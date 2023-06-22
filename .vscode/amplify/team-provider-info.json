@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cheekydino-dev-164422-authRole",
+      "UnauthRoleArn": "arn:aws:iam::388127569725:role/amplify-cheekydino-dev-164422-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::388127569725:role/amplify-cheekydino-dev-164422-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-cheekydino-dev-164422-deployment",
+      "UnauthRoleName": "amplify-cheekydino-dev-164422-unauthRole",
+      "StackName": "amplify-cheekydino-dev-164422",
+      "StackId": "arn:aws:cloudformation:eu-west-2:388127569725:stack/amplify-cheekydino-dev-164422/dd8d2ac0-f592-11ed-8dbc-0ac49305d196",
+      "AmplifyAppId": "d15xv1khkelgm1"
+    }
+  }
+}

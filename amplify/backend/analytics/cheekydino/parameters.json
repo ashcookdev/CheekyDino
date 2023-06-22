@@ -1,0 +1,22 @@
+{
+  "appName": "cheekydino",
+  "roleName": "pinpointLambdaRoleddcf033e",
+  "cloudformationPolicyName": "cloudformationPolicyddcf033e",
+  "cloudWatchPolicyName": "cloudWatchPolicyddcf033e",
+  "pinpointPolicyName": "pinpointPolicyddcf033e",
+  "authPolicyName": "pinpoint_amplify_ddcf033e",
+  "unauthPolicyName": "pinpoint_amplify_ddcf033e",
+  "authRoleName": {
+    "Ref": "AuthRoleName"
+  },
+  "unauthRoleName": {
+    "Ref": "UnauthRoleName"
+  },
+  "authRoleArn": {
+    "Fn::GetAtt": [
+      "AuthRole",
+      "Arn"
+    ]
+  },
+  "pinpointInAppMessagingPolicyName": "pinpointInAppMessagingPolicyNameddcf033e"
+}

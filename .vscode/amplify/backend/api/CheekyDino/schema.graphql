@@ -1,0 +1,54 @@
+type PartyAdultFood @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  ChickenNugget: Int
+  CocktailSausage: Int
+  OnionRings: Int
+  FishFingers: Int
+  MozzarellaSticks: Int
+  GarlicBread: Int
+  GarlicMushrooms: Int
+  TraySandwiches: Int
+  PepperoniPizza: Int
+  MargheritaPizza: Int
+  BBQChickenPizza: Int
+  VegPizza: Int
+}
+
+type PartyGuests @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  PartyType: Int!
+  ChildName: String
+  FoodOption: String!
+  Allergies: String
+  ContactInfoEmail: String
+  partybookingID: ID! @index(name: "byPartyBooking")
+  Arrived: AWSTime
+  SweetConeColour: String
+  TeddyTasticBear: String
+}
+
+type PartyBooking @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  PartyType: String!
+  ChildName: String!
+  ChildAge: Int!
+  PartyDate: AWSDate!
+  PartyTime: AWSTime!
+  NoOfChildren: Int!
+  ThirdPartyContactedDate: Boolean
+  FoodOptionSelected: String
+  Total: Float!
+  PartyGuests: [PartyGuests] @hasMany(indexName: "byPartyBooking", fields: ["id"])
+  AdultHotFoodQty: Int
+  AdultColdFoodQty: Int
+  AdultPizzaFoodQty: Int
+  PartyAdultFood: PartyAdultFood @hasOne
+  SweetConesSelected: Boolean
+  CharacterSelected: String
+  BearVoiceRecorders: Boolean
+  PartyFoodPrepared: AWSTime
+  PartyHostAssigned: String
+  PartyChildMumArrived: AWSTime
+  PartyFoodTimeDue: AWSTime
+}
+ 

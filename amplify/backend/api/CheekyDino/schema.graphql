@@ -1,0 +1,98 @@
+type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: public}]) {
+  id: ID!
+  Name: String
+  Email: AWSEmail
+  TimeslotFrom: AWSTime
+  TimeslotTo: AWSTime
+  TimeLeft: AWSTime
+  TimeArrived: AWSTime
+  Date: AWSDate
+  Table: Int
+  Orders: Int
+  Prepaid: Boolean
+  TotalSpent: Float
+  CafeOrderID: String
+  Adults: Int
+  Children: Int
+}
+
+type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
+  id: ID!
+  CreatedTime: AWSTime
+  CreatedDate: AWSDate
+  Total: Float
+  DrinkItems: [String]
+  HotItems: [String]
+  Table: Int
+  Completed: Boolean
+}
+
+type Messages @model @auth(rules: [{allow: private}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartHosts"], operations: [read, create]}, {allow: groups, groups: ["Staff"], operations: [read, create]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: owner, operations: [create, read]}]) {
+  id: ID!
+  content: String
+  createdAt: AWSTime
+  email: String
+  group: [String]
+}
+
+type PartyAdultFood @model @auth(rules: [{allow: groups, groups: ["Staff"], operations: [read, update]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartHosts"], operations: [read, update, create]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: owner}]) {
+  id: ID!
+  ChickenNugget: Int
+  CocktailSausage: Int
+  OnionRings: Int
+  FishFingers: Int
+  MozzarellaSticks: Int
+  GarlicBread: Int
+  GarlicMushrooms: Int
+  TraySandwiches: Int
+  PepperoniPizza: Int
+  MargheritaPizza: Int
+  BBQChickenPizza: Int
+  VegPizza: Int
+  AdultFoodComplete: Boolean
+}
+
+type PartyGuests @model @auth(rules: [{allow: owner}, {allow: groups, groups: ["PartHosts"], operations: [read, update]}, {allow: groups, groups: ["Staff"], operations: [create, read]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: groups, groups: ["TeamLeader"], operations: [read, update]}, {allow: private}]) {
+  id: ID!
+  ChildName: String
+  FoodOption: String!
+  Allergies: String
+  ContactInfoEmail: String
+  partybookingID: ID! @index(name: "byPartyBooking")
+  ArrivalTime: AWSTime
+  SweetConeColour: String
+  TeddyTasticBear: String
+  Completed: Boolean
+  Arrived: Boolean
+}
+
+type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: ["PartHosts"], operations: [read, update, create]}, {allow: groups, groups: ["TeamLeader"], operations: [create, read, update]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Staff"], operations: [create, read, update]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: public, operations: [read]}]) {
+  id: ID!
+  PartyType: String!
+  ChildName: String!
+  ChildAge: Int!
+  PartyDate: AWSDate!
+  PartyTime: AWSTime!
+  NoOfChildren: Int!
+  ThirdPartyContactedDate: Boolean
+  FoodOptionSelected: String
+  Total: Float!
+  PartyGuests: [PartyGuests] @hasMany(indexName: "byPartyBooking", fields: ["id"])
+  AdultHotFoodQty: Int
+  AdultColdFoodQty: Int
+  PartyAdultFood: PartyAdultFood @hasOne
+  SweetConesSelected: Boolean
+  CharacterSelected: String
+  BearVoiceRecorders: Boolean
+  PartyFoodPrepared: AWSTime
+  PartyHostAssigned: String
+  PartyChildMumArrived: AWSTime
+  PartyFoodTimeDue: AWSTime
+  PartyFinish: AWSTime
+  partybookingID: String
+  PartyFoodComplete: Boolean
+  LeftBranch: Boolean
+  CurrentGuests: Int
+  LeftBranchTime: AWSTime
+}
+ 

@@ -1,0 +1,38 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cheekydino-staging-135937-authRole",
+      "UnauthRoleArn": "arn:aws:iam::388127569725:role/amplify-cheekydino-staging-135937-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::388127569725:role/amplify-cheekydino-staging-135937-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-cheekydino-staging-135937-deployment",
+      "UnauthRoleName": "amplify-cheekydino-staging-135937-unauthRole",
+      "StackName": "amplify-cheekydino-staging-135937",
+      "StackId": "arn:aws:cloudformation:eu-west-2:388127569725:stack/amplify-cheekydino-staging-135937/e81c0840-ea83-11ed-8895-0233824c9288",
+      "AmplifyAppId": "d38zwwmxfhxt52"
+    },
+    "categories": {
+      "auth": {
+        "CheekyDino": {}
+      },
+      "notifications": {
+        "Pinpoint": {
+          "Name": "cheekydino-staging",
+          "Id": "e1f5e18071f340cb9eb03cf3bac5ce39",
+          "Region": "eu-west-2"
+        }
+      },
+      "analytics": {
+        "Pinpoint": {
+          "Name": "cheekydino-staging",
+          "Id": "e1f5e18071f340cb9eb03cf3bac5ce39",
+          "Region": "eu-west-2"
+        },
+        "cheekydino": {}
+      },
+      "api": {
+        "CheekyDino": {}
+      }
+    }
+  }
+}
