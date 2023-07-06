@@ -17,12 +17,15 @@ import {CheckIcon} from '@heroicons/react/20/solid'
 import OrderProgress from './orderprogress'
 import PartyProgress from './partyProgress'
 import { format, set } from 'date-fns'
-import ChatDashboard from './ChatDashboard'
+import {Sessions} from './models'
+import {PartyBooking} from './models'
 
 const secondaryNavigation = [
     { name: 'Tables', href: '/Tables', current: true },
-    { name: 'Live Chat', href: '#', current: false },
-    { name: 'Calender', href: '#', current: false },
+    { name: 'Orders', href: '/orders', current: false },
+    { name: 'Sessions', href: '/sessionhistory', current: false },
+    { name: 'Parties', href: '/partyhistory', current: false},
+{name: 'Finance', href: '/finance',current: false } ,
 ]
 
 const statuses = {
@@ -43,6 +46,14 @@ export default function Dashboard() {
     const [orders, setOrders] = useState([])
     const [order, setOrder] = useState([])
     const [currentTime, setCurrentTime] = useState(0);
+    const [occupiedTables, setOccupiedTables] = useState([])
+    const [currentGuests, setCurrentGuests] = useState(0)
+    const [futureBookings, setFutureBookings] = useState([])
+
+    console.log(occupiedTables)
+    console.log(currentGuests)
+
+
  
     const currentDate = new Date();
     const formattedDate = format(currentDate, 'MMMM dd, yyyy');
@@ -56,7 +67,36 @@ export default function Dashboard() {
         return () => clearInterval(interval);
       }, []);
 
-
+      useEffect(() => {
+        async function fetchSessions() {
+            const date = new Date();
+            const dateString = date.toISOString().split('T')[0];
+            const currentTime = format(new Date(), 'HH,mm');
+    
+            // Fetch all sessions for the current date
+            const sessions = await DataStore.query(Sessions, c => c.Date.eq(dateString));
+    
+            // Filter sessions to find those that are currently occupied
+            const occupiedTables = sessions.filter(session => session.TimeslotFrom < currentTime && session.TimeslotTo > currentTime);
+    
+            // Calculate the total number of current guests
+            const currentGuests = occupiedTables.reduce((total, session) => total + session.Adults + session.Children, 0);
+    
+            // Filter sessions to find those that are booked for the future
+            const futureBookings = sessions.filter(session => session.TimeslotFrom > currentTime);
+    
+            // Update state with the calculated values
+            setOccupiedTables(occupiedTables);
+            setCurrentGuests(currentGuests);
+            setFutureBookings(futureBookings);
+        }
+    
+        fetchSessions();
+    
+        const subscription = DataStore.observe(Sessions).subscribe(() => fetchSessions());
+        return () => subscription.unsubscribe();
+    }, []);
+    
 
 
 
@@ -96,6 +136,11 @@ export default function Dashboard() {
         
       }, [])
 
+
+    
+
+    //get all sessions for today from database
+
       
     
 
@@ -106,8 +151,11 @@ export default function Dashboard() {
 
     const stats = [
         { name: 'Orders Today', value: order.length, change: '+4.75%', changeType: 'positive' },
-        { name: 'Current Orders', value: orders.length, },
-        { name: 'Tables Occupied', value: orders.length, },
+        { name: 'Current Orders', value: "0", },
+        { name: 'Tables Occupied', value: occupiedTables.length },
+        { name: 'Future Bookings Today', value: futureBookings.length },
+        { name: 'Guests in Branch', value: currentGuests, },
+
         { name: 'Total', value: "£" + totalAmount, change: '+10.18%', changeType: 'negative' },
     ]
 
@@ -143,6 +191,19 @@ export default function Dashboard() {
       }, [])
       
 
+//current tables occupied & future bookings today and how many guests
+
+
+
+
+
+
+        
+
+
+
+
+        
 
 
 
@@ -151,12 +212,12 @@ export default function Dashboard() {
         <>
 
 
-            <main>
+            <main className='bg-custom-image'>
                 <div className="relative isolate overflow-hidden pt-16">
                     {/* Secondary navigation */}
                     <header className="pb-4 pt-6 sm:pb-6">
                         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-6 px-4 sm:flex-nowrap sm:px-6 lg:px-8">
-                            <h1 className="text-base font-semibold leading-7 text-gray-900">Cashflow</h1>
+                            <h1 className="text-base font-semibold leading-7 text-gray-900">Dashboard</h1>
                             <div className="order-last flex w-full gap-x-8 text-sm font-semibold leading-6 sm:order-none sm:w-auto sm:border-l sm:border-gray-200 sm:pl-6 sm:leading-7">
                                 {secondaryNavigation.map((item) => (
                                     <a key={item.name} href={item.href} className={item.current ? 'text-indigo-600' : 'text-gray-700'}>
@@ -164,13 +225,7 @@ export default function Dashboard() {
                                     </a>
                                 ))}
                             </div>
-                            <a
-                                href="#"
-                                className="ml-auto flex items-center gap-x-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                            >
-                                <PlusSmallIcon className="-ml-1.5 h-5 w-5" aria-hidden="true" />
-                                New invoice
-                            </a>
+                            
                         </div>
                     </header>
 

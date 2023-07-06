@@ -64,9 +64,9 @@ const groups = ['Kitchen', 'PartyHost','Staff'];
 // ...
 
 return (
-  <div className="p-8 bg-gray-100 min-h-screen">
-    <h1 className="text-3xl mb-4 font-semibold">Chat App</h1>
-    <div className="mb-4 text-gray-600">Logged in as: {userEmail}</div>
+  <div  className="top-0 inset-x-0 bg-opacity-50 backdrop-blur-md shadow"
+  style={{ backgroundImage: "url('/bg.png')" }}>
+    <div className="w-1/4 ml-10 bg-opacity-50 backdrop-blur-md p-4 rounded-lg shadow-md">Logged in as: {userEmail}</div>
     <select
       multiple
       value={selectedGroups}

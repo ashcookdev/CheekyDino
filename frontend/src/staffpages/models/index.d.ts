@@ -26,6 +26,10 @@ type EagerSessions = {
   readonly CafeOrderID?: string | null;
   readonly Adults?: number | null;
   readonly Children?: number | null;
+  readonly Arrived?: boolean | null;
+  readonly LeftCenter?: boolean | null;
+  readonly ExtraTables?: number | null;
+  readonly Telephone?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -50,6 +54,10 @@ type LazySessions = {
   readonly CafeOrderID?: string | null;
   readonly Adults?: number | null;
   readonly Children?: number | null;
+  readonly Arrived?: boolean | null;
+  readonly LeftCenter?: boolean | null;
+  readonly ExtraTables?: number | null;
+  readonly Telephone?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

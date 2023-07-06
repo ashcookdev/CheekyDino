@@ -38,7 +38,8 @@ function handleLogout() {
 }
 
   return (
-    <Disclosure as="nav" className=" top-0 inset-x-0 bg-white bg-opacity-50 backdrop-blur-md shadow">
+    <Disclosure as="nav"  className="top-0 inset-x-0 bg-opacity-50 backdrop-blur-md shadow"
+    style={{ backgroundImage: "url('/bg.png')" }}>
     {({ open }) => (
       <>
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">

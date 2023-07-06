@@ -20,7 +20,7 @@ export const schema = {
                 "Email": {
                     "name": "Email",
                     "isArray": false,
-                    "type": "AWSEmail",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -108,6 +108,34 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "Arrived": {
+                    "name": "Arrived",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "LeftCenter": {
+                    "name": "LeftCenter",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "ExtraTables": {
+                    "name": "ExtraTables",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Telephone": {
+                    "name": "Telephone",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -160,9 +188,6 @@ export const schema = {
                             {
                                 "allow": "public",
                                 "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
                                     "read"
                                 ]
                             }
@@ -1222,5 +1247,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.3",
-    "version": "524ab8f16a019b41459de27f0270d775"
+    "version": "af0fa08e54eb06a4cb90e7ec78b86378"
 };

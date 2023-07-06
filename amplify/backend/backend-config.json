@@ -79,7 +79,7 @@
   "notifications": {
     "cheekydino": {
       "channels": [
-        "InAppMessaging"
+        "SMS"
       ],
       "service": "Pinpoint"
     }

@@ -4,6 +4,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {Auth} from 'aws-amplify';
 
 const navigation = [
+  {name: 'Session Bookings', href: '/sessionbookings', current: false},
   { name: 'Party Booking', href: '/my-booking', current: true },
     { name: 'Payments', href: '/payments', current: false },
   { name: 'Book Again', href: '/packages', current: false },

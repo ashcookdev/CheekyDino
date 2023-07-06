@@ -65,7 +65,7 @@ export default function App() {
   
     return (
             <nav aria-label="Progress">
-              <ol role="list" className="overflow-hidden">
+<ol role="list" className="overflow-hidden bg-white bg-opacity-75 backdrop-blur-md">
                 {steps.map((step, stepIdx) => (
                   <li
                     key={step.name}

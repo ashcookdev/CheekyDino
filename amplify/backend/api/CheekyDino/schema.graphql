@@ -1,7 +1,7 @@
-type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: public}]) {
+type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: public, operations: [read]}]) {
   id: ID!
   Name: String
-  Email: AWSEmail
+  Email: String
   TimeslotFrom: AWSTime
   TimeslotTo: AWSTime
   TimeLeft: AWSTime
@@ -14,6 +14,10 @@ type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: pub
   CafeOrderID: String
   Adults: Int
   Children: Int
+  Arrived: Boolean
+  LeftCenter: Boolean
+  ExtraTables: Int
+  Telephone: String
 }
 
 type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -94,5 +98,4 @@ type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: [
   LeftBranch: Boolean
   CurrentGuests: Int
   LeftBranchTime: AWSTime
-}
- 
+} 

@@ -6,6 +6,9 @@ import { PartyBooking } from './models';
 import { PartyGuests } from './models';
 import { Messages } from './models';
 import BarCodeScanner from "./barcodescanner";
+import TillBooking from "./tillbooking";
+import { Sessions } from "./models";
+import Tables from "./tables";
 
 
 export default function Till() {
@@ -25,6 +28,8 @@ export default function Till() {
   const [clientArrived, setClientArrived] = useState(false);
   const [partyFinished, setPartyFinished] = useState(false);
   const [scanner, setScanner] = useState(false);
+  const [arrival, setArrival] = useState(false);
+  const [tablee, setTablee] = useState(false);
 
 
   
@@ -44,6 +49,8 @@ export default function Till() {
 
   //get all party bookings for today
 
+  
+      
 
 
   useEffect(() => {
@@ -209,6 +216,14 @@ export default function Till() {
     
   }
 
+  if (arrival === true) {
+return <TillBooking/>  }
+
+if (tablee === true) {
+  return <Tables/>  }
+
+
+
 
 
 
@@ -232,11 +247,20 @@ export default function Till() {
           ))}
         </div>
       </div>
-      <div>
-      <button className="w-20 h-20 bg-red-600 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-2 mb-2 flex items-center justify-center animate-pulse"
+      <div className="flex">
+      <button className="w-20 h-20 bg-green-600 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-2 mb-2 flex items-center justify-center "
 onClick={() => setScanner(true)} >
 Scan QR Code
         </button>
+        <button className="w-20 h-20 bg-blue-600 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-2 mb-2 flex items-center justify-center "
+onClick={() => setArrival(true)} >
+New Arrival
+        </button>
+        <button className="w-20 h-20 bg-red-600 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-2 mb-2 flex items-center justify-center "
+onClick={() => setTablee(true)} >
+Tables
+        </button>
+
 
 
       </div>

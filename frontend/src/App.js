@@ -24,9 +24,16 @@ import Football from './customer-pages/party/Football';
 import Kitchen from './staffpages/KitchenHome';
 import Till from './staffpages/Till';
 import DashBoard from './staffpages/DashBoard';
-import SessionBook from './customer-pages/sessionbook/sessionbooker';
+import SessionBook from './staffpages/sessionbooker';
 import Barcode from './staffpages/barcodescanner';
 import Tables from './staffpages/tables';
+import SessionLogin from './staffpages/sessiobooklogin'
+import SessionBooking from './staffpages/sessiondetails';
+import TillBooking from './staffpages/tillbooking';
+import OrderHistory from './staffpages/allorders';
+import SessionHistory from './staffpages/sessionhistory';
+import PartyHistory from './staffpages/partyhistory';
+import Finance from './staffpages/financials';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -98,6 +105,8 @@ function App() {
           <>
             <Route path="/my-booking" element={<MyBooking />} />
             <Route path="/add-guests" element={<PartyGuests />} />
+            <Route path="/sessionbookings" element={<SessionBooking />} />
+
           </>
         )}
       </Routes>
@@ -112,6 +121,12 @@ function App() {
             <Route path="/" element={<AuthenticatedDashBoard />} />
             <Route path= "/Barcode" element={<Barcode />} />
             <Route path= "/Tables" element={<AuthenticatedTables />} />
+            <Route path= "/TillBooking" element={<TillBooking />} />
+            <Route path= "/orders" element={<OrderHistory />} />
+            <Route path= "/sessionhistory" element={<SessionHistory/>} />
+            <Route path= "/partyhistory" element={<PartyHistory />} />
+            <Route path= "/finance" element={<Finance />} />
+            
 
           </>
         )}
@@ -122,10 +137,12 @@ function App() {
         <Route path="/character" element={<Character />} />
         <Route path="/packages" element={<Packages />} />
         <Route path="/login" element={<Login />} />
+        <Route path= "/sessionlogin" element= {<SessionLogin/>} />
         <Route path="/register" element={<Register />} />
         <Route path="/trexparty/calendar" element={<TRexCalendar />} />
         <Route path="/themed" element={<ThemedCalendar />} />
         <Route path="/session" element={<SessionBook />} />
+        
       </Routes>
     </>
   );
