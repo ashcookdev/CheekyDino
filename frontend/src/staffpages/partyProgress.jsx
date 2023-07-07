@@ -10,7 +10,7 @@ import { Messages } from "./models";
 
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 
-export default function App() {
+export default function PartyBookings() {
     const [currentTime, setCurrentTime] = useState(0);
     const [bookings, setPartyBookings] = useState([]);
     const [partyGuests, setPartyGuests] = useState([]);
@@ -34,13 +34,14 @@ export default function App() {
                     new Date(booking.PartyDate) < tomorrow
             );
             setPartyBookings(partyBookings);
-            const partybookingId = partyBookings[0].id;
-            const partyGuests = await DataStore.query(PartyGuests);
-            const guests = partyGuests.filter(
-                (guest) => guest.PartyBookingID === partybookingId
-            );
-            setPartyGuests(guests);
-        }
+            if (partyBookings.length > 0) {
+                const partybookingId = partyBookings[0].id;
+                const partyGuests = await DataStore.query(PartyGuests);
+                const guests = partyGuests.filter(
+                    (guest) => guest.PartyBookingID === partybookingId
+                );
+                setPartyGuests(guests);
+            }}
 
         fetchTodaysPartyBookings();
         const subscription = DataStore.observe(PartyBooking).subscribe(() => {
