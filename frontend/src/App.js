@@ -34,6 +34,7 @@ import OrderHistory from './staffpages/allorders';
 import SessionHistory from './staffpages/sessionhistory';
 import PartyHistory from './staffpages/partyhistory';
 import Finance from './staffpages/financials';
+import Home from './customer-pages/home';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -142,6 +143,7 @@ function App() {
         <Route path="/trexparty/calendar" element={<TRexCalendar />} />
         <Route path="/themed" element={<ThemedCalendar />} />
         <Route path="/session" element={<SessionBook />} />
+        <Route path="/" element={<Home />} />
         
       </Routes>
     </>

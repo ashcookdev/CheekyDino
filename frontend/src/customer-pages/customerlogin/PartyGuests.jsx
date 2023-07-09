@@ -4,6 +4,8 @@ import { DataStore } from '@aws-amplify/datastore';
 import { PartyBooking } from '../../staffpages/models';
 import { PartyGuests } from '../../staffpages/models';
 import { CheckIcon } from '@heroicons/react/24/solid';
+import "./customer.css";
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -75,12 +77,20 @@ export default function GuestDashboard() {
             </th>
           </tr>
         </thead>
-
+  
         <tbody>
           {Array.from({ length: noOfChildren }, (_, i) => (
             <tr key={i} className="hover:bg-grey-lighter">
-              <td className="py-4 px-6 border-b border-grey-light">{i + 1}</td>
-              <td className="py-4 px-6 border-b border-grey-light">
+              <td
+                data-label="No."
+                className="py-4 px-6 border-b border-grey-light"
+              >
+                {i + 1}
+              </td>
+              <td
+                data-label="Child Name"
+                className="py-4 px-6 border-b border-grey-light"
+              >
                 {guestsData[i]?.ChildName ? (
                   guestsData[i].ChildName
                 ) : (
@@ -91,7 +101,10 @@ export default function GuestDashboard() {
                   />
                 )}
               </td>
-              <td className="py-4 px-6 border-b border-grey-light">
+              <td
+                data-label="Food Option"
+                className="py-4 px-6 border-b border-grey-light"
+              >
                 {guestsData[i]?.FoodOption ? (
                   guestsData[i].FoodOption
                 ) : (
@@ -102,7 +115,10 @@ export default function GuestDashboard() {
                   />
                 )}
               </td>
-              <td className="py-4 px-6 border-b border-grey-light">
+              <td
+                data-label="Allergies"
+                className="py-4 px-6 border-b border-grey-light"
+              >
                 {guestsData[i]?.Allergies ? (
                   guestsData[i].Allergies
                 ) : (
@@ -113,7 +129,10 @@ export default function GuestDashboard() {
                   />
                 )}
               </td>
-              <td className="py-4 px-6 border-b border-grey-light">
+              <td
+                data-label="Contact Info Email"
+                className="py-4 px-6 border-b border-grey-light"
+              >
                 {guestsData[i]?.ContactInfoEmail ? (
                   guestsData[i].ContactInfoEmail
                 ) : (
@@ -136,4 +155,4 @@ export default function GuestDashboard() {
       </button>
     </form>
   );
-}
+                }  

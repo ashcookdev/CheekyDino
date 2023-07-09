@@ -207,29 +207,37 @@ export default function ThemedCalender() {
 
 
       </header>
-      <div className="flex flex-auto">
-        <div className='hidden w-1/2 max-w-md flex-none border-l border-gray-100 px-8 py-10 md:block'>
-          {selectedPartyDetails && (
-            <div className="p-4 border rounded-lg mb-4">
-
-              <h2 className="text-lg font-bold">{selectedDate}</h2>
-              {selectedPartyDetails.map(timeSlot => (
-                // Only display a card if there are available appointments for this time slot
-                timeSlot.availableAppointments > 0 && (
-                  <div key={timeSlot.timeSlot}>
-                    <h3>{timeSlot.timeSlot}</h3>
-                    <p>Available Party Time: {timeSlot.availableAppointments}</p>
-                    <button className="rounded-full bg-indigo-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                      onClick={() => handleBookAppointment(timeSlot.timeSlot)}>
-                      Book appointment
-                    </button>
-                  </div>
-                )
+      <div className="flex flex-auto justify-center">
+  <div className="max-w-md flex-none border-l border-gray-100 px-8 py-10 md:block">
+    {selectedPartyDetails && (
+      <div className="p-4 border rounded-lg mb-4 shadow-md">
+        <h2 className="text-lg font-semi-bold text-center mb-4">
+          Date: {format(new Date(selectedDate), 'dd/MM/yyyy')}
+        </h2>
+        {selectedPartyDetails.map(timeSlot => (
+          // Only display a card if there are available appointments for this time slot
+          timeSlot.availableAppointments > 0 && (
+            <div key={timeSlot.timeSlot} className="mb-4 p-4 border rounded-lg shadow-sm">
+              <h3 className="text-center mb-2">Time: {timeSlot.timeSlot}</h3>
+              {partyid.map(party => (
+                <div key={party.id} className="mb-2">
+                  <p className="text-center mb-1">Party: {party.name}</p>
+                  <p className="text-center mb-1">Price: {party.price}</p>
+                </div>
               ))}
+              <button
+                className="rounded-full bg-indigo-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 block mx-auto"
+                onClick={() => handleBookAppointment(timeSlot.timeSlot)}
+              >
+                Book Party
+              </button>
             </div>
-          )}
-        </div>
+          )
+        ))}
       </div>
+    )}
+  </div>
+</div>
 
 
 
@@ -238,7 +246,7 @@ export default function ThemedCalender() {
 
 
       <div ref={containerOffset} className="flex flex-auto flex-col min-h-0">
-        <div className="hidden w-1/2 max-w-md flex-none border-l border-gray-100 px-8 py-10 md:block">
+        <div className=" max-w-md flex-none border-l border-gray-100 px-8 py-10 md:block">
           <div className="flex items-center text-center text-gray-900">
             <button onClick={handlePrevMonthClick}
               type="button"
@@ -256,7 +264,7 @@ export default function ThemedCalender() {
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
             </button>
           </div>
-
+<div className=' justify-center'>
           <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200">
             {daysAvailability.map((day, dayIdx) => (<button
               key={day.date}
@@ -295,8 +303,11 @@ export default function ThemedCalender() {
             ))}
 
           </div>
+          
         </div>
+
       </div>
+    </div>
     </div>
 
   )
