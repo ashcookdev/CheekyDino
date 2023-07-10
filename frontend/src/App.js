@@ -35,6 +35,7 @@ import SessionHistory from './staffpages/sessionhistory';
 import PartyHistory from './staffpages/partyhistory';
 import Finance from './staffpages/financials';
 import Home from './customer-pages/home';
+import Order from './staffpages/order';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -107,6 +108,7 @@ function App() {
             <Route path="/my-booking" element={<MyBooking />} />
             <Route path="/add-guests" element={<PartyGuests />} />
             <Route path="/sessionbookings" element={<SessionBooking />} />
+            <Route path="/order" element={<Order />} />
 
           </>
         )}
@@ -119,7 +121,7 @@ function App() {
             
             <Route path= "/kitchen" element={<AuthenticatedKitchen />} />
             <Route path="/Till" element={<AuthenticatedTill />} />
-            <Route path="/" element={<AuthenticatedDashBoard />} />
+            <Route path="/dashboard" element={<AuthenticatedDashBoard />} />
             <Route path= "/Barcode" element={<Barcode />} />
             <Route path= "/Tables" element={<AuthenticatedTables />} />
             <Route path= "/TillBooking" element={<TillBooking />} />

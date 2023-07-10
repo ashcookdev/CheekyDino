@@ -13,26 +13,23 @@ import { BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { DataStore } from 'aws-amplify'
 import { CafeOrder } from './models'
 import { useEffect } from 'react'
-import {CheckIcon} from '@heroicons/react/20/solid'
+import { CheckIcon } from '@heroicons/react/20/solid'
 import OrderProgress from './orderprogress'
 import PartyProgress from './partyProgress'
 import { format, set } from 'date-fns'
-import {Sessions} from './models'
-import {PartyBooking} from './models'
+import { Sessions } from './models'
+import { PartyBooking } from './models'
+import { Analytics } from 'aws-amplify'
+
 
 const secondaryNavigation = [
     { name: 'Tables', href: '/Tables', current: true },
     { name: 'Orders', href: '/orders', current: false },
     { name: 'Sessions', href: '/sessionhistory', current: false },
-    { name: 'Parties', href: '/partyhistory', current: false},
-{name: 'Finance', href: '/finance',current: false } ,
+    { name: 'Parties', href: '/partyhistory', current: false },
+    { name: 'Finance', href: '/finance', current: false },
 ]
 
-const statuses = {
-    Paid: 'text-green-700 bg-green-50 ring-green-600/20',
-    Withdraw: 'text-gray-600 bg-gray-50 ring-gray-500/10',
-    Overdue: 'text-red-700 bg-red-50 ring-red-600/10',
-}
 
 
 function classNames(...classes) {
@@ -54,97 +51,84 @@ export default function Dashboard() {
     console.log(currentGuests)
 
 
- 
+
     const currentDate = new Date();
     const formattedDate = format(currentDate, 'MMMM dd, yyyy');
     const formattedTime = format(currentDate, 'h:mm:ss a');
 
     useEffect(() => {
         const interval = setInterval(() => {
-          setCurrentTime(new Date());
+            setCurrentTime(new Date());
         }, 1000);
-    
-        return () => clearInterval(interval);
-      }, []);
 
-      useEffect(() => {
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
         async function fetchSessions() {
             const date = new Date();
             const dateString = date.toISOString().split('T')[0];
             const currentTime = format(new Date(), 'HH,mm');
-    
+
             // Fetch all sessions for the current date
             const sessions = await DataStore.query(Sessions, c => c.Date.eq(dateString));
-    
+
             // Filter sessions to find those that are currently occupied
             const occupiedTables = sessions.filter(session => session.TimeslotFrom < currentTime && session.TimeslotTo > currentTime);
-    
+
             // Calculate the total number of current guests
             const currentGuests = occupiedTables.reduce((total, session) => total + session.Adults + session.Children, 0);
-    
+
             // Filter sessions to find those that are booked for the future
             const futureBookings = sessions.filter(session => session.TimeslotFrom > currentTime);
-    
+
             // Update state with the calculated values
             setOccupiedTables(occupiedTables);
             setCurrentGuests(currentGuests);
             setFutureBookings(futureBookings);
         }
-    
+
         fetchSessions();
-    
+
         const subscription = DataStore.observe(Sessions).subscribe(() => fetchSessions());
         return () => subscription.unsubscribe();
     }, []);
-    
-
-
-
-    
-    
 
     useEffect(() => {
         async function fetchOrders() {
-          const orders = await DataStore.query(CafeOrder)
-          setOrders(orders)
+            const orders = await DataStore.query(CafeOrder)
+            setOrders(orders)
         }
-    
+
         fetchOrders()
-    
+
         const subscription = DataStore.observe(CafeOrder).subscribe(() => fetchOrders())
         return () => subscription.unsubscribe()
-      }, [])
+    }, [])
 
     useEffect(() => {
         async function fetchTodaysOrders() {
-          const today = new Date()
-          today.setHours(0, 0, 0, 0)
-    
-          const tomorrow = new Date(today)
-          tomorrow.setDate(tomorrow.getDate() + 1)
-    
-          const allOrders = await DataStore.query(CafeOrder)
-          const orders = allOrders.filter(
-            (order) =>
-              new Date(order.CreatedDate) >= today && new Date(order.CreatedDate) < tomorrow
-          )
-          setOrder(orders)
+            const today = new Date()
+            today.setHours(0, 0, 0, 0)
+
+            const tomorrow = new Date(today)
+            tomorrow.setDate(tomorrow.getDate() + 1)
+
+            const allOrders = await DataStore.query(CafeOrder)
+            const orders = allOrders.filter(
+                (order) =>
+                    new Date(order.CreatedDate) >= today && new Date(order.CreatedDate) < tomorrow
+            )
+            setOrder(orders)
         }
-    
+
         fetchTodaysOrders()
 
-        
-      }, [])
+
+    }, [])
 
 
-    
-
-    //get all sessions for today from database
-
-      
-    
-
-//map through orders and get total amount
+    //map through orders and get total amount
     const totalAmount = orders.reduce((total, order) => total + order.Total, 0)
 
     console.log(totalAmount)
@@ -159,54 +143,39 @@ export default function Dashboard() {
         { name: 'Total', value: "£" + totalAmount, change: '+10.18%', changeType: 'negative' },
     ]
 
-   
+
     const [steps, setSteps] = useState([
         { name: 'Order', status: 'complete' },
         { name: 'Prepare', status: 'complete' },
         { name: 'Deliver', status: 'current' },
         { name: 'Review', status: 'upcoming' },
-      ])
-    
-      useEffect(() => {
+    ])
+
+    useEffect(() => {
         const subscription = DataStore.observe(CafeOrder).subscribe((msg) => {
-          // Update the steps based on the new data
-          if (msg.model === CafeOrder && msg.opType === 'UPDATE' && msg.element.Completed === false) {
-            setSteps([
-              { name: 'Order', status: 'complete' },
-              { name: 'Prepare', status: 'current' },
-              { name: 'Deliver', status: 'upcoming' },
-              { name: 'Review', status: 'upcoming' },
-            ])
-          } else {
-            setSteps([
-              { name: 'Order', status: 'complete' },
-              { name: 'Prepare', status: 'complete' },
-              { name: 'Deliver', status: 'current' },
-              { name: 'Review', status: 'upcoming' },
-            ])
-          }
+            // Update the steps based on the new data
+            if (msg.model === CafeOrder && msg.opType === 'UPDATE' && msg.element.Completed === false) {
+                setSteps([
+                    { name: 'Order', status: 'complete' },
+                    { name: 'Prepare', status: 'current' },
+                    { name: 'Deliver', status: 'upcoming' },
+                    { name: 'Review', status: 'upcoming' },
+                ])
+            } else {
+                setSteps([
+                    { name: 'Order', status: 'complete' },
+                    { name: 'Prepare', status: 'complete' },
+                    { name: 'Deliver', status: 'current' },
+                    { name: 'Review', status: 'upcoming' },
+                ])
+            }
         })
-      
+
         return () => subscription.unsubscribe()
-      }, [])
-      
-
-//current tables occupied & future bookings today and how many guests
+    }, [])
 
 
-
-
-
-
-        
-
-
-
-
-        
-
-
-
+    //current tables occupied & future bookings today and how many guests in branch
 
     return (
         <>
@@ -225,13 +194,13 @@ export default function Dashboard() {
                                     </a>
                                 ))}
                             </div>
-                            
+
                         </div>
                     </header>
 
                     {/* Stats */}
                     <div className="border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5">
-                        <p> {formattedTime} | {formattedDate} </p> 
+                        <p> {formattedTime} | {formattedDate} </p>
                         <dl className="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:px-2 xl:px-0">
                             {stats.map((stat, statIdx) => (
                                 <div
@@ -283,11 +252,11 @@ export default function Dashboard() {
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                                 <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
                                     <OrderProgress steps={steps} />
-</div>        
-</div>                            
-</div>
-</div>
-                               
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Recent client list*/}
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
@@ -297,7 +266,7 @@ export default function Dashboard() {
                                     View all<span className="sr-only">, clients</span>
                                 </a>
                             </div>
-                           <PartyProgress />
+                            <PartyProgress />
                         </div>
                     </div>
                 </div>

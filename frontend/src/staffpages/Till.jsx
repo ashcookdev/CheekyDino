@@ -9,6 +9,8 @@ import BarCodeScanner from "./barcodescanner";
 import TillBooking from "./tillbooking";
 import { Sessions } from "./models";
 import Tables from "./tables";
+import { Analytics } from 'aws-amplify';
+
 
 
 export default function Till() {
@@ -67,14 +69,25 @@ export default function Till() {
     // Add the product item to the order
     setOrder(order => [...order, { name: product, price: Products[product].price }]);
     setTotal(total => total + Products[product].price);
+
+    Analytics.record({
+      name: 'Product Added',
+      attributes: { product: product },
+      productPrice: Products[product].price
+    });
+
   };
 
   const handleConfirmClick = async () => {
+    const currentTime = new Date();
+    const options = { timeZone: 'Europe/London', hour12: false };
+    const awstime = currentTime.toLocaleString('en-GB', options).split(',')[1].trim();
+    const formattedTime = awstime.substring(0, 5);
     // Save all the items in the order to the data store
     await DataStore.save(
       new CafeOrder({
         HotItems: order.map(item => item.name),
-        CreatedTime: new Date().toISOString().split('T')[1].slice(0, -1),
+        CreatedTime: formattedTime,
         CreatedDate: new Date().toISOString().split('T')[0],
         Total: total,
         Table: table,
@@ -140,48 +153,70 @@ export default function Till() {
 
 
   const handleGuestArrival = async (guest) => {
+    // Format the current time according to the Europe/London time zone
+    const currentTime = new Date();
+    const options = { timeZone: 'Europe/London', hour12: false };
+    const arrivalTime = currentTime.toLocaleString('en-GB', options).split(',')[1].trim();
+  
     // Update the guest's arrival status
     await DataStore.save(
-      PartyGuests.copyOf(guest, updated => {
+      PartyGuests.copyOf(guest, (updated) => {
         updated.Arrived = true;
-        updated.ArrivalTime = new Date().toISOString().split('T')[1].slice(0, -1);
+        updated.ArrivalTime = arrivalTime;
       })
     );
-
+  
     // Retrieve the PartyBooking object that corresponds to the selected party
     const partyBook = await DataStore.query(PartyBooking, selectedParty);
-
+  
     // Update Current Guests in PartyBooking record
     await DataStore.save(
-      PartyBooking.copyOf(partyBook, updated => {
+      PartyBooking.copyOf(partyBook, (updated) => {
         updated.CurrentGuests = partyBook.CurrentGuests + 1;
-
       })
     );
+  
+    // Record the event with Amplify Analytics
+    Analytics.record({
+      name: 'guestsInBuilding',
+      attributes: {
+        guestName: guest.ChildName,
+        branchId: 'Cheeky Dino Maidstone',
+        numberofGuests: 1,
+        time: arrivalTime,
+        date: currentTime// replace with your branch ID
+        // additional attributes here
+      }
+    });
   };
+  
 
 
   const HandleLeft = async function HandleLeft(selectedParty) {
-
     // Query the PartyBooking object with the specified ID
     const partyBooking = await DataStore.query(PartyBooking, selectedParty);
-
+  
+    // Format the current time according to the Europe/London time zone
+    const currentTime = new Date();
+    const options = { timeZone: 'Europe/London', hour12: false };
+    const departureTime = currentTime.toLocaleString('en-GB', options).split(',')[1].trim();
+  
+    // Update the PartyChildLeft property of the PartyBooking object
     await DataStore.save(
       PartyBooking.copyOf(partyBooking, (updated) => {
-        updated.PartyChildLeft = new Date().toISOString().split('T')[1].slice(0, -1);
+        updated.PartyChildLeft = departureTime;
       })
     );
-
+  
     // Send a message to the ChatDashboard component
     await DataStore.save(
       new Messages({
         content: `Party ${partyBooking.ChildName} has left make sure to check them out and clean the party room`,
         email: 'Front Desk',
         group: ['Party Host', 'Staff', 'Admin', 'Developer', 'TeamLeader'],
-        createdAt: new Date().toISOString().split('T')[1].slice(0, -1)
+        createdAt: departureTime
       })
     );
-
     console.log(`Party ${partyBooking.ChildName} has left`);
   }
 
@@ -190,26 +225,32 @@ export default function Till() {
   async function HandleClient(selectedParty) {
     // Query the PartyBooking object with the specified ID
     const partyBooking = await DataStore.query(PartyBooking, selectedParty);
-
+  
+    // Format the current time according to the Europe/London time zone
+    const currentTime = new Date();
+    const options = { timeZone: 'Europe/London', hour12: false };
+    const arrivalTime = currentTime.toLocaleString('en-GB', options).split(',')[1].trim();
+  
     // Update the PartyChildMumArrived property of the PartyBooking object
     await DataStore.save(
       PartyBooking.copyOf(partyBooking, (updated) => {
-        updated.PartyChildMumArrived = new Date().toISOString().split('T')[1].slice(0, -1);
+        updated.PartyChildMumArrived = arrivalTime;
       })
     );
-
+  
     // Send a message to the ChatDashboard component
     await DataStore.save(
       new Messages({
         content: `Party ${partyBooking.ChildName} has arrived make sure to check them in and prepare the party room`,
         email: 'Front Desk',
         group: ['Party Host', 'Staff', 'Admin', 'Developer', 'TeamLeader'],
-        createdAt: new Date().toISOString().split('T')[1].slice(0, -1)
+        createdAt: arrivalTime
       })
     );
-
+  
     console.log(`Party ${partyBooking.ChildName} has arrived`);
   }
+  
 
   if (scanner === true) {
     return (<BarCodeScanner />);

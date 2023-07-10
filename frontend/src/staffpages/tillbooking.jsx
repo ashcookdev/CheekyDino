@@ -88,6 +88,10 @@ export default function SessionBook() {
     { table: 29, capacity: 4 },
     { table: 30, capacity: 4 },
     { table: 31, capacity: 4 },
+    { table: 32, capacity: 4 },
+    { table: 33, capacity: 4 },
+    { table: 34, capacity: 4 },
+    { table: 35, capacity: 4 },
   ];
 
   console.log(children, adults, date)
@@ -167,19 +171,6 @@ export default function SessionBook() {
     setTrue(true)
   }
   
-
-
-
-
-
-
-       
-
-
-
-
-
-
 
     // filter sessions for now or later using TimeSlotTo and TimeSlotFrom and Table 
   return (

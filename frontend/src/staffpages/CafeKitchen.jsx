@@ -58,10 +58,11 @@ export default function CafeKitchen() {
     , []);
 
     function HandleOrderConfirmed(order) {
-      const currentTime = new Date();
-const awstime = currentTime.toISOString().split('T')[1].split('.')[0];
-const formattedTime = awstime.substring(0, 5);
 
+       const currentTime = new Date();
+  const options = { timeZone: 'Europe/London', hour12: false };
+  const awstime = currentTime.toLocaleString('en-GB', options).split(',')[1].trim();
+  const formattedTime = awstime.substring(0, 5);
 
 
       // Update record in DataStore

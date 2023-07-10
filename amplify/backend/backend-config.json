@@ -133,5 +133,12 @@
         }
       ]
     }
+  },
+  "storage": {
+    "s3cheekydinoaiml": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
+    }
   }
 }

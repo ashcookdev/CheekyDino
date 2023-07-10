@@ -4,6 +4,7 @@ import { Sessions } from './models';
 import { format, addHours } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import Till from './Till';
+import { Analytics } from 'aws-amplify';
 
 
 export default function TableSelect({ availableTables, onSelect, details }) {
@@ -73,6 +74,19 @@ export default function TableSelect({ availableTables, onSelect, details }) {
             })
         ).then(() => {
             console.log('Data saved successfully');
+            Analytics.record({
+                name: 'guestsInBuilding',
+                attributes: {
+                    guestName: savedDetails.name,
+                    branchId: 'Cheeky Dino Maidstone',
+                    numberofGuests: children + adults,
+                    time: nowString,
+                    date: awsDate,
+                     // replace with your branch ID
+                    // additional attributes here
+                }
+            });
+
             setTrue(true)
         }).catch((error) => {
             console.error('Error saving data:', error);

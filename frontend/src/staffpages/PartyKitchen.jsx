@@ -1,30 +1,23 @@
-import { format, set } from 'date-fns';
 import { useState, useEffect } from 'react';
-import { DataStore, Predicates } from 'aws-amplify';
-import { PartyBooking } from './models';
-import { PartyGuests } from './models';
-import { Messages } from './models';
-import KitchenStats from './KitchenStats';
+import { DataStore } from 'aws-amplify';
+import { PartyBooking, PartyGuests, Messages } from './models';
+import { format } from 'date-fns';
 
 function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-    }
+  return classes.filter(Boolean).join(' ');
+}
+
 
 
 export default function Kitchen() {
   const [currentTime, setCurrentTime] = useState(0);
-  
   const [party, setPartyBookings] = useState([]);
   const [partyGuests, setPartyGuests] = useState([]);
-    const [selected, setSelected] = useState({})
-    const allGuestsSelected = selected.length === partyGuests.length;
-    const [bookingConfirmed, setBookingConfirmed] = useState(false);
-      const [fieldsetVisible, setFieldsetVisible] = useState(false);
-     
-
-
-
- 
+  const [selected, setSelected] = useState({});
+  const allGuestsSelected = selected.length === partyGuests.length;
+  const [bookingConfirmed, setBookingConfirmed] = useState(false);
+  const [fieldsetVisible, setFieldsetVisible] = useState(false);
+  const [noPartyBookings, setNoPartyBookings] = useState(false);
 
   const currentDate = new Date();
   const formattedDate = format(currentDate, 'MMMM dd, yyyy');
@@ -39,9 +32,7 @@ export default function Kitchen() {
 
   const formattedTime = format(currentTime, 'h:mm:ss a');
 
-  console.log(selected)
-  //show current date
-  
+  console.log(selected);
 
   async function fetchTodaysPartyBookings() {
     const today = new Date();
@@ -55,21 +46,20 @@ export default function Kitchen() {
       (booking) =>
         new Date(booking.PartyDate) >= today && new Date(booking.PartyDate) < tomorrow
     );
-    console.log(partyBookings)
+    console.log(partyBookings);
     setPartyBookings(partyBookings);
-    const partybookingId = partyBookings[0].id;
-    const partyGuests = await DataStore.query(PartyGuests);
-    // get booking id from party booking and filter results from party guests
-    const guests = partyGuests.filter((guest) => guest.partybookingID === partybookingId);
-    console.log(guests)
-    setPartyGuests(guests);
-
+    if (partyBookings.length > 0) {
+      setNoPartyBookings(false);
+      const partybookingId = partyBookings[0].id;
+      const partyGuests = await DataStore.query(PartyGuests);
+      // get booking id from party booking and filter results from party guests
+      const guests = partyGuests.filter((guest) => guest.partybookingID === partybookingId);
+      console.log(guests);
+      setPartyGuests(guests);
+    } else {
+      setNoPartyBookings(true);
     }
-
-  
-    
-    //
-  
+  }
 
   const stats = [
     { id: 1, name: 'Partys Today', value: party.length },
@@ -88,7 +78,6 @@ export default function Kitchen() {
     return () => subscription.unsubscribe();
   }, []);
 
-  
   function handleViewOrderClick() {
     setFieldsetVisible((prevVisible) => !prevVisible);
   }
@@ -97,22 +86,18 @@ export default function Kitchen() {
     const { name, value } = event.target;
     setSelected((prevSelected) => ({ ...prevSelected, [name]: JSON.parse(value) }));
   }
-  
-  
 
-  async function handleConfirmClick( party) {
+  async function handleConfirmClick(party) {
     const awstime = currentTime.toISOString().split('T')[1].split('.')[0];
 
-
-
     const partyGuests = await DataStore.query(PartyGuests);
-  for (const guest of partyGuests) {
-    await DataStore.save(
-      PartyGuests.copyOf(guest, (updated) => {
-        updated.Completed = true;
-      })
-    );
-  }
+    for (const guest of partyGuests) {
+      await DataStore.save(
+        PartyGuests.copyOf(guest, (updated) => {
+          updated.Completed = true;
+        })
+      );
+    }
 
     const original = await DataStore.query(PartyBooking, party.id);
     await DataStore.save(
@@ -123,24 +108,25 @@ export default function Kitchen() {
 
     await DataStore.save(
       new Messages({
-        content: "Food Ready for " + party.ChildName + " Party Come to the Kitchen",
+        content: 'Food Ready for ' + party.ChildName + ' Party Come to the Kitchen',
         createdAt: awstime,
-        email: "Kitchen",
-        group: ["Staff", "Kitchen", "Team Leader"],
+        email: 'Kitchen',
+        group: ['Staff', 'Kitchen', 'Team Leader'],
       })
     );
     window.location.reload();
   }
-  
-
 
   return (
+   
+
    
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
 
     
 <ul className="divide-y divide-gray-100 bg-gray-900 rounded-lg shadow-lg">
-        
+{noPartyBookings && <p className='text-white'>No party bookings today.</p>}
+
 {party
   .filter((booking) => !booking.PartyFoodComplete)
   .sort((a, b) => new Date(a.PartyTime) - new Date(b.PartyTime))

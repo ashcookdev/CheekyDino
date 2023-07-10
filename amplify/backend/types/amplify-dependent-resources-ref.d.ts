@@ -24,5 +24,11 @@ export type AmplifyDependentResourcesAttributes = {
       "UserPoolId": "string",
       "UserPoolName": "string"
     }
+  },
+  "storage": {
+    "s3cheekydinoaiml": {
+      "BucketName": "string",
+      "Region": "string"
+    }
   }
 }

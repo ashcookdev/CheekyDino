@@ -1,29 +1,64 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import {Auth} from 'aws-amplify';
+import { Auth } from 'aws-amplify';
+import { useState, useEffect } from 'react';
+import { DataStore } from 'aws-amplify';
+import { Sessions } from '../../staffpages/models';
 
-const navigation = [
-  {name: 'Session Bookings', href: '/sessionbookings', current: false},
-  { name: 'Party Booking', href: '/my-booking', current: true },
-    { name: 'Payments', href: '/payments', current: false },
-  { name: 'Book Again', href: '/packages', current: false },
-]
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function CustomerNav() {
 
-    const handleSignOut = async () => {
-        try {
-          await Auth.signOut();
-          window.location.reload();
-        } catch (error) {
-          console.error('Error signing out: ', error);
-        }
-      };
+  
+  const [Arrived, setArrived] = useState(false);
+  const [LeftCenter, setLeftCenter] = useState(false);
+
+
+  useEffect(() => {
+    async function getArrived() {
+      // Get the current authenticated user's information
+      const user = await Auth.currentAuthenticatedUser();
+      // Get the user's email from their Cognito details
+      const email = user.attributes.email;
+      // Get today's date in the format expected by the AWSDate scalar type (YYYY-MM-DD)
+      const today = new Date().toISOString().split('T')[0];
+      // Query the Sessions model for all sessions
+      const sessions = await DataStore.query(Sessions);
+      // Filter the sessions array to only include sessions with a matching Email field and a matching Date field
+      const filteredSessions = sessions.filter(
+        (session) => session.Email === email && session.Date === today
+      );
+      if (filteredSessions.length > 0) {
+        setArrived(filteredSessions[0].Arrived);
+        setLeftCenter(filteredSessions[0].LeftCenter);
+      }
+      
+    }
+    getArrived();
+  }, []);
+
+  const navigation = [
+    { name: 'Session Bookings', href: '/sessionbookings', current: false },
+    { name: 'Party Booking', href: '/my-booking', current: true },
+    { name: 'Payments', href: '/payments', current: false },
+    { name: 'Book Again', href: '/packages', current: false },
+    // Add a new option that only appears when Arrived is true and LeftCenter is false
+    Arrived && !LeftCenter && { name: 'Order', href: '/Order', current: false },
+  ].filter(Boolean);
+
+  const handleSignOut = async () => {
+    try {
+      await Auth.signOut();
+      window.location.reload();
+    } catch (error) {
+      console.error('Error signing out: ', error);
+    }
+  };
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -124,17 +159,17 @@ export default function Example() {
                         )}
                       </Menu.Item>
                       <Menu.Item>
-                      {({ active }) => (
-          <button
-            onClick={handleSignOut}
-            className={classNames(
-              active ? 'bg-gray-100' : '',
-              'block w-full text-left px-4 py-2 text-sm text-gray-700'
-            )}
-          >
-            Sign out
-          </button>
-        )}
+                        {({ active }) => (
+                          <button
+                            onClick={handleSignOut}
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block w-full text-left px-4 py-2 text-sm text-gray-700'
+                            )}
+                          >
+                            Sign out
+                          </button>
+                        )}
                       </Menu.Item>
                     </Menu.Items>
                   </Transition>
