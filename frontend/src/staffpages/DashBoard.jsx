@@ -68,7 +68,7 @@ export default function Dashboard() {
         async function fetchSessions() {
             const date = new Date();
             const dateString = date.toISOString().split('T')[0];
-            const currentTime = format(new Date(), 'HH,mm');
+            const currentTime = format(currentDate, 'h:mm:ss a');
 
             // Fetch all sessions for the current date
             const sessions = await DataStore.query(Sessions, c => c.Date.eq(dateString));
@@ -77,8 +77,15 @@ export default function Dashboard() {
             const occupiedTables = sessions.filter(session => session.TimeslotFrom < currentTime && session.TimeslotTo > currentTime);
 
             // Calculate the total number of current guests
-            const currentGuests = occupiedTables.reduce((total, session) => total + session.Adults + session.Children, 0);
-
+            const filteredSessions = occupiedTables.filter(
+                session => !(session.LeftCenter === true && session.Arrived === true)
+              );
+              
+              const currentGuests = filteredSessions.reduce(
+                (total, session) => total + session.Adults + session.Children,
+                0
+              );
+              
             // Filter sessions to find those that are booked for the future
             const futureBookings = sessions.filter(session => session.TimeslotFrom > currentTime);
 

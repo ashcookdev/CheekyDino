@@ -23,13 +23,13 @@ type EagerSessions = {
   readonly Orders?: number | null;
   readonly Prepaid?: boolean | null;
   readonly TotalSpent?: number | null;
-  readonly CafeOrderID?: string | null;
   readonly Adults?: number | null;
   readonly Children?: number | null;
   readonly Arrived?: boolean | null;
   readonly LeftCenter?: boolean | null;
   readonly ExtraTables?: number | null;
   readonly Telephone?: string | null;
+  readonly CafeOrders?: (CafeOrder | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -51,13 +51,13 @@ type LazySessions = {
   readonly Orders?: number | null;
   readonly Prepaid?: boolean | null;
   readonly TotalSpent?: number | null;
-  readonly CafeOrderID?: string | null;
   readonly Adults?: number | null;
   readonly Children?: number | null;
   readonly Arrived?: boolean | null;
   readonly LeftCenter?: boolean | null;
   readonly ExtraTables?: number | null;
   readonly Telephone?: string | null;
+  readonly CafeOrders: AsyncCollection<CafeOrder>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -81,6 +81,9 @@ type EagerCafeOrder = {
   readonly HotItems?: (string | null)[] | null;
   readonly Table?: number | null;
   readonly Completed?: boolean | null;
+  readonly Delieved?: boolean | null;
+  readonly sessionsID?: string | null;
+  readonly Sessionid?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -98,6 +101,9 @@ type LazyCafeOrder = {
   readonly HotItems?: (string | null)[] | null;
   readonly Table?: number | null;
   readonly Completed?: boolean | null;
+  readonly Delieved?: boolean | null;
+  readonly sessionsID?: string | null;
+  readonly Sessionid?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

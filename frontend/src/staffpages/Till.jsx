@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DataStore } from "aws-amplify";
+import { DataStore, Predicates } from "aws-amplify";
 import { CafeOrder } from "./models";
 import { format, parse } from "date-fns";
 import { PartyBooking } from './models';
@@ -10,6 +10,7 @@ import TillBooking from "./tillbooking";
 import { Sessions } from "./models";
 import Tables from "./tables";
 import { Analytics } from 'aws-amplify';
+import TillSession from "./tillsession";
 
 
 
@@ -32,6 +33,7 @@ export default function Till() {
   const [scanner, setScanner] = useState(false);
   const [arrival, setArrival] = useState(false);
   const [tablee, setTablee] = useState(false);
+  const [session, setSession] = useState(false);
 
 
   
@@ -80,22 +82,40 @@ export default function Till() {
 
   const handleConfirmClick = async () => {
     const currentTime = new Date();
-    const options = { timeZone: 'Europe/London', hour12: false };
-    const awstime = currentTime.toLocaleString('en-GB', options).split(',')[1].trim();
-    const formattedTime = awstime.substring(0, 5);
-    // Save all the items in the order to the data store
-    await DataStore.save(
-      new CafeOrder({
-        HotItems: order.map(item => item.name),
-        CreatedTime: formattedTime,
-        CreatedDate: new Date().toISOString().split('T')[0],
-        Total: total,
-        Table: table,
-        Completed: false
-      })
-    );
-    console.log("Order confirmed");
+const options = { timeZone: 'Europe/London', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit', millisecond: '2-digit' };
+const awstime = currentTime.toLocaleTimeString('en-GB', options);
 
+
+const sessions = await DataStore.query(Sessions, Predicates.ALL);
+const session = sessions.find(s => s.Table === table && s.Arrived === true);
+
+if (!session) {
+  alert('Error: No customer at table');
+  return;
+}
+
+
+// Update the session with the new order and total price
+await DataStore.save(
+  Sessions.copyOf(session, updated => {
+    updated.Orders += 1;
+    updated.TotalSpent += total;
+  })
+);
+
+// Save all the items in the order to the data store
+await DataStore.save(
+  new CafeOrder({
+    HotItems: order.map(item => item.name),
+    CreatedTime: awstime,
+    CreatedDate: new Date().toISOString().split('T')[0],
+    Total: total,
+    Table: table,
+    Completed: false,
+    Sessionid: session.id
+  })
+);
+console.log("Order confirmed");
     // Reset the order and total price
     setOrder([]);
     setTotal(0);
@@ -184,7 +204,8 @@ export default function Till() {
         branchId: 'Cheeky Dino Maidstone',
         numberofGuests: 1,
         time: arrivalTime,
-        date: currentTime// replace with your branch ID
+        date: currentTime,
+        lefttime: null// replace with your branch ID
         // additional attributes here
       }
     });
@@ -263,6 +284,9 @@ return <TillBooking/>  }
 if (tablee === true) {
   return <Tables/>  }
 
+if (session === true) {
+  return <TillSession/>
+}
 
 
 
@@ -300,6 +324,10 @@ New Arrival
         <button className="w-20 h-20 bg-red-600 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-2 mb-2 flex items-center justify-center "
 onClick={() => setTablee(true)} >
 Tables
+        </button>
+        <button className="w-20 h-20 bg-red-600 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-2 mb-2 flex items-center justify-center "
+onClick={() => setSession(true)} >
+Sessions
         </button>
 
 

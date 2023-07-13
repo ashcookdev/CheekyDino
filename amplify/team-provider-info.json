@@ -32,6 +32,9 @@
       },
       "api": {
         "CheekyDino": {}
+      },
+      "storage": {
+        "s3cheekydinoaiml": {}
       }
     }
   }

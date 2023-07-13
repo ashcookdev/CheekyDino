@@ -24,7 +24,6 @@ export declare type SessionsCreateFormInputValues = {
     Orders?: number;
     Prepaid?: boolean;
     TotalSpent?: number;
-    CafeOrderID?: string;
     Adults?: number;
     Children?: number;
     Arrived?: boolean;
@@ -44,7 +43,6 @@ export declare type SessionsCreateFormValidationValues = {
     Orders?: ValidationFunction<number>;
     Prepaid?: ValidationFunction<boolean>;
     TotalSpent?: ValidationFunction<number>;
-    CafeOrderID?: ValidationFunction<string>;
     Adults?: ValidationFunction<number>;
     Children?: ValidationFunction<number>;
     Arrived?: ValidationFunction<boolean>;
@@ -66,7 +64,6 @@ export declare type SessionsCreateFormOverridesProps = {
     Orders?: PrimitiveOverrideProps<TextFieldProps>;
     Prepaid?: PrimitiveOverrideProps<SwitchFieldProps>;
     TotalSpent?: PrimitiveOverrideProps<TextFieldProps>;
-    CafeOrderID?: PrimitiveOverrideProps<TextFieldProps>;
     Adults?: PrimitiveOverrideProps<TextFieldProps>;
     Children?: PrimitiveOverrideProps<TextFieldProps>;
     Arrived?: PrimitiveOverrideProps<SwitchFieldProps>;

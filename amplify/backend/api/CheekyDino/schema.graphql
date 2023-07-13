@@ -11,13 +11,13 @@ type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: pub
   Orders: Int
   Prepaid: Boolean
   TotalSpent: Float
-  CafeOrderID: String
   Adults: Int
   Children: Int
   Arrived: Boolean
   LeftCenter: Boolean
   ExtraTables: Int
   Telephone: String
+  CafeOrders: [CafeOrder] @hasMany(indexName: "bySessions", fields: ["id"])
 }
 
 type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -29,6 +29,9 @@ type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
   HotItems: [String]
   Table: Int
   Completed: Boolean
+  Delieved: Boolean
+  sessionsID: ID @index(name: "bySessions")
+  Sessionid: String
 }
 
 type Messages @model @auth(rules: [{allow: private}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartHosts"], operations: [read, create]}, {allow: groups, groups: ["Staff"], operations: [read, create]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: owner, operations: [create, read]}]) {
@@ -98,4 +101,5 @@ type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: [
   LeftBranch: Boolean
   CurrentGuests: Int
   LeftBranchTime: AWSTime
-} 
+}
+ 

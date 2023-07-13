@@ -87,13 +87,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "CafeOrderID": {
-                    "name": "CafeOrderID",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
                 "Adults": {
                     "name": "Adults",
                     "isArray": false,
@@ -135,6 +128,22 @@ export const schema = {
                     "type": "String",
                     "isRequired": false,
                     "attributes": []
+                },
+                "CafeOrders": {
+                    "name": "CafeOrders",
+                    "isArray": true,
+                    "type": {
+                        "model": "CafeOrder"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "sessionsID"
+                        ]
+                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -257,6 +266,27 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "Delieved": {
+                    "name": "Delieved",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "sessionsID": {
+                    "name": "sessionsID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Sessionid": {
+                    "name": "Sessionid",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -280,6 +310,15 @@ export const schema = {
                 {
                     "type": "model",
                     "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "bySessions",
+                        "fields": [
+                            "sessionsID"
+                        ]
+                    }
                 },
                 {
                     "type": "auth",
@@ -1247,5 +1286,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.3",
-    "version": "af0fa08e54eb06a4cb90e7ec78b86378"
+    "version": "4b1ba6b2312c1aa587e0af5d608dfc46"
 };

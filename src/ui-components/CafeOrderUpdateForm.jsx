@@ -201,6 +201,8 @@ export default function CafeOrderUpdateForm(props) {
     HotItems: [],
     Table: "",
     Completed: false,
+    Delieved: false,
+    Sessionid: "",
   };
   const [CreatedTime, setCreatedTime] = React.useState(
     initialValues.CreatedTime
@@ -213,6 +215,8 @@ export default function CafeOrderUpdateForm(props) {
   const [HotItems, setHotItems] = React.useState(initialValues.HotItems);
   const [Table, setTable] = React.useState(initialValues.Table);
   const [Completed, setCompleted] = React.useState(initialValues.Completed);
+  const [Delieved, setDelieved] = React.useState(initialValues.Delieved);
+  const [Sessionid, setSessionid] = React.useState(initialValues.Sessionid);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = cafeOrderRecord
@@ -227,6 +231,8 @@ export default function CafeOrderUpdateForm(props) {
     setCurrentHotItemsValue("");
     setTable(cleanValues.Table);
     setCompleted(cleanValues.Completed);
+    setDelieved(cleanValues.Delieved);
+    setSessionid(cleanValues.Sessionid);
     setErrors({});
   };
   const [cafeOrderRecord, setCafeOrderRecord] =
@@ -254,6 +260,8 @@ export default function CafeOrderUpdateForm(props) {
     HotItems: [],
     Table: [],
     Completed: [],
+    Delieved: [],
+    Sessionid: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -288,6 +296,8 @@ export default function CafeOrderUpdateForm(props) {
           HotItems,
           Table,
           Completed,
+          Delieved,
+          Sessionid,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -351,6 +361,8 @@ export default function CafeOrderUpdateForm(props) {
               HotItems,
               Table,
               Completed,
+              Delieved,
+              Sessionid,
             };
             const result = onChange(modelFields);
             value = result?.CreatedTime ?? value;
@@ -382,6 +394,8 @@ export default function CafeOrderUpdateForm(props) {
               HotItems,
               Table,
               Completed,
+              Delieved,
+              Sessionid,
             };
             const result = onChange(modelFields);
             value = result?.CreatedDate ?? value;
@@ -416,6 +430,8 @@ export default function CafeOrderUpdateForm(props) {
               HotItems,
               Table,
               Completed,
+              Delieved,
+              Sessionid,
             };
             const result = onChange(modelFields);
             value = result?.Total ?? value;
@@ -442,6 +458,8 @@ export default function CafeOrderUpdateForm(props) {
               HotItems,
               Table,
               Completed,
+              Delieved,
+              Sessionid,
             };
             const result = onChange(modelFields);
             values = result?.DrinkItems ?? values;
@@ -492,6 +510,8 @@ export default function CafeOrderUpdateForm(props) {
               HotItems: values,
               Table,
               Completed,
+              Delieved,
+              Sessionid,
             };
             const result = onChange(modelFields);
             values = result?.HotItems ?? values;
@@ -548,6 +568,8 @@ export default function CafeOrderUpdateForm(props) {
               HotItems,
               Table: value,
               Completed,
+              Delieved,
+              Sessionid,
             };
             const result = onChange(modelFields);
             value = result?.Table ?? value;
@@ -578,6 +600,8 @@ export default function CafeOrderUpdateForm(props) {
               HotItems,
               Table,
               Completed: value,
+              Delieved,
+              Sessionid,
             };
             const result = onChange(modelFields);
             value = result?.Completed ?? value;
@@ -592,6 +616,70 @@ export default function CafeOrderUpdateForm(props) {
         hasError={errors.Completed?.hasError}
         {...getOverrideProps(overrides, "Completed")}
       ></SwitchField>
+      <SwitchField
+        label="Delieved"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={Delieved}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              CreatedTime,
+              CreatedDate,
+              Total,
+              DrinkItems,
+              HotItems,
+              Table,
+              Completed,
+              Delieved: value,
+              Sessionid,
+            };
+            const result = onChange(modelFields);
+            value = result?.Delieved ?? value;
+          }
+          if (errors.Delieved?.hasError) {
+            runValidationTasks("Delieved", value);
+          }
+          setDelieved(value);
+        }}
+        onBlur={() => runValidationTasks("Delieved", Delieved)}
+        errorMessage={errors.Delieved?.errorMessage}
+        hasError={errors.Delieved?.hasError}
+        {...getOverrideProps(overrides, "Delieved")}
+      ></SwitchField>
+      <TextField
+        label="Sessionid"
+        isRequired={false}
+        isReadOnly={false}
+        value={Sessionid}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              CreatedTime,
+              CreatedDate,
+              Total,
+              DrinkItems,
+              HotItems,
+              Table,
+              Completed,
+              Delieved,
+              Sessionid: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Sessionid ?? value;
+          }
+          if (errors.Sessionid?.hasError) {
+            runValidationTasks("Sessionid", value);
+          }
+          setSessionid(value);
+        }}
+        onBlur={() => runValidationTasks("Sessionid", Sessionid)}
+        errorMessage={errors.Sessionid?.errorMessage}
+        hasError={errors.Sessionid?.hasError}
+        {...getOverrideProps(overrides, "Sessionid")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

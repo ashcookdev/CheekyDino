@@ -69,6 +69,7 @@ export default function CafeKitchen() {
       DataStore.save(
         CafeOrder.copyOf(order, (updated) => {
           updated.Completed = true;
+          updated.Delieved= false;
         })
       );
     
@@ -129,7 +130,7 @@ export default function CafeKitchen() {
                     <div className="hidden sm:flex sm:flex-col sm:items-end">
                       <p className="text-sm leading-6 text-gray-900">{order.role}</p>
                         <p className="mt-1 text-xs leading-5 text-white">
-                          Order Time:       {format(parse(order.CreatedTime, 'HH:mm:ss.SSS', new Date()), 'h:mm a')}
+                          Order Time:       {format(parse(order.CreatedTime, 'HH:mm:ss', new Date()), 'h:mm a')}
 
 
                         </p>

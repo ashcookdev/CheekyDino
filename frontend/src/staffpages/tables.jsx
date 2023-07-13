@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { DataStore } from "@aws-amplify/datastore";
+import { DataStore, Predicates } from "@aws-amplify/datastore";
 import { Sessions } from "./models";
+import {CafeOrder} from "./models";
 import { format, formatDistanceToNow, parse } from "date-fns";
 import { MoveTableDropdown } from "./MoveTableDropdown";
-import { OrderProgress } from "./orderprogress";
+import TableProgress from "./tableprogress.jsx";
 
 function Table({
   number,
@@ -13,12 +14,23 @@ function Table({
   onConfirmClick,
   name,
   guests,
-  onCleanClick, // add this line
+  orders,
+  total,
+  sessionid,
   onMoveClick, // add this line
+  
+
 }) {
   const [isLast10Minutes, setIsLast10Minutes] = useState(false);
+  const [cafeOrders, setCafeOrders] = useState([]);
+  const [progressBarWidth, setProgressBarWidth] = useState(0);
+  const [progressBarText, setProgressBarText] = useState('');
+
+  console.log(cafeOrders);
+  console.log(sessionid)
 
 
+  
 
   useEffect(() => {
     if (isBooked) {
@@ -31,18 +43,67 @@ function Table({
     }
   }, [isBooked, remainingTime]);
 
+  useEffect(() => {
+    fetchTodaysOrders();
+    const subscription = DataStore.observe(CafeOrder).subscribe(() =>
+      fetchTodaysOrders()
+    );
+    return () => subscription.unsubscribe();
+  }, []);
+
+  
 
 
+  async function fetchTodaysOrders() {
+    if (sessionid) {
+      const orders = (await DataStore.query(CafeOrder)).filter(
+        c => c.Sessionid === sessionid
+      );
+      setCafeOrders(orders);
+    } else {
+      setCafeOrders([]);
+    }
+  }
+  
+    
+    
+
+    useEffect(() => {
+      console.log('sessionid changed:', sessionid);
+    }, [sessionid]);
+    
+  
+     
+
+    useEffect(() => {
+      if (cafeOrders.length > 0) {
+        const lastOrder = cafeOrders[cafeOrders.length - 1];
+        console.log('lastOrder:', lastOrder);
+        if (!lastOrder.Completed && !lastOrder.Delieved) {
+          setProgressBarWidth(25);
+          setProgressBarText('Cooking');
+        } else if (lastOrder.Completed && !lastOrder.Delieved) {
+          setProgressBarWidth(75);
+          setProgressBarText('Sent to Table');
+        } else if (lastOrder.Completed && lastOrder.Delieved) {
+          setProgressBarWidth(0);
+          setProgressBarText('');
+        }
+      }
+    }, [cafeOrders]);
+    
 
   return (
     <li
-      className={`relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6 ${isLast10Minutes ? "bg-yellow-500 animate-pulse" : ""
-        }`}
+      className={`relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6 ${
+        isLast10Minutes ? 'bg-yellow-500 animate-pulse' : ''
+      }`}
     >
       <div className="flex gap-x-4">
         <div
-          className={`h-12 w-12 flex-none rounded-full flex items-center justify-center ${isBooked ? "bg-red-500" : "bg-green-500"
-            }`}
+          className={`h-12 w-12 flex-none rounded-full flex items-center justify-center ${
+            isBooked ? 'bg-red-500' : 'bg-green-500'
+          }`}
         >
           <span className="text-white font-bold text-lg">{number}</span>
         </div>
@@ -56,8 +117,13 @@ function Table({
           <p className="text-sm font-semibold leading-6 text-gray-900">
             Guests: {guests}
           </p>
-
-
+          <p className="text-sm font-semibold leading-6 text-gray-900">
+            Orders: {orders}
+          </p>
+          <p className="text-sm font-semibold leading-6 text-gray-900">
+            Total Spent:£{total}
+          </p>
+  
           {isBooked && (
             <p className="mt-1 flex text-xs leading-5 text-gray-500">
               Booked for {timeslot}
@@ -65,42 +131,61 @@ function Table({
           )}
         </div>
       </div>
-      <div className="flex items-center gap-x-4">
-        <div className="hidden sm:flex sm:flex-col sm:items-end">
-          {isBooked && (
-            <p className="mt-1 text-xs leading-5 text-gray-500">
-              Remaining time: {remainingTime}
-            </p>
-          )}
-        </div>
-        {isLast10Minutes && (
-          <button
-            type="button"
-            onClick={() => onConfirmClick(number)}
-            className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Confirm
-          </button>
+      <div>
+        <h4 className="sr-only">Status</h4>
+        {progressBarWidth > 0 && (
+          <>
+            <p className="text-sm font-medium text-gray-900">Current Orders</p>
+            <div className="mt-6" aria-hidden="true">
+              <div className="overflow-hidden rounded-full bg-gray-200">
+                <div
+  className="h-2 rounded-full bg-indigo-600"
+                  style={{ width: `${progressBarWidth}%` }}
+                />
+              </div>
+              <div className="mt-6 hidden grid-cols-4 text-sm font-medium text-gray-600 sm:grid">
+                <div>{progressBarText}</div>
+              </div>
+            </div>
+          </>
         )}
       </div>
-
+      <div className="hidden sm:flex sm:flex-col sm:items-end">
+        {isBooked && (
+          <p className="mt-1 text-xs leading-5 text-gray-500">
+            Remaining time: {remainingTime}
+          </p>
+        )}
+      </div>
       <button
-        type="button"
-        onClick={() => onMoveClick(number)}
-        className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >
-        Move
-      </button>
+          type="button"
+          onClick={() => onMoveClick(number)}
+          className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          Move Table
+        </button>
+        
 
-    </li>
+      {isLast10Minutes && (
+        <button
+          type="button"
+          onClick={() => onConfirmClick(number)}
+          className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          Confirm
+        </button>
+      )}
+      {/* Closing tag for the first div */}
+    </li> // Closing tag for the li
   );
-}
+      }  
 
-function Tables({ sessions, orders }) {
+function Tables({ sessions }) {
 
   const [freeTables, setFreeTables] = useState(null);
   const [truthy, setTruthy] = useState(false);
   const [tableNumber, setSelectedTable] = useState(null);
+  const [order, setOrder] = useState([]);
 
 
 
@@ -178,27 +263,61 @@ function Tables({ sessions, orders }) {
     });
     setTables(updatedTables);
   }, [sessions]);
+  
 
-  async function handleConfirmClick(tableNumber) {
-    // Query the DataStore for sessions that start after the current time and have the same table number as the clicked table
+  async function handleConfirmClick(number, timeLeft) {
+    // Query the DataStore for all sessions
+    const sessions = await DataStore.query(Sessions);
+    // Filter the sessions to only include those that start after the current time and have the same table number as the clicked table
     const currentTime = format(new Date(), "HH:mm");
-    const nextSessions = await DataStore.query(Sessions, (session) =>
-      session
-        .Table("eq", tableNumber)
-        .TimeslotFrom("gt", currentTime)
+    const nextSessions = sessions.filter(
+      session => session.Table === tableNumber && session.TimeslotFrom > currentTime
     );
-
+  
     // Only make the table available if it is not booked in the next timeslot
     if (nextSessions.length === 0) {
-      setTables((prevTables) =>
-        prevTables.map((table) =>
+      setTables(prevTables =>
+        prevTables.map(table =>
           table.number === tableNumber
-            ? { ...table, isBooked: false, timeslot: null, remainingTime: null, name: table.Name, guests: table.Children + table.Adults }
+            ? {
+                ...table,
+                isBooked: false,
+                timeslot: null,
+                remainingTime: null,
+                name: table.Name,
+                guests: table.Children + table.Adults,
+                orders: table.Orders,
+                total: table.TotalSpent,
+                sessionid: table.id,
+              }
             : table
         )
       );
     }
+  
+    // Filter the sessions to only include those with the given table number, where Arrived is true and LeftCenter is false
+    const sess = await DataStore.query(Sessions);
+    // Filter the sessions to only include those with the given table number, where Arrived is true and LeftCenter is false
+    const filteredSessions = sess.filter(
+      session =>
+        session.Table === tableNumber && session.Arrived === true && session.LeftCenter === false
+    );
+    // If there is a session that meets these criteria, update its TimeLeft and LeftCenter fields
+    if (filteredSessions.length > 0) {
+      const session = filteredSessions[0];
+      await DataStore.save(
+        Sessions.copyOf(session, updated => {
+          updated.TimeLeft = timeLeft;
+          updated.LeftCenter = true;
+        })
+      );
+    } else {
+alert('Error: Cannot perform function');    }
   }
+    
+  
+    
+  
 
 
   // ...
@@ -206,6 +325,10 @@ function Tables({ sessions, orders }) {
   function handleMoveClick(tableNumber) {
     // Find the session for the table that was clicked
     const session = sessions.find((session) => session.Table === tableNumber);
+    if (!session) {
+        alert('Error: Cannot perform function');
+        return;
+    }
     // Get the end time of the session's timeslot
     const timeslotFinish = parse(session.TimeslotTo, "HH:mm", new Date());
     // Find the tables that are not booked or that have a timeslot that ends before the end of the clicked table's timeslot
@@ -225,11 +348,8 @@ function Tables({ sessions, orders }) {
     setTruthy(true);
     console.log(freeTablesWithCapacity);
     setSelectedTable(tableNumber);
+}
 
-
-
-
-  }
 
   if (truthy === true) {
     const session = sessions.find((session) => session.Table === tableNumber);
@@ -256,6 +376,9 @@ function Tables({ sessions, orders }) {
         // Get the name and number of guests from the session
         const name = session ? session.Name : null;
         const guests = session ? session.Adults + session.Children : null;
+        const orders = session ? session.Orders : null;
+        const total = session ? session.TotalSpent : null;
+        const sessionid = session ? session.id : null;
         return (
           <Table
             key={table.number}
@@ -267,6 +390,9 @@ function Tables({ sessions, orders }) {
             onMoveClick={handleMoveClick} // add this line
             name={name}
             guests={guests}
+            orders={orders}
+            total={total}
+            sessionid={sessionid}
           />
 
         );
@@ -291,17 +417,20 @@ export default function Example() {
       tomorrow.setDate(tomorrow.getDate() + 1);
 
       const currentTime = format(new Date(), "HH:mm");
+      console.log(currentTime);
 
       const sessions = await DataStore.query(Sessions);
       console.log(sessions);
       console.log(sessions[0].TimeslotFrom);
       const todaysSessions = sessions.filter(
-        (session) =>
+        session =>
           new Date(session.Date) >= today &&
           new Date(session.Date) < tomorrow &&
           session.TimeslotFrom <= currentTime &&
-          session.TimeslotTo >= currentTime
+          session.TimeslotTo >= currentTime &&
+          !(session.LeftCenter === true && session.Arrived === true)
       );
+      
 
       setSessions(todaysSessions);
     }

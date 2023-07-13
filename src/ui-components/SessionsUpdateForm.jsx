@@ -41,7 +41,6 @@ export default function SessionsUpdateForm(props) {
     Orders: "",
     Prepaid: false,
     TotalSpent: "",
-    CafeOrderID: "",
     Adults: "",
     Children: "",
     Arrived: false,
@@ -64,9 +63,6 @@ export default function SessionsUpdateForm(props) {
   const [Orders, setOrders] = React.useState(initialValues.Orders);
   const [Prepaid, setPrepaid] = React.useState(initialValues.Prepaid);
   const [TotalSpent, setTotalSpent] = React.useState(initialValues.TotalSpent);
-  const [CafeOrderID, setCafeOrderID] = React.useState(
-    initialValues.CafeOrderID
-  );
   const [Adults, setAdults] = React.useState(initialValues.Adults);
   const [Children, setChildren] = React.useState(initialValues.Children);
   const [Arrived, setArrived] = React.useState(initialValues.Arrived);
@@ -91,7 +87,6 @@ export default function SessionsUpdateForm(props) {
     setOrders(cleanValues.Orders);
     setPrepaid(cleanValues.Prepaid);
     setTotalSpent(cleanValues.TotalSpent);
-    setCafeOrderID(cleanValues.CafeOrderID);
     setAdults(cleanValues.Adults);
     setChildren(cleanValues.Children);
     setArrived(cleanValues.Arrived);
@@ -123,7 +118,6 @@ export default function SessionsUpdateForm(props) {
     Orders: [],
     Prepaid: [],
     TotalSpent: [],
-    CafeOrderID: [],
     Adults: [],
     Children: [],
     Arrived: [],
@@ -168,7 +162,6 @@ export default function SessionsUpdateForm(props) {
           Orders,
           Prepaid,
           TotalSpent,
-          CafeOrderID,
           Adults,
           Children,
           Arrived,
@@ -241,7 +234,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children,
               Arrived,
@@ -282,7 +274,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children,
               Arrived,
@@ -324,7 +315,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children,
               Arrived,
@@ -366,7 +356,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children,
               Arrived,
@@ -408,7 +397,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children,
               Arrived,
@@ -450,7 +438,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children,
               Arrived,
@@ -492,7 +479,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children,
               Arrived,
@@ -537,7 +523,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children,
               Arrived,
@@ -582,7 +567,6 @@ export default function SessionsUpdateForm(props) {
               Orders: value,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children,
               Arrived,
@@ -623,7 +607,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid: value,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children,
               Arrived,
@@ -668,7 +651,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent: value,
-              CafeOrderID,
               Adults,
               Children,
               Arrived,
@@ -688,47 +670,6 @@ export default function SessionsUpdateForm(props) {
         errorMessage={errors.TotalSpent?.errorMessage}
         hasError={errors.TotalSpent?.hasError}
         {...getOverrideProps(overrides, "TotalSpent")}
-      ></TextField>
-      <TextField
-        label="Cafe order id"
-        isRequired={false}
-        isReadOnly={false}
-        value={CafeOrderID}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Name,
-              Email,
-              TimeslotFrom,
-              TimeslotTo,
-              TimeLeft,
-              TimeArrived,
-              Date,
-              Table,
-              Orders,
-              Prepaid,
-              TotalSpent,
-              CafeOrderID: value,
-              Adults,
-              Children,
-              Arrived,
-              LeftCenter,
-              ExtraTables,
-              Telephone,
-            };
-            const result = onChange(modelFields);
-            value = result?.CafeOrderID ?? value;
-          }
-          if (errors.CafeOrderID?.hasError) {
-            runValidationTasks("CafeOrderID", value);
-          }
-          setCafeOrderID(value);
-        }}
-        onBlur={() => runValidationTasks("CafeOrderID", CafeOrderID)}
-        errorMessage={errors.CafeOrderID?.errorMessage}
-        hasError={errors.CafeOrderID?.hasError}
-        {...getOverrideProps(overrides, "CafeOrderID")}
       ></TextField>
       <TextField
         label="Adults"
@@ -754,7 +695,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults: value,
               Children,
               Arrived,
@@ -799,7 +739,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children: value,
               Arrived,
@@ -840,7 +779,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children,
               Arrived: value,
@@ -881,7 +819,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children,
               Arrived,
@@ -926,7 +863,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children,
               Arrived,
@@ -967,7 +903,6 @@ export default function SessionsUpdateForm(props) {
               Orders,
               Prepaid,
               TotalSpent,
-              CafeOrderID,
               Adults,
               Children,
               Arrived,
