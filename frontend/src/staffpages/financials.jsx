@@ -5,10 +5,19 @@ import { formatISO } from 'date-fns';
 import GraphFinance from './graphfinance';
 
 export default function Financials() {
-    const [cafeOrders, setCafeOrders] = useState({ hour: [], day: [], week: [], month: [] });
-    const [sessions, setSessions] = useState({ hour: [], day: [], week: [], month: [] });
-    const [partyBookings, setPartyBookings] = useState({ hour: [], day: [], week: [], month: [] });
-    
+  const [cafeOrders, setCafeOrders] = useState({ hour: [], day: [], week: [], month: [] });
+  const [sessions, setSessions] = useState({ hour: [], day: [], week: [], month: [] });
+  const [partyBookings, setPartyBookings] = useState({ hour: [], day: [], week: [], month: [] });
+  const [totalThisHour, setTotalThisHour] = useState(0);
+const [totalToday, setTotalToday] = useState(0);
+const [totalThisWeek, setTotalThisWeek] = useState(0);
+const [totalThisMonth, setTotalThisMonth] = useState(0);
+
+console.log(totalThisHour);
+console.log(totalToday);
+console.log(totalThisWeek);
+
+
 
   useEffect(() => {
     async function getData() {
@@ -92,109 +101,133 @@ export default function Financials() {
         booking => new Date(booking.PartyDate) >= today && new Date(booking.PartyDate) <= now
       );
 
-        const partyBookingsThisWeek = allPartyBookings.filter(
+      const partyBookingsThisWeek = allPartyBookings.filter(
         booking => new Date(booking.PartyDate) >= thisWeek && new Date(booking.PartyDate) <= now
-        );
-        const partyBookingsThisMonth = allPartyBookings.filter(
+      );
+      const partyBookingsThisMonth = allPartyBookings.filter(
         booking => new Date(booking.PartyDate) >= thisMonth && new Date(booking.PartyDate) <= now
-        );
-         setPartyBookings
+      );
+     // Calculate totals for cafe orders
+// Calculate totals for sessions
+// Calculate totals for sessions
+const totalSessionsThisHour = sessions.hour.reduce((total, session) => total + session.TotalSpent, 0);
+const totalSessionsToday = sessions.day.reduce((total, session) => total + session.TotalSpent, 0);
+const totalSessionsThisWeek = sessions.week.reduce((total, session) => total + session.TotalSpent, 0);
+const totalSessionsThisMonth = sessions.month.reduce((total, session) => total + session.TotalSpent, 0);
+
+// Calculate totals for party bookings
+const totalPartyBookingsThisHour = partyBookings.hour.reduce((total, booking) => total + booking.Total, 0);
+const totalPartyBookingsToday = partyBookings.day.reduce((total, booking) => total + booking.Total, 0);
+const totalPartyBookingsThisWeek = partyBookings.week.reduce((total, booking) => total + booking.Total, 0);
+const totalPartyBookingsThisMonth = partyBookings.month.reduce((total, booking) => total + booking.Total, 0);
+
+// Update state variables with calculated totals
+setTotalThisHour(totalSessionsThisHour + totalPartyBookingsThisHour);
+setTotalToday(totalSessionsToday + totalPartyBookingsToday);
+setTotalThisWeek(totalSessionsThisWeek + totalPartyBookingsThisWeek);
+setTotalThisMonth(totalSessionsThisMonth + totalPartyBookingsThisMonth);
+
+
+      setPartyBookings
         ({
-        hour: partyBookingsThisHour,
-        day: partyBookingsToday,
-        week: partyBookingsThisWeek,
-        month: partyBookingsThisMonth,
+          hour: partyBookingsThisHour,
+          day: partyBookingsToday,
+          week: partyBookingsThisWeek,
+          month: partyBookingsThisMonth,
         });
+        
     }
 
     getData();
-    }, []);
+  }, []);
 
-    function downloadData() {
-        // Create CSV data
-        let csvContent = 'data:text/csv;charset=utf-8,';
-        csvContent += 'Time Range,Cafe Orders,Sessions,Party Bookings\n';
-        csvContent += `Past Hour,£${cafeOrders.hour.reduce((acc, order) => acc + order.Total, 0).toFixed(2)},£${sessions.hour.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)},£${partyBookings.hour.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}\n`;
-        csvContent += `Current Day,£${cafeOrders.day.reduce((acc, order) => acc + order.Total, 0).toFixed(2)},£${sessions.day.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)},£${partyBookings.day.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}\n`;
-        csvContent += `This Week,£${cafeOrders.week.reduce((acc, order) => acc + order.Total, 0).toFixed(2)},£${sessions.week.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)},£${partyBookings.week.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}\n`;
-        csvContent += `This Month,£${cafeOrders.month.reduce((acc, order) => acc + order.Total, 0).toFixed(2)},£${sessions.month.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)},£${partyBookings.month.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}\n`;  
-        csvContent += `Total,£${cafeOrders.hour.reduce((acc, order) => acc + order.Total, 0).toFixed(2)},£${sessions.hour.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)},£${partyBookings.hour.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}\n`;
-        // Create download link
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement('a');
-        link.setAttribute('href', encodedUri);
-        link.setAttribute('download', `financials-${formatISO(new Date())}.csv`);
-        document.body.appendChild(link);
-        link.click();
-    }
+  function downloadData() {
+    // Create CSV data
+    let csvContent = 'data:text/csv;charset=utf-8,';
+    csvContent += 'Time Range,Cafe Orders,Sessions,Party Bookings\n';
+    csvContent += `Past Hour,£${cafeOrders.hour.reduce((acc, order) => acc + order.Total, 0).toFixed(2)},£${sessions.hour.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)},£${partyBookings.hour.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}\n`;
+    csvContent += `Current Day,£${cafeOrders.day.reduce((acc, order) => acc + order.Total, 0).toFixed(2)},£${sessions.day.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)},£${partyBookings.day.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}\n`;
+    csvContent += `This Week,£${cafeOrders.week.reduce((acc, order) => acc + order.Total, 0).toFixed(2)},£${sessions.week.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)},£${partyBookings.week.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}\n`;
+    csvContent += `This Month,£${cafeOrders.month.reduce((acc, order) => acc + order.Total, 0).toFixed(2)},£${sessions.month.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)},£${partyBookings.month.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}\n`;
+    csvContent += `Total,£${cafeOrders.hour.reduce((acc, order) => acc + order.Total, 0).toFixed(2)},£${sessions.hour.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)},£${partyBookings.hour.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}\n`;
+    // Create download link
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `financials-${formatISO(new Date())}.csv`);
+    document.body.appendChild(link);
+    link.click();
+  }
 
-    return (
-        <>
-<table className="table-auto border border-collapse w-full text-left">
-  <thead>
-    <tr className="bg-gray-100">
-      <th className="border px-4 py-2">Time Range</th>
-      <th className="border px-4 py-2">Cafe Orders</th>
-      <th className="border px-4 py-2">Sessions</th>
-      <th className="border px-4 py-2">Party Bookings</th>
-      <th className="border px-4 py-2">Total</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td className="border px-4 py-2">Past Hour</td>
-      <td className="border px-4 py-2">£{cafeOrders.hour.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
-      <td className="border px-4 py-2">£{sessions.hour.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
-      <td className="border px-4 py-2">£{partyBookings.hour.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
-      <td className="border px-4 py-2">£{(cafeOrders.hour.reduce((acc, order) => acc + order.Total, 0) +
-        sessions.hour.reduce((acc, session) => acc + session.TotalSpent, 0) +
-        partyBookings.hour.reduce((acc, booking) => acc + booking.Total, 0)).toFixed(2)}
-      </td>
-    </tr>
-    <tr>
-      <td className="border px-4 py-2">Current Day</td>
-      <td className="border px-4 py-2">£{cafeOrders.day.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
-      <td className="border px-4 py-2">£{sessions.day.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
-      <td className="border px-4 py-2">£{partyBookings.day.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
-      <td className="border px-4 py-2">£{(cafeOrders.day.reduce((acc, order) => acc + order.Total, 0) +
-        sessions.day.reduce((acc, session) => acc + session.TotalSpent, 0) +
-        partyBookings.day.reduce((acc, booking) => acc + booking.Total, 0)).toFixed(2)}
-      </td>
-    </tr>
-    <tr>
-      <td className="border px-4 py-2">This Week</td>
-      <td className="border px-4 py-2">£{cafeOrders.week.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
-      <td className="border px-4 py-2">£{sessions.week.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
-      <td className="border px-4 py-2">£{partyBookings.week.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
-      <td className="border px-4 py-2">£{(cafeOrders.week.reduce((acc, order) => acc + order.Total, 0) +
-        sessions.week.reduce((acc, session) => acc + session.TotalSpent, 0) +
-        partyBookings.week.reduce((acc, booking) => acc + booking.Total, 0)).toFixed(2)}
-        </td>
-    </tr>
-    <tr>
-        <td className="border px-4 py-2">This Month</td>
-        <td className="border px-4 py-2">£{cafeOrders.month.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
-        <td className="border px-4 py-2">£{sessions.month.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
-        <td className="border px-4 py-2">£{partyBookings.month.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
-        <td className="border px-4 py-2">£{(cafeOrders.month.reduce((acc, order) => acc + order.Total, 0) +
-        sessions.month.reduce((acc, session) => acc + session.TotalSpent, 0) +
-        partyBookings.month.reduce((acc, booking) => acc + booking.Total, 0)).toFixed(2)}
-        </td>
-    </tr>
-    
-    </tbody>
-</table>
+  return (
+    <>
+      <table className="table-auto border border-collapse w-full text-left">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="border px-4 py-2">Time Range</th>
+            <th className="border px-4 py-2">Cafe Orders</th>
+            <th className="border px-4 py-2">Sessions</th>
+            <th className="border px-4 py-2">Party Bookings</th>
+            <th className="border px-4 py-2">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="border px-4 py-2">Past Hour</td>
+            <td className="border px-4 py-2">£{cafeOrders.hour.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
+            <td className="border px-4 py-2">£{sessions.hour.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
+            <td className="border px-4 py-2">£{partyBookings.hour.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
+            <td className="border px-4 py-2">£{(cafeOrders.hour.reduce((acc, order) => acc + order.Total, 0) +
+              sessions.hour.reduce((acc, session) => acc + session.TotalSpent, 0) +
+              partyBookings.hour.reduce((acc, booking) => acc + booking.Total, 0)).toFixed(2)}
+            </td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">Current Day</td>
+            <td className="border px-4 py-2">£{cafeOrders.day.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
+            <td className="border px-4 py-2">£{sessions.day.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
+            <td className="border px-4 py-2">£{partyBookings.day.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
+            <td className="border px-4 py-2">£{(cafeOrders.day.reduce((acc, order) => acc + order.Total, 0) +
+              sessions.day.reduce((acc, session) => acc + session.TotalSpent, 0) +
+              partyBookings.day.reduce((acc, booking) => acc + booking.Total, 0)).toFixed(2)}
+            </td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">This Week</td>
+            <td className="border px-4 py-2">£{cafeOrders.week.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
+            <td className="border px-4 py-2">£{sessions.week.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
+            <td className="border px-4 py-2">£{partyBookings.week.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
+            <td className="border px-4 py-2">£{(cafeOrders.week.reduce((acc, order) => acc + order.Total, 0) +
+              sessions.week.reduce((acc, session) => acc + session.TotalSpent, 0) +
+              partyBookings.week.reduce((acc, booking) => acc + booking.Total, 0)).toFixed(2)}
+            </td>
+          </tr>
+          <tr>
+            <td className="border px-4 py-2">This Month</td>
+            <td className="border px-4 py-2">£{cafeOrders.month.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
+            <td className="border px-4 py-2">£{sessions.month.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
+            <td className="border px-4 py-2">£{partyBookings.month.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
+            <td className="border px-4 py-2">£{(cafeOrders.month.reduce((acc, order) => acc + order.Total, 0) +
+              sessions.month.reduce((acc, session) => acc + session.TotalSpent, 0) +
+              partyBookings.month.reduce((acc, booking) => acc + booking.Total, 0)).toFixed(2)}
+            </td>
+          </tr>
 
-      
-          <button
-            className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            onClick={downloadData}
-          >
-            Download Data
-          </button>
-          <GraphFinance/>
-        </>
-      );
-    }      
+        </tbody>
+      </table>
 
-    
+
+      <button
+        className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        onClick={downloadData}
+      >
+        Download Data
+      </button>
+      <GraphFinance  totalThisHour={totalThisHour}
+  totalToday={totalToday}
+  totalThisWeek={totalThisWeek}
+  totalThisMonth={totalThisMonth} />
+    </>
+  );
+}
+

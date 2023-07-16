@@ -94,11 +94,13 @@ function Table({
     
 
   return (
+    
     <li
       className={`relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6 ${
         isLast10Minutes ? 'bg-yellow-500 animate-pulse' : ''
       }`}
     >
+      
       <div className="flex gap-x-4">
         <div
           className={`h-12 w-12 flex-none rounded-full flex items-center justify-center ${
