@@ -1,6 +1,7 @@
 import { DataStore } from 'aws-amplify';
 import { Sessions } from './models';
 import React, { useState, useEffect } from 'react';
+import BarGraph from './graph';
 
 export default function OrderHistory() {
   const [sessions, setSessions] = useState([]);
@@ -122,6 +123,10 @@ const totalAmountMinusVAT = totalAmount * 0.8;
           </li>
         ))}
       </ul>
+      <div className="p-4 rounded-md border border-gray-300 shadow-md mt-20">
+  <BarGraph />
+</div>
+
     </>
   );
 }

@@ -2,6 +2,7 @@ import { DataStore } from 'aws-amplify';
 import { CafeOrder, Sessions, PartyBooking } from './models';
 import React, { useState, useEffect } from 'react';
 import { formatISO } from 'date-fns';
+import GraphFinance from './graphfinance';
 
 export default function Financials() {
     const [cafeOrders, setCafeOrders] = useState({ hour: [], day: [], week: [], month: [] });
@@ -191,6 +192,7 @@ export default function Financials() {
           >
             Download Data
           </button>
+          <GraphFinance/>
         </>
       );
     }      

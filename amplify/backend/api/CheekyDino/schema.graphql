@@ -1,3 +1,57 @@
+type Confectionary @model @auth(rules: [{allow: private}, {allow: owner}]) {
+  id: ID!
+  Muffin: Float
+  CakeSlice: Float
+  Cookies: Float
+  Buttons: Float
+  Quavers: Float
+  Pombears: Float
+  Jazzles: Float
+  Pringles: Float
+  Raisins: Float
+  SweetCone: Float
+  Crisps60p: Float
+  Crisps35p: Float
+}
+
+type SoftDrinks @model @auth(rules: [{allow: private}, {allow: owner}]) {
+  id: ID!
+  FantaLemonBottle: Float
+  FantaTwistBottle: Float
+  FantaOrangeBottle: Float
+  FantaOrangeZeroBottle: Float
+  CokeBottle: Float
+  DietCokeBottle: Float
+  CokeZeroBottle: Float
+  Sprite: Float
+  AppleJuiceCarton: Float
+  OrangeJuiceCarton: Float
+  JugOfSquash: Float
+  Slushy: Float
+  FruitShoot: Float
+  Water: Float
+  NinjuApple: Float
+  NinjuTropical: Float
+}
+
+type HotDrinks @model @auth(rules: [{allow: private}, {allow: owner}]) {
+  id: ID!
+  Tea: Float
+  SpecialTea: Float
+  HotChocolate: Float
+  Cappaccino: Float
+  Decaff: Float
+  HotChocolateCreamMarshmellow: Float
+  Latte: Float
+  Mocha: Float
+  AmericanoWhite: Float
+  AmericanoBlack: Float
+  Expresso: Float
+  DoubleExpresso: Float
+  FlatWhite: Float
+  Syrup: Float
+}
+
 type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: public, operations: [read]}]) {
   id: ID!
   Name: String

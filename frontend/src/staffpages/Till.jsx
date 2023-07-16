@@ -11,6 +11,7 @@ import { Sessions } from "./models";
 import Tables from "./tables";
 import { Analytics } from 'aws-amplify';
 import TillSession from "./tillsession";
+import {HotDrinks} from "./models";
 
 
 
@@ -23,10 +24,7 @@ export default function Till() {
   const [party, setPartyBookings] = useState([]);
   const [partyGuests, setPartyGuests] = useState([]);
   const [currentTime, setCurrentTime] = useState(0);
-  const currentDate = new Date();
-  const formattedDate = format(currentDate, "MMMM dd, yyyy");
-  const formattedTime = format(currentTime, "h:mm:ss a");
-  const [showGuestList, setShowGuestList] = useState(false);
+ 
   const [selectedParty, setSelectedParty] = useState(null);
   const [clientArrived, setClientArrived] = useState(false);
   const [partyFinished, setPartyFinished] = useState(false);
@@ -34,9 +32,14 @@ export default function Till() {
   const [arrival, setArrival] = useState(false);
   const [tablee, setTablee] = useState(false);
   const [session, setSession] = useState(false);
+  const [hotDrinks, setHotDrinks] = useState([]);
+  const [showHotDrinks, setShowHotDrinks] = useState(false);
+
+  console.log(hotDrinks)
 
 
   
+
 
 
   console.log(party)
@@ -53,7 +56,18 @@ export default function Till() {
 
   //get all party bookings for today
 
-  
+useEffect(() => {
+  async function fetchHotDrinks() {
+    const hotdrinks = await DataStore.query(HotDrinks);
+    console.log(hotdrinks);
+    setHotDrinks(hotdrinks);
+  }
+
+  fetchHotDrinks();}
+  , []);
+
+
+
       
 
 
@@ -272,6 +286,7 @@ console.log("Order confirmed");
     console.log(`Party ${partyBooking.ChildName} has arrived`);
   }
   
+  
 
   if (scanner === true) {
     return (<BarCodeScanner />);
@@ -325,7 +340,7 @@ New Arrival
 onClick={() => setTablee(true)} >
 Tables
         </button>
-        <button className="w-20 h-20 bg-red-600 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-2 mb-2 flex items-center justify-center "
+        <button className="w-20 h-20 bg-purple-600 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-2 mb-2 flex items-center justify-center "
 onClick={() => setSession(true)} >
 Sessions
         </button>
@@ -395,13 +410,16 @@ Sessions
                 alt="Soft Drinks"
               />
             </button>
-            <button className="w-full h-full bg-gray-200 rounded-md p-2">
+            <button className="w-full h-full bg-gray-200 rounded-md p-2"
+            onClick={() => setShowHotDrinks(true)}>
               <img
                 className="w-full h-full object-cover rounded-md"
                 src="<URL of Hot Drinks image>"
                 alt="Hot Drinks"
               />
             </button>
+           
+
             <button className="w-full h-full bg-gray-200 rounded-md p-2">
               <img
                 className="w-full h-full object-cover rounded-md"
@@ -432,6 +450,23 @@ Sessions
             </div>
           </div>
         )}
+         {showHotDrinks && (
+  <div className="mt-4 border-b-2 border-gray-200 pb-4">
+    <h3 className="font-bold text-lg mb-4">Hot Drinks:</h3>
+    <div className="grid grid-cols-4 gap-4">
+      {/* Loop through the hotDrinks object and generate buttons for each drink here */}
+      {Object.keys(hotDrinks).map(drink => (
+        <button
+          key={drink}
+          className="w-full h-full bg-gray-200 rounded-md"
+          onClick={() => handleProductClick(drink)}
+        >
+          {drink}
+        </button>
+      ))}
+    </div>
+  </div>
+)}
         {showHotFood && (
           <div className="mt-4 border-b-2 border-gray-200 pb-4">
             <h3 className="font-bold text-lg mb-4">Hot Food:</h3>
@@ -447,6 +482,7 @@ Sessions
                 </button>
               ))}
             </div>
+            
           </div>
         )}
 

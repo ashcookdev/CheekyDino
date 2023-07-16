@@ -77,15 +77,8 @@ export default function Dashboard() {
             const occupiedTables = sessions.filter(session => session.TimeslotFrom < currentTime && session.TimeslotTo > currentTime);
 
             // Calculate the total number of current guests
-            const filteredSessions = occupiedTables.filter(
-                session => !(session.LeftCenter === true && session.Arrived === true)
-              );
-              
-              const currentGuests = filteredSessions.reduce(
-                (total, session) => total + session.Adults + session.Children,
-                0
-              );
-              
+            const currentGuests = occupiedTables.reduce((total, session) => total + session.Adults + session.Children, 0);
+
             // Filter sessions to find those that are booked for the future
             const futureBookings = sessions.filter(session => session.TimeslotFrom > currentTime);
 

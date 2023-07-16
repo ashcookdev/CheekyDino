@@ -300,7 +300,7 @@ function Tables({ sessions }) {
     // Filter the sessions to only include those with the given table number, where Arrived is true and LeftCenter is false
     const filteredSessions = sess.filter(
       session =>
-        session.Table === tableNumber && session.Arrived === true && session.LeftCenter === false
+        session.Table === tableNumber && session.Arrived === true && session.LeftCenter === null
     );
     // If there is a session that meets these criteria, update its TimeLeft and LeftCenter fields
     if (filteredSessions.length > 0) {

@@ -6,6 +6,168 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 
 
 
+type EagerConfectionary = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Confectionary, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Muffin?: number | null;
+  readonly CakeSlice?: number | null;
+  readonly Cookies?: number | null;
+  readonly Buttons?: number | null;
+  readonly Quavers?: number | null;
+  readonly Pombears?: number | null;
+  readonly Jazzles?: number | null;
+  readonly Pringles?: number | null;
+  readonly Raisins?: number | null;
+  readonly SweetCone?: number | null;
+  readonly Crisps60p?: number | null;
+  readonly Crisps35p?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyConfectionary = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Confectionary, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Muffin?: number | null;
+  readonly CakeSlice?: number | null;
+  readonly Cookies?: number | null;
+  readonly Buttons?: number | null;
+  readonly Quavers?: number | null;
+  readonly Pombears?: number | null;
+  readonly Jazzles?: number | null;
+  readonly Pringles?: number | null;
+  readonly Raisins?: number | null;
+  readonly SweetCone?: number | null;
+  readonly Crisps60p?: number | null;
+  readonly Crisps35p?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Confectionary = LazyLoading extends LazyLoadingDisabled ? EagerConfectionary : LazyConfectionary
+
+export declare const Confectionary: (new (init: ModelInit<Confectionary>) => Confectionary) & {
+  copyOf(source: Confectionary, mutator: (draft: MutableModel<Confectionary>) => MutableModel<Confectionary> | void): Confectionary;
+}
+
+type EagerSoftDrinks = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<SoftDrinks, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly FantaLemonBottle?: number | null;
+  readonly FantaTwistBottle?: number | null;
+  readonly FantaOrangeBottle?: number | null;
+  readonly FantaOrangeZeroBottle?: number | null;
+  readonly CokeBottle?: number | null;
+  readonly DietCokeBottle?: number | null;
+  readonly CokeZeroBottle?: number | null;
+  readonly Sprite?: number | null;
+  readonly AppleJuiceCarton?: number | null;
+  readonly OrangeJuiceCarton?: number | null;
+  readonly JugOfSquash?: number | null;
+  readonly Slushy?: number | null;
+  readonly FruitShoot?: number | null;
+  readonly Water?: number | null;
+  readonly NinjuApple?: number | null;
+  readonly NinjuTropical?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazySoftDrinks = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<SoftDrinks, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly FantaLemonBottle?: number | null;
+  readonly FantaTwistBottle?: number | null;
+  readonly FantaOrangeBottle?: number | null;
+  readonly FantaOrangeZeroBottle?: number | null;
+  readonly CokeBottle?: number | null;
+  readonly DietCokeBottle?: number | null;
+  readonly CokeZeroBottle?: number | null;
+  readonly Sprite?: number | null;
+  readonly AppleJuiceCarton?: number | null;
+  readonly OrangeJuiceCarton?: number | null;
+  readonly JugOfSquash?: number | null;
+  readonly Slushy?: number | null;
+  readonly FruitShoot?: number | null;
+  readonly Water?: number | null;
+  readonly NinjuApple?: number | null;
+  readonly NinjuTropical?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type SoftDrinks = LazyLoading extends LazyLoadingDisabled ? EagerSoftDrinks : LazySoftDrinks
+
+export declare const SoftDrinks: (new (init: ModelInit<SoftDrinks>) => SoftDrinks) & {
+  copyOf(source: SoftDrinks, mutator: (draft: MutableModel<SoftDrinks>) => MutableModel<SoftDrinks> | void): SoftDrinks;
+}
+
+type EagerHotDrinks = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<HotDrinks, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Tea?: number | null;
+  readonly SpecialTea?: number | null;
+  readonly HotChocolate?: number | null;
+  readonly Cappaccino?: number | null;
+  readonly Decaff?: number | null;
+  readonly HotChocolateCreamMarshmellow?: number | null;
+  readonly Latte?: number | null;
+  readonly Mocha?: number | null;
+  readonly AmericanoWhite?: number | null;
+  readonly AmericanoBlack?: number | null;
+  readonly Expresso?: number | null;
+  readonly DoubleExpresso?: number | null;
+  readonly FlatWhite?: number | null;
+  readonly Syrup?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyHotDrinks = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<HotDrinks, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Tea?: number | null;
+  readonly SpecialTea?: number | null;
+  readonly HotChocolate?: number | null;
+  readonly Cappaccino?: number | null;
+  readonly Decaff?: number | null;
+  readonly HotChocolateCreamMarshmellow?: number | null;
+  readonly Latte?: number | null;
+  readonly Mocha?: number | null;
+  readonly AmericanoWhite?: number | null;
+  readonly AmericanoBlack?: number | null;
+  readonly Expresso?: number | null;
+  readonly DoubleExpresso?: number | null;
+  readonly FlatWhite?: number | null;
+  readonly Syrup?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type HotDrinks = LazyLoading extends LazyLoadingDisabled ? EagerHotDrinks : LazyHotDrinks
+
+export declare const HotDrinks: (new (init: ModelInit<HotDrinks>) => HotDrinks) & {
+  copyOf(source: HotDrinks, mutator: (draft: MutableModel<HotDrinks>) => MutableModel<HotDrinks> | void): HotDrinks;
+}
+
 type EagerSessions = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Sessions, 'id'>;

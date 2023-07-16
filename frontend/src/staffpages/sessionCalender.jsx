@@ -182,6 +182,7 @@ useEffect(() => {
               Adults: parseInt(adults),
               Children: parseInt(children),
               Age: age,
+              Arrived: true,
             })
           );
           console.log(newBooking);

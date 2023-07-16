@@ -42,8 +42,10 @@ export default function Session() {
     }
 
   const filteredSessions = sessions.filter(
-    session => session.Arrived === true && session.LeftCenter === false
+    session => session.Arrived === true && session.LeftCenter === null
+    
   );
+console.log(filteredSessions)
 
   const sessionElements = filteredSessions.map(session => (
     <tr key={session.id}>

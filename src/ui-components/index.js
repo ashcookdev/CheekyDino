@@ -6,6 +6,12 @@
 
 export { default as studioTheme } from "./studioTheme";
 export { default as PartyBookingCreateForm } from "./PartyBookingCreateForm";
+export { default as ConfectionaryCreateForm } from "./ConfectionaryCreateForm";
+export { default as ConfectionaryUpdateForm } from "./ConfectionaryUpdateForm";
+export { default as SoftDrinksCreateForm } from "./SoftDrinksCreateForm";
+export { default as SoftDrinksUpdateForm } from "./SoftDrinksUpdateForm";
+export { default as HotDrinksCreateForm } from "./HotDrinksCreateForm";
+export { default as HotDrinksUpdateForm } from "./HotDrinksUpdateForm";
 export { default as SessionsCreateForm } from "./SessionsCreateForm";
 export { default as SessionsUpdateForm } from "./SessionsUpdateForm";
 export { default as CafeOrderCreateForm } from "./CafeOrderCreateForm";
