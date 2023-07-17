@@ -4,9 +4,11 @@ import { schema } from './schema';
 
 
 
-const { Confectionary, SoftDrinks, HotDrinks, Sessions, CafeOrder, Messages, PartyAdultFood, PartyGuests, PartyBooking } = initSchema(schema);
+const { TimeEntry, Staff, Confectionary, SoftDrinks, HotDrinks, Sessions, CafeOrder, Messages, PartyAdultFood, PartyGuests, PartyBooking, TimeEntryStaff } = initSchema(schema);
 
 export {
+  TimeEntry,
+  Staff,
   Confectionary,
   SoftDrinks,
   HotDrinks,
@@ -15,5 +17,6 @@ export {
   Messages,
   PartyAdultFood,
   PartyGuests,
-  PartyBooking
+  PartyBooking,
+  TimeEntryStaff
 };

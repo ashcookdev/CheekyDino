@@ -37,6 +37,7 @@ import Finance from './staffpages/financials';
 import Home from './customer-pages/home';
 import Order from './staffpages/order';
 import Graph from './staffpages/graph';
+import Task from './staffpages/Task';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -131,6 +132,7 @@ function App() {
             <Route path= "/partyhistory" element={<PartyHistory />} />
             <Route path= "/finance" element={<Finance />} />
             <Route path= "/Graph" element={<Graph />} />
+            <Route path= "/Tasks" element={<Task />} />
             
 
           </>

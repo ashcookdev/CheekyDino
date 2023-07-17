@@ -1,11 +1,16 @@
 import { DataStore } from 'aws-amplify';
 import { PartyBooking } from './models';
 import React, { useState, useEffect } from 'react';
+import PartyBookingForm from './partybookingform';
 
 export default function OrderHistory() {
   const [partyBookings, setPartyBookings] = useState([]);
   const [timeRange, setTimeRange] = useState('Hour');
   const [showFuturePartyBookings, setShowFuturePartyBookings] = useState(false);
+  const [showMoreInformation, setShowMoreInformation] = useState(false);
+  const [partyid, setId] = useState('');
+
+
 
   useEffect(() => {
     async function getPartyBookings() {
@@ -71,6 +76,13 @@ export default function OrderHistory() {
   const totalAmount = partyBookings.reduce((acc, order) => acc + order.Total, 0);
   const totalAmountMinusVAT = totalAmount * 0.8;
 
+
+  if (showMoreInformation === true) {
+    return (
+<PartyBookingForm partyid={partyid} />)
+    
+  }
+
   return (
     <>
       <div>
@@ -104,18 +116,26 @@ export default function OrderHistory() {
       </div>
 
       <ul role="list" className="divide-y divide-gray-100">
-        {partyBookings.map(session => (
-          <li key={session.id} className="flex justify-between gap-x-6 py-5">
-            {/* Render session details here */}
-            <p>Name: {session.ChildName}</p>
-            <p>Age: {session.ChildAge}</p>
-            <p>Party Type: {session.PartyType}</p>
-            <p>Date: {session.PartyDate}</p>
-            <p>Time: {session.PartyTime}</p>
-            <p>No. of Children: {session.NoOfChildren}</p>
-            <p>Total: £{session.Total.toFixed(2)}</p>
-          </li>
-        ))}
+      {partyBookings.map(session => (
+  <li key={session.id} className="flex justify-between gap-x-6 py-5">
+    {/* Render session details here */}
+    <p>Name: {session.ChildName}</p>
+    <p>Age: {session.ChildAge}</p>
+    <p>Party Type: {session.PartyType}</p>
+    <p>Date: {session.PartyDate}</p>
+    <p>Time: {session.PartyTime}</p>
+    <p>No. of Children: {session.NoOfChildren}</p>
+    <p>Total: £{session.Total.toFixed(2)}</p>
+    {/* Add a button to show more information */}
+    <button
+      className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      onClick={() => setShowMoreInformation(true) || setId(session.id)}
+    >
+      More Information
+    </button>
+  </li>
+))}
+
       </ul>
     </>
   );

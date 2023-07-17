@@ -6,6 +6,84 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 
 
 
+type EagerTimeEntry = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<TimeEntry, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Staff?: (TimeEntryStaff | null)[] | null;
+  readonly StaffID?: string | null;
+  readonly ClockInTime?: string | null;
+  readonly ClockOutTime?: string | null;
+  readonly Hours?: number | null;
+  readonly Date?: string | null;
+  readonly ShiftStart?: string | null;
+  readonly ShiftFinish?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyTimeEntry = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<TimeEntry, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Staff: AsyncCollection<TimeEntryStaff>;
+  readonly StaffID?: string | null;
+  readonly ClockInTime?: string | null;
+  readonly ClockOutTime?: string | null;
+  readonly Hours?: number | null;
+  readonly Date?: string | null;
+  readonly ShiftStart?: string | null;
+  readonly ShiftFinish?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type TimeEntry = LazyLoading extends LazyLoadingDisabled ? EagerTimeEntry : LazyTimeEntry
+
+export declare const TimeEntry: (new (init: ModelInit<TimeEntry>) => TimeEntry) & {
+  copyOf(source: TimeEntry, mutator: (draft: MutableModel<TimeEntry>) => MutableModel<TimeEntry> | void): TimeEntry;
+}
+
+type EagerStaff = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Staff, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Name?: string | null;
+  readonly Email?: string | null;
+  readonly TimeEntries?: string | null;
+  readonly timeentriess?: (TimeEntryStaff | null)[] | null;
+  readonly Role?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyStaff = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Staff, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Name?: string | null;
+  readonly Email?: string | null;
+  readonly TimeEntries?: string | null;
+  readonly timeentriess: AsyncCollection<TimeEntryStaff>;
+  readonly Role?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Staff = LazyLoading extends LazyLoadingDisabled ? EagerStaff : LazyStaff
+
+export declare const Staff: (new (init: ModelInit<Staff>) => Staff) & {
+  copyOf(source: Staff, mutator: (draft: MutableModel<Staff>) => MutableModel<Staff> | void): Staff;
+}
+
 type EagerConfectionary = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Confectionary, 'id'>;
@@ -484,4 +562,38 @@ export declare type PartyBooking = LazyLoading extends LazyLoadingDisabled ? Eag
 
 export declare const PartyBooking: (new (init: ModelInit<PartyBooking>) => PartyBooking) & {
   copyOf(source: PartyBooking, mutator: (draft: MutableModel<PartyBooking>) => MutableModel<PartyBooking> | void): PartyBooking;
+}
+
+type EagerTimeEntryStaff = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<TimeEntryStaff, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly timeEntryId?: string | null;
+  readonly staffId?: string | null;
+  readonly timeEntry: TimeEntry;
+  readonly staff: Staff;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyTimeEntryStaff = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<TimeEntryStaff, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly timeEntryId?: string | null;
+  readonly staffId?: string | null;
+  readonly timeEntry: AsyncItem<TimeEntry>;
+  readonly staff: AsyncItem<Staff>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type TimeEntryStaff = LazyLoading extends LazyLoadingDisabled ? EagerTimeEntryStaff : LazyTimeEntryStaff
+
+export declare const TimeEntryStaff: (new (init: ModelInit<TimeEntryStaff>) => TimeEntryStaff) & {
+  copyOf(source: TimeEntryStaff, mutator: (draft: MutableModel<TimeEntryStaff>) => MutableModel<TimeEntryStaff> | void): TimeEntryStaff;
 }

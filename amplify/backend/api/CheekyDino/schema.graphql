@@ -1,3 +1,24 @@
+type TimeEntry @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  Staff: [Staff] @manyToMany(relationName: "TimeEntryStaff")
+  StaffID: String
+  ClockInTime: AWSTime
+  ClockOutTime: AWSTime
+  Hours: Float
+  Date: AWSDate
+  ShiftStart: String
+  ShiftFinish: String
+}
+
+type Staff @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  Name: String
+  Email: String
+  TimeEntries: String
+  timeentriess: [TimeEntry] @manyToMany(relationName: "TimeEntryStaff")
+  Role: String
+}
+
 type Confectionary @model @auth(rules: [{allow: private}, {allow: owner}]) {
   id: ID!
   Muffin: Float

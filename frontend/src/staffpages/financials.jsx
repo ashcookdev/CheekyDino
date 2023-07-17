@@ -223,10 +223,7 @@ setTotalThisMonth(totalSessionsThisMonth + totalPartyBookingsThisMonth);
       >
         Download Data
       </button>
-      <GraphFinance  totalThisHour={totalThisHour}
-  totalToday={totalToday}
-  totalThisWeek={totalThisWeek}
-  totalThisMonth={totalThisMonth} />
+      <GraphFinance/>
     </>
   );
 }
