@@ -1,139 +1,112 @@
-import { useState, useEffect } from 'react';
-import { DataStore } from 'aws-amplify'; // import DataStore from your data store library
-import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
-import {
-  startOfHour,
-  subHours,
-  startOfDay,
-  startOfWeek,
-  startOfMonth,
-  startOfYear
-} from 'date-fns';
-import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
-import { Sessions, PartyBooking } from './models'; // import the model
+import React, { useState, useEffect } from 'react';
+import { DataStore } from 'aws-amplify';
+import { Sessions, PartyBooking } from './models';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import MyPieChart from './piechart';
 
-
-const MyComponent = () => {
-  const [totals, setTotals] = useState({});
-  const [timeRange, setTimeRange] = useState('hour');
-  const [lineChartData, setLineChartData] = useState([]);
-
-  useEffect(() => {
-    // Define time range variables
-    const timeZone = 'Europe/London';
-    const now = new Date();
-    const zonedNow = utcToZonedTime(now, timeZone);
-    const oneHourAgo = zonedTimeToUtc(subHours(startOfHour(zonedNow), 1), timeZone);
-    const today = zonedTimeToUtc(startOfDay(zonedNow), timeZone);
-    const thisWeek = zonedTimeToUtc(startOfWeek(zonedNow), timeZone);
-    const thisMonth = zonedTimeToUtc(startOfMonth(zonedNow), timeZone);
-    const thisYear = zonedTimeToUtc(startOfYear(zonedNow), timeZone);
-
-    async function getData() {
-      try {
-        const allSessions = await DataStore.query(Sessions);
-        const allPartyBookings = await DataStore.query(PartyBooking);
-
-        // Filter sessions and party bookings based on time range
-        const filterData = (data, dateKey) => ({
-          hour: data.filter(item => new Date(item[dateKey]) >= oneHourAgo && new Date(item[dateKey]) <= now),
-          day: data.filter(item => new Date(item[dateKey]) >= today && new Date(item[dateKey]) <= now),
-          week: data.filter(item => new Date(item[dateKey]) >= thisWeek && new Date(item[dateKey]) <= now),
-          month: data.filter(item => new Date(item[dateKey]) >= thisMonth && new Date(item[dateKey]) <= now),
-          year: data.filter(item => new Date(item[dateKey]) >= thisYear && new Date(item[dateKey]) <= now)
-        });
-
-        const sessions = filterData(allSessions, 'Date');
-        const partyBookings = filterData(allPartyBookings, 'PartyDate');
-
-        // Calculate totals for sessions and party bookings
-        const calculateTotals = (data, totalKey) => ({
-          hour: data.hour.reduce((total, item) => total + item[totalKey], 0),
-          day: data.day.reduce((total, item) => total + item[totalKey], 0),
-          week: data.week.reduce((total, item) => total + item[totalKey], 0),
-          month: data.month.reduce((total, item) => total + item[totalKey], 0),
-          year: data.year.reduce((total, item) => total + item[totalKey], 0)
-        });
-
-        const totalSessions = calculateTotals(sessions, 'TotalSpent');
-        const totalPartyBookings = calculateTotals(partyBookings, 'Total');
-
-        // Combine session and party booking totals
-        const totals = {
-          hour: (totalSessions.hour || 0) + (totalPartyBookings.hour || 0),
-          day: (totalSessions.day || 0) + (totalPartyBookings.day || 0),
-          week: (totalSessions.week || 0) + (totalPartyBookings.week || 0),
-          month: (totalSessions.month || 0) + (totalPartyBookings.month || 0),
-          year: (totalSessions.year || 0) + (totalPartyBookings.year || 0)
-        };
-
-        // Update state with calculated totals
-        setTotals(totals);
-      } catch (error) {
-        console.error('Error retrieving data:', error);
-      }
+async function getData(period) {
+  const sessions = await DataStore.query(Sessions);
+  const partyBookings = await DataStore.query(PartyBooking);
+  const data = [...sessions, ...partyBookings].reduce((acc, item) => {
+    let date = item.Date || item.PartyDate;
+    if (!date) {
+      return acc;
     }
-
-    getData();
-  }, []);
-
-  
-const data = Object.entries(totals).map(([key, value]) => ({
-  date: key,
-  total: value
-}));
-
-
-  // Calculate line chart data
-
-
-  return (
-    <div className="p-4 rounded-md border border-gray-300 shadow-md">
-      <div className="flex space-x-2 mb-4">
-        <button
-          className={`px-4 py-2 rounded-md focus:outline-none ${timeRange === 'hour' ? 'bg-indigo-600 text-white' : 'bg-white text-indigo-600'
-            }`}
-          onClick={() => setTimeRange('hour')}
-        >
-          Per Hour
-        </button>
-        <button
-          className={`px-4 py-2 rounded-md focus:outline-none ${timeRange === 'day' ? 'bg-indigo-600 text-white' : 'bg-white text-indigo-600'
-            }`}
-          onClick={() => setTimeRange('day')}
-        >
-          Per Day
-        </button>
-        <button
-          className={`px-4 py-2 rounded-md focus:outline-none ${timeRange === 'week' ? 'bg-indigo-600 text-white' : 'bg-white text-indigo-600'
-            }`}
-          onClick={() => setTimeRange('week')}
-        >
-          Per Week
-        </button>
-        <button
-          className={`px-4 py-2 rounded-md focus:outline-none ${timeRange === 'month' ? 'bg-indigo-600 text-white' : 'bg-white text-indigo-600'
-            }`}
-          onClick={() => setTimeRange('month')}
-        >
-          Per Month
-        </button>
-        <button
-          className={`px-4 py-2 rounded-md focus:outline-none ${timeRange === 'year' ? 'bg-indigo-600 text-white' : 'bg-white text-indigo-600'
-            }`}
-          onClick={() => setTimeRange('year')}
-        >
-          Per Year
-        </button>
-      </div>
-      <LineChart width={500} height={300} data={data}>
-        <XAxis dataKey="date" />
-        <YAxis />
-        <Tooltip />
-        <Line type="monotone" dataKey="total" stroke="#8884d8" />
-      </LineChart>
-    </div>
-  );
+    if (period === 'week') {
+      date = getWeek(date);
+    } else if (period === 'month') {
+      date = getMonth(date);
+    } else if (period === 'year') {
+      date = getYear(date);
+    }
+    if (!acc[date]) {
+      acc[date] = { date, sessionsTotalSpent: 0, partyBookingsTotalSpent: 0 };
+    }
+    if (item.TotalSpent) {
+      acc[date].sessionsTotalSpent += item.TotalSpent;
+    } else if (item.Total) {
+      acc[date].partyBookingsTotalSpent += item.Total;
+    }
+    return acc;
+  }, {});
+  return Object.values(data).map((item) => ({
+    ...item,
+    totalSpent: item.sessionsTotalSpent + item.partyBookingsTotalSpent,
+  }));
 }
 
-export default MyComponent;
+
+
+
+function getWeek(date) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() + 3 - ((d.getDay() + 6) % 7));
+  const week1 = new Date(d.getFullYear(), 0, 4);
+  return `${d.getFullYear()}-W${1 + Math.round(((d.getTime() - week1.getTime()) / 86400000 - 3 + ((week1.getDay() + 6) % 7)) / 7)}`;
+}
+
+function getMonth(date) {
+  const d = new Date(date);
+  return `${d.getFullYear()}-${d.getMonth() + 1}`;
+}
+
+function getYear(date) {
+  const d = new Date(date);
+  return `${d.getFullYear()}`;
+}
+
+
+
+
+function MyLineChart() {
+  const [data, setData] = useState([]);
+  const [period, setPeriod] = useState('day');
+
+  
+    useEffect(() => {
+      getData(period).then(setData);
+    }, [period]);
+  
+    return (
+      <div className="p-4 bg-white rounded shadow">
+        <div className="flex mb-4">
+          <button
+            className={`px-4 py-2 rounded-l ${period === 'day' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            onClick={() => setPeriod('day')}
+          >
+            Day
+          </button>
+          <button
+            className={`px-4 py-2 ${period === 'week' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            onClick={() => setPeriod('week')}
+          >
+            Week
+          </button>
+          <button
+            className={`px-4 py-2 ${period === 'month' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            onClick={() => setPeriod('month')}
+          >
+            Month
+          </button>
+          <button
+            className={`px-4 py-2 rounded-r ${period === 'year' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            onClick={() => setPeriod('year')}
+          >
+            Year
+          </button>
+        </div>
+        <LineChart width={500} height={300} data={data}>
+          <CartesianGrid strokeDasharray="5 3" />
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip />
+          <Line type="monotone" dataKey="totalSpent" stroke="#8884d8" />
+        </LineChart>
+        <MyPieChart data={data} />
+
+      </div>
+    );
+  }
+ 
+export default MyLineChart;
