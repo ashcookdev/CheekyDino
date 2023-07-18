@@ -82,7 +82,8 @@ export default function Booking({partyid}) {
             FoodOption: foodOption,
             Allergies: allergies,
             ContactInfoEmail: contactInfoEmail,
-            partybookingID: partyid
+            partybookingID: partyid,
+            Arrived: false
           })
         );
       

@@ -47,6 +47,7 @@ export default function GuestDashboard() {
             Allergies: formData.get(`allergies${i}`),
             ContactInfoEmail: formData.get(`contactInfoEmail${i}`),
             partybookingID: partyBookingId,
+            Arrived: false,
           })
         );
       }

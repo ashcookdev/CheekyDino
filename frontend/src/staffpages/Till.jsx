@@ -169,6 +169,7 @@ console.log("Order confirmed");
     const partyGuests = allPartyGuests.filter(
       (guest) => guest.partybookingID === partybookingID
     );
+    console.log(partyGuests)
     setPartyGuests(partyGuests);
   }
 
