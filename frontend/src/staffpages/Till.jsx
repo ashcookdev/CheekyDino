@@ -116,6 +116,7 @@ await DataStore.save(
     updated.TotalSpent += total;
   })
 );
+console.log("Session updated")
 
 // Save all the items in the order to the data store
 await DataStore.save(

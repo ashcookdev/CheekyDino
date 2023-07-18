@@ -124,7 +124,7 @@ export default function Kitchen() {
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
 
     
-<ul className="divide-y divide-gray-100 bg-gray-900 rounded-lg shadow-lg">
+<ul className="divide-y divide-gray-100 bg-transparent rounded-lg shadow-lg">
 {noPartyBookings && <p className='text-white'>No party bookings today.</p>}
 
 {party

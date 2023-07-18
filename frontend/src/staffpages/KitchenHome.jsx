@@ -15,15 +15,15 @@ export default function Kitchen() {
 
 
   return (
-    <div className="bg-black mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div className="text-white py-6">
-        <h1 className="text-2xl font-medium">Kitchen</h1>
-        <p className="mt-2">
-          {time} | {date}
-        </p>
-        <div className="mt-4">
-        </div>
-      </div>
+    <div className="bg-black mx-auto max-w-7xl sm:px-6 lg:px-8" style={{backgroundImage: `url(/background.gif)`}}>
+    <div className="text-white py-6">
+      <h1 className="text-2xl font-medium">Kitchen</h1>
+      <p className="mt-2">
+        {time} | {date}
+      </p>
+      <div className="mt-4"></div>
+    </div>
+  
       <div className="flex flex-col md:flex-row">
         <div className="w-full md:w-1/2">
           <h2 className="text-lg font-medium text-white">Orders</h2>
@@ -34,7 +34,8 @@ export default function Kitchen() {
           <PartyKitchen />
         </div>
       </div>
-    </div>
+    </div>  
+
   );
 }
 

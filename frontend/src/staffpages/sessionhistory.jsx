@@ -76,14 +76,14 @@ const totalAmountMinusVAT = totalAmount * 0.8;
 
   return (
     <>
-      <div>
+      <div className="flex flex-col items-start sm:items-center sm:flex-row sm:justify-between">
         <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
           Time Range
         </label>
         <select
           id="location"
           name="location"
-          className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 sm:w-auto"
           defaultValue="Hour"
           onChange={e => setTimeRange(e.target.value)}
         >
@@ -93,22 +93,22 @@ const totalAmountMinusVAT = totalAmount * 0.8;
           <option>This Month</option>
         </select>
         <button
-          className="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0"
           onClick={() => setShowFutureSessions(!showFutureSessions)}
         >
           {showFutureSessions ? 'Hide Future Sessions' : 'Show Future Sessions'}
         </button>
       </div>
 
-      <div className="flex justify-between gap-x-6 py-5">
-  <p>Number of Sessions: {numberOfOrders}</p>
-  <p>Total Amount: £{totalAmount.toFixed(2)}</p>
-  <p>Total Amount (minus VAT): £{totalAmountMinusVAT.toFixed(2)}</p>
-</div>
+      <div className="flex flex-col items-start sm:flex-row sm:justify-between gap-x-6 py-5">
+        <p>Number of Sessions: {numberOfOrders}</p>
+        <p>Total Amount: £{totalAmount.toFixed(2)}</p>
+        <p>Total Amount (minus VAT): £{totalAmountMinusVAT.toFixed(2)}</p>
+      </div>
 
       <ul role="list" className="divide-y divide-gray-100">
         {sessions.map(session => (
-          <li key={session.id} className="flex justify-between gap-x-6 py-5">
+          <li key={session.id} className="flex flex-col items-start sm:flex-row sm:justify-between gap-x-6 py-5">
             {/* Render session details here */}
             <p>Name: {session.Name}</p>
             <p>Email: {session.Email}</p>
@@ -124,8 +124,8 @@ const totalAmountMinusVAT = totalAmount * 0.8;
         ))}
       </ul>
       <div className="p-4 rounded-md border border-gray-300 shadow-md mt-20">
-  <BarGraph />
-</div>
+        <BarGraph />
+      </div>
 
     </>
   );
