@@ -138,7 +138,7 @@ export default function Kitchen() {
               <li
                 key={party.id}
                 className={classNames(
-                  bookingConfirmed ? 'bg-green-500' : 'bg-black',
+                  bookingConfirmed ? 'bg-green-500' : 'blurry-bg',
                   'flex justify-between gap-x-6 py-5'
                 )}
               >

@@ -58,12 +58,12 @@ return (
               <div className="flex flex-shrink-0 items-center">
                 <img
                   className="block h-8 w-auto lg:hidden rounded-full"
-                  src="./v.png"
+                  src="./versa.gif"
                   alt="Your Company"
                 />
                 <img
                   className="hidden h-8 w-auto lg:block rounded-full"
-                  src="./v.png"
+                  src="./versa.gif"
                   alt="Your Company"
                 />
               </div>

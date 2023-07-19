@@ -12,6 +12,7 @@ import Tables from "./tables";
 import { Analytics } from 'aws-amplify';
 import TillSession from "./tillsession";
 import {HotDrinks} from "./models";
+import { CheckIcon, XCircleIcon } from "@heroicons/react/20/solid";
 
 
 
@@ -288,6 +289,18 @@ console.log("Order confirmed");
     console.log(`Party ${partyBooking.ChildName} has arrived`);
   }
   
+const handleMistake = async function(guest) {
+
+  await DataStore.save(
+    PartyGuests.copyOf(guest, (updated) => {
+      updated.Arrived = false;
+      updated.ArrivalTime = null;
+    })
+  );
+window.location.reload();
+}    // Query the PartyGuest object with the specified ID
+
+
   
 
   if (scanner === true) {
@@ -383,6 +396,26 @@ Sessions
           </label>
         </li>
       ))}
+      
+{partyGuests
+  .filter(guest => guest.partybookingID === selectedParty && guest.Arrived === true)
+  .map(guest => (
+    <li key={guest.id} className="mb-2 flex items-center">
+      <CheckIcon className="h-5 w-5 text-green-500 mr-2" />
+      <label>{guest.ChildName}</label>
+      <button
+  className="rounded-full"
+  onClick={() => {
+    handleMistake(guest);
+  }}
+>
+  <XCircleIcon className="h-5 w-5 text-red-500 mr-2" />
+</button>
+    </li>
+   
+
+
+  ))}
     {!partyFinished && (
       <button
         className="rounded-full bg-blue-600 px-2.5 py-1 text-sm font-semibold text-white shadow-md hover:bg-blue-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:ring-blue-600 mt-4 border border-blue-800"
@@ -391,6 +424,7 @@ Sessions
         Confirm
       </button>
     )}
+   
   </div>
 )}
 

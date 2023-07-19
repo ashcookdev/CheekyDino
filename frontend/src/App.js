@@ -97,13 +97,17 @@ function App() {
 
   return (
     <>
-      {isSignedIn && !allowedGroups.includes(userGroup) ? (
-      <CustomerNav />
-    ) : isSignedIn && allowedGroups.includes(userGroup) ? (
-      <StaffNav />
-    ) : (
-      <Navbar />
-    )}
+      {isSignedIn &&
+  !allowedGroups.includes(userGroup) &&
+  !['/dashboard', '/kitchen'].includes(location.pathname) ? (
+    <CustomerNav />
+  ) : isSignedIn &&
+    allowedGroups.includes(userGroup) &&
+    !['/dashboard', '/kitchen'].includes(location.pathname) ? (
+    <StaffNav />
+  ) : !['/dashboard', '/kitchen'].includes(location.pathname) ? (
+    <Navbar />
+  ) : null}
       <Routes>
         {isSignedIn && !allowedGroups.includes(userGroup) && (
           <>
