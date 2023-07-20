@@ -54,6 +54,8 @@ export default function PartyBookingUpdateForm(props) {
     LeftBranch: false,
     CurrentGuests: "",
     LeftBranchTime: "",
+    Table: "",
+    PartyFoodDelivered: false,
   };
   const [PartyType, setPartyType] = React.useState(initialValues.PartyType);
   const [ChildName, setChildName] = React.useState(initialValues.ChildName);
@@ -113,6 +115,10 @@ export default function PartyBookingUpdateForm(props) {
   const [LeftBranchTime, setLeftBranchTime] = React.useState(
     initialValues.LeftBranchTime
   );
+  const [Table, setTable] = React.useState(initialValues.Table);
+  const [PartyFoodDelivered, setPartyFoodDelivered] = React.useState(
+    initialValues.PartyFoodDelivered
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = partyBookingRecord
@@ -142,6 +148,8 @@ export default function PartyBookingUpdateForm(props) {
     setLeftBranch(cleanValues.LeftBranch);
     setCurrentGuests(cleanValues.CurrentGuests);
     setLeftBranchTime(cleanValues.LeftBranchTime);
+    setTable(cleanValues.Table);
+    setPartyFoodDelivered(cleanValues.PartyFoodDelivered);
     setErrors({});
   };
   const [partyBookingRecord, setPartyBookingRecord] = React.useState(
@@ -182,6 +190,8 @@ export default function PartyBookingUpdateForm(props) {
     LeftBranch: [],
     CurrentGuests: [],
     LeftBranchTime: [],
+    Table: [],
+    PartyFoodDelivered: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -233,6 +243,8 @@ export default function PartyBookingUpdateForm(props) {
           LeftBranch,
           CurrentGuests,
           LeftBranchTime,
+          Table,
+          PartyFoodDelivered,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -312,6 +324,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.PartyType ?? value;
@@ -359,6 +373,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.ChildName ?? value;
@@ -410,6 +426,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.ChildAge ?? value;
@@ -458,6 +476,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.PartyDate ?? value;
@@ -506,6 +526,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.PartyTime ?? value;
@@ -557,6 +579,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.NoOfChildren ?? value;
@@ -604,6 +628,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.ThirdPartyContactedDate ?? value;
@@ -653,6 +679,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.FoodOptionSelected ?? value;
@@ -706,6 +734,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.Total ?? value;
@@ -757,6 +787,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.AdultHotFoodQty ?? value;
@@ -808,6 +840,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.AdultColdFoodQty ?? value;
@@ -855,6 +889,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.SweetConesSelected ?? value;
@@ -904,6 +940,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.CharacterSelected ?? value;
@@ -953,6 +991,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.BearVoiceRecorders ?? value;
@@ -1003,6 +1043,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.PartyFoodPrepared ?? value;
@@ -1052,6 +1094,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.PartyHostAssigned ?? value;
@@ -1102,6 +1146,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.PartyChildMumArrived ?? value;
@@ -1152,6 +1198,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.PartyFoodTimeDue ?? value;
@@ -1200,6 +1248,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.PartyFinish ?? value;
@@ -1247,6 +1297,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.partybookingID ?? value;
@@ -1294,6 +1346,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.PartyFoodComplete ?? value;
@@ -1343,6 +1397,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch: value,
               CurrentGuests,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.LeftBranch ?? value;
@@ -1394,6 +1450,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests: value,
               LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.CurrentGuests ?? value;
@@ -1442,6 +1500,8 @@ export default function PartyBookingUpdateForm(props) {
               LeftBranch,
               CurrentGuests,
               LeftBranchTime: value,
+              Table,
+              PartyFoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.LeftBranchTime ?? value;
@@ -1456,6 +1516,110 @@ export default function PartyBookingUpdateForm(props) {
         hasError={errors.LeftBranchTime?.hasError}
         {...getOverrideProps(overrides, "LeftBranchTime")}
       ></TextField>
+      <TextField
+        label="Table"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={Table}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              PartyType,
+              ChildName,
+              ChildAge,
+              PartyDate,
+              PartyTime,
+              NoOfChildren,
+              ThirdPartyContactedDate,
+              FoodOptionSelected,
+              Total,
+              AdultHotFoodQty,
+              AdultColdFoodQty,
+              SweetConesSelected,
+              CharacterSelected,
+              BearVoiceRecorders,
+              PartyFoodPrepared,
+              PartyHostAssigned,
+              PartyChildMumArrived,
+              PartyFoodTimeDue,
+              PartyFinish,
+              partybookingID,
+              PartyFoodComplete,
+              LeftBranch,
+              CurrentGuests,
+              LeftBranchTime,
+              Table: value,
+              PartyFoodDelivered,
+            };
+            const result = onChange(modelFields);
+            value = result?.Table ?? value;
+          }
+          if (errors.Table?.hasError) {
+            runValidationTasks("Table", value);
+          }
+          setTable(value);
+        }}
+        onBlur={() => runValidationTasks("Table", Table)}
+        errorMessage={errors.Table?.errorMessage}
+        hasError={errors.Table?.hasError}
+        {...getOverrideProps(overrides, "Table")}
+      ></TextField>
+      <SwitchField
+        label="Party food delivered"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={PartyFoodDelivered}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              PartyType,
+              ChildName,
+              ChildAge,
+              PartyDate,
+              PartyTime,
+              NoOfChildren,
+              ThirdPartyContactedDate,
+              FoodOptionSelected,
+              Total,
+              AdultHotFoodQty,
+              AdultColdFoodQty,
+              SweetConesSelected,
+              CharacterSelected,
+              BearVoiceRecorders,
+              PartyFoodPrepared,
+              PartyHostAssigned,
+              PartyChildMumArrived,
+              PartyFoodTimeDue,
+              PartyFinish,
+              partybookingID,
+              PartyFoodComplete,
+              LeftBranch,
+              CurrentGuests,
+              LeftBranchTime,
+              Table,
+              PartyFoodDelivered: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.PartyFoodDelivered ?? value;
+          }
+          if (errors.PartyFoodDelivered?.hasError) {
+            runValidationTasks("PartyFoodDelivered", value);
+          }
+          setPartyFoodDelivered(value);
+        }}
+        onBlur={() =>
+          runValidationTasks("PartyFoodDelivered", PartyFoodDelivered)
+        }
+        errorMessage={errors.PartyFoodDelivered?.errorMessage}
+        hasError={errors.PartyFoodDelivered?.hasError}
+        {...getOverrideProps(overrides, "PartyFoodDelivered")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

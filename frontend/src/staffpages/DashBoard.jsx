@@ -44,6 +44,9 @@ export default function Dashboard() {
     const [occupiedTables, setOccupiedTables] = useState([])
     const [currentGuests, setCurrentGuests] = useState(0)
     const [futureBookings, setFutureBookings] = useState([])
+    const [currentorder, setCurrent] = useState([])
+
+    console.log(currentorder)
 
     console.log(occupiedTables)
     console.log(currentGuests)
@@ -134,6 +137,9 @@ const navigation = [
                     new Date(order.CreatedDate) >= today && new Date(order.CreatedDate) < tomorrow
             )
             setOrder(orders)
+
+            const order = allOrders.filter(currentorder => currentorder.Completed === false && currentorder.Delieved === false )
+            setCurrent(order) 
         }
 
         fetchTodaysOrders()
@@ -149,7 +155,7 @@ const navigation = [
 
     const stats = [
         { name: 'Orders Today', value: order.length, change: '+4.75%', changeType: 'positive' },
-        { name: 'Current Orders', value: "0", },
+        { name: 'Current Orders', value: currentorder.length, },
         { name: 'Tables Occupied', value: occupiedTables.length },
         { name: 'Future Bookings Today', value: futureBookings.length },
         { name: 'Guests in Branch', value: currentGuests, },

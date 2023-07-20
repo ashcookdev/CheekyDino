@@ -7,16 +7,180 @@
 /* eslint-disable */
 import * as React from "react";
 import {
+  Badge,
   Button,
+  Divider,
   Flex,
   Grid,
+  Icon,
+  ScrollView,
   SwitchField,
+  Text,
   TextField,
+  useTheme,
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Sessions } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== "" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height="inherit" width="inherit" maxHeight={"7rem"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: "pointer",
+                  alignItems: "center",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? "#B8CEF9" : "",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: "pointer",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: "M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z",
+                      stroke: "black",
+                    },
+                  ]}
+                  ariaLabel="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation="horizontal" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent="flex-end">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children="Cancel"
+              type="button"
+              size="small"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size="small"
+            variation="link"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? "Save" : "Add"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
 export default function SessionsUpdateForm(props) {
   const {
     id: idProp,
@@ -47,6 +211,7 @@ export default function SessionsUpdateForm(props) {
     LeftCenter: false,
     ExtraTables: "",
     Telephone: "",
+    orderid: [],
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Email, setEmail] = React.useState(initialValues.Email);
@@ -71,6 +236,7 @@ export default function SessionsUpdateForm(props) {
     initialValues.ExtraTables
   );
   const [Telephone, setTelephone] = React.useState(initialValues.Telephone);
+  const [orderid, setOrderid] = React.useState(initialValues.orderid);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = sessionsRecord
@@ -93,6 +259,8 @@ export default function SessionsUpdateForm(props) {
     setLeftCenter(cleanValues.LeftCenter);
     setExtraTables(cleanValues.ExtraTables);
     setTelephone(cleanValues.Telephone);
+    setOrderid(cleanValues.orderid ?? []);
+    setCurrentOrderidValue("");
     setErrors({});
   };
   const [sessionsRecord, setSessionsRecord] = React.useState(sessionsModelProp);
@@ -106,6 +274,8 @@ export default function SessionsUpdateForm(props) {
     queryData();
   }, [idProp, sessionsModelProp]);
   React.useEffect(resetStateValues, [sessionsRecord]);
+  const [currentOrderidValue, setCurrentOrderidValue] = React.useState("");
+  const orderidRef = React.createRef();
   const validations = {
     Name: [],
     Email: [],
@@ -124,6 +294,7 @@ export default function SessionsUpdateForm(props) {
     LeftCenter: [],
     ExtraTables: [],
     Telephone: [],
+    orderid: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -168,6 +339,7 @@ export default function SessionsUpdateForm(props) {
           LeftCenter,
           ExtraTables,
           Telephone,
+          orderid,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -240,6 +412,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -280,6 +453,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.Email ?? value;
@@ -321,6 +495,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.TimeslotFrom ?? value;
@@ -362,6 +537,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.TimeslotTo ?? value;
@@ -403,6 +579,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.TimeLeft ?? value;
@@ -444,6 +621,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.TimeArrived ?? value;
@@ -485,6 +663,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.Date ?? value;
@@ -529,6 +708,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.Table ?? value;
@@ -573,6 +753,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.Orders ?? value;
@@ -613,6 +794,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.Prepaid ?? value;
@@ -657,6 +839,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.TotalSpent ?? value;
@@ -701,6 +884,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.Adults ?? value;
@@ -745,6 +929,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.Children ?? value;
@@ -785,6 +970,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.Arrived ?? value;
@@ -825,6 +1011,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter: value,
               ExtraTables,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.LeftCenter ?? value;
@@ -869,6 +1056,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables: value,
               Telephone,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.ExtraTables ?? value;
@@ -909,6 +1097,7 @@ export default function SessionsUpdateForm(props) {
               LeftCenter,
               ExtraTables,
               Telephone: value,
+              orderid,
             };
             const result = onChange(modelFields);
             value = result?.Telephone ?? value;
@@ -923,6 +1112,65 @@ export default function SessionsUpdateForm(props) {
         hasError={errors.Telephone?.hasError}
         {...getOverrideProps(overrides, "Telephone")}
       ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.orderid ?? values;
+          }
+          setOrderid(values);
+          setCurrentOrderidValue("");
+        }}
+        currentFieldValue={currentOrderidValue}
+        label={"Orderid"}
+        items={orderid}
+        hasError={errors?.orderid?.hasError}
+        errorMessage={errors?.orderid?.errorMessage}
+        setFieldValue={setCurrentOrderidValue}
+        inputFieldRef={orderidRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Orderid"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentOrderidValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.orderid?.hasError) {
+              runValidationTasks("orderid", value);
+            }
+            setCurrentOrderidValue(value);
+          }}
+          onBlur={() => runValidationTasks("orderid", currentOrderidValue)}
+          errorMessage={errors.orderid?.errorMessage}
+          hasError={errors.orderid?.hasError}
+          ref={orderidRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "orderid")}
+        ></TextField>
+      </ArrayField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

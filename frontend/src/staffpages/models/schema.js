@@ -844,6 +844,14 @@ export const schema = {
                         ]
                     }
                 },
+                "orderid": {
+                    "name": "orderid",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -1087,6 +1095,34 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isArrayNullable": true
+                },
+                "orderID": {
+                    "name": "orderID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "sessionID": {
+                    "name": "sessionID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "partyID": {
+                    "name": "partyID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "delivered": {
+                    "name": "delivered",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
                 },
                 "updatedAt": {
                     "name": "updatedAt",
@@ -1842,6 +1878,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "Table": {
+                    "name": "Table",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "PartyFoodDelivered": {
+                    "name": "PartyFoodDelivered",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -2083,5 +2133,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.3",
-    "version": "42c0e42f3a0f500570abd76c31211ae6"
+    "version": "ba50c98e4ad0abc2735425c9632892ac"
 };

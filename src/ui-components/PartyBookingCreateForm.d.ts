@@ -25,6 +25,8 @@ export declare type PartyBookingCreateFormInputValues = {
     LeftBranch?: boolean;
     CurrentGuests?: number;
     LeftBranchTime?: string;
+    Table?: number;
+    PartyFoodDelivered?: boolean;
 };
 export declare type PartyBookingCreateFormValidationValues = {
     ChildName?: ValidationFunction<string>;
@@ -39,6 +41,8 @@ export declare type PartyBookingCreateFormValidationValues = {
     LeftBranch?: ValidationFunction<boolean>;
     CurrentGuests?: ValidationFunction<number>;
     LeftBranchTime?: ValidationFunction<string>;
+    Table?: ValidationFunction<number>;
+    PartyFoodDelivered?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type PartyBookingCreateFormOverridesProps = {
@@ -55,6 +59,8 @@ export declare type PartyBookingCreateFormOverridesProps = {
     LeftBranch?: PrimitiveOverrideProps<SwitchFieldProps>;
     CurrentGuests?: PrimitiveOverrideProps<TextFieldProps>;
     LeftBranchTime?: PrimitiveOverrideProps<TextFieldProps>;
+    Table?: PrimitiveOverrideProps<TextFieldProps>;
+    PartyFoodDelivered?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type PartyBookingCreateFormProps = React.PropsWithChildren<{
     overrides?: PartyBookingCreateFormOverridesProps | undefined | null;

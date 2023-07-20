@@ -270,6 +270,7 @@ type EagerSessions = {
   readonly ExtraTables?: number | null;
   readonly Telephone?: string | null;
   readonly CafeOrders?: (CafeOrder | null)[] | null;
+  readonly orderid?: (string | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -298,6 +299,7 @@ type LazySessions = {
   readonly ExtraTables?: number | null;
   readonly Telephone?: string | null;
   readonly CafeOrders: AsyncCollection<CafeOrder>;
+  readonly orderid?: (string | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -364,6 +366,10 @@ type EagerMessages = {
   readonly createdAt?: string | null;
   readonly email?: string | null;
   readonly group?: (string | null)[] | null;
+  readonly orderID?: string | null;
+  readonly sessionID?: string | null;
+  readonly partyID?: string | null;
+  readonly delivered?: boolean | null;
   readonly updatedAt?: string | null;
 }
 
@@ -377,6 +383,10 @@ type LazyMessages = {
   readonly createdAt?: string | null;
   readonly email?: string | null;
   readonly group?: (string | null)[] | null;
+  readonly orderID?: string | null;
+  readonly sessionID?: string | null;
+  readonly partyID?: string | null;
+  readonly delivered?: boolean | null;
   readonly updatedAt?: string | null;
 }
 
@@ -516,6 +526,8 @@ type EagerPartyBooking = {
   readonly LeftBranch?: boolean | null;
   readonly CurrentGuests?: number | null;
   readonly LeftBranchTime?: string | null;
+  readonly Table?: number | null;
+  readonly PartyFoodDelivered?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly partyBookingPartyAdultFoodId?: string | null;
@@ -553,6 +565,8 @@ type LazyPartyBooking = {
   readonly LeftBranch?: boolean | null;
   readonly CurrentGuests?: number | null;
   readonly LeftBranchTime?: string | null;
+  readonly Table?: number | null;
+  readonly PartyFoodDelivered?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly partyBookingPartyAdultFoodId?: string | null;

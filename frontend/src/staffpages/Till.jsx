@@ -128,7 +128,9 @@ await DataStore.save(
     Total: total,
     Table: table,
     Completed: false,
-    Sessionid: session.id
+    Sessionid: session.id,
+    Delieved: false
+
   })
 );
 console.log("Order confirmed");

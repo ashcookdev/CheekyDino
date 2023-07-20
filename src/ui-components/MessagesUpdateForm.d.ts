@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { Messages } from "../models";
 export declare type ValidationResponse = {
@@ -18,12 +18,20 @@ export declare type MessagesUpdateFormInputValues = {
     createdAt?: string;
     email?: string;
     group?: string[];
+    orderID?: string;
+    sessionID?: string;
+    partyID?: string;
+    delivered?: boolean;
 };
 export declare type MessagesUpdateFormValidationValues = {
     content?: ValidationFunction<string>;
     createdAt?: ValidationFunction<string>;
     email?: ValidationFunction<string>;
     group?: ValidationFunction<string>;
+    orderID?: ValidationFunction<string>;
+    sessionID?: ValidationFunction<string>;
+    partyID?: ValidationFunction<string>;
+    delivered?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MessagesUpdateFormOverridesProps = {
@@ -32,6 +40,10 @@ export declare type MessagesUpdateFormOverridesProps = {
     createdAt?: PrimitiveOverrideProps<TextFieldProps>;
     email?: PrimitiveOverrideProps<TextFieldProps>;
     group?: PrimitiveOverrideProps<TextFieldProps>;
+    orderID?: PrimitiveOverrideProps<TextFieldProps>;
+    sessionID?: PrimitiveOverrideProps<TextFieldProps>;
+    partyID?: PrimitiveOverrideProps<TextFieldProps>;
+    delivered?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type MessagesUpdateFormProps = React.PropsWithChildren<{
     overrides?: MessagesUpdateFormOverridesProps | undefined | null;

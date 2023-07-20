@@ -80,7 +80,10 @@ export default function CafeKitchen() {
           content: `Table ${order.Table} order has been made, at ${formattedTime} can staff please collect the order`,
           email: "Kitchen",
           createdAt: awstime,
+          sessionid: order.Sessionid,
+          orderID: order.id,
           group: ["Staff", "Kitchen", "Team Leader","Admin","Developer"],
+
 
           
           // ...

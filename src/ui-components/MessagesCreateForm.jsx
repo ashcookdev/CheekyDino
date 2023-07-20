@@ -14,6 +14,7 @@ import {
   Grid,
   Icon,
   ScrollView,
+  SwitchField,
   Text,
   TextField,
   useTheme,
@@ -196,11 +197,19 @@ export default function MessagesCreateForm(props) {
     createdAt: "",
     email: "",
     group: [],
+    orderID: "",
+    sessionID: "",
+    partyID: "",
+    delivered: false,
   };
   const [content, setContent] = React.useState(initialValues.content);
   const [createdAt, setCreatedAt] = React.useState(initialValues.createdAt);
   const [email, setEmail] = React.useState(initialValues.email);
   const [group, setGroup] = React.useState(initialValues.group);
+  const [orderID, setOrderID] = React.useState(initialValues.orderID);
+  const [sessionID, setSessionID] = React.useState(initialValues.sessionID);
+  const [partyID, setPartyID] = React.useState(initialValues.partyID);
+  const [delivered, setDelivered] = React.useState(initialValues.delivered);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setContent(initialValues.content);
@@ -208,6 +217,10 @@ export default function MessagesCreateForm(props) {
     setEmail(initialValues.email);
     setGroup(initialValues.group);
     setCurrentGroupValue("");
+    setOrderID(initialValues.orderID);
+    setSessionID(initialValues.sessionID);
+    setPartyID(initialValues.partyID);
+    setDelivered(initialValues.delivered);
     setErrors({});
   };
   const [currentGroupValue, setCurrentGroupValue] = React.useState("");
@@ -217,6 +230,10 @@ export default function MessagesCreateForm(props) {
     createdAt: [],
     email: [],
     group: [],
+    orderID: [],
+    sessionID: [],
+    partyID: [],
+    delivered: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -248,6 +265,10 @@ export default function MessagesCreateForm(props) {
           createdAt,
           email,
           group,
+          orderID,
+          sessionID,
+          partyID,
+          delivered,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -306,6 +327,10 @@ export default function MessagesCreateForm(props) {
               createdAt,
               email,
               group,
+              orderID,
+              sessionID,
+              partyID,
+              delivered,
             };
             const result = onChange(modelFields);
             value = result?.content ?? value;
@@ -334,6 +359,10 @@ export default function MessagesCreateForm(props) {
               createdAt: value,
               email,
               group,
+              orderID,
+              sessionID,
+              partyID,
+              delivered,
             };
             const result = onChange(modelFields);
             value = result?.createdAt ?? value;
@@ -361,6 +390,10 @@ export default function MessagesCreateForm(props) {
               createdAt,
               email: value,
               group,
+              orderID,
+              sessionID,
+              partyID,
+              delivered,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -384,6 +417,10 @@ export default function MessagesCreateForm(props) {
               createdAt,
               email,
               group: values,
+              orderID,
+              sessionID,
+              partyID,
+              delivered,
             };
             const result = onChange(modelFields);
             values = result?.group ?? values;
@@ -420,6 +457,130 @@ export default function MessagesCreateForm(props) {
           {...getOverrideProps(overrides, "group")}
         ></TextField>
       </ArrayField>
+      <TextField
+        label="Order id"
+        isRequired={false}
+        isReadOnly={false}
+        value={orderID}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              content,
+              createdAt,
+              email,
+              group,
+              orderID: value,
+              sessionID,
+              partyID,
+              delivered,
+            };
+            const result = onChange(modelFields);
+            value = result?.orderID ?? value;
+          }
+          if (errors.orderID?.hasError) {
+            runValidationTasks("orderID", value);
+          }
+          setOrderID(value);
+        }}
+        onBlur={() => runValidationTasks("orderID", orderID)}
+        errorMessage={errors.orderID?.errorMessage}
+        hasError={errors.orderID?.hasError}
+        {...getOverrideProps(overrides, "orderID")}
+      ></TextField>
+      <TextField
+        label="Session id"
+        isRequired={false}
+        isReadOnly={false}
+        value={sessionID}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              content,
+              createdAt,
+              email,
+              group,
+              orderID,
+              sessionID: value,
+              partyID,
+              delivered,
+            };
+            const result = onChange(modelFields);
+            value = result?.sessionID ?? value;
+          }
+          if (errors.sessionID?.hasError) {
+            runValidationTasks("sessionID", value);
+          }
+          setSessionID(value);
+        }}
+        onBlur={() => runValidationTasks("sessionID", sessionID)}
+        errorMessage={errors.sessionID?.errorMessage}
+        hasError={errors.sessionID?.hasError}
+        {...getOverrideProps(overrides, "sessionID")}
+      ></TextField>
+      <TextField
+        label="Party id"
+        isRequired={false}
+        isReadOnly={false}
+        value={partyID}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              content,
+              createdAt,
+              email,
+              group,
+              orderID,
+              sessionID,
+              partyID: value,
+              delivered,
+            };
+            const result = onChange(modelFields);
+            value = result?.partyID ?? value;
+          }
+          if (errors.partyID?.hasError) {
+            runValidationTasks("partyID", value);
+          }
+          setPartyID(value);
+        }}
+        onBlur={() => runValidationTasks("partyID", partyID)}
+        errorMessage={errors.partyID?.errorMessage}
+        hasError={errors.partyID?.hasError}
+        {...getOverrideProps(overrides, "partyID")}
+      ></TextField>
+      <SwitchField
+        label="Delivered"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={delivered}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              content,
+              createdAt,
+              email,
+              group,
+              orderID,
+              sessionID,
+              partyID,
+              delivered: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.delivered ?? value;
+          }
+          if (errors.delivered?.hasError) {
+            runValidationTasks("delivered", value);
+          }
+          setDelivered(value);
+        }}
+        onBlur={() => runValidationTasks("delivered", delivered)}
+        errorMessage={errors.delivered?.errorMessage}
+        hasError={errors.delivered?.hasError}
+        {...getOverrideProps(overrides, "delivered")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

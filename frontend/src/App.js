@@ -26,7 +26,7 @@ import Till from './staffpages/Till';
 import DashBoard from './staffpages/DashBoard';
 import SessionBook from './staffpages/sessionbooker';
 import Barcode from './staffpages/barcodescanner';
-import Tables from './staffpages/tables';
+import Tables from './staffpages/tableparent';
 import SessionLogin from './staffpages/sessiobooklogin'
 import SessionBooking from './staffpages/sessiondetails';
 import TillBooking from './staffpages/tillbooking';
@@ -99,13 +99,13 @@ function App() {
     <>
       {isSignedIn &&
   !allowedGroups.includes(userGroup) &&
-  !['/dashboard', '/kitchen'].includes(location.pathname) ? (
+  !['/dashboard', '/kitchen','/Tables','/finance','/chat'].includes(location.pathname) ? (
     <CustomerNav />
   ) : isSignedIn &&
     allowedGroups.includes(userGroup) &&
-    !['/dashboard', '/kitchen'].includes(location.pathname) ? (
+    !['/dashboard', '/kitchen','/Tables','/finance','/chat'].includes(location.pathname) ? (
     <StaffNav />
-  ) : !['/dashboard', '/kitchen'].includes(location.pathname) ? (
+  ) : !['/dashboard', '/kitchen', '/Tables','/finance','/chat'].includes(location.pathname) ? (
     <Navbar />
   ) : null}
       <Routes>

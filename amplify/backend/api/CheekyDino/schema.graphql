@@ -93,6 +93,7 @@ type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: pub
   ExtraTables: Int
   Telephone: String
   CafeOrders: [CafeOrder] @hasMany(indexName: "bySessions", fields: ["id"])
+  orderid: [String]
 }
 
 type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -115,6 +116,10 @@ type Messages @model @auth(rules: [{allow: private}, {allow: groups, groups: ["A
   createdAt: AWSTime
   email: String
   group: [String]
+  orderID: String
+  sessionID: String
+  partyID: String
+  delivered: Boolean
 }
 
 type PartyAdultFood @model @auth(rules: [{allow: groups, groups: ["Staff"], operations: [read, update]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartHosts"], operations: [read, update, create]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: owner}]) {
@@ -176,5 +181,7 @@ type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: [
   LeftBranch: Boolean
   CurrentGuests: Int
   LeftBranchTime: AWSTime
+  Table: Int
+  PartyFoodDelivered: Boolean
 }
  

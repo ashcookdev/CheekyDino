@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { DataStore, Predicates } from "@aws-amplify/datastore";
 import { Sessions } from "./models";
-import {CafeOrder} from "./models";
+import {CafeOrder, Messages} from "./models";
 import { format, formatDistanceToNow, parse } from "date-fns";
 import { MoveTableDropdown } from "./MoveTableDropdown";
 import TableProgress from "./tableprogress.jsx";
@@ -20,17 +20,32 @@ function Table({
   onMoveClick, // add this line
   
 
+
 }) {
   const [isLast10Minutes, setIsLast10Minutes] = useState(false);
   const [cafeOrders, setCafeOrders] = useState([]);
   const [progressBarWidth, setProgressBarWidth] = useState(0);
   const [progressBarText, setProgressBarText] = useState('');
+  const [session, setSession] = useState([]);
 
-  console.log(cafeOrders);
-  console.log(sessionid)
+  console.log("sessionid:", sessionid);
+
+  useEffect(() => {
+    setSession(sessionid);
+  }, [sessionid]);
 
 
-  
+  useEffect(() => {
+    if (isLast10Minutes) {
+      // Save a message to your AWS DataStore with the table number and sessionID
+      DataStore.save(
+        new Messages({
+          content: `Can you please remind customer on table ${number} to leave premises and clean table for next customer`,
+          sessionID: sessionid
+        })
+      );
+    }
+  }, [isLast10Minutes, number, sessionid]);
 
   useEffect(() => {
     if (isBooked) {
@@ -45,62 +60,74 @@ function Table({
 
   useEffect(() => {
     fetchTodaysOrders();
-    const subscription = DataStore.observe(CafeOrder).subscribe(() =>
-      fetchTodaysOrders()
-    );
+    const subscription = DataStore.observe(CafeOrder).subscribe(() => {
+      console.log("CafeOrder change detected");
+      fetchTodaysOrders();
+    });
     return () => subscription.unsubscribe();
   }, []);
-
   
 
 
   async function fetchTodaysOrders() {
+    console.log("session:" + session)
+    console.log("fetchTodaysOrders called");
+    const orders = await DataStore.query(CafeOrder);
+    console.log("DataStore.query:", orders);
+  
+    orders.forEach(order => {
+      console.log("Sessionid:", order.Sessionid);
+      console.log("Completed:", order.Completed);
+      console.log("Delieved:", order.Delieved);
+    });
+  
     if (sessionid) {
-      const orders = (await DataStore.query(CafeOrder)).filter(
-        c => c.Sessionid === sessionid
+      const filteredOrders = orders.filter(
+        c => c.Sessionid === session && !c.Completed && !c.Delieved
       );
-      setCafeOrders(orders);
+      console.log("filteredOrders:", filteredOrders);
+      setCafeOrders(filteredOrders);
     } else {
       setCafeOrders([]);
     }
   }
   
-    
-    
-
-    useEffect(() => {
-      console.log('sessionid changed:', sessionid);
-    }, [sessionid]);
-    
   
-     
 
-    useEffect(() => {
-      if (cafeOrders.length > 0) {
-        const lastOrder = cafeOrders[cafeOrders.length - 1];
-        console.log('lastOrder:', lastOrder);
-        if (!lastOrder.Completed && !lastOrder.Delieved) {
-          setProgressBarWidth(25);
-          setProgressBarText('Cooking');
-        } else if (lastOrder.Completed && !lastOrder.Delieved) {
-          setProgressBarWidth(75);
-          setProgressBarText('Sent to Table');
-        } else if (lastOrder.Completed && lastOrder.Delieved) {
-          setProgressBarWidth(0);
-          setProgressBarText('');
-        }
+  useEffect(() => {
+    // Find the CafeOrder object that matches the table's sessionid
+    const order = cafeOrders.find(c => c.Sessionid === sessionid);
+    console.log("order:", order);
+  
+    // Update the progress bar based on the properties of the order
+    if (order) {
+      if (!order.Completed && !order.Delieved) {
+        setProgressBarWidth(50);
+        setProgressBarText('Cooking');
+      } else if (order.Completed && !order.Delieved) {
+        setProgressBarWidth(75);
+        setProgressBarText('Sent to Table');
+      } else if (order.Completed && order.Delieved) {
+        setProgressBarWidth(0);
+        setProgressBarText('');
       }
-    }, [cafeOrders]);
-    
-
+    } else {
+      // If there is no matching order, hide the progress bar
+      setProgressBarWidth(0);
+      setProgressBarText('');
+    }
+  
+    console.log("progressBarWidth:", progressBarWidth);
+    console.log("progressBarText:", progressBarText);
+  }, [cafeOrders, sessionid]);
+  
+  
   return (
-    
     <li
       className={`relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6 ${
         isLast10Minutes ? 'bg-yellow-500 animate-pulse' : ''
       }`}
     >
-      
       <div className="flex gap-x-4">
         <div
           className={`h-12 w-12 flex-none rounded-full flex items-center justify-center ${
@@ -125,7 +152,7 @@ function Table({
           <p className="text-sm font-semibold leading-6 text-gray-900">
             Total Spent:£{total}
           </p>
-  
+
           {isBooked && (
             <p className="mt-1 flex text-xs leading-5 text-gray-500">
               Booked for {timeslot}
@@ -141,7 +168,7 @@ function Table({
             <div className="mt-6" aria-hidden="true">
               <div className="overflow-hidden rounded-full bg-gray-200">
                 <div
-  className="h-2 rounded-full bg-indigo-600"
+                  className="h-2 rounded-full bg-indigo-600"
                   style={{ width: `${progressBarWidth}%` }}
                 />
               </div>
@@ -152,35 +179,10 @@ function Table({
           </>
         )}
       </div>
-      <div className="hidden sm:flex sm:flex-col sm:items-end">
-        {isBooked && (
-          <p className="mt-1 text-xs leading-5 text-gray-500">
-            Remaining time: {remainingTime}
-          </p>
-        )}
-      </div>
-      <button
-          type="button"
-          onClick={() => onMoveClick(number)}
-          className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Move Table
-        </button>
-        
-
-      {isLast10Minutes && (
-        <button
-          type="button"
-          onClick={() => onConfirmClick(number)}
-          className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Confirm
-        </button>
-      )}
-      {/* Closing tag for the first div */}
-    </li> // Closing tag for the li
+    </li>
   );
-      }  
+}
+
 
 function Tables({ sessions }) {
 
@@ -267,60 +269,8 @@ function Tables({ sessions }) {
   }, [sessions]);
   
 
-  async function handleConfirmClick(number, timeLeft) {
-    // Query the DataStore for all sessions
-    const sessions = await DataStore.query(Sessions);
-    // Filter the sessions to only include those that start after the current time and have the same table number as the clicked table
-    const currentTime = format(new Date(), "HH:mm");
-    const nextSessions = sessions.filter(
-      session => session.Table === tableNumber && session.TimeslotFrom > currentTime
-    );
-  
-    // Only make the table available if it is not booked in the next timeslot
-    if (nextSessions.length === 0) {
-      setTables(prevTables =>
-        prevTables.map(table =>
-          table.number === tableNumber
-            ? {
-                ...table,
-                isBooked: false,
-                timeslot: null,
-                remainingTime: null,
-                name: table.Name,
-                guests: table.Children + table.Adults,
-                orders: table.Orders,
-                total: table.TotalSpent,
-                sessionid: table.id,
-              }
-            : table
-        )
-      );
-    }
-  
-    // Filter the sessions to only include those with the given table number, where Arrived is true and LeftCenter is false
-    const sess = await DataStore.query(Sessions);
-    // Filter the sessions to only include those with the given table number, where Arrived is true and LeftCenter is false
-    const filteredSessions = sess.filter(
-      session =>
-        session.Table === tableNumber && session.Arrived === true && session.LeftCenter === null
-    );
-    // If there is a session that meets these criteria, update its TimeLeft and LeftCenter fields
-    if (filteredSessions.length > 0) {
-      const session = filteredSessions[0];
-      await DataStore.save(
-        Sessions.copyOf(session, updated => {
-          updated.TimeLeft = timeLeft;
-          updated.LeftCenter = true;
-        })
-      );
-    } else {
-alert('Error: Cannot perform function');    }
-  }
-    
   
     
-  
-
 
   // ...
 
@@ -388,7 +338,6 @@ alert('Error: Cannot perform function');    }
             isBooked={table.isBooked}
             timeslot={table.timeslot}
             remainingTime={table.remainingTime}
-            onConfirmClick={handleConfirmClick}
             onMoveClick={handleMoveClick} // add this line
             name={name}
             guests={guests}
@@ -409,6 +358,9 @@ alert('Error: Cannot perform function');    }
 
 export default function Example() {
   const [sessions, setSessions] = useState([]);
+
+
+
 
   useEffect(() => {
     async function getSessionsForCurrentTime() {
@@ -433,7 +385,7 @@ export default function Example() {
           !(session.LeftCenter === true && session.Arrived === true)
       );
       
-
+console.log(todaysSessions);
       setSessions(todaysSessions);
     }
 

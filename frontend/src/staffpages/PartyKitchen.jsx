@@ -103,6 +103,7 @@ export default function Kitchen() {
     await DataStore.save(
       PartyBooking.copyOf(original, (updated) => {
         updated.PartyFoodComplete = true;
+        updated.PartyFoodPrepared = awstime
       })
     );
 
@@ -111,6 +112,8 @@ export default function Kitchen() {
         content: 'Food Ready for ' + party.ChildName + ' Party Come to the Kitchen',
         createdAt: awstime,
         email: 'Kitchen',
+        partyID: party.id,
+
         group: ['Staff', 'Kitchen', 'Team Leader'],
       })
     );
