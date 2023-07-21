@@ -115,6 +115,7 @@ function App() {
 const navigation = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon, current: true },
 { name: 'Chat', href: '/chat', icon: UsersIcon, current: false },
+{ name: 'Kitchen', href: '/kitchen', icon: FolderIcon, current: false },
 { name: 'Till', href: '/Till', icon: FolderIcon, current: false },
 { name: 'Tables', href: '/Tables', icon: CalendarIcon, current: false },
 { name: 'Tasks', href: '/Tasks', icon: CalendarIcon, current: false },

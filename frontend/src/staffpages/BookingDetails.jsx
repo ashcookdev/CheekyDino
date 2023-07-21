@@ -32,7 +32,7 @@ const guests = session.Adults + session.Children;
         Sessions.copyOf(session, updated => {
           updated.Arrived = true;
           updated.TimeArrived = formattedTime;
-          updated.LeftCenter = null;
+          updated.LeftCenter = false;
 
         })
       );

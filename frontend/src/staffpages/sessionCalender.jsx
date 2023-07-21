@@ -183,6 +183,7 @@ useEffect(() => {
               Children: parseInt(children),
               Age: age,
               Arrived: true,
+              LeftCenter: false,
             })
           );
           console.log(newBooking);

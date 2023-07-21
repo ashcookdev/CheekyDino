@@ -68,6 +68,7 @@ export default function TableSelect({ availableTables, onSelect, details }) {
                 TimeslotFrom: savedDetails.TimeSlotFrom,
                 TimeslotTo: savedDetails.TimeSlotTo,
                 Arrived: true,
+                LeftCenter: false,
                 TimeArrived: nowString,
                 Telephone: savedDetails.Telephone,
     
