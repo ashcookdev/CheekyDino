@@ -154,13 +154,13 @@ const navigation = [
     console.log(totalAmount)
 
     const stats = [
-        { name: 'Orders Today', value: order.length, change: '+4.75%', changeType: 'positive' },
+        { name: 'Orders Today', value: order.length },
         { name: 'Current Orders', value: currentorder.length, },
         { name: 'Tables Occupied', value: occupiedTables.length },
         { name: 'Future Bookings Today', value: futureBookings.length },
         { name: 'Guests in Branch', value: currentGuests, },
 
-        { name: 'Total', value: "£" + totalAmount, change: '+10.18%', changeType: 'negative' },
+        { name: 'Total', value: "£" + totalAmount },
     ]
 
 

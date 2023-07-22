@@ -13,6 +13,7 @@ export default function SessionBook() {
   const [date, setDate] = useState(new Date());
   const [name, setName] = useState("")
   const [age, setAge] = useState("")
+  
 
   console.log(children, adults, date)
 

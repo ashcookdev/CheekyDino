@@ -260,7 +260,10 @@ const navigation = [
         </div>
 
         <main className="py-10 lg:pl-72">
-        <div className="bg-black mx-auto max-w-7xl sm:px-6 lg:px-8" style={{backgroundImage: `url(/background.gif)`}}>
+  <div
+    className="bg-black mx-auto max-w-7xl sm:px-6 lg:px-8"
+    style={{ backgroundImage: `url(/background.gif)` }}
+  >
     <div className="text-white py-6">
       <h1 className="text-2xl font-medium">Kitchen</h1>
       <p className="mt-2">
@@ -268,21 +271,20 @@ const navigation = [
       </p>
       <div className="mt-4"></div>
     </div>
-  
-      <div className="flex flex-col md:flex-row">
-        <div className="w-full md:w-1/2">
-          <h2 className="text-lg font-medium text-white">Orders</h2>
-          <CafeKitchen />
-        </div>
-        <div className="w-full md:w-1/2">
-          <h2 className="text-lg font-medium text-white">Party</h2>
-          <PartyKitchen />
-        </div>
+
+    <div className="flex flex-col md:flex-row">
+      <div className="w-full md:w-1/2 mb-4 md:mb-0">
+        <h2 className="text-lg font-medium text-white">Orders</h2>
+        <CafeKitchen />
       </div>
-    </div>  
+      <div className="w-full md:w-1/2">
+        <h2 className="text-lg font-medium text-white">Party</h2>
+        <PartyKitchen />
+      </div>
+    </div>
+  </div>
+</main>;
 
-
-        </main>
 
       </div>
   );

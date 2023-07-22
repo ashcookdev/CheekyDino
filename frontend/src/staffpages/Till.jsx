@@ -35,6 +35,8 @@ export default function Till() {
   const [session, setSession] = useState(false);
   const [hotDrinks, setHotDrinks] = useState([]);
   const [showHotDrinks, setShowHotDrinks] = useState(false);
+  const [childName, setChildName] = useState("");
+
 
   console.log(hotDrinks)
 
@@ -66,7 +68,6 @@ useEffect(() => {
 
   fetchHotDrinks();}
   , []);
-
 
 
       
@@ -320,21 +321,42 @@ if (session === true) {
   return <TillSession/>
 }
 
+const handleTableChange = async (e) => {
+  const tableNumber = parseInt(e.target.value);
+  setTable(tableNumber);
 
+  // Search the local datastore for all sessions
+  const allSessions = await DataStore.query(Sessions);
+
+  // Filter the sessions by table number, arrived status, and left center status
+  const sessions = allSessions.filter(
+    (s) => s.Table === tableNumber && s.Arrived === true && s.LeftCenter === false
+  );
+
+  // Update the state with the child name from the first session
+  if (sessions.length > 0) {
+    setChildName(sessions[0].Name);
+  } else {
+    setChildName("");
+  }
+};
 
 
 
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div className="mt-4 border-b-2 border-gray-200 pb-4 flex items-center">
-        <label htmlFor="table" className="block font-bold text-lg mr-4">Table:</label>
-        <input
-          id="table"
-          type="number"
-          value={table}
-          onChange={e => setTable(parseInt(e.target.value))}
-          className="border rounded-md p-2 mr-4"
-        />
+      <label htmlFor="table" className="block font-bold text-lg mr-4">
+      Table:
+    </label>
+    <input
+      id="table"
+      type="number"
+      value={table}
+      onChange={handleTableChange}
+      className="border rounded-md p-2 mr-4"
+    />
+    {childName && <p>Child Name: {childName}</p>}
         <div className="flex-grow">
           {party.map(partyBooking => (
             <button className="w-20 h-20 bg-indigo-600 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-2 mb-2 flex items-center justify-center animate-pulse"

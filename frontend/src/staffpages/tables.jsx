@@ -110,6 +110,8 @@ function OccupiedTables() {
 
 
   async function handleMoveTable(table) {
+    console.log("handleMoveTable called with table:", table);
+
     // Get all sessions
     const sessions = await DataStore.query(Sessions);
 
@@ -125,20 +127,19 @@ function OccupiedTables() {
 
     // Get all available tables
     const availableTables = TableData.filter(
-      (t) => !occupiedTables.includes(t.number)
+      (t) => !occupiedTables.includes(t.table)
     );
 
     // Show the dropdown menu for the selected table
-    setSelectedTable({ [table.Table]: availableTables });
+    setSelectedTable({ [table.number]: availableTables });
   }
-
 
   async function handleMoveTableConfirm(table, newTableNumber) {
     // Retrieve the records with the matching id
     const records = await DataStore.query(Sessions, table.id);
 
     if (!records || records.length === 0) {
-      console.error('Record not found:', table.id);
+      console.error("Record not found:", table.id);
       return;
     }
 
@@ -153,7 +154,6 @@ function OccupiedTables() {
 
     // Hide the dropdown menu
     setSelectedTable({});
-    window.location.reload()
   }
 
 
@@ -200,6 +200,25 @@ function OccupiedTables() {
     console.log('newOrderStatuses:', newOrderStatuses);
   }, [orders]);
   
+const Delivered = async (order) => {
+  console.log('Delivered function called');
+  console.log('table:', order.id);
+  const records = await DataStore.query(CafeOrder, order.id);
+  console.log('records:', records);
+
+  const save = await DataStore.save(
+    CafeOrder.copyOf(records, (updated) => {
+      updated.Delieved = true;
+      updated.TimeDelivered = format(new Date(), 'HH:mm');
+    })
+  );
+  console.log('save:', save);
+
+  
+   
+  window.location.reload();
+};
+
 
 
 
@@ -207,135 +226,161 @@ function OccupiedTables() {
 
   return (
     <ul>
-      {tableInfo.map((table) => (
-        <li
-          key={table.number}
-          className={`p-4 rounded-lg shadow-md ${table.backgroundColor} ${table.shouldFlashGold ? 'animate-pulse' : ''
-            }`}
-        >
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <div className="h-12 w-12 rounded-full bg-white flex items-center justify-center">
-                <span className="text-lg font-bold">{table.number}</span>
-              </div>
+    {tableInfo.map((table) => (
+      <li
+        key={table.number}
+        className={`p-4 rounded-lg shadow-md ${table.backgroundColor} ${
+          table.shouldFlashGold ? "animate-pulse" : ""
+        }`}
+      >
+        <div className="flex flex-col sm:flex-row items-center">
+          <div className="flex-shrink-0 mb-4 sm:mb-0">
+            <div className="h-12 w-12 rounded-full bg-white flex items-center justify-center">
+              <span className="text-lg font-bold">{table.number}</span>
             </div>
-            <div className="ml-4">
-              <p className="text-lg font-semibold text-white">
-                Table {table.number}
-              </p>
-              <p className="text-sm font-medium text-white">Name: {table.name}</p>
-              <p className="text-sm font-medium text-white">
-                Guests: {table.guests}
-              </p>
-              <p className="text-sm font-medium text-white">
-                Orders: {table.orders}
-              </p>
-              <p className="text-sm font-medium text-white">
-                Total Spent: £{table.totalSpent}
-              </p>
-              <p className="text-sm font-medium text-white">
-                Booked for {table.timeslot}
-              </p>
-              <p className="text-sm font-medium text-white">
-                Time Arrived: {table.timeArrived}
-              </p>
-              <p className="text-sm font-medium text-white">
-                Time Remaining: {table.timeRemaining} minutes
-              </p>
-
-            </div>
-
-            <div className="ml-auto flex-shrink-0 flex items-center space-x-4">
-           
-            </div> {orders.map((order, index) => {
-  const status = orderStatuses[order.id] || '';
-  let progress = 0;
-  let color = 'bg-green-500';
-  if (status === 'Cooking') {
-    progress = 50;
-    color = 'bg-black';
-  } else if (status === 'Take Order to Table') {
-    progress = 75;
-    color = 'bg-black';
-  } else if (status === 'Delivered') {
-    progress = 100;
-    color = 'bg-green-500';
-  }
-  return (
-    
-    <div key={index} className="bg-white shadow-md p-4 m-4 rounded-md">
-      
-      <h4 className="sr-only">Status</h4>
-      <p className="text-sm font-medium text-gray-900"> Status: {status}</p>
-      <p className="text-sm font-medium text-gray-900">Order{order.length}: {order.HotItems} + {order.ColdItems}</p>
-      <p className="text-sm font-medium text-gray-900">Time Created {order.CreatedTime}</p>
-      <p className="text-sm font-medium text-gray-900">Time Delivered: {order.TimeDelivered}</p>
-
-
-      {status !== 'Delivered' && (
-        <div className="mt-6" aria-hidden="true">
-          <div className="overflow-hidden rounded-full bg-blue-200">
-            <div
-            className={`h-2 rounded-full ${color} animate-pulse transition-all duration-500 ease-in-out progress-bar`}
-            style={{ width: `${progress}%` }}
-          />
-          
           </div>
-          <div className="mt-6 text-sm font-medium text-gray-600">{status}</div>
+          <div className="ml-0 sm:ml-4">
+            <p className="text-lg font-semibold text-white">
+              Table {table.number}
+            </p>
+            <p className="text-sm font-medium text-white">Name: {table.name}</p>
+            <p className="text-sm font-medium text-white">
+              Guests: {table.guests}
+            </p>
+            <p className="text-sm font-medium text-white">
+              Orders: {table.orders}
+            </p>
+            <p className="text-sm font-medium text-white">
+              Total Spent: £{table.totalSpent}
+            </p>
+            <p className="text-sm font-medium text-white">
+              Booked for {table.timeslot}
+            </p>
+            <p className="text-sm font-medium text-white">
+              Time Arrived: {table.timeArrived}
+            </p>
+            <p className="text-sm font-medium text-white">
+              Time Remaining: {table.timeRemaining} minutes
+            </p>
+          </div>
+  
+          <div className="ml-auto flex-shrink-0 flex items-center space-x-4 mt-4 sm:mt-0">
+          <button
+      type="button"
+      onClick={() => handleLeftCenter(table)}
+
+      className="inline-flex items-center gap-x-2 rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+    >
+      Left Center
+    </button>
+    <button
+  type="button"
+  onClick={() => {    console.log("Move Table button clicked with table:", table);
+  handleMoveTable(table)}}
+  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+>
+  Move Table
+</button>
+
+{Object.entries(selectedTable).map(([tableNumber, availableTables]) => (
+        <div key={tableNumber}>
+          <label htmlFor={`table-${tableNumber}`}>
+            Move table {tableNumber} to:
+          </label>
+          <select
+            id={`table-${tableNumber}`}
+            onChange={(e) =>
+              handleMoveTableConfirm(tableNumber, e.target.value)
+            }
+          >
+            <option value="">Select a table</option>
+            {availableTables.map((table) => (
+              <option key={table.table} value={table.table}>
+                {table.table}
+              </option>
+            ))}
+          </select>
         </div>
-      )}
+      ))}
     </div>
-  );
-})}
 
+          </div>
+  
+        {orders.map((order, index) => {
+          const status = orderStatuses[order.id] || "";
+          let progress = 0;
+          let color = "bg-green-500";
+          if (status === "Cooking") {
+            progress = 50;
+            color = "bg-purple-800";
+          } else if (status === "Take Order to Table") {
+            progress = 75;
+            color = "bg-purple-900";
+          } else if (status === "Delivered") {
+            progress = 100;
+            color = "bg-green-500";
+          }
+          return (
+            <div
+              key={index}
+              className="bg-white shadow-md p-4 m-4 rounded-md"
+            >
+              <h4 className="sr-only">Status</h4>
+              <p className="text-sm font-medium text-gray-900">
+                Order {index + 1}
+              </p>
+              <p className="text-sm font-medium text-gray-900">
+                {" "}
+                Status: {status}
+              </p>
+              <p className="text-sm font-medium text-gray-900">
+                Order{order.length}: {order.HotItems} + {order.ColdItems}
+              </p>
+              <p className="text-sm font-medium text-gray-900">
+                Time Created {order.CreatedTime}
+              </p>
+              <p className="text-sm font-medium text-gray-900">
+                Time Delivered: {order.TimeDelivered}
+              </p>
+  {status === "Take Order to Table" && (
+    
+  
+  
+    <button
+    type="button"
+    onClick={() => Delivered(order)}
+    className="inline-flex items-center gap-x-2 rounded-md bg-green-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+  >
+    Delivered 
+  </button>
+  )}
 
-            <div className="ml-auto flex-shrink-0 flex items-center space-x-4">
-              <button
-                type="button"
-                onClick={() => handleLeftCenter(table)}
-                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Left Center
-              </button>
-              {!selectedTable[table.Table] ? (
-                <button
-                  type="button"
-                  onClick={() => handleMoveTable(table)}
-                  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Move Table
-                </button>
-              ) : (
-                <>
-                  <select
-                    value={selectedTable[table.Table]}
-                    onChange={(e) =>
-                      handleMoveTableConfirm(table, e.target.value)
-                    }
-                    className="mt-2 block w-full rounded-md border-gray-300 shadow-sm py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  >
-                    <option value="">Select a table</option>
-                    {selectedTable[table.Table].map((t) => (
-                      <option key={t.table} value={t.table}>
-                        Table {t.table} ({t.capacity} seats)
-                      </option>
-                    ))}
-                  </select>
-
-                  <button
-                    type="button"
-                    onClick={() => setSelectedTable({})}
-                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                  >
-                    Cancel
-                  </button>
-                </>
+              {status !== "Delivered" && (
+                <div className="mt-6" aria-hidden="true">
+                  <div className="overflow-hidden rounded-full bg-blue-200">
+                    <div
+                      className={`h-2 rounded-full ${color} animate-pulse transition-all duration-500 ease-in-out progress-bar`}
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                  <div className="mt-6 text-sm font-medium text-gray-600">
+                    {status}
+                  </div>
+                
+                </div>
               )}
             </div>
-          </div>
-        </li>
-      ))}
-    </ul>
+          );
+        })}
+      </li>
+     
+
+    ))}
+  </ul>
+ 
+  
+
+  
   );
 }
 export default OccupiedTables;
