@@ -34,6 +34,9 @@ function App() {
   const [shouldFlash, setShouldFlash] = React.useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const date = new Date();
+  const formattedDate = format(date, 'hh:mm');
+
 
   React.useEffect(() => {
     fetchMessages();
@@ -73,16 +76,21 @@ function App() {
   }
 
   async function handleDelivery(message) {
+
     if (message.sessionID) {
       // update the CafeOrder DataStore
       const cafeOrders = await DataStore.query(CafeOrder);
-      const cafeOrder = cafeOrders.find((c) => c.sessionsID === message.sessionID);
+      const cafeOrder = cafeOrders.find((c) => c.Sessionid === message.sessionID);
+      console.log(cafeOrder);
       if (cafeOrder) {
         await DataStore.save(
           CafeOrder.copyOf(cafeOrder, (updated) => {
             updated.Delieved = true;
+            updated.TimeDelivered = formattedDate;
+
           })
         );
+        console.log(cafeOrder);
       }
     } else if (message.partyID) {
       // update the PartyBooking DataStore
@@ -138,7 +146,6 @@ const navigation = [
 
   // Format the time and date using date-fns
   const time = format(now, "h:mm a");
-  const date = format(now, "EEEE, MMMM do, yyyy");
 
 
 

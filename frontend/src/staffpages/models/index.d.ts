@@ -326,6 +326,7 @@ type EagerCafeOrder = {
   readonly Delieved?: boolean | null;
   readonly sessionsID?: string | null;
   readonly Sessionid?: string | null;
+  readonly TimeDelivered?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -346,6 +347,7 @@ type LazyCafeOrder = {
   readonly Delieved?: boolean | null;
   readonly sessionsID?: string | null;
   readonly Sessionid?: string | null;
+  readonly TimeDelivered?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

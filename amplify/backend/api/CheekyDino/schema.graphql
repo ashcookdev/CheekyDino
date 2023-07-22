@@ -108,6 +108,7 @@ type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
   Delieved: Boolean
   sessionsID: ID @index(name: "bySessions")
   Sessionid: String
+  TimeDelivered: AWSTime
 }
 
 type Messages @model @auth(rules: [{allow: private}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartHosts"], operations: [read, create]}, {allow: groups, groups: ["Staff"], operations: [read, create]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: owner, operations: [create, read]}]) {
@@ -183,5 +184,4 @@ type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: [
   LeftBranchTime: AWSTime
   Table: Int
   PartyFoodDelivered: Boolean
-}
- 
+} 

@@ -102,7 +102,7 @@ const awstime = currentTime.toLocaleTimeString('en-GB', options);
 
 
 const sessions = await DataStore.query(Sessions, Predicates.ALL);
-const session = sessions.find(s => s.Table === table && s.Arrived === true);
+const session = sessions.find(s => s.Table === table && s.Arrived === true && s.LeftCenter === false);
 
 if (!session) {
   alert('Error: No customer at table');
@@ -133,7 +133,7 @@ await DataStore.save(
 
   })
 );
-console.log("Order confirmed");
+console.log("Order confirmed" + session.id);
     // Reset the order and total price
     setOrder([]);
     setTotal(0);

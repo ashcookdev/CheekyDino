@@ -3,12 +3,14 @@ import { DataStore } from 'aws-amplify';
 import { Sessions } from './models';
 import { isToday, format, differenceInMinutes, parse } from 'date-fns';
 import TableData from './TableData.json';
-import CafeOrderProgress from './CafeOrderProgress';
+import { CafeOrder } from './models';
+import './progress.css'
 
 function OccupiedTables() {
   const [sessions, setSessions] = useState([]);
   const [selectedTable, setSelectedTable] = useState({});
-
+  const [orders, setOrders] = useState([]);
+  const [orderStatuses, setOrderStatuses] = useState({});
 
 
   useEffect(() => {
@@ -19,20 +21,21 @@ function OccupiedTables() {
       );
       setSessions(todaysBookings);
     }
-  
+
     // observe the table for changes
     const subscription = DataStore.observe(Sessions).subscribe(() =>
       getTodaysBookings()
     );
-  
+
     getTodaysBookings();
-  
+
     return () => subscription.unsubscribe();
   }, []);
-  
 
 
-  
+
+
+
 
   // Filter the sessions array to only include occupied tables
   const occupiedTables = sessions.filter(
@@ -85,26 +88,27 @@ function OccupiedTables() {
   async function handleLeftCenter(table) {
     // Retrieve the records with the matching id
     const records = await DataStore.query(Sessions, table.id);
-  
+
     if (!records || records.length === 0) {
       console.error('Record not found:', table.id);
       return;
     }
-  
+
     // Update the LeftCenter field for all matching records
     for (const record of records) {
       await DataStore.save(
         Sessions.copyOf(record, (updated) => {
           updated.LeftCenter = true;
+          updated.TimeLeft = format(new Date(), 'HH:mm:ss.SSS');
         })
       );
     }
     window.location.reload();
   }
-  
-  
-  
-  
+
+
+
+
   async function handleMoveTable(table) {
     // Get all sessions
     const sessions = await DataStore.query(Sessions);
@@ -132,12 +136,12 @@ function OccupiedTables() {
   async function handleMoveTableConfirm(table, newTableNumber) {
     // Retrieve the records with the matching id
     const records = await DataStore.query(Sessions, table.id);
-  
+
     if (!records || records.length === 0) {
       console.error('Record not found:', table.id);
       return;
     }
-  
+
     // Update the Table field for all matching records
     for (const record of records) {
       await DataStore.save(
@@ -146,13 +150,60 @@ function OccupiedTables() {
         })
       );
     }
-  
+
     // Hide the dropdown menu
     setSelectedTable({});
     window.location.reload()
   }
+
+
+  useEffect(() => {
+    async function getCafeOrders() {
+      const cafeOrders = [];
+      for (const session of sessions) {
+        const allCafeOrders = await DataStore.query(CafeOrder);
+        const sessionCafeOrders = allCafeOrders.filter(
+          (c) => c.Sessionid === session.id
+        );
+        cafeOrders.push(...sessionCafeOrders);
+      }
+      console.log(cafeOrders);
+      setOrders(cafeOrders);
+    }
+    getCafeOrders();
+  
+    const subscription = DataStore.observe(CafeOrder).subscribe((msg) => {
+      getCafeOrders();
+    });
+  
+    return () => subscription.unsubscribe();
+  }, [sessions]);
   
   
+  
+
+  useEffect(() => {
+    const newOrderStatuses = {};
+    for (const order of orders) {
+      let status = '';
+      console.log('order.Delieved:', order.Delieved, 'order.Complete:', order.Completed); // <-- added console log here
+      if (order.Delieved === false && order.Completed === false) {
+        status = 'Cooking';
+      } else if (order.Completed === true && order.Delieved === false) {
+        status = 'Take Order to Table';
+      } else if (order.Delieved === true && order.Completed === true) {
+        status = 'Delivered';
+      }
+      newOrderStatuses[order.id] = status;
+    }
+    setOrderStatuses(newOrderStatuses);
+    console.log('newOrderStatuses:', newOrderStatuses);
+  }, [orders]);
+  
+
+
+
+
 
   return (
     <ul>
@@ -169,10 +220,16 @@ function OccupiedTables() {
               </div>
             </div>
             <div className="ml-4">
-              <p className="text-lg font-semibold text-white">Table {table.number}</p>
+              <p className="text-lg font-semibold text-white">
+                Table {table.number}
+              </p>
               <p className="text-sm font-medium text-white">Name: {table.name}</p>
-              <p className="text-sm font-medium text-white">Guests: {table.guests}</p>
-              <p className="text-sm font-medium text-white">Orders: {table.orders}</p>
+              <p className="text-sm font-medium text-white">
+                Guests: {table.guests}
+              </p>
+              <p className="text-sm font-medium text-white">
+                Orders: {table.orders}
+              </p>
               <p className="text-sm font-medium text-white">
                 Total Spent: £{table.totalSpent}
               </p>
@@ -185,10 +242,53 @@ function OccupiedTables() {
               <p className="text-sm font-medium text-white">
                 Time Remaining: {table.timeRemaining} minutes
               </p>
+
             </div>
+
             <div className="ml-auto flex-shrink-0 flex items-center space-x-4">
-              <CafeOrderProgress cafeOrderId={table.id}  />
-            </div>
+           
+            </div> {orders.map((order, index) => {
+  const status = orderStatuses[order.id] || '';
+  let progress = 0;
+  let color = 'bg-green-500';
+  if (status === 'Cooking') {
+    progress = 50;
+    color = 'bg-black';
+  } else if (status === 'Take Order to Table') {
+    progress = 75;
+    color = 'bg-black';
+  } else if (status === 'Delivered') {
+    progress = 100;
+    color = 'bg-green-500';
+  }
+  return (
+    
+    <div key={index} className="bg-white shadow-md p-4 m-4 rounded-md">
+      
+      <h4 className="sr-only">Status</h4>
+      <p className="text-sm font-medium text-gray-900"> Status: {status}</p>
+      <p className="text-sm font-medium text-gray-900">Order{order.length}: {order.HotItems} + {order.ColdItems}</p>
+      <p className="text-sm font-medium text-gray-900">Time Created {order.CreatedTime}</p>
+      <p className="text-sm font-medium text-gray-900">Time Delivered: {order.TimeDelivered}</p>
+
+
+      {status !== 'Delivered' && (
+        <div className="mt-6" aria-hidden="true">
+          <div className="overflow-hidden rounded-full bg-blue-200">
+            <div
+            className={`h-2 rounded-full ${color} animate-pulse transition-all duration-500 ease-in-out progress-bar`}
+            style={{ width: `${progress}%` }}
+          />
+          
+          </div>
+          <div className="mt-6 text-sm font-medium text-gray-600">{status}</div>
+        </div>
+      )}
+    </div>
+  );
+})}
+
+
             <div className="ml-auto flex-shrink-0 flex items-center space-x-4">
               <button
                 type="button"
@@ -208,19 +308,19 @@ function OccupiedTables() {
               ) : (
                 <>
                   <select
-  value={selectedTable[table.Table]}
-  onChange={(e) =>
-    handleMoveTableConfirm(table, e.target.value)
-  }
-  className="mt-2 block w-full rounded-md border-gray-300 shadow-sm py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
->
-  <option value="">Select a table</option>
-  {selectedTable[table.Table].map((t) => (
-    <option key={t.table} value={t.table}>
-      Table {t.table} ({t.capacity} seats)
-    </option>
-  ))}
-</select>
+                    value={selectedTable[table.Table]}
+                    onChange={(e) =>
+                      handleMoveTableConfirm(table, e.target.value)
+                    }
+                    className="mt-2 block w-full rounded-md border-gray-300 shadow-sm py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  >
+                    <option value="">Select a table</option>
+                    {selectedTable[table.Table].map((t) => (
+                      <option key={t.table} value={t.table}>
+                        Table {t.table} ({t.capacity} seats)
+                      </option>
+                    ))}
+                  </select>
 
                   <button
                     type="button"
