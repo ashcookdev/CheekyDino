@@ -3,6 +3,7 @@ import { DataStore } from '@aws-amplify/datastore';
 import { Sessions } from './models';
 import { Analytics } from 'aws-amplify';
 import Till from './Till';
+import { format } from 'date-fns';
 
 export default function Arrival({ session}) {
 
@@ -25,8 +26,7 @@ const guests = session.Adults + session.Children;
     const currentTime = new Date();
     const options = { timeZone: 'Europe/London', hour12: false };
     const awstime = currentTime.toLocaleString('en-GB', options).split(',')[1].trim();
-    const formattedTime = awstime.substring(0, 5);
-
+    const formattedTime = format(currentTime, 'HH:mm:ss.SSS'); 
     try {
       await DataStore.save(
         Sessions.copyOf(session, updated => {

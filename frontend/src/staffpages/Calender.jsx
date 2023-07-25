@@ -6,7 +6,6 @@ import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, startOfWe
 import { useState } from 'react'
 import { DataStore, Predicates } from 'aws-amplify'
 import { PartyBooking } from './models'
-import { Navigate } from 'react-router-dom'
 // ...
 
 function classNames(...classes) {

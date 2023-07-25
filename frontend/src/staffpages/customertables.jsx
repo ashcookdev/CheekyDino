@@ -244,66 +244,20 @@ const Delivered = async (order) => {
             <p className="text-lg font-semibold text-white">
               Table {table.number}
             </p>
-            <p className="text-sm font-medium text-white">Name: {table.name}</p>
-            <p className="text-sm font-medium text-white">
-              Guests: {table.guests}
-            </p>
-            <p className="text-sm font-medium text-white">
-              Orders: {table.orders}
-            </p>
-            <p className="text-sm font-medium text-white">
-              Total Spent: £{table.totalSpent}
-            </p>
-            <p className="text-sm font-medium text-white">
+            
+            <h3 className="text-sm font-medium text-white">
               Booked for {table.timeslot}
-            </p>
-            <p className="text-sm font-medium text-white">
+            </h3>
+            <h3 className="text-sm font-medium text-white">
               Time Arrived: {table.timeArrived}
-            </p>
-            <p className="text-sm font-medium text-white">
+            </h3>
+            
+            <h3 className="text-sm font-medium text-white">
               Time Remaining: {table.timeRemaining} minutes
-            </p>
+            </h3>
           </div>
   
-          <div className="ml-auto flex-shrink-0 flex items-center space-x-4 mt-4 sm:mt-0">
-          <button
-      type="button"
-      onClick={() => handleLeftCenter(table)}
-
-      className="inline-flex items-center gap-x-2 rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-    >
-      Left Center
-    </button>
-    <button
-  type="button"
-  onClick={() => {    console.log("Move Table button clicked with table:", table);
-  handleMoveTable(table)}}
-  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
->
-  Move Table
-</button>
-
-{Object.entries(selectedTable).map(([tableNumber, availableTables]) => (
-        <div key={tableNumber}>
-          <label htmlFor={`table-${tableNumber}`}>
-            Move table {tableNumber} to:
-          </label>
-          <select
-            id={`table-${tableNumber}`}
-            onChange={(e) =>
-              handleMoveTableConfirm(tableNumber, e.target.value)
-            }
-          >
-            <option value="">Select a table</option>
-            {availableTables.map((table) => (
-              <option key={table.table} value={table.table}>
-                {table.table}
-              </option>
-            ))}
-          </select>
-        </div>
-      ))}
-    </div>
+         
 
           </div>
   

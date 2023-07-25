@@ -38,6 +38,7 @@ import Home from './customer-pages/home';
 import Order from './staffpages/order';
 import Graph from './staffpages/graph';
 import Task from './staffpages/Task';
+import CustomerScreen from './staffpages/customerscreen';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -52,6 +53,7 @@ function App() {
   const [messages, setMessages] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [isSignedIn, setIsSignedIn] = React.useState(false);
+  const [modalContent, setModalContent] = React.useState('');
 
   const location = useLocation();
 
@@ -62,12 +64,18 @@ function App() {
     });
   }, []);
 
+  const allowedLocations = ['/calender', '/kitchen', '/Till', '/dashboard', '/Barcode', '/Tables', '/TillBooking', '/orders', '/sessionhistory', '/partyhistory', '/finance', '/Graph', '/Tasks', '/Customerscreen','/chat']; // list of locations where the modal should appear
+
   React.useEffect(() => {
-    const subscription = DataStore.observe(Messages).subscribe(() => {
-      DataStore.query(Messages).then(setMessages);
+    const subscription = DataStore.observe(Messages).subscribe((msg) => {
+      if (allowedGroups.includes(userGroup) && allowedLocations.includes(location.pathname)) {
+        setShowModal(true);
+        setModalContent(msg.element.content)
+      }
     });
     return () => subscription.unsubscribe();
-  }, []);
+  }, [userGroup, location]);
+
 
   React.useEffect(() => {
     Auth.currentAuthenticatedUser()
@@ -90,7 +98,7 @@ function App() {
     'TeamLeader',
     'Kitchen',
     'FrontDesk',
-    'Cafe'
+    'Cafe',
 
   ];
   const mostRecentMessage = messages[messages.length - 1];
@@ -137,6 +145,7 @@ function App() {
             <Route path= "/finance" element={<Finance />} />
             <Route path= "/Graph" element={<Graph />} />
             <Route path= "/Tasks" element={<Task />} />
+            <Route path= "/Customerscreen" element={<CustomerScreen />} />
             
 
           </>
@@ -156,6 +165,11 @@ function App() {
         <Route path="/" element={<Home />} />
         
       </Routes>
+      {showModal && (
+        <Modal
+      content = {modalContent}
+      />
+      )}
     </>
   );
 }
