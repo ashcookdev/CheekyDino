@@ -20,6 +20,13 @@ export default function CafeKitchen() {
     
     console.log(orders)
 
+    
+    setInterval(() => {
+      window.location.reload();
+  }, 60000);
+  
+
+
 
     useEffect(() => {
         const interval = setInterval(() => {
