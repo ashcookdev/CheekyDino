@@ -20,7 +20,7 @@ export default function TableSelect({ availableTables, onSelect, details }) {
     }
 
 
-    console.log(details)
+    console.log(savedDetails.Name[0].name)
 
     const handleTableClick = (table) => {
 
@@ -53,6 +53,11 @@ export default function TableSelect({ availableTables, onSelect, details }) {
 
         const children = parseInt(savedDetails.Children)
         const adults = parseInt(savedDetails.Adults)
+
+        const name = savedDetails.Name[0].name;
+        const extraNames = savedDetails.Name.slice(1).map(item => item.name);
+        const age = savedDetails.Name.map(item => item.age);
+
     
         //save to database
         DataStore.save(
@@ -60,8 +65,7 @@ export default function TableSelect({ availableTables, onSelect, details }) {
                 Email: savedDetails.Email,
                 Number: savedDetails.Number,
                 Date: awsDate,
-                Name: savedDetails.Name,
-                Age: savedDetails.Age,
+                Name: name,
                 Children: children,
                 Adults: adults,
                 Table: selectedTables[0].table,
@@ -71,6 +75,9 @@ export default function TableSelect({ availableTables, onSelect, details }) {
                 LeftCenter: false,
                 TimeArrived: nowString,
                 Telephone: savedDetails.Telephone,
+                ExtraNames: extraNames,
+                Age: age,
+
     
             })
         ).then(() => {

@@ -12,34 +12,43 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type HotDrinksCreateFormInputValues = {
+export declare type KidsMenuCreateFormInputValues = {
     Name?: string;
     Price?: number;
-    Syrup?: boolean;
+    Description?: string;
+    Beans?: boolean;
+    Notes?: string;
     Kitchen?: boolean;
+    imageSrc?: string;
 };
-export declare type HotDrinksCreateFormValidationValues = {
+export declare type KidsMenuCreateFormValidationValues = {
     Name?: ValidationFunction<string>;
     Price?: ValidationFunction<number>;
-    Syrup?: ValidationFunction<boolean>;
+    Description?: ValidationFunction<string>;
+    Beans?: ValidationFunction<boolean>;
+    Notes?: ValidationFunction<string>;
     Kitchen?: ValidationFunction<boolean>;
+    imageSrc?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type HotDrinksCreateFormOverridesProps = {
-    HotDrinksCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+export declare type KidsMenuCreateFormOverridesProps = {
+    KidsMenuCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
     Name?: PrimitiveOverrideProps<TextFieldProps>;
     Price?: PrimitiveOverrideProps<TextFieldProps>;
-    Syrup?: PrimitiveOverrideProps<SwitchFieldProps>;
+    Description?: PrimitiveOverrideProps<TextFieldProps>;
+    Beans?: PrimitiveOverrideProps<SwitchFieldProps>;
+    Notes?: PrimitiveOverrideProps<TextFieldProps>;
     Kitchen?: PrimitiveOverrideProps<SwitchFieldProps>;
+    imageSrc?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type HotDrinksCreateFormProps = React.PropsWithChildren<{
-    overrides?: HotDrinksCreateFormOverridesProps | undefined | null;
+export declare type KidsMenuCreateFormProps = React.PropsWithChildren<{
+    overrides?: KidsMenuCreateFormOverridesProps | undefined | null;
 } & {
     clearOnSuccess?: boolean;
-    onSubmit?: (fields: HotDrinksCreateFormInputValues) => HotDrinksCreateFormInputValues;
-    onSuccess?: (fields: HotDrinksCreateFormInputValues) => void;
-    onError?: (fields: HotDrinksCreateFormInputValues, errorMessage: string) => void;
-    onChange?: (fields: HotDrinksCreateFormInputValues) => HotDrinksCreateFormInputValues;
-    onValidate?: HotDrinksCreateFormValidationValues;
+    onSubmit?: (fields: KidsMenuCreateFormInputValues) => KidsMenuCreateFormInputValues;
+    onSuccess?: (fields: KidsMenuCreateFormInputValues) => void;
+    onError?: (fields: KidsMenuCreateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: KidsMenuCreateFormInputValues) => KidsMenuCreateFormInputValues;
+    onValidate?: KidsMenuCreateFormValidationValues;
 } & React.CSSProperties>;
-export default function HotDrinksCreateForm(props: HotDrinksCreateFormProps): React.ReactElement;
+export default function KidsMenuCreateForm(props: KidsMenuCreateFormProps): React.ReactElement;

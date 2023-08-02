@@ -24,7 +24,7 @@ import Football from './customer-pages/party/Football';
 import Kitchen from './staffpages/KitchenHome';
 import Till from './staffpages/Till';
 import DashBoard from './staffpages/DashBoard';
-import SessionBook from './staffpages/sessionbooker';
+import SessionBook from './staffpages/customersession';
 import Barcode from './staffpages/barcodescanner';
 import Tables from './staffpages/tableparent';
 import SessionLogin from './staffpages/sessiobooklogin'
@@ -39,6 +39,8 @@ import Order from './staffpages/order';
 import Graph from './staffpages/graph';
 import Task from './staffpages/Task';
 import CustomerScreen from './staffpages/customerscreen';
+import SessionCalendar from './staffpages/sessionCalender';
+import KidsMenu from './staffpages/kidsmenu'
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -111,9 +113,9 @@ function App() {
     <CustomerNav />
   ) : isSignedIn &&
     allowedGroups.includes(userGroup) &&
-    !['/dashboard', '/kitchen','/Tables','/finance','/chat'].includes(location.pathname) ? (
+    !['/dashboard', '/kitchen','/Tables','/finance','/chat', '/till'].includes(location.pathname) ? (
     <StaffNav />
-  ) : !['/dashboard', '/kitchen', '/Tables','/finance','/chat'].includes(location.pathname) ? (
+  ) : !['/dashboard', '/kitchen', '/Tables','/finance','/chat', '/till'].includes(location.pathname) ? (
     <Navbar />
   ) : null}
       <Routes>
@@ -123,6 +125,7 @@ function App() {
             <Route path="/add-guests" element={<PartyGuests />} />
             <Route path="/sessionbookings" element={<SessionBooking />} />
             <Route path="/order" element={<Order />} />
+            <Route path="/order/kidsmenu" element = {<KidsMenu />} />
 
           </>
         )}
@@ -146,6 +149,7 @@ function App() {
             <Route path= "/Graph" element={<Graph />} />
             <Route path= "/Tasks" element={<Task />} />
             <Route path= "/Customerscreen" element={<CustomerScreen />} />
+            <Route path= "/sessionCalendar" element={<SessionCalendar/>} />
             
 
           </>
@@ -165,11 +169,7 @@ function App() {
         <Route path="/" element={<Home />} />
         
       </Routes>
-      {showModal && (
-        <Modal
-      content = {modalContent}
-      />
-      )}
+      
     </>
   );
 }

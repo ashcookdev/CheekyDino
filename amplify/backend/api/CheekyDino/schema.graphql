@@ -1,4 +1,36 @@
-type TimeEntry @model @auth(rules: [{allow: private}]) {
+type Extras @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  Name: String
+  Price: Float
+  Kitchen: Boolean
+}
+
+type Breakfast @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  Name: String
+  Price: Float
+  WhiteBread: Boolean
+  BrownBread: Boolean
+  Egg: Int
+  Fried: Boolean
+  Scrambled: Boolean
+  Sausage: Int
+  Bacon: Int
+  HashBrown: Int
+}
+
+type KidsMenu @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  Name: String
+  Price: Float
+  Description: String
+  Beans: Boolean
+  Notes: String
+  Kitchen: Boolean
+  imageSrc: String
+}
+
+type TimeEntry @model @auth(rules: [{allow: private}, {allow: owner}]) {
   id: ID!
   Staff: [Staff] @manyToMany(relationName: "TimeEntryStaff")
   StaffID: String
@@ -21,56 +53,24 @@ type Staff @model @auth(rules: [{allow: private}]) {
 
 type Confectionary @model @auth(rules: [{allow: private}, {allow: owner}]) {
   id: ID!
-  Muffin: Float
-  CakeSlice: Float
-  Cookies: Float
-  Buttons: Float
-  Quavers: Float
-  Pombears: Float
-  Jazzles: Float
-  Pringles: Float
-  Raisins: Float
-  SweetCone: Float
-  Crisps60p: Float
-  Crisps35p: Float
+  Name: String
+  Price: Float
+  Kitchen: Boolean
 }
 
 type SoftDrinks @model @auth(rules: [{allow: private}, {allow: owner}]) {
   id: ID!
-  FantaLemonBottle: Float
-  FantaTwistBottle: Float
-  FantaOrangeBottle: Float
-  FantaOrangeZeroBottle: Float
-  CokeBottle: Float
-  DietCokeBottle: Float
-  CokeZeroBottle: Float
-  Sprite: Float
-  AppleJuiceCarton: Float
-  OrangeJuiceCarton: Float
-  JugOfSquash: Float
-  Slushy: Float
-  FruitShoot: Float
-  Water: Float
-  NinjuApple: Float
-  NinjuTropical: Float
+  Name: String
+  Price: Float
+  Kitchen: Boolean
 }
 
 type HotDrinks @model @auth(rules: [{allow: private}, {allow: owner}]) {
   id: ID!
-  Tea: Float
-  SpecialTea: Float
-  HotChocolate: Float
-  Cappaccino: Float
-  Decaff: Float
-  HotChocolateCreamMarshmellow: Float
-  Latte: Float
-  Mocha: Float
-  AmericanoWhite: Float
-  AmericanoBlack: Float
-  Expresso: Float
-  DoubleExpresso: Float
-  FlatWhite: Float
-  Syrup: Float
+  Name: String
+  Price: Float
+  Syrup: Boolean
+  Kitchen: Boolean
 }
 
 type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: public, operations: [read]}]) {
@@ -94,6 +94,8 @@ type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: pub
   Telephone: String
   CafeOrders: [CafeOrder] @hasMany(indexName: "bySessions", fields: ["id"])
   orderid: [String]
+  Age: [String]
+  ExtraNames: [String]
 }
 
 type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -109,6 +111,8 @@ type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
   sessionsID: ID @index(name: "bySessions")
   Sessionid: String
   TimeDelivered: AWSTime
+  Notes: String
+  Kitchen: Boolean
 }
 
 type Messages @model @auth(rules: [{allow: private}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartHosts"], operations: [read, create]}, {allow: groups, groups: ["Staff"], operations: [read, create]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: owner, operations: [create, read]}]) {
@@ -184,4 +188,5 @@ type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: [
   LeftBranchTime: AWSTime
   Table: Int
   PartyFoodDelivered: Boolean
-} 
+}
+ 

@@ -16,6 +16,7 @@ function App({ signOut, user }) {
         if (groups && groups.some(group => ['Staff', 'Developer', 'PartyHost', 'Admin', 'Superuser'].includes(group))) {
           // Redirect the user to the /chat page
           navigate('/chat');
+          window.location.reload();
         } else {
           // Redirect the user to the /dashboard page
           navigate('/dashboard');

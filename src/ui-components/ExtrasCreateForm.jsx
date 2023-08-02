@@ -14,10 +14,10 @@ import {
   TextField,
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { HotDrinks } from "../models";
+import { Extras } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-export default function HotDrinksCreateForm(props) {
+export default function ExtrasCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -31,25 +31,21 @@ export default function HotDrinksCreateForm(props) {
   const initialValues = {
     Name: "",
     Price: "",
-    Syrup: false,
     Kitchen: false,
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Price, setPrice] = React.useState(initialValues.Price);
-  const [Syrup, setSyrup] = React.useState(initialValues.Syrup);
   const [Kitchen, setKitchen] = React.useState(initialValues.Kitchen);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.Name);
     setPrice(initialValues.Price);
-    setSyrup(initialValues.Syrup);
     setKitchen(initialValues.Kitchen);
     setErrors({});
   };
   const validations = {
     Name: [],
     Price: [],
-    Syrup: [],
     Kitchen: [],
   };
   const runValidationTasks = async (
@@ -80,7 +76,6 @@ export default function HotDrinksCreateForm(props) {
         let modelFields = {
           Name,
           Price,
-          Syrup,
           Kitchen,
         };
         const validationResponses = await Promise.all(
@@ -111,7 +106,7 @@ export default function HotDrinksCreateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(new HotDrinks(modelFields));
+          await DataStore.save(new Extras(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -124,7 +119,7 @@ export default function HotDrinksCreateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "HotDrinksCreateForm")}
+      {...getOverrideProps(overrides, "ExtrasCreateForm")}
       {...rest}
     >
       <TextField
@@ -138,7 +133,6 @@ export default function HotDrinksCreateForm(props) {
             const modelFields = {
               Name: value,
               Price,
-              Syrup,
               Kitchen,
             };
             const result = onChange(modelFields);
@@ -169,7 +163,6 @@ export default function HotDrinksCreateForm(props) {
             const modelFields = {
               Name,
               Price: value,
-              Syrup,
               Kitchen,
             };
             const result = onChange(modelFields);
@@ -186,33 +179,6 @@ export default function HotDrinksCreateForm(props) {
         {...getOverrideProps(overrides, "Price")}
       ></TextField>
       <SwitchField
-        label="Syrup"
-        defaultChecked={false}
-        isDisabled={false}
-        isChecked={Syrup}
-        onChange={(e) => {
-          let value = e.target.checked;
-          if (onChange) {
-            const modelFields = {
-              Name,
-              Price,
-              Syrup: value,
-              Kitchen,
-            };
-            const result = onChange(modelFields);
-            value = result?.Syrup ?? value;
-          }
-          if (errors.Syrup?.hasError) {
-            runValidationTasks("Syrup", value);
-          }
-          setSyrup(value);
-        }}
-        onBlur={() => runValidationTasks("Syrup", Syrup)}
-        errorMessage={errors.Syrup?.errorMessage}
-        hasError={errors.Syrup?.hasError}
-        {...getOverrideProps(overrides, "Syrup")}
-      ></SwitchField>
-      <SwitchField
         label="Kitchen"
         defaultChecked={false}
         isDisabled={false}
@@ -223,7 +189,6 @@ export default function HotDrinksCreateForm(props) {
             const modelFields = {
               Name,
               Price,
-              Syrup,
               Kitchen: value,
             };
             const result = onChange(modelFields);

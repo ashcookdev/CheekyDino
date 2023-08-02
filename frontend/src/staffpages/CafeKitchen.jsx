@@ -49,10 +49,12 @@ export default function CafeKitchen() {
         (order) =>
           new Date(order.CreatedDate) >= today &&
           new Date(order.CreatedDate) < tomorrow &&
-          !order.Completed
+          !order.Completed &&
+          order.Kitchen
       );
       setOrders(orders);
     }
+    
     
 
     useEffect(() => {

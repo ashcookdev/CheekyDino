@@ -335,7 +335,7 @@ const Delivered = async (order) => {
                 Status: {status}
               </p>
               <p className="text-sm font-medium text-gray-900">
-                Order{order.length}: {order.HotItems} + {order.ColdItems}
+                Order{order.length}: {order.HotItems} + {order.DrinkItems}
               </p>
               <p className="text-sm font-medium text-gray-900">
                 Time Created {order.CreatedTime}

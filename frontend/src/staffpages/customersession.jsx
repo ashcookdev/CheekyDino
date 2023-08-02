@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import SessionCalenderTill from './sessioncalendertill';
+import SessionCalender from './sessionCalender';
 
 
 
@@ -34,37 +34,19 @@ export default function SessionBook() {
   };
 
   if (submitted) {
-    return <SessionCalenderTill children={children} adults={adults} date= {date} childData = {childData} email={email} telephone= {telephone} />;
+    return <SessionCalender children={children} adults={adults} date= {date} childData = {childData} telephone= {telephone} />;
   }
 
   return (
-    <div className="bg-white py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <div className="bg-gradient-to-r from-white to-orange-50 py-24 sm:py-32">
+    <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0">
-          <h2 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Book Your Session
-          </h2>
+        <h2 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl text-center"> Book Your Session </h2>
           <div>
           <div>
 
-<label
-  htmlFor="Email"
-  className="block text-sm font-medium leading-6 text-gray-900"
->
-  Email
-</label>
-<input
-  onChange={(e) => setEmail(e.target.value)}
-  id="email"
-  type='text'
-  name="email"
-  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
 
->
-
-</input>
-<div>
-
+<div className='mt-8'>
 <label
   htmlFor="phone"
   className="block text-sm font-medium leading-6 text-gray-900"

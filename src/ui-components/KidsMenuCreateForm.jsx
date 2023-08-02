@@ -14,10 +14,10 @@ import {
   TextField,
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { HotDrinks } from "../models";
+import { KidsMenu } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-export default function HotDrinksCreateForm(props) {
+export default function KidsMenuCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -31,26 +31,40 @@ export default function HotDrinksCreateForm(props) {
   const initialValues = {
     Name: "",
     Price: "",
-    Syrup: false,
+    Description: "",
+    Beans: false,
+    Notes: "",
     Kitchen: false,
+    imageSrc: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Price, setPrice] = React.useState(initialValues.Price);
-  const [Syrup, setSyrup] = React.useState(initialValues.Syrup);
+  const [Description, setDescription] = React.useState(
+    initialValues.Description
+  );
+  const [Beans, setBeans] = React.useState(initialValues.Beans);
+  const [Notes, setNotes] = React.useState(initialValues.Notes);
   const [Kitchen, setKitchen] = React.useState(initialValues.Kitchen);
+  const [imageSrc, setImageSrc] = React.useState(initialValues.imageSrc);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.Name);
     setPrice(initialValues.Price);
-    setSyrup(initialValues.Syrup);
+    setDescription(initialValues.Description);
+    setBeans(initialValues.Beans);
+    setNotes(initialValues.Notes);
     setKitchen(initialValues.Kitchen);
+    setImageSrc(initialValues.imageSrc);
     setErrors({});
   };
   const validations = {
     Name: [],
     Price: [],
-    Syrup: [],
+    Description: [],
+    Beans: [],
+    Notes: [],
     Kitchen: [],
+    imageSrc: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -80,8 +94,11 @@ export default function HotDrinksCreateForm(props) {
         let modelFields = {
           Name,
           Price,
-          Syrup,
+          Description,
+          Beans,
+          Notes,
           Kitchen,
+          imageSrc,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -111,7 +128,7 @@ export default function HotDrinksCreateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(new HotDrinks(modelFields));
+          await DataStore.save(new KidsMenu(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -124,7 +141,7 @@ export default function HotDrinksCreateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "HotDrinksCreateForm")}
+      {...getOverrideProps(overrides, "KidsMenuCreateForm")}
       {...rest}
     >
       <TextField
@@ -138,8 +155,11 @@ export default function HotDrinksCreateForm(props) {
             const modelFields = {
               Name: value,
               Price,
-              Syrup,
+              Description,
+              Beans,
+              Notes,
               Kitchen,
+              imageSrc,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -169,8 +189,11 @@ export default function HotDrinksCreateForm(props) {
             const modelFields = {
               Name,
               Price: value,
-              Syrup,
+              Description,
+              Beans,
+              Notes,
               Kitchen,
+              imageSrc,
             };
             const result = onChange(modelFields);
             value = result?.Price ?? value;
@@ -185,33 +208,96 @@ export default function HotDrinksCreateForm(props) {
         hasError={errors.Price?.hasError}
         {...getOverrideProps(overrides, "Price")}
       ></TextField>
+      <TextField
+        label="Description"
+        isRequired={false}
+        isReadOnly={false}
+        value={Description}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Price,
+              Description: value,
+              Beans,
+              Notes,
+              Kitchen,
+              imageSrc,
+            };
+            const result = onChange(modelFields);
+            value = result?.Description ?? value;
+          }
+          if (errors.Description?.hasError) {
+            runValidationTasks("Description", value);
+          }
+          setDescription(value);
+        }}
+        onBlur={() => runValidationTasks("Description", Description)}
+        errorMessage={errors.Description?.errorMessage}
+        hasError={errors.Description?.hasError}
+        {...getOverrideProps(overrides, "Description")}
+      ></TextField>
       <SwitchField
-        label="Syrup"
+        label="Beans"
         defaultChecked={false}
         isDisabled={false}
-        isChecked={Syrup}
+        isChecked={Beans}
         onChange={(e) => {
           let value = e.target.checked;
           if (onChange) {
             const modelFields = {
               Name,
               Price,
-              Syrup: value,
+              Description,
+              Beans: value,
+              Notes,
               Kitchen,
+              imageSrc,
             };
             const result = onChange(modelFields);
-            value = result?.Syrup ?? value;
+            value = result?.Beans ?? value;
           }
-          if (errors.Syrup?.hasError) {
-            runValidationTasks("Syrup", value);
+          if (errors.Beans?.hasError) {
+            runValidationTasks("Beans", value);
           }
-          setSyrup(value);
+          setBeans(value);
         }}
-        onBlur={() => runValidationTasks("Syrup", Syrup)}
-        errorMessage={errors.Syrup?.errorMessage}
-        hasError={errors.Syrup?.hasError}
-        {...getOverrideProps(overrides, "Syrup")}
+        onBlur={() => runValidationTasks("Beans", Beans)}
+        errorMessage={errors.Beans?.errorMessage}
+        hasError={errors.Beans?.hasError}
+        {...getOverrideProps(overrides, "Beans")}
       ></SwitchField>
+      <TextField
+        label="Notes"
+        isRequired={false}
+        isReadOnly={false}
+        value={Notes}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Price,
+              Description,
+              Beans,
+              Notes: value,
+              Kitchen,
+              imageSrc,
+            };
+            const result = onChange(modelFields);
+            value = result?.Notes ?? value;
+          }
+          if (errors.Notes?.hasError) {
+            runValidationTasks("Notes", value);
+          }
+          setNotes(value);
+        }}
+        onBlur={() => runValidationTasks("Notes", Notes)}
+        errorMessage={errors.Notes?.errorMessage}
+        hasError={errors.Notes?.hasError}
+        {...getOverrideProps(overrides, "Notes")}
+      ></TextField>
       <SwitchField
         label="Kitchen"
         defaultChecked={false}
@@ -223,8 +309,11 @@ export default function HotDrinksCreateForm(props) {
             const modelFields = {
               Name,
               Price,
-              Syrup,
+              Description,
+              Beans,
+              Notes,
               Kitchen: value,
+              imageSrc,
             };
             const result = onChange(modelFields);
             value = result?.Kitchen ?? value;
@@ -239,6 +328,36 @@ export default function HotDrinksCreateForm(props) {
         hasError={errors.Kitchen?.hasError}
         {...getOverrideProps(overrides, "Kitchen")}
       ></SwitchField>
+      <TextField
+        label="Image src"
+        isRequired={false}
+        isReadOnly={false}
+        value={imageSrc}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Price,
+              Description,
+              Beans,
+              Notes,
+              Kitchen,
+              imageSrc: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.imageSrc ?? value;
+          }
+          if (errors.imageSrc?.hasError) {
+            runValidationTasks("imageSrc", value);
+          }
+          setImageSrc(value);
+        }}
+        onBlur={() => runValidationTasks("imageSrc", imageSrc)}
+        errorMessage={errors.imageSrc?.errorMessage}
+        hasError={errors.imageSrc?.hasError}
+        {...getOverrideProps(overrides, "imageSrc")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

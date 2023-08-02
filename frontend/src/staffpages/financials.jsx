@@ -56,7 +56,7 @@ const teams = [{ id: 1, name: 'Orders', href: '/orders', initial: 'O', current: 
 const navigation = [
 { name: 'Home', href: '/dashboard', icon: HomeIcon, current: true },
 { name: 'Chat', href: '/chat', icon: UsersIcon, current: false },
-{ name: 'Till', href: '/Till', icon: FolderIcon, current: false },
+{ name: 'Till', href: '/till', icon: FolderIcon, current: false },
 { name: 'Tables', href: '/Tables', icon: CalendarIcon, current: false },
 { name: 'Tasks', href: '/Tasks', icon: CalendarIcon, current: false },
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },

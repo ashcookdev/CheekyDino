@@ -211,6 +211,8 @@ export default function SessionsCreateForm(props) {
     ExtraTables: "",
     Telephone: "",
     orderid: [],
+    Age: [],
+    ExtraNames: [],
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Email, setEmail] = React.useState(initialValues.Email);
@@ -236,6 +238,8 @@ export default function SessionsCreateForm(props) {
   );
   const [Telephone, setTelephone] = React.useState(initialValues.Telephone);
   const [orderid, setOrderid] = React.useState(initialValues.orderid);
+  const [Age, setAge] = React.useState(initialValues.Age);
+  const [ExtraNames, setExtraNames] = React.useState(initialValues.ExtraNames);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.Name);
@@ -257,10 +261,19 @@ export default function SessionsCreateForm(props) {
     setTelephone(initialValues.Telephone);
     setOrderid(initialValues.orderid);
     setCurrentOrderidValue("");
+    setAge(initialValues.Age);
+    setCurrentAgeValue("");
+    setExtraNames(initialValues.ExtraNames);
+    setCurrentExtraNamesValue("");
     setErrors({});
   };
   const [currentOrderidValue, setCurrentOrderidValue] = React.useState("");
   const orderidRef = React.createRef();
+  const [currentAgeValue, setCurrentAgeValue] = React.useState("");
+  const AgeRef = React.createRef();
+  const [currentExtraNamesValue, setCurrentExtraNamesValue] =
+    React.useState("");
+  const ExtraNamesRef = React.createRef();
   const validations = {
     Name: [],
     Email: [],
@@ -280,6 +293,8 @@ export default function SessionsCreateForm(props) {
     ExtraTables: [],
     Telephone: [],
     orderid: [],
+    Age: [],
+    ExtraNames: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -325,6 +340,8 @@ export default function SessionsCreateForm(props) {
           ExtraTables,
           Telephone,
           orderid,
+          Age,
+          ExtraNames,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -397,6 +414,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -438,6 +457,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.Email ?? value;
@@ -480,6 +501,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.TimeslotFrom ?? value;
@@ -522,6 +545,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.TimeslotTo ?? value;
@@ -564,6 +589,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.TimeLeft ?? value;
@@ -606,6 +633,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.TimeArrived ?? value;
@@ -648,6 +677,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.Date ?? value;
@@ -693,6 +724,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.Table ?? value;
@@ -738,6 +771,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.Orders ?? value;
@@ -779,6 +814,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.Prepaid ?? value;
@@ -824,6 +861,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.TotalSpent ?? value;
@@ -869,6 +908,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.Adults ?? value;
@@ -914,6 +955,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.Children ?? value;
@@ -955,6 +998,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.Arrived ?? value;
@@ -996,6 +1041,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.LeftCenter ?? value;
@@ -1041,6 +1088,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables: value,
               Telephone,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.ExtraTables ?? value;
@@ -1082,6 +1131,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone: value,
               orderid,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             value = result?.Telephone ?? value;
@@ -1119,6 +1170,8 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid: values,
+              Age,
+              ExtraNames,
             };
             const result = onChange(modelFields);
             values = result?.orderid ?? values;
@@ -1153,6 +1206,130 @@ export default function SessionsCreateForm(props) {
           ref={orderidRef}
           labelHidden={true}
           {...getOverrideProps(overrides, "orderid")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age: values,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            values = result?.Age ?? values;
+          }
+          setAge(values);
+          setCurrentAgeValue("");
+        }}
+        currentFieldValue={currentAgeValue}
+        label={"Age"}
+        items={Age}
+        hasError={errors?.Age?.hasError}
+        errorMessage={errors?.Age?.errorMessage}
+        setFieldValue={setCurrentAgeValue}
+        inputFieldRef={AgeRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Age"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentAgeValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Age?.hasError) {
+              runValidationTasks("Age", value);
+            }
+            setCurrentAgeValue(value);
+          }}
+          onBlur={() => runValidationTasks("Age", currentAgeValue)}
+          errorMessage={errors.Age?.errorMessage}
+          hasError={errors.Age?.hasError}
+          ref={AgeRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "Age")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.ExtraNames ?? values;
+          }
+          setExtraNames(values);
+          setCurrentExtraNamesValue("");
+        }}
+        currentFieldValue={currentExtraNamesValue}
+        label={"Extra names"}
+        items={ExtraNames}
+        hasError={errors?.ExtraNames?.hasError}
+        errorMessage={errors?.ExtraNames?.errorMessage}
+        setFieldValue={setCurrentExtraNamesValue}
+        inputFieldRef={ExtraNamesRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Extra names"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentExtraNamesValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.ExtraNames?.hasError) {
+              runValidationTasks("ExtraNames", value);
+            }
+            setCurrentExtraNamesValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks("ExtraNames", currentExtraNamesValue)
+          }
+          errorMessage={errors.ExtraNames?.errorMessage}
+          hasError={errors.ExtraNames?.hasError}
+          ref={ExtraNamesRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "ExtraNames")}
         ></TextField>
       </ArrayField>
       <Flex

@@ -204,6 +204,8 @@ export default function CafeOrderUpdateForm(props) {
     Delieved: false,
     Sessionid: "",
     TimeDelivered: "",
+    Notes: "",
+    Kitchen: false,
   };
   const [CreatedTime, setCreatedTime] = React.useState(
     initialValues.CreatedTime
@@ -221,6 +223,8 @@ export default function CafeOrderUpdateForm(props) {
   const [TimeDelivered, setTimeDelivered] = React.useState(
     initialValues.TimeDelivered
   );
+  const [Notes, setNotes] = React.useState(initialValues.Notes);
+  const [Kitchen, setKitchen] = React.useState(initialValues.Kitchen);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = cafeOrderRecord
@@ -238,6 +242,8 @@ export default function CafeOrderUpdateForm(props) {
     setDelieved(cleanValues.Delieved);
     setSessionid(cleanValues.Sessionid);
     setTimeDelivered(cleanValues.TimeDelivered);
+    setNotes(cleanValues.Notes);
+    setKitchen(cleanValues.Kitchen);
     setErrors({});
   };
   const [cafeOrderRecord, setCafeOrderRecord] =
@@ -268,6 +274,8 @@ export default function CafeOrderUpdateForm(props) {
     Delieved: [],
     Sessionid: [],
     TimeDelivered: [],
+    Notes: [],
+    Kitchen: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -305,6 +313,8 @@ export default function CafeOrderUpdateForm(props) {
           Delieved,
           Sessionid,
           TimeDelivered,
+          Notes,
+          Kitchen,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -371,6 +381,8 @@ export default function CafeOrderUpdateForm(props) {
               Delieved,
               Sessionid,
               TimeDelivered,
+              Notes,
+              Kitchen,
             };
             const result = onChange(modelFields);
             value = result?.CreatedTime ?? value;
@@ -405,6 +417,8 @@ export default function CafeOrderUpdateForm(props) {
               Delieved,
               Sessionid,
               TimeDelivered,
+              Notes,
+              Kitchen,
             };
             const result = onChange(modelFields);
             value = result?.CreatedDate ?? value;
@@ -442,6 +456,8 @@ export default function CafeOrderUpdateForm(props) {
               Delieved,
               Sessionid,
               TimeDelivered,
+              Notes,
+              Kitchen,
             };
             const result = onChange(modelFields);
             value = result?.Total ?? value;
@@ -471,6 +487,8 @@ export default function CafeOrderUpdateForm(props) {
               Delieved,
               Sessionid,
               TimeDelivered,
+              Notes,
+              Kitchen,
             };
             const result = onChange(modelFields);
             values = result?.DrinkItems ?? values;
@@ -524,6 +542,8 @@ export default function CafeOrderUpdateForm(props) {
               Delieved,
               Sessionid,
               TimeDelivered,
+              Notes,
+              Kitchen,
             };
             const result = onChange(modelFields);
             values = result?.HotItems ?? values;
@@ -583,6 +603,8 @@ export default function CafeOrderUpdateForm(props) {
               Delieved,
               Sessionid,
               TimeDelivered,
+              Notes,
+              Kitchen,
             };
             const result = onChange(modelFields);
             value = result?.Table ?? value;
@@ -616,6 +638,8 @@ export default function CafeOrderUpdateForm(props) {
               Delieved,
               Sessionid,
               TimeDelivered,
+              Notes,
+              Kitchen,
             };
             const result = onChange(modelFields);
             value = result?.Completed ?? value;
@@ -649,6 +673,8 @@ export default function CafeOrderUpdateForm(props) {
               Delieved: value,
               Sessionid,
               TimeDelivered,
+              Notes,
+              Kitchen,
             };
             const result = onChange(modelFields);
             value = result?.Delieved ?? value;
@@ -682,6 +708,8 @@ export default function CafeOrderUpdateForm(props) {
               Delieved,
               Sessionid: value,
               TimeDelivered,
+              Notes,
+              Kitchen,
             };
             const result = onChange(modelFields);
             value = result?.Sessionid ?? value;
@@ -716,6 +744,8 @@ export default function CafeOrderUpdateForm(props) {
               Delieved,
               Sessionid,
               TimeDelivered: value,
+              Notes,
+              Kitchen,
             };
             const result = onChange(modelFields);
             value = result?.TimeDelivered ?? value;
@@ -730,6 +760,76 @@ export default function CafeOrderUpdateForm(props) {
         hasError={errors.TimeDelivered?.hasError}
         {...getOverrideProps(overrides, "TimeDelivered")}
       ></TextField>
+      <TextField
+        label="Notes"
+        isRequired={false}
+        isReadOnly={false}
+        value={Notes}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              CreatedTime,
+              CreatedDate,
+              Total,
+              DrinkItems,
+              HotItems,
+              Table,
+              Completed,
+              Delieved,
+              Sessionid,
+              TimeDelivered,
+              Notes: value,
+              Kitchen,
+            };
+            const result = onChange(modelFields);
+            value = result?.Notes ?? value;
+          }
+          if (errors.Notes?.hasError) {
+            runValidationTasks("Notes", value);
+          }
+          setNotes(value);
+        }}
+        onBlur={() => runValidationTasks("Notes", Notes)}
+        errorMessage={errors.Notes?.errorMessage}
+        hasError={errors.Notes?.hasError}
+        {...getOverrideProps(overrides, "Notes")}
+      ></TextField>
+      <SwitchField
+        label="Kitchen"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={Kitchen}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              CreatedTime,
+              CreatedDate,
+              Total,
+              DrinkItems,
+              HotItems,
+              Table,
+              Completed,
+              Delieved,
+              Sessionid,
+              TimeDelivered,
+              Notes,
+              Kitchen: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Kitchen ?? value;
+          }
+          if (errors.Kitchen?.hasError) {
+            runValidationTasks("Kitchen", value);
+          }
+          setKitchen(value);
+        }}
+        onBlur={() => runValidationTasks("Kitchen", Kitchen)}
+        errorMessage={errors.Kitchen?.errorMessage}
+        hasError={errors.Kitchen?.hasError}
+        {...getOverrideProps(overrides, "Kitchen")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

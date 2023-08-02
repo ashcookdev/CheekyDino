@@ -4,24 +4,30 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
-export { default as studioTheme } from "./studioTheme";
-export { default as PartyBookingCreateForm } from "./PartyBookingCreateForm";
-export { default as TimeEntryCreateForm } from "./TimeEntryCreateForm";
-export { default as TimeEntryUpdateForm } from "./TimeEntryUpdateForm";
-export { default as StaffCreateForm } from "./StaffCreateForm";
-export { default as StaffUpdateForm } from "./StaffUpdateForm";
-export { default as ConfectionaryCreateForm } from "./ConfectionaryCreateForm";
-export { default as ConfectionaryUpdateForm } from "./ConfectionaryUpdateForm";
-export { default as SoftDrinksCreateForm } from "./SoftDrinksCreateForm";
-export { default as SoftDrinksUpdateForm } from "./SoftDrinksUpdateForm";
-export { default as HotDrinksCreateForm } from "./HotDrinksCreateForm";
-export { default as HotDrinksUpdateForm } from "./HotDrinksUpdateForm";
-export { default as SessionsCreateForm } from "./SessionsCreateForm";
-export { default as SessionsUpdateForm } from "./SessionsUpdateForm";
+export { default as BreakfastCreateForm } from "./BreakfastCreateForm";
+export { default as BreakfastUpdateForm } from "./BreakfastUpdateForm";
 export { default as CafeOrderCreateForm } from "./CafeOrderCreateForm";
 export { default as CafeOrderUpdateForm } from "./CafeOrderUpdateForm";
+export { default as ConfectionaryCreateForm } from "./ConfectionaryCreateForm";
+export { default as ConfectionaryUpdateForm } from "./ConfectionaryUpdateForm";
+export { default as ExtrasCreateForm } from "./ExtrasCreateForm";
+export { default as ExtrasUpdateForm } from "./ExtrasUpdateForm";
+export { default as HotDrinksCreateForm } from "./HotDrinksCreateForm";
+export { default as HotDrinksUpdateForm } from "./HotDrinksUpdateForm";
+export { default as KidsMenuCreateForm } from "./KidsMenuCreateForm";
+export { default as KidsMenuUpdateForm } from "./KidsMenuUpdateForm";
 export { default as MessagesCreateForm } from "./MessagesCreateForm";
 export { default as MessagesUpdateForm } from "./MessagesUpdateForm";
 export { default as PartyAdultFoodCreateForm } from "./PartyAdultFoodCreateForm";
 export { default as PartyAdultFoodUpdateForm } from "./PartyAdultFoodUpdateForm";
+export { default as PartyBookingCreateForm } from "./PartyBookingCreateForm";
 export { default as PartyBookingUpdateForm } from "./PartyBookingUpdateForm";
+export { default as SessionsCreateForm } from "./SessionsCreateForm";
+export { default as SessionsUpdateForm } from "./SessionsUpdateForm";
+export { default as SoftDrinksCreateForm } from "./SoftDrinksCreateForm";
+export { default as SoftDrinksUpdateForm } from "./SoftDrinksUpdateForm";
+export { default as StaffCreateForm } from "./StaffCreateForm";
+export { default as StaffUpdateForm } from "./StaffUpdateForm";
+export { default as TimeEntryCreateForm } from "./TimeEntryCreateForm";
+export { default as TimeEntryUpdateForm } from "./TimeEntryUpdateForm";
+export { default as studioTheme } from "./studioTheme";

@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { Auth } from 'aws-amplify';
 import { Sessions } from './models';
 import { useNavigate } from 'react-router-dom';
 import tableData from './TableData.json';
-import {format} from 'date-fns';
 
-//{ date, children, adults, childData }
+//
 
-export default function SessionCalender({ date, children, adults, childData }) {
+export default function SessionCalender({ date, children, adults, childData, email, telephone }) {
 
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
   const [freeTablesPerTimeslot, setFreeTablesPerTimeslot] = useState([]);
 
   
@@ -22,12 +19,7 @@ export default function SessionCalender({ date, children, adults, childData }) {
   //get email from auth
 
 
-  useEffect(() => {
-    Auth.currentUserInfo().then((user) => {
-      setEmail(user.attributes.email);
-    });
-  }, []);
-
+  
 console.log(childData[0].name)
 
 
@@ -119,7 +111,8 @@ function handleBook(item) {
 
   const name = childData[0].name
   const extraNames = childData.length > 1 ? childData.slice(1).map(item => item.name) : null;
-  
+  const adults = parseInt(adults)
+  const children = parseInt(children)
 
   // Save booking information to DataStore
   DataStore.save(
@@ -137,12 +130,14 @@ function handleBook(item) {
       ExtraTables: item.recommendedTables.length > 1 ? item.recommendedTables[1] : null,      
       Prepaid: false,
       Age: childData.map(item => item.age),
-      ExtraNames: extraNames
+      ExtraNames: extraNames,
+    Telephone: telephone,
+    
     })
   );
 
   // Redirect to /sessionbooking page
-  navigate('/sessionbookings');
+  navigate('/till');
   window.location.reload();
 }
 
@@ -151,14 +146,7 @@ function handleBook(item) {
     // Display available timeslots with "Book" button
     return (
       <div>
-        <div className="md:flex md:items-center md:justify-between mt-10">
-          <div className="min-w-0 flex-1">
-            <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight text-center">
-              Book Your Time
-            </h2>
-            <p className="text-lg font-semibold leading-6 text-gray-900 text-center">{format(new Date(date), 'EEEE, MMMM do, yyyy')}</p>
-          </div>
-        </div>
+        <p className="text-lg font-semibold leading-6 text-gray-900">{date}</p>
         <ul role="list" className="divide-y divide-gray-100 mt-4">
           {freeTablesPerTimeslot.map(item => (
             <li key={item.timeslot.start} className="flex justify-between gap-x-6 py-5">
@@ -172,7 +160,7 @@ function handleBook(item) {
                   </div>
                 </div>
               </div>
-              <div className="mt-4 md:mt-0 md:flex md:flex-col md:items-end">
+              <div className="hidden sm:flex sm:flex-col sm:items-end">
                 <button onClick={() => handleBook(item)} className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Book</button>
               </div>
             </li>
@@ -180,7 +168,6 @@ function handleBook(item) {
         </ul>
       </div>
     );
-    
   
 
 }

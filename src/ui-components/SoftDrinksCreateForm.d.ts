@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -13,60 +13,21 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type SoftDrinksCreateFormInputValues = {
-    FantaLemonBottle?: number;
-    FantaTwistBottle?: number;
-    FantaOrangeBottle?: number;
-    FantaOrangeZeroBottle?: number;
-    CokeBottle?: number;
-    DietCokeBottle?: number;
-    CokeZeroBottle?: number;
-    Sprite?: number;
-    AppleJuiceCarton?: number;
-    OrangeJuiceCarton?: number;
-    JugOfSquash?: number;
-    Slushy?: number;
-    FruitShoot?: number;
-    Water?: number;
-    NinjuApple?: number;
-    NinjuTropical?: number;
+    Name?: string;
+    Price?: number;
+    Kitchen?: boolean;
 };
 export declare type SoftDrinksCreateFormValidationValues = {
-    FantaLemonBottle?: ValidationFunction<number>;
-    FantaTwistBottle?: ValidationFunction<number>;
-    FantaOrangeBottle?: ValidationFunction<number>;
-    FantaOrangeZeroBottle?: ValidationFunction<number>;
-    CokeBottle?: ValidationFunction<number>;
-    DietCokeBottle?: ValidationFunction<number>;
-    CokeZeroBottle?: ValidationFunction<number>;
-    Sprite?: ValidationFunction<number>;
-    AppleJuiceCarton?: ValidationFunction<number>;
-    OrangeJuiceCarton?: ValidationFunction<number>;
-    JugOfSquash?: ValidationFunction<number>;
-    Slushy?: ValidationFunction<number>;
-    FruitShoot?: ValidationFunction<number>;
-    Water?: ValidationFunction<number>;
-    NinjuApple?: ValidationFunction<number>;
-    NinjuTropical?: ValidationFunction<number>;
+    Name?: ValidationFunction<string>;
+    Price?: ValidationFunction<number>;
+    Kitchen?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type SoftDrinksCreateFormOverridesProps = {
     SoftDrinksCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    FantaLemonBottle?: PrimitiveOverrideProps<TextFieldProps>;
-    FantaTwistBottle?: PrimitiveOverrideProps<TextFieldProps>;
-    FantaOrangeBottle?: PrimitiveOverrideProps<TextFieldProps>;
-    FantaOrangeZeroBottle?: PrimitiveOverrideProps<TextFieldProps>;
-    CokeBottle?: PrimitiveOverrideProps<TextFieldProps>;
-    DietCokeBottle?: PrimitiveOverrideProps<TextFieldProps>;
-    CokeZeroBottle?: PrimitiveOverrideProps<TextFieldProps>;
-    Sprite?: PrimitiveOverrideProps<TextFieldProps>;
-    AppleJuiceCarton?: PrimitiveOverrideProps<TextFieldProps>;
-    OrangeJuiceCarton?: PrimitiveOverrideProps<TextFieldProps>;
-    JugOfSquash?: PrimitiveOverrideProps<TextFieldProps>;
-    Slushy?: PrimitiveOverrideProps<TextFieldProps>;
-    FruitShoot?: PrimitiveOverrideProps<TextFieldProps>;
-    Water?: PrimitiveOverrideProps<TextFieldProps>;
-    NinjuApple?: PrimitiveOverrideProps<TextFieldProps>;
-    NinjuTropical?: PrimitiveOverrideProps<TextFieldProps>;
+    Name?: PrimitiveOverrideProps<TextFieldProps>;
+    Price?: PrimitiveOverrideProps<TextFieldProps>;
+    Kitchen?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type SoftDrinksCreateFormProps = React.PropsWithChildren<{
     overrides?: SoftDrinksCreateFormOverridesProps | undefined | null;

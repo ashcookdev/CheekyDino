@@ -5,6 +5,8 @@ import { DataStore } from 'aws-amplify';
 import { Sessions } from './models';
 import TableSelect from './TableSelect';
 import { format, addHours, set } from 'date-fns';
+import tableData from './TableData.json';
+import SessionBooker from './sessionbooker';
 
 
 
@@ -12,7 +14,7 @@ export default function SessionBook() {
   const [children, setChildren] = useState(1);
   const [adults, setAdults] = useState(1);
   const [submitted, setSubmitted] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState("");
   const [name, setName] = useState("")
   const [age, setAge] = useState("")
   const [email, setEmail] = useState("")
@@ -21,11 +23,18 @@ export default function SessionBook() {
   const [truee, setTrue] = useState(false)
   const [details, setDetails] = useState({})
 
+  const [showForm, setShowForm] = useState(false);
+
+  const [childData, setChildData] = useState(Array.from({ length: children }, () => ({ name: '', age: '' })));
+  const [next, setNext] = useState(false);
+
+  
+console.log(childData)
 
   const handleTableSelect = (selectedTables) => {
     // do nothing
   };
-  
+
   if (truee === true) {
     return (
       <TableSelect
@@ -35,8 +44,26 @@ export default function SessionBook() {
       />
     );
   }
+
+if (next === true) {
+  return (
+    <SessionBooker />
+  )
+}
   
 
+
+  const handleChildrenChange = (e) => {
+    const value = e.target.value;
+    setChildren(value);
+    setChildData(Array.from({ length: value }, () => ({ name: '', age: '' })));
+  };
+
+  const handleChildDataChange = (index, key, value) => {
+    setChildData((prev) =>
+      prev.map((data, i) => (i === index ? { ...data, [key]: value } : data))
+    );
+  };
 
 
   const timeslots = [
@@ -56,74 +83,35 @@ export default function SessionBook() {
     { start: '15:30', end: '17:30' },
   ];
 
-  const tablecapacity = [
-    { table: 1, capacity: 2 },
-    { table: 2, capacity: 2 },
-    { table: 3, capacity: 2 },
-    { table: 4, capacity: 2 },
-    { table: 5, capacity: 2 },
-    { table: 6, capacity: 2 },
-    { table: 7, capacity: 2 },
-    { table: 8, capacity: 2 },
-    { table: 9, capacity: 2 },
-    { table: 10, capacity: 2 },
-    { table: 11, capacity: 4 },
-    { table: 12, capacity: 4 },
-    { table: 13, capacity: 4 },
-    { table: 14, capacity: 4 },
-    { table: 15, capacity: 4 },
-    { table: 16, capacity: 4 },
-    { table: 17, capacity: 4 },
-    { table: 18, capacity: 4 },
-    { table: 19, capacity: 4 },
-    { table: 20, capacity: 4 },
-    { table: 21, capacity: 4 },
-    { table: 22, capacity: 4 },
-    { table: 23, capacity: 4 },
-    { table: 24, capacity: 4 },
-    { table: 25, capacity: 4 },
-    { table: 26, capacity: 4 },
-    { table: 27, capacity: 4 },
-    { table: 28, capacity: 4 },
-    { table: 29, capacity: 4 },
-    { table: 30, capacity: 4 },
-    { table: 31, capacity: 4 },
-    { table: 32, capacity: 4 },
-    { table: 33, capacity: 4 },
-    { table: 34, capacity: 4 },
-    { table: 35, capacity: 4 },
-  ];
-
+  
   console.log(children, adults, date)
 
-  const handleSubmit = () => {
-    setSubmitted(true);
-  };
+  
 
   const handleNowSubmit = async () => {
     // get todays date
     const today = new Date();
     // format the current time 
     const nowString = format(today, 'HH:mm');
-  
+
     const dateString = today.toISOString().split('T')[0];
-  
+
     const twoHoursLater = addHours(today, 2);
-  
+
     // format the result as a string
     const twoHoursLaterString = format(twoHoursLater, 'HH:mm');
-  
+
     console.log(twoHoursLaterString);
     console.log(nowString);
-  
+
     // get all sessions for todays date
     const bookings = await DataStore.query(Sessions, c => c.Date.eq(dateString));
     console.log(bookings);
-  
+
     // calculate total number of guests
     const guests = children + adults;
-  
-    let availableTablesForTimeslot = tablecapacity.filter(table => {
+
+    let availableTablesForTimeslot = tableData.filter(table => {
       // check if table is already booked
       const isBooked = bookings.some(booking => {
         const { TimeslotFrom, TimeslotTo, Table } = booking;
@@ -135,7 +123,7 @@ export default function SessionBook() {
       });
       return !isBooked;
     });
-  
+
     // conditionally recommend tables based on the number of guests
     if (guests === 2) {
       availableTablesForTimeslot = availableTablesForTimeslot.filter(table => table.capacity === 2);
@@ -154,7 +142,7 @@ export default function SessionBook() {
     setAvailableTables(availableTablesForTimeslot);
     setDetails(
       {
-        Name: name,
+        Name: childData,
         Age: age,
         Email: email,
         Number: number,
@@ -163,16 +151,16 @@ export default function SessionBook() {
         Date: date,
         TimeSlotFrom: nowString,
         TimeSlotTo: twoHoursLaterString,
-        Telephone : number,
+        Telephone: number,
 
       }
     )
     console.log(availableTablesForTimeslot)
     setTrue(true)
   }
-  
 
-    // filter sessions for now or later using TimeSlotTo and TimeSlotFrom and Table 
+
+  // filter sessions for now or later using TimeSlotTo and TimeSlotFrom and Table 
   return (
     <div className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -181,167 +169,122 @@ export default function SessionBook() {
             Book Your Session
           </h2>
           <div>
+<button            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
+ onClick = {()=> setShowForm(true)}>Book For Today</button>
+
+            <button onClick={() => {setNext(true)}}            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
+ >Book For Another Day</button>
+            {showForm && (
+            <div>
+
+              <label
+                htmlFor="Email"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Email
+              </label>
+              <input
+                onChange={(e) => setEmail(e.target.value)}
+                id="email"
+                type='text'
+                name="email"
+                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+
+              >
+
+              </input>
+            <div>
+
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Telephone
+              </label>
+              <input
+                onChange={(e) => setNumber(e.target.value)}
+                id="number"
+                type='text'
+                name="number"
+                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+
+              >
+
+              </input>
+            </div>
+
+
+
+
           <div>
-            
-            <label
-              htmlFor="location"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Childs Name
+            <label htmlFor="children" className="block text-sm font-medium leading-6 text-gray-900">
+              Number of Adults
             </label>
             <input
-              onChange={(e) => setName(e.target.value)}
-              id="name"
-              name="name"
-              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              
-            >
-             
-            </input>
-          </div>
-          <div>
-            
-            <label
-              htmlFor="location"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Childs Age
-            </label>
-            <input
-              onChange={(e) => setAge(e.target.value)}
-              id="name"
-              type='number'
-              name="name"
-              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              
-            >
-             
-            </input>
-          </div>
-          <div>
-            
-            <label
-              htmlFor="location"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Email
-            </label>
-            <input
-              onChange={(e) => setEmail(e.target.value)}
-              id="email"
-              type='text'
-              name="email"
-              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              
-            >
-             
-            </input>
-          </div>
-          <div>
-            
-            <label
-              htmlFor="location"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Telephone
-            </label>
-            <input
-              onChange={(e) => setNumber(e.target.value)}
-              id="number"
-              type='text'
-              name="number"
-              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              
-            >
-             
-            </input>
-          </div>
-            <label
-              htmlFor="location"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Number of Children
-            </label>
-            <select
-              onChange={(e) => setChildren(e.target.value)}
+              onChange={(e) => setAdults(e.target.value)}
               id="children"
+              type="number"
               name="children"
               className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
               defaultValue="1"
             >
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-              <option>8</option>
-              <option>9</option>
-              <option>10</option>
-            </select>
+            </input>
           </div>
 
           <div>
-            <label
-              htmlFor="location"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Number of Adults
+            <label htmlFor="children" className="block text-sm font-medium leading-6 text-gray-900">
+              Number of Children
             </label>
-            <select
-              onChange={(e) => setAdults(e.target.value)}
-              id="adults"
-              name="adults"
+            <input
+              onChange={handleChildrenChange}
+              id="children"
+              type="number"
+              name="children"
               className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
               defaultValue="1"
-            >
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-              <option>8</option>
-              <option>9</option>
-              <option>10</option>
-            </select>
-          </div>
-          <div>
-            <label
-              htmlFor="date"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Date
-            </label>
-            <DatePicker
-              id="date"
-              selected={date}
-              onChange={(date) => setDate(date)}
-              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-                <div>
-        
-                </div>
+            ></input>
 
+            {childData.map((data, index) => (
+              <div key={index}>
+                <label htmlFor={`name-${index}`} className="block text-sm font-medium leading-6 text-gray-900">
+                  Child's Name
+                </label>
+                <input
+                  onChange={(e) => handleChildDataChange(index, 'name', e.target.value)}
+                  id={`name-${index}`}
+                  name={`name-${index}`}
+                  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                ></input>
 
+                <label htmlFor={`age-${index}`} className="block text-sm font-medium leading-6 text-gray-900">
+                  Child's Age
+                </label>
+                <input
+                  onChange={(e) => handleChildDataChange(index, 'age', e.target.value)}
+                  id={`age-${index}`}
+                  type="number"
+                  name={`age-${index}`}
+                  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                ></input>
+              </div>
+            ))}
+          </div>
+         
           <button
             type="submit"
             onClick={handleNowSubmit}
             className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
           >
-            Book for Now 
+            Book
           </button>
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
-          >
-            Book for Later
-          </button>
+          </div>
+          )
+}
         </div>
+        </div>
+
+
+          
       </div>
     </div>
   );

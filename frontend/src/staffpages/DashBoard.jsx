@@ -59,7 +59,7 @@ export default function Dashboard() {
 
 
 const navigation = [
-    { name: 'Till', href: '/Till', icon: HomeIcon, current: true },
+    { name: 'Till', href: '/till', icon: HomeIcon, current: true },
   { name: 'Chat', href: '/chat', icon: UsersIcon, current: false },
   { name: 'Kitchen', href: '/kitchen', icon: FolderIcon, current: false },
   { name: 'Tables', href: '/Tables', icon: CalendarIcon, current: false },

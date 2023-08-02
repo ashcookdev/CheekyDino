@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -13,48 +13,21 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type ConfectionaryCreateFormInputValues = {
-    Muffin?: number;
-    CakeSlice?: number;
-    Cookies?: number;
-    Buttons?: number;
-    Quavers?: number;
-    Pombears?: number;
-    Jazzles?: number;
-    Pringles?: number;
-    Raisins?: number;
-    SweetCone?: number;
-    Crisps60p?: number;
-    Crisps35p?: number;
+    Name?: string;
+    Price?: number;
+    Kitchen?: boolean;
 };
 export declare type ConfectionaryCreateFormValidationValues = {
-    Muffin?: ValidationFunction<number>;
-    CakeSlice?: ValidationFunction<number>;
-    Cookies?: ValidationFunction<number>;
-    Buttons?: ValidationFunction<number>;
-    Quavers?: ValidationFunction<number>;
-    Pombears?: ValidationFunction<number>;
-    Jazzles?: ValidationFunction<number>;
-    Pringles?: ValidationFunction<number>;
-    Raisins?: ValidationFunction<number>;
-    SweetCone?: ValidationFunction<number>;
-    Crisps60p?: ValidationFunction<number>;
-    Crisps35p?: ValidationFunction<number>;
+    Name?: ValidationFunction<string>;
+    Price?: ValidationFunction<number>;
+    Kitchen?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ConfectionaryCreateFormOverridesProps = {
     ConfectionaryCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    Muffin?: PrimitiveOverrideProps<TextFieldProps>;
-    CakeSlice?: PrimitiveOverrideProps<TextFieldProps>;
-    Cookies?: PrimitiveOverrideProps<TextFieldProps>;
-    Buttons?: PrimitiveOverrideProps<TextFieldProps>;
-    Quavers?: PrimitiveOverrideProps<TextFieldProps>;
-    Pombears?: PrimitiveOverrideProps<TextFieldProps>;
-    Jazzles?: PrimitiveOverrideProps<TextFieldProps>;
-    Pringles?: PrimitiveOverrideProps<TextFieldProps>;
-    Raisins?: PrimitiveOverrideProps<TextFieldProps>;
-    SweetCone?: PrimitiveOverrideProps<TextFieldProps>;
-    Crisps60p?: PrimitiveOverrideProps<TextFieldProps>;
-    Crisps35p?: PrimitiveOverrideProps<TextFieldProps>;
+    Name?: PrimitiveOverrideProps<TextFieldProps>;
+    Price?: PrimitiveOverrideProps<TextFieldProps>;
+    Kitchen?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type ConfectionaryCreateFormProps = React.PropsWithChildren<{
     overrides?: ConfectionaryCreateFormOverridesProps | undefined | null;

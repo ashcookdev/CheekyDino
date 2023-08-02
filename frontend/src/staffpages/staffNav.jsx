@@ -166,7 +166,7 @@ return (
             </Disclosure.Button>
             <Disclosure.Button
               as="a"
-              href="/Till"
+              href="/till"
               className="flex items-center block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
               >
               <CurrencyDollarIcon className="h-5 w-5 mr-1" aria-hidden="true" />

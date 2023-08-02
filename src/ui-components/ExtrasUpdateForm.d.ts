@@ -7,38 +7,38 @@
 import * as React from "react";
 import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { Confectionary } from "../models";
+import { Extras } from "../models";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type ConfectionaryUpdateFormInputValues = {
+export declare type ExtrasUpdateFormInputValues = {
     Name?: string;
     Price?: number;
     Kitchen?: boolean;
 };
-export declare type ConfectionaryUpdateFormValidationValues = {
+export declare type ExtrasUpdateFormValidationValues = {
     Name?: ValidationFunction<string>;
     Price?: ValidationFunction<number>;
     Kitchen?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type ConfectionaryUpdateFormOverridesProps = {
-    ConfectionaryUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+export declare type ExtrasUpdateFormOverridesProps = {
+    ExtrasUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     Name?: PrimitiveOverrideProps<TextFieldProps>;
     Price?: PrimitiveOverrideProps<TextFieldProps>;
     Kitchen?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
-export declare type ConfectionaryUpdateFormProps = React.PropsWithChildren<{
-    overrides?: ConfectionaryUpdateFormOverridesProps | undefined | null;
+export declare type ExtrasUpdateFormProps = React.PropsWithChildren<{
+    overrides?: ExtrasUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
-    confectionary?: Confectionary;
-    onSubmit?: (fields: ConfectionaryUpdateFormInputValues) => ConfectionaryUpdateFormInputValues;
-    onSuccess?: (fields: ConfectionaryUpdateFormInputValues) => void;
-    onError?: (fields: ConfectionaryUpdateFormInputValues, errorMessage: string) => void;
-    onChange?: (fields: ConfectionaryUpdateFormInputValues) => ConfectionaryUpdateFormInputValues;
-    onValidate?: ConfectionaryUpdateFormValidationValues;
+    extras?: Extras;
+    onSubmit?: (fields: ExtrasUpdateFormInputValues) => ExtrasUpdateFormInputValues;
+    onSuccess?: (fields: ExtrasUpdateFormInputValues) => void;
+    onError?: (fields: ExtrasUpdateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: ExtrasUpdateFormInputValues) => ExtrasUpdateFormInputValues;
+    onValidate?: ExtrasUpdateFormValidationValues;
 } & React.CSSProperties>;
-export default function ConfectionaryUpdateForm(props: ConfectionaryUpdateFormProps): React.ReactElement;
+export default function ExtrasUpdateForm(props: ExtrasUpdateFormProps): React.ReactElement;

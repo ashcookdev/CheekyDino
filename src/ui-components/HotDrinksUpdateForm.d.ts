@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { HotDrinks } from "../models";
 export declare type ValidationResponse = {
@@ -14,54 +14,24 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type HotDrinksUpdateFormInputValues = {
-    Tea?: number;
-    SpecialTea?: number;
-    HotChocolate?: number;
-    Cappaccino?: number;
-    Decaff?: number;
-    HotChocolateCreamMarshmellow?: number;
-    Latte?: number;
-    Mocha?: number;
-    AmericanoWhite?: number;
-    AmericanoBlack?: number;
-    Expresso?: number;
-    DoubleExpresso?: number;
-    FlatWhite?: number;
-    Syrup?: number;
+    Name?: string;
+    Price?: number;
+    Syrup?: boolean;
+    Kitchen?: boolean;
 };
 export declare type HotDrinksUpdateFormValidationValues = {
-    Tea?: ValidationFunction<number>;
-    SpecialTea?: ValidationFunction<number>;
-    HotChocolate?: ValidationFunction<number>;
-    Cappaccino?: ValidationFunction<number>;
-    Decaff?: ValidationFunction<number>;
-    HotChocolateCreamMarshmellow?: ValidationFunction<number>;
-    Latte?: ValidationFunction<number>;
-    Mocha?: ValidationFunction<number>;
-    AmericanoWhite?: ValidationFunction<number>;
-    AmericanoBlack?: ValidationFunction<number>;
-    Expresso?: ValidationFunction<number>;
-    DoubleExpresso?: ValidationFunction<number>;
-    FlatWhite?: ValidationFunction<number>;
-    Syrup?: ValidationFunction<number>;
+    Name?: ValidationFunction<string>;
+    Price?: ValidationFunction<number>;
+    Syrup?: ValidationFunction<boolean>;
+    Kitchen?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type HotDrinksUpdateFormOverridesProps = {
     HotDrinksUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    Tea?: PrimitiveOverrideProps<TextFieldProps>;
-    SpecialTea?: PrimitiveOverrideProps<TextFieldProps>;
-    HotChocolate?: PrimitiveOverrideProps<TextFieldProps>;
-    Cappaccino?: PrimitiveOverrideProps<TextFieldProps>;
-    Decaff?: PrimitiveOverrideProps<TextFieldProps>;
-    HotChocolateCreamMarshmellow?: PrimitiveOverrideProps<TextFieldProps>;
-    Latte?: PrimitiveOverrideProps<TextFieldProps>;
-    Mocha?: PrimitiveOverrideProps<TextFieldProps>;
-    AmericanoWhite?: PrimitiveOverrideProps<TextFieldProps>;
-    AmericanoBlack?: PrimitiveOverrideProps<TextFieldProps>;
-    Expresso?: PrimitiveOverrideProps<TextFieldProps>;
-    DoubleExpresso?: PrimitiveOverrideProps<TextFieldProps>;
-    FlatWhite?: PrimitiveOverrideProps<TextFieldProps>;
-    Syrup?: PrimitiveOverrideProps<TextFieldProps>;
+    Name?: PrimitiveOverrideProps<TextFieldProps>;
+    Price?: PrimitiveOverrideProps<TextFieldProps>;
+    Syrup?: PrimitiveOverrideProps<SwitchFieldProps>;
+    Kitchen?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type HotDrinksUpdateFormProps = React.PropsWithChildren<{
     overrides?: HotDrinksUpdateFormOverridesProps | undefined | null;

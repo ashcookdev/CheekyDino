@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Confectionary } from "../models";
 import { fetchByPath, validateField } from "./utils";
@@ -23,60 +29,24 @@ export default function ConfectionaryCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    Muffin: "",
-    CakeSlice: "",
-    Cookies: "",
-    Buttons: "",
-    Quavers: "",
-    Pombears: "",
-    Jazzles: "",
-    Pringles: "",
-    Raisins: "",
-    SweetCone: "",
-    Crisps60p: "",
-    Crisps35p: "",
+    Name: "",
+    Price: "",
+    Kitchen: false,
   };
-  const [Muffin, setMuffin] = React.useState(initialValues.Muffin);
-  const [CakeSlice, setCakeSlice] = React.useState(initialValues.CakeSlice);
-  const [Cookies, setCookies] = React.useState(initialValues.Cookies);
-  const [Buttons, setButtons] = React.useState(initialValues.Buttons);
-  const [Quavers, setQuavers] = React.useState(initialValues.Quavers);
-  const [Pombears, setPombears] = React.useState(initialValues.Pombears);
-  const [Jazzles, setJazzles] = React.useState(initialValues.Jazzles);
-  const [Pringles, setPringles] = React.useState(initialValues.Pringles);
-  const [Raisins, setRaisins] = React.useState(initialValues.Raisins);
-  const [SweetCone, setSweetCone] = React.useState(initialValues.SweetCone);
-  const [Crisps60p, setCrisps60p] = React.useState(initialValues.Crisps60p);
-  const [Crisps35p, setCrisps35p] = React.useState(initialValues.Crisps35p);
+  const [Name, setName] = React.useState(initialValues.Name);
+  const [Price, setPrice] = React.useState(initialValues.Price);
+  const [Kitchen, setKitchen] = React.useState(initialValues.Kitchen);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setMuffin(initialValues.Muffin);
-    setCakeSlice(initialValues.CakeSlice);
-    setCookies(initialValues.Cookies);
-    setButtons(initialValues.Buttons);
-    setQuavers(initialValues.Quavers);
-    setPombears(initialValues.Pombears);
-    setJazzles(initialValues.Jazzles);
-    setPringles(initialValues.Pringles);
-    setRaisins(initialValues.Raisins);
-    setSweetCone(initialValues.SweetCone);
-    setCrisps60p(initialValues.Crisps60p);
-    setCrisps35p(initialValues.Crisps35p);
+    setName(initialValues.Name);
+    setPrice(initialValues.Price);
+    setKitchen(initialValues.Kitchen);
     setErrors({});
   };
   const validations = {
-    Muffin: [],
-    CakeSlice: [],
-    Cookies: [],
-    Buttons: [],
-    Quavers: [],
-    Pombears: [],
-    Jazzles: [],
-    Pringles: [],
-    Raisins: [],
-    SweetCone: [],
-    Crisps60p: [],
-    Crisps35p: [],
+    Name: [],
+    Price: [],
+    Kitchen: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -104,18 +74,9 @@ export default function ConfectionaryCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          Muffin,
-          CakeSlice,
-          Cookies,
-          Buttons,
-          Quavers,
-          Pombears,
-          Jazzles,
-          Pringles,
-          Raisins,
-          SweetCone,
-          Crisps60p,
-          Crisps35p,
+          Name,
+          Price,
+          Kitchen,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -162,473 +123,87 @@ export default function ConfectionaryCreateForm(props) {
       {...rest}
     >
       <TextField
-        label="Muffin"
+        label="Name"
         isRequired={false}
         isReadOnly={false}
-        type="number"
-        step="any"
-        value={Muffin}
+        value={Name}
         onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Muffin: value,
-              CakeSlice,
-              Cookies,
-              Buttons,
-              Quavers,
-              Pombears,
-              Jazzles,
-              Pringles,
-              Raisins,
-              SweetCone,
-              Crisps60p,
-              Crisps35p,
+              Name: value,
+              Price,
+              Kitchen,
             };
             const result = onChange(modelFields);
-            value = result?.Muffin ?? value;
+            value = result?.Name ?? value;
           }
-          if (errors.Muffin?.hasError) {
-            runValidationTasks("Muffin", value);
+          if (errors.Name?.hasError) {
+            runValidationTasks("Name", value);
           }
-          setMuffin(value);
+          setName(value);
         }}
-        onBlur={() => runValidationTasks("Muffin", Muffin)}
-        errorMessage={errors.Muffin?.errorMessage}
-        hasError={errors.Muffin?.hasError}
-        {...getOverrideProps(overrides, "Muffin")}
+        onBlur={() => runValidationTasks("Name", Name)}
+        errorMessage={errors.Name?.errorMessage}
+        hasError={errors.Name?.hasError}
+        {...getOverrideProps(overrides, "Name")}
       ></TextField>
       <TextField
-        label="Cake slice"
+        label="Price"
         isRequired={false}
         isReadOnly={false}
         type="number"
         step="any"
-        value={CakeSlice}
+        value={Price}
         onChange={(e) => {
           let value = isNaN(parseFloat(e.target.value))
             ? e.target.value
             : parseFloat(e.target.value);
           if (onChange) {
             const modelFields = {
-              Muffin,
-              CakeSlice: value,
-              Cookies,
-              Buttons,
-              Quavers,
-              Pombears,
-              Jazzles,
-              Pringles,
-              Raisins,
-              SweetCone,
-              Crisps60p,
-              Crisps35p,
+              Name,
+              Price: value,
+              Kitchen,
             };
             const result = onChange(modelFields);
-            value = result?.CakeSlice ?? value;
+            value = result?.Price ?? value;
           }
-          if (errors.CakeSlice?.hasError) {
-            runValidationTasks("CakeSlice", value);
+          if (errors.Price?.hasError) {
+            runValidationTasks("Price", value);
           }
-          setCakeSlice(value);
+          setPrice(value);
         }}
-        onBlur={() => runValidationTasks("CakeSlice", CakeSlice)}
-        errorMessage={errors.CakeSlice?.errorMessage}
-        hasError={errors.CakeSlice?.hasError}
-        {...getOverrideProps(overrides, "CakeSlice")}
+        onBlur={() => runValidationTasks("Price", Price)}
+        errorMessage={errors.Price?.errorMessage}
+        hasError={errors.Price?.hasError}
+        {...getOverrideProps(overrides, "Price")}
       ></TextField>
-      <TextField
-        label="Cookies"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={Cookies}
+      <SwitchField
+        label="Kitchen"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={Kitchen}
         onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
+          let value = e.target.checked;
           if (onChange) {
             const modelFields = {
-              Muffin,
-              CakeSlice,
-              Cookies: value,
-              Buttons,
-              Quavers,
-              Pombears,
-              Jazzles,
-              Pringles,
-              Raisins,
-              SweetCone,
-              Crisps60p,
-              Crisps35p,
+              Name,
+              Price,
+              Kitchen: value,
             };
             const result = onChange(modelFields);
-            value = result?.Cookies ?? value;
+            value = result?.Kitchen ?? value;
           }
-          if (errors.Cookies?.hasError) {
-            runValidationTasks("Cookies", value);
+          if (errors.Kitchen?.hasError) {
+            runValidationTasks("Kitchen", value);
           }
-          setCookies(value);
+          setKitchen(value);
         }}
-        onBlur={() => runValidationTasks("Cookies", Cookies)}
-        errorMessage={errors.Cookies?.errorMessage}
-        hasError={errors.Cookies?.hasError}
-        {...getOverrideProps(overrides, "Cookies")}
-      ></TextField>
-      <TextField
-        label="Buttons"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={Buttons}
-        onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              Muffin,
-              CakeSlice,
-              Cookies,
-              Buttons: value,
-              Quavers,
-              Pombears,
-              Jazzles,
-              Pringles,
-              Raisins,
-              SweetCone,
-              Crisps60p,
-              Crisps35p,
-            };
-            const result = onChange(modelFields);
-            value = result?.Buttons ?? value;
-          }
-          if (errors.Buttons?.hasError) {
-            runValidationTasks("Buttons", value);
-          }
-          setButtons(value);
-        }}
-        onBlur={() => runValidationTasks("Buttons", Buttons)}
-        errorMessage={errors.Buttons?.errorMessage}
-        hasError={errors.Buttons?.hasError}
-        {...getOverrideProps(overrides, "Buttons")}
-      ></TextField>
-      <TextField
-        label="Quavers"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={Quavers}
-        onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              Muffin,
-              CakeSlice,
-              Cookies,
-              Buttons,
-              Quavers: value,
-              Pombears,
-              Jazzles,
-              Pringles,
-              Raisins,
-              SweetCone,
-              Crisps60p,
-              Crisps35p,
-            };
-            const result = onChange(modelFields);
-            value = result?.Quavers ?? value;
-          }
-          if (errors.Quavers?.hasError) {
-            runValidationTasks("Quavers", value);
-          }
-          setQuavers(value);
-        }}
-        onBlur={() => runValidationTasks("Quavers", Quavers)}
-        errorMessage={errors.Quavers?.errorMessage}
-        hasError={errors.Quavers?.hasError}
-        {...getOverrideProps(overrides, "Quavers")}
-      ></TextField>
-      <TextField
-        label="Pombears"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={Pombears}
-        onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              Muffin,
-              CakeSlice,
-              Cookies,
-              Buttons,
-              Quavers,
-              Pombears: value,
-              Jazzles,
-              Pringles,
-              Raisins,
-              SweetCone,
-              Crisps60p,
-              Crisps35p,
-            };
-            const result = onChange(modelFields);
-            value = result?.Pombears ?? value;
-          }
-          if (errors.Pombears?.hasError) {
-            runValidationTasks("Pombears", value);
-          }
-          setPombears(value);
-        }}
-        onBlur={() => runValidationTasks("Pombears", Pombears)}
-        errorMessage={errors.Pombears?.errorMessage}
-        hasError={errors.Pombears?.hasError}
-        {...getOverrideProps(overrides, "Pombears")}
-      ></TextField>
-      <TextField
-        label="Jazzles"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={Jazzles}
-        onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              Muffin,
-              CakeSlice,
-              Cookies,
-              Buttons,
-              Quavers,
-              Pombears,
-              Jazzles: value,
-              Pringles,
-              Raisins,
-              SweetCone,
-              Crisps60p,
-              Crisps35p,
-            };
-            const result = onChange(modelFields);
-            value = result?.Jazzles ?? value;
-          }
-          if (errors.Jazzles?.hasError) {
-            runValidationTasks("Jazzles", value);
-          }
-          setJazzles(value);
-        }}
-        onBlur={() => runValidationTasks("Jazzles", Jazzles)}
-        errorMessage={errors.Jazzles?.errorMessage}
-        hasError={errors.Jazzles?.hasError}
-        {...getOverrideProps(overrides, "Jazzles")}
-      ></TextField>
-      <TextField
-        label="Pringles"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={Pringles}
-        onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              Muffin,
-              CakeSlice,
-              Cookies,
-              Buttons,
-              Quavers,
-              Pombears,
-              Jazzles,
-              Pringles: value,
-              Raisins,
-              SweetCone,
-              Crisps60p,
-              Crisps35p,
-            };
-            const result = onChange(modelFields);
-            value = result?.Pringles ?? value;
-          }
-          if (errors.Pringles?.hasError) {
-            runValidationTasks("Pringles", value);
-          }
-          setPringles(value);
-        }}
-        onBlur={() => runValidationTasks("Pringles", Pringles)}
-        errorMessage={errors.Pringles?.errorMessage}
-        hasError={errors.Pringles?.hasError}
-        {...getOverrideProps(overrides, "Pringles")}
-      ></TextField>
-      <TextField
-        label="Raisins"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={Raisins}
-        onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              Muffin,
-              CakeSlice,
-              Cookies,
-              Buttons,
-              Quavers,
-              Pombears,
-              Jazzles,
-              Pringles,
-              Raisins: value,
-              SweetCone,
-              Crisps60p,
-              Crisps35p,
-            };
-            const result = onChange(modelFields);
-            value = result?.Raisins ?? value;
-          }
-          if (errors.Raisins?.hasError) {
-            runValidationTasks("Raisins", value);
-          }
-          setRaisins(value);
-        }}
-        onBlur={() => runValidationTasks("Raisins", Raisins)}
-        errorMessage={errors.Raisins?.errorMessage}
-        hasError={errors.Raisins?.hasError}
-        {...getOverrideProps(overrides, "Raisins")}
-      ></TextField>
-      <TextField
-        label="Sweet cone"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={SweetCone}
-        onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              Muffin,
-              CakeSlice,
-              Cookies,
-              Buttons,
-              Quavers,
-              Pombears,
-              Jazzles,
-              Pringles,
-              Raisins,
-              SweetCone: value,
-              Crisps60p,
-              Crisps35p,
-            };
-            const result = onChange(modelFields);
-            value = result?.SweetCone ?? value;
-          }
-          if (errors.SweetCone?.hasError) {
-            runValidationTasks("SweetCone", value);
-          }
-          setSweetCone(value);
-        }}
-        onBlur={() => runValidationTasks("SweetCone", SweetCone)}
-        errorMessage={errors.SweetCone?.errorMessage}
-        hasError={errors.SweetCone?.hasError}
-        {...getOverrideProps(overrides, "SweetCone")}
-      ></TextField>
-      <TextField
-        label="Crisps60p"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={Crisps60p}
-        onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              Muffin,
-              CakeSlice,
-              Cookies,
-              Buttons,
-              Quavers,
-              Pombears,
-              Jazzles,
-              Pringles,
-              Raisins,
-              SweetCone,
-              Crisps60p: value,
-              Crisps35p,
-            };
-            const result = onChange(modelFields);
-            value = result?.Crisps60p ?? value;
-          }
-          if (errors.Crisps60p?.hasError) {
-            runValidationTasks("Crisps60p", value);
-          }
-          setCrisps60p(value);
-        }}
-        onBlur={() => runValidationTasks("Crisps60p", Crisps60p)}
-        errorMessage={errors.Crisps60p?.errorMessage}
-        hasError={errors.Crisps60p?.hasError}
-        {...getOverrideProps(overrides, "Crisps60p")}
-      ></TextField>
-      <TextField
-        label="Crisps35p"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={Crisps35p}
-        onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              Muffin,
-              CakeSlice,
-              Cookies,
-              Buttons,
-              Quavers,
-              Pombears,
-              Jazzles,
-              Pringles,
-              Raisins,
-              SweetCone,
-              Crisps60p,
-              Crisps35p: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.Crisps35p ?? value;
-          }
-          if (errors.Crisps35p?.hasError) {
-            runValidationTasks("Crisps35p", value);
-          }
-          setCrisps35p(value);
-        }}
-        onBlur={() => runValidationTasks("Crisps35p", Crisps35p)}
-        errorMessage={errors.Crisps35p?.errorMessage}
-        hasError={errors.Crisps35p?.hasError}
-        {...getOverrideProps(overrides, "Crisps35p")}
-      ></TextField>
+        onBlur={() => runValidationTasks("Kitchen", Kitchen)}
+        errorMessage={errors.Kitchen?.errorMessage}
+        hasError={errors.Kitchen?.hasError}
+        {...getOverrideProps(overrides, "Kitchen")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
