@@ -15,6 +15,7 @@ import TillParty from "./TillParty";
 import TillPayments from "./TillPayments";
 import { useNavigate } from "react-router-dom";
 import Kitchen from "./KitchenHome";
+import Timeslot from "./todaysbookings";
 
 
 
@@ -47,6 +48,7 @@ const [selectedProduct, setSelectedProduct] = useState(null);
 const [extras, setExtras] = useState([]);
 const [ShowExtras, setShowExtras] = useState(false);
 const [kitchen, setKitchen] = useState(false);
+
 
 
 const navigate = useNavigate();
@@ -185,7 +187,7 @@ useEffect(() => {
   }
 
   if (session === true) {
-    return <TillSession />
+    return <Timeslot/>
   }
 
   if (partyNow === true) {

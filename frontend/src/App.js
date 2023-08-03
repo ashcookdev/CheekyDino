@@ -41,6 +41,7 @@ import Task from './staffpages/Task';
 import CustomerScreen from './staffpages/customerscreen';
 import SessionCalendar from './staffpages/sessionCalender';
 import KidsMenu from './staffpages/kidsmenu'
+import SessionToday from './staffpages/todaysbookings';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -149,7 +150,7 @@ function App() {
             <Route path= "/Graph" element={<Graph />} />
             <Route path= "/Tasks" element={<Task />} />
             <Route path= "/Customerscreen" element={<CustomerScreen />} />
-            <Route path= "/sessionCalendar" element={<SessionCalendar/>} />
+            <Route path= "/timeslot" element={<SessionToday/>} />
             
 
           </>

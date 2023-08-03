@@ -98,7 +98,15 @@ function classNames(...classes) {
 
 export default function TableOrder({ order }) {
 
- 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      window.location.reload();
+    }, 60 * 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   const [truth, setTruth] = useState(false)
   const [kidsMenu, setKidsMenu] = useState(false)
@@ -132,6 +140,9 @@ export default function TableOrder({ order }) {
   if (kidsMenu === true) {
     return <KidsMenu orders= {order} />;
   }
+
+
+  
 
 
   // 

@@ -94,8 +94,9 @@ export default function CustomerOrderProgress({sessionId}) {
     }
 
     return (
-        <div className="bg-cover bg-center" style={{ backgroundImage, backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh' }}>
-            <div className="flex justify-center bg-black text-white p-4 rounded-lg overflow-hidden relative mb-10">
+      
+        <div className="bg-contain bg-center" style={{ backgroundImage, backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh' }}>
+            <div className="flex justify-center bg-transparent text-white p-4 rounded-lg overflow-hidden relative mb-10">
       <div className="flex relative animate-marquee">
         <div className="flex pr-4">
           <p className="text-lg mr-4">Table: {cafeOrder.Table}</p>
@@ -141,18 +142,21 @@ export default function CustomerOrderProgress({sessionId}) {
                         <div>
                           <p className="text-lg text-white">
                             {event.content}{' '}
-                            <a href={event.href} className="font-medium text-gray-900">
+                            <a href={event.href} className="font-medium text-white">
                               {event.target}
                             </a>
                           </p>
                         </div>
+                        
                       </div>
                     </div>
                   </div>
                 </li>
               ))}
             </ul>
+            
           </div>
+          
         </div>
       )
       

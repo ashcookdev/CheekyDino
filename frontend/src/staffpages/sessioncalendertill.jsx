@@ -111,8 +111,7 @@ function handleBook(item) {
 
   const name = childData[0].name
   const extraNames = childData.length > 1 ? childData.slice(1).map(item => item.name) : null;
-  const adults = parseInt(adults)
-  const children = parseInt(children)
+  
 
   // Save booking information to DataStore
   DataStore.save(
