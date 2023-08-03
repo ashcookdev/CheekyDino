@@ -121,7 +121,7 @@ export default function TableOrder({ order }) {
                 <h1 className="text-4xl font-bold tracking-tight text-gray-900">Order From Your Table</h1>
 
               </div>
-              {order.length > 0 && (
+              {/* {order.length > 0 && (
                 <div className="flex items-center mt-10 mb-10">
 
                   <button onClick={() => setTruth(true)} className="px-4 py-2 bg-indigo-500 rounded-md">Checkout</button>
@@ -132,7 +132,7 @@ export default function TableOrder({ order }) {
                     </span>
                   </div>
                 </div>
-              )}
+              )} */}
 
               <section aria-labelledby="products-heading" className="mt-8">
                 <h2 id="products-heading" className="sr-only">

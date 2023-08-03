@@ -19,7 +19,8 @@ function App({ signOut, user }) {
           window.location.reload();
         } else {
           // Redirect the user to the /dashboard page
-          navigate('/dashboard');
+          navigate('/order');
+          window.location.reload();
         }
       });
     }

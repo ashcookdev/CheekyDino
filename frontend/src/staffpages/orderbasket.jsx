@@ -18,6 +18,9 @@ import { DataStore } from 'aws-amplify'
 import {CafeOrder} from './models'
 import {Sessions} from './models'
 import {Auth} from 'aws-amplify'
+import CustomerOrderProgress from './customerorderprogress'
+import { format, utcToZonedTime } from 'date-fns-tz';
+
 
 
 
@@ -29,13 +32,20 @@ export default function Checkout({order}) {
 
   const [orders, setOrder] = useState([])
   const [sessions, setSessions] = useState([])
+  const [completed, setCompleted] = useState(false)
+  const [orderId, setSessionId] = useState(null)
 
-  console.log(sessions)
 
   useEffect(() => {
     setOrder(order)
     
   }, [order]);
+
+  console.log(orders);
+orders.forEach((order, index) => {
+  console.log(`Order ${index}:`, order);
+});
+
 
 // get email from user
 
@@ -60,8 +70,7 @@ useEffect(() => {
       (c) =>
         c.Email === email &&
         c.Arrived === true &&
-        c.LeftCenter === false &&
-        c.Date === new Date().toLocaleDateString()
+        c.LeftCenter === false 
     );
     setSessions(filteredModels);
   };
@@ -69,26 +78,72 @@ useEffect(() => {
 }, [email]);
 
 
-
-console.log(sessions)
-
-// get session id from session
-
-
-
-
-
-
+const totalCost = orders.reduce(
+  (total, order) =>
+    total +
+    order.price * (order.quantity || 1) +
+    order.extras.reduce((extraTotal, extra) => extraTotal + extra.price * (order.quantity || 1), 0),
+  0
+);
+const formattedTotalCost = totalCost.toFixed(2);
 
 
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  console.log('Submitting order:', orders);
+
+  // Get the session you want to update
+const session = sessions[0];
+
+// Update the session with the new order information
+const updatedSession = await DataStore.save(
+  Sessions.copyOf(session, (updated) => {
+    updated.Orders += 1;
+    updated.TotalSpent += totalCost;
+  })
+);
+
+// Update the state with the updated session
+
+// Create a new CafeOrder with the order information
+const timeZone = 'Europe/London';
+const zonedDate = utcToZonedTime(new Date(), timeZone);
+const createdTime = format(zonedDate, 'HH:mm', { timeZone });
+const createdDate = format(zonedDate, 'yyyy-MM-dd', { timeZone });
+
+const hotItems = orders.flatMap((order) => [
+  order.product,
+  ...order.extras.map((extra) => extra.name),
+]);
 
 
+const newCafeOrder = await DataStore.save(
+  new CafeOrder({
+    CreatedTime: createdTime,
+    CreatedDate: createdDate,
+    Total: totalCost,
+    Table: session.Table,
+    Sessionid: session.id,
+Kitchen: true,
+HotItems: hotItems,
+Completed: false,
+Delieved: false
 
 
+  })
+);
+
+setCompleted(true);
+setSessionId(updatedSession.id);
+};
 
 
+if (completed === true) {
+  return (<CustomerOrderProgress sessionId = {orderId} />);
+  
+}
 
-    
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -118,52 +173,75 @@ console.log(sessions)
                             <a href={product.href} className="font-medium text-gray-700 hover:text-gray-800">
                               {product.product}
                             </a>
+                            
                           </h3>
                         </div>
                         <div className="mt-1 flex text-sm">
                           {product.size ? (
-                            <p className="ml-4 border-l border-gray-200 pl-4 text-gray-500">{product.size}</p>
+                            <p className="ml-4 border-l border-gray-200 pl-4 text-gray-500">{product.extras[0].name}</p>
                           ) : null}
                         </div>
                         <p className="mt-1 text-sm font-medium text-gray-900">£{product.price}.00</p>
+                        <ul>
+    
+  </ul>
                       </div>
-
+                      
                       <div className="mt-4 sm:mt-0 sm:pr-9">
-                        <label htmlFor={`quantity-${productIdx}`} className="sr-only">
-                          Quantity, {product.name}
-                        </label>
+  <label htmlFor={`quantity-${productIdx}`} className="sr-only">
+    Quantity, {product.name}
+  </label>
+  
+
+
+                        
+                        
+                        
+            
                         <select
-                          id={`quantity-${productIdx}`}
-                          name={`quantity-${productIdx}`}
-                          className="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                        >
-                          <option value={1}>1</option>
-                          <option value={2}>2</option>
-                          <option value={3}>3</option>
-                          <option value={4}>4</option>
-                          <option value={5}>5</option>
-                          <option value={6}>6</option>
-                          <option value={7}>7</option>
-                          <option value={8}>8</option>
-                        </select>
+  id={`quantity-${productIdx}`}
+  name={`quantity-${productIdx}`}
+  className="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+  onChange={(event) => {
+    console.log('Quantity changed:', event.target.value);
+    const newQuantity = parseInt(event.target.value);
+    setOrder((prevOrders) =>
+      prevOrders.map((order, index) =>
+        index === productIdx ? { ...order, quantity: newQuantity } : order
+      )
+    );
+  }}
+>
+  <option value={1}>1</option>
+  <option value={2}>2</option>
+  <option value={3}>3</option>
+  <option value={4}>4</option>
+  <option value={5}>5</option>
+  <option value={6}>6</option>
+  <option value={7}>7</option>
+  <option value={8}>8</option>
+  </select>
+
 
                         <div className="absolute right-0 top-0">
-                          <button type="button" className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500">
-                            <span className="sr-only">Remove</span>
-                            <XMarkIcon className="h-5 w-5" aria-hidden="true" />
-                          </button>
+                        <button
+  type="button"
+  className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
+  onClick={() => {
+    setOrder((prevOrders) => prevOrders.filter((order, index) => index !== productIdx));
+  }}
+>
+  <span className="sr-only">Remove</span>
+  <XMarkIcon className="h-5 w-5" aria-hidden="true" />
+</button>
+
                         </div>
                       </div>
                     </div>
 
                     <p className="mt-4 flex space-x-2 text-sm text-gray-700">
-                      {product.inStock ? (
-                        <CheckIcon className="h-5 w-5 flex-shrink-0 text-green-500" aria-hidden="true" />
-                      ) : (
-                        <ClockIcon className="h-5 w-5 flex-shrink-0 text-gray-300" aria-hidden="true" />
-                      )}
+                     
 
-                      <span>{product.inStock ? 'In stock' : `Ships in ${product.leadTime}`}</span>
                     </p>
                   </div>
                 </li>
@@ -182,41 +260,24 @@ console.log(sessions)
 
             <dl className="mt-6 space-y-4">
               <div className="flex items-center justify-between">
+                
                 <dt className="text-sm text-gray-600">Subtotal</dt>
-                <dd className="text-sm font-medium text-gray-900">$99.00</dd>
+                <dd className="text-sm font-medium text-gray-900">£{Number(formattedTotalCost)}</dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt className="flex items-center text-sm text-gray-600">
-                  <span>Shipping estimate</span>
-                  <a href="#" className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
-                    <span className="sr-only">Learn more about how shipping is calculated</span>
-                    <QuestionMarkCircleIcon className="h-5 w-5" aria-hidden="true" />
-                  </a>
                 </dt>
-                <dd className="text-sm font-medium text-gray-900">$5.00</dd>
               </div>
-              <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-                <dt className="flex text-sm text-gray-600">
-                  <span>Tax estimate</span>
-                  <a href="#" className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
-                    <span className="sr-only">Learn more about how tax is calculated</span>
-                    <QuestionMarkCircleIcon className="h-5 w-5" aria-hidden="true" />
-                  </a>
-                </dt>
-                <dd className="text-sm font-medium text-gray-900">$8.32</dd>
-              </div>
-              <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-                <dt className="text-base font-medium text-gray-900">Order total</dt>
-                <dd className="text-base font-medium text-gray-900">$112.32</dd>
-              </div>
+              
+              
             </dl>
 
             <div className="mt-6">
-              <button
+              <button onClick= {handleSubmit}
                 type="submit"
                 className="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
               >
-                Checkout
+                Order
               </button>
             </div>
           </section>
