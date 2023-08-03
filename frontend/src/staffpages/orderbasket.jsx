@@ -20,11 +20,14 @@ import {Sessions} from './models'
 import {Auth} from 'aws-amplify'
 import CustomerOrderProgress from './customerorderprogress'
 import { format, utcToZonedTime } from 'date-fns-tz';
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 export default function Checkout({order}) {
+
+  const navigate = useNavigate();
 
 
 
@@ -139,7 +142,8 @@ setSessionId(updatedSession.id);
 
 
 if (completed === true) {
-  return (<CustomerOrderProgress sessionId = {orderId} />);
+window.location.reload();
+  return (navigate('/Order'));
   
 }
 

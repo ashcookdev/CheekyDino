@@ -1,4 +1,4 @@
-import { CheckIcon, HandThumbUpIcon, UserIcon } from '@heroicons/react/20/solid'
+import { CheckIcon, CogIcon, HandThumbUpIcon, UserIcon } from '@heroicons/react/20/solid'
 import { useEffect, useState } from 'react'
 import { DataStore, Predicates } from 'aws-amplify'
 import { CafeOrder } from './models'
@@ -15,6 +15,8 @@ export default function CustomerOrderProgress({sessionId}) {
     const navigate = useNavigate();
 
 
+
+
     useEffect(() => {
   const fetchCafeOrder = async () => {
     const cafeOrders = await DataStore.query(CafeOrder, Predicates.ALL, {
@@ -26,19 +28,21 @@ export default function CustomerOrderProgress({sessionId}) {
   fetchCafeOrder();
 
   const subscription = DataStore.observe(CafeOrder).subscribe((msg) => {
-    if (msg.model.Sessionid === sessionId) {
+    if (msg.model.Sessionid === sessionId && (msg.model.Delieved === true || msg.model.Completed === true)) {
       setCafeOrder(msg.model);
     }
   });
 
   return () => subscription.unsubscribe();
 }, [sessionId]);
+
+
       
 
   if (!cafeOrder) {
     return (
-        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-white bg-opacity-75 z-50">
-          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+        <div>
+          <h5 className="text-2xl font-bold text-center">No Current Orders</h5>
         </div>
       );
   }
@@ -57,21 +61,21 @@ export default function CustomerOrderProgress({sessionId}) {
       id: 1,
       content: 'Order status:',
       target: 'Cooking',
-      icon: CheckIcon,
+      icon: CogIcon,
       iconBackground: status === 'Cooking' ? 'bg-green-500' : 'bg-gray-300',
     },
     {
       id: 2,
       content: 'Order status:',
       target: 'Being sent to table',
-      icon: CheckIcon,
+      icon: CogIcon,
       iconBackground: status === 'Being sent to table' ? 'bg-green-500' : 'bg-gray-300',
     },
     {
       id: 3,
       content: 'Order status:',
       target: 'Delivered',
-      icon: CheckIcon,
+      icon: CogIcon,
       iconBackground: status === 'Delivered' ? 'bg-green-500' : 'bg-gray-300',
     },
   ];
@@ -86,7 +90,7 @@ export default function CustomerOrderProgress({sessionId}) {
   }
 
   if (cafeOrder.Completed && cafeOrder.Delieved === true) {
-    return (navigate('/sessionbookings'))
+    return null;
     }
 
     return (

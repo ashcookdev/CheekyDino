@@ -19,7 +19,7 @@ function App({ signOut, user }) {
           window.location.reload();
         } else {
           // Redirect the user to the /dashboard page
-          navigate('/order');
+          navigate('/sessionbookings');
           window.location.reload();
         }
       });

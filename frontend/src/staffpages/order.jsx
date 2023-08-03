@@ -12,6 +12,13 @@ import {
 
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { Auth } from 'aws-amplify';
+import { DataStore } from 'aws-amplify';
+import { Sessions } from './models';
+import { useEffect } from 'react';
+import CustomerOrderProgress from './customerorderprogress'; 
+
+
 
 import OrderBasket from './orderbasket'
 import KidsMenu from './kidsmenu'
@@ -95,7 +102,28 @@ export default function TableOrder({ order }) {
 
   const [truth, setTruth] = useState(false)
   const [kidsMenu, setKidsMenu] = useState(false)
+  const [sessionId, setSessionId] = useState('')
 
+
+  useEffect(() => {
+    // get email from cognito
+    async function getEmail() {
+      const user = await Auth.currentAuthenticatedUser();
+      const email = user.attributes.email;
+      const today = new Date().toISOString().split('T')[0];
+      const sessions = await DataStore.query(Sessions);
+      const filteredSessions = sessions.filter(
+        (session) => session.Email === email && session.Date === today
+      );
+      if (filteredSessions.length > 0) {
+        setSessionId(filteredSessions[0].id);
+      }
+    }
+    getEmail();
+  }, []);
+
+
+  console.log(sessionId)
 
   if (truth === true) {
     return <OrderBasket order={order} />;
@@ -121,18 +149,7 @@ export default function TableOrder({ order }) {
                 <h1 className="text-4xl font-bold tracking-tight text-gray-900">Order From Your Table</h1>
 
               </div>
-              {/* {order.length > 0 && (
-                <div className="flex items-center mt-10 mb-10">
-
-                  <button onClick={() => setTruth(true)} className="px-4 py-2 bg-indigo-500 rounded-md">Checkout</button>
-                  <div className="relative ml-4">
-                    <ShoppingCartIcon className="h-6 w-6" />
-                    <span className="absolute top-0 right-0 text-xs bg-red-500 rounded-full px-1 text-white">
-                      {order.length}
-                    </span>
-                  </div>
-                </div>
-              )} */}
+              <CustomerOrderProgress sessionId = {sessionId} />
 
               <section aria-labelledby="products-heading" className="mt-8">
                 <h2 id="products-heading" className="sr-only">
