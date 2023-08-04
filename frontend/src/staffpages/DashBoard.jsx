@@ -92,7 +92,7 @@ const navigation = [
             const sessions = await DataStore.query(Sessions, c => c.Date.eq(dateString));
 
             // Filter sessions to find those that are currently occupied
-            const occupiedTables = sessions.filter(session => session.TimeslotFrom < currentTime && session.TimeslotTo > currentTime);
+            const occupiedTables = sessions.filter(session => session.TimeslotFrom < currentTime && session.TimeslotTo > currentTime && session.Arrived === true);
 
             // Calculate the total number of current guests
             const currentGuests = occupiedTables.reduce((total, session) => total + session.Adults + session.Children, 0);

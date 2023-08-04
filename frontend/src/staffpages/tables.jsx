@@ -226,11 +226,20 @@ const Delivered = async (order) => {
 
 
   return (
-    <ul>
+    <div className= "mt-5">
+      <div className="md:flex md:items-center md:justify-between mb-5">
+      <div className="min-w-0 flex-1">
+        <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight text-center">
+          Occupied Tables
+        </h2>
+      </div>
+     
+    </div>
+    <ul className='mt-5 mb-5'>
     {tableInfo.map((table) => (
       <li
         key={table.number}
-        className={`p-4 rounded-lg shadow-md ${table.backgroundColor} ${
+        className={`p-4 rounded-lg mt-5 shadow-md ${table.backgroundColor} ${
           table.shouldFlashGold ? "animate-pulse" : ""
         }`}
       >
@@ -243,6 +252,8 @@ const Delivered = async (order) => {
           <div className="ml-0 sm:ml-4">
             <p className="text-lg font-semibold text-white">
               Table {table.number}
+            </p>
+            <p className="text-lg font-semibold text-white">
             </p>
             <p className="text-sm font-medium text-white">Name: {table.name}</p>
             <p className="text-sm font-medium text-white">
@@ -307,7 +318,9 @@ const Delivered = async (order) => {
 
           </div>
   
-        {orders.map((order, index) => {
+         {orders
+      .filter((order) => order.Table === table.number && order.Delieved === false)
+      .map((order, index) => {
           const status = orderStatuses[order.id] || "";
           let progress = 0;
           let color = "bg-green-500";
@@ -378,6 +391,8 @@ const Delivered = async (order) => {
 
     ))}
   </ul>
+</div>
+  
  
   
 

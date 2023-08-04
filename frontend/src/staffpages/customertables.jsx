@@ -261,7 +261,9 @@ const Delivered = async (order) => {
 
           </div>
   
-        {orders.map((order, index) => {
+          {orders
+      .filter((order) => order.Table === table.number && order.Delieved === false)
+      .map((order, index) => {
           const status = orderStatuses[order.id] || "";
           let progress = 0;
           let color = "bg-green-500";
