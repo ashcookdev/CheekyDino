@@ -134,6 +134,7 @@
       ]
     }
   },
+  "predictions": {},
   "storage": {
     "s3cheekydinoaiml": {
       "dependsOn": [],

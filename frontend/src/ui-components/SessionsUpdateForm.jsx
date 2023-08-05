@@ -1,0 +1,1383 @@
+/***************************************************************************
+ * The contents of this file were generated with Amplify Studio.           *
+ * Please refrain from making any modifications to this file.              *
+ * Any changes to this file will be overwritten when running amplify pull. *
+ **************************************************************************/
+
+/* eslint-disable */
+import * as React from "react";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  SwitchField,
+  Text,
+  TextField,
+  useTheme,
+} from "@aws-amplify/ui-react";
+import { getOverrideProps } from "@aws-amplify/ui-react/internal";
+import { Sessions } from "../models";
+import { fetchByPath, validateField } from "./utils";
+import { DataStore } from "aws-amplify";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== "" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height="inherit" width="inherit" maxHeight={"7rem"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: "pointer",
+                  alignItems: "center",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? "#B8CEF9" : "",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: "pointer",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: "M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z",
+                      stroke: "black",
+                    },
+                  ]}
+                  ariaLabel="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation="horizontal" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent="flex-end">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children="Cancel"
+              type="button"
+              size="small"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size="small"
+            variation="link"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? "Save" : "Add"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function SessionsUpdateForm(props) {
+  const {
+    id: idProp,
+    sessions: sessionsModelProp,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    Name: "",
+    Email: "",
+    TimeslotFrom: "",
+    TimeslotTo: "",
+    TimeLeft: "",
+    TimeArrived: "",
+    Date: "",
+    Table: "",
+    Orders: "",
+    Prepaid: false,
+    TotalSpent: "",
+    Adults: "",
+    Children: "",
+    Arrived: false,
+    LeftCenter: false,
+    ExtraTables: "",
+    Telephone: "",
+    orderid: [],
+    Age: [],
+    ExtraNames: [],
+  };
+  const [Name, setName] = React.useState(initialValues.Name);
+  const [Email, setEmail] = React.useState(initialValues.Email);
+  const [TimeslotFrom, setTimeslotFrom] = React.useState(
+    initialValues.TimeslotFrom
+  );
+  const [TimeslotTo, setTimeslotTo] = React.useState(initialValues.TimeslotTo);
+  const [TimeLeft, setTimeLeft] = React.useState(initialValues.TimeLeft);
+  const [TimeArrived, setTimeArrived] = React.useState(
+    initialValues.TimeArrived
+  );
+  const [Date, setDate] = React.useState(initialValues.Date);
+  const [Table, setTable] = React.useState(initialValues.Table);
+  const [Orders, setOrders] = React.useState(initialValues.Orders);
+  const [Prepaid, setPrepaid] = React.useState(initialValues.Prepaid);
+  const [TotalSpent, setTotalSpent] = React.useState(initialValues.TotalSpent);
+  const [Adults, setAdults] = React.useState(initialValues.Adults);
+  const [Children, setChildren] = React.useState(initialValues.Children);
+  const [Arrived, setArrived] = React.useState(initialValues.Arrived);
+  const [LeftCenter, setLeftCenter] = React.useState(initialValues.LeftCenter);
+  const [ExtraTables, setExtraTables] = React.useState(
+    initialValues.ExtraTables
+  );
+  const [Telephone, setTelephone] = React.useState(initialValues.Telephone);
+  const [orderid, setOrderid] = React.useState(initialValues.orderid);
+  const [Age, setAge] = React.useState(initialValues.Age);
+  const [ExtraNames, setExtraNames] = React.useState(initialValues.ExtraNames);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = sessionsRecord
+      ? { ...initialValues, ...sessionsRecord }
+      : initialValues;
+    setName(cleanValues.Name);
+    setEmail(cleanValues.Email);
+    setTimeslotFrom(cleanValues.TimeslotFrom);
+    setTimeslotTo(cleanValues.TimeslotTo);
+    setTimeLeft(cleanValues.TimeLeft);
+    setTimeArrived(cleanValues.TimeArrived);
+    setDate(cleanValues.Date);
+    setTable(cleanValues.Table);
+    setOrders(cleanValues.Orders);
+    setPrepaid(cleanValues.Prepaid);
+    setTotalSpent(cleanValues.TotalSpent);
+    setAdults(cleanValues.Adults);
+    setChildren(cleanValues.Children);
+    setArrived(cleanValues.Arrived);
+    setLeftCenter(cleanValues.LeftCenter);
+    setExtraTables(cleanValues.ExtraTables);
+    setTelephone(cleanValues.Telephone);
+    setOrderid(cleanValues.orderid ?? []);
+    setCurrentOrderidValue("");
+    setAge(cleanValues.Age ?? []);
+    setCurrentAgeValue("");
+    setExtraNames(cleanValues.ExtraNames ?? []);
+    setCurrentExtraNamesValue("");
+    setErrors({});
+  };
+  const [sessionsRecord, setSessionsRecord] = React.useState(sessionsModelProp);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp
+        ? await DataStore.query(Sessions, idProp)
+        : sessionsModelProp;
+      setSessionsRecord(record);
+    };
+    queryData();
+  }, [idProp, sessionsModelProp]);
+  React.useEffect(resetStateValues, [sessionsRecord]);
+  const [currentOrderidValue, setCurrentOrderidValue] = React.useState("");
+  const orderidRef = React.createRef();
+  const [currentAgeValue, setCurrentAgeValue] = React.useState("");
+  const AgeRef = React.createRef();
+  const [currentExtraNamesValue, setCurrentExtraNamesValue] =
+    React.useState("");
+  const ExtraNamesRef = React.createRef();
+  const validations = {
+    Name: [],
+    Email: [],
+    TimeslotFrom: [],
+    TimeslotTo: [],
+    TimeLeft: [],
+    TimeArrived: [],
+    Date: [],
+    Table: [],
+    Orders: [],
+    Prepaid: [],
+    TotalSpent: [],
+    Adults: [],
+    Children: [],
+    Arrived: [],
+    LeftCenter: [],
+    ExtraTables: [],
+    Telephone: [],
+    orderid: [],
+    Age: [],
+    ExtraNames: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as="form"
+      rowGap="15px"
+      columnGap="15px"
+      padding="20px"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          Name,
+          Email,
+          TimeslotFrom,
+          TimeslotTo,
+          TimeLeft,
+          TimeArrived,
+          Date,
+          Table,
+          Orders,
+          Prepaid,
+          TotalSpent,
+          Adults,
+          Children,
+          Arrived,
+          LeftCenter,
+          ExtraTables,
+          Telephone,
+          orderid,
+          Age,
+          ExtraNames,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === "string" && value.trim() === "") {
+              modelFields[key] = undefined;
+            }
+          });
+          await DataStore.save(
+            Sessions.copyOf(sessionsRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, "SessionsUpdateForm")}
+      {...rest}
+    >
+      <TextField
+        label="Name"
+        isRequired={false}
+        isReadOnly={false}
+        value={Name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name: value,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.Name ?? value;
+          }
+          if (errors.Name?.hasError) {
+            runValidationTasks("Name", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks("Name", Name)}
+        errorMessage={errors.Name?.errorMessage}
+        hasError={errors.Name?.hasError}
+        {...getOverrideProps(overrides, "Name")}
+      ></TextField>
+      <TextField
+        label="Email"
+        isRequired={false}
+        isReadOnly={false}
+        value={Email}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email: value,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.Email ?? value;
+          }
+          if (errors.Email?.hasError) {
+            runValidationTasks("Email", value);
+          }
+          setEmail(value);
+        }}
+        onBlur={() => runValidationTasks("Email", Email)}
+        errorMessage={errors.Email?.errorMessage}
+        hasError={errors.Email?.hasError}
+        {...getOverrideProps(overrides, "Email")}
+      ></TextField>
+      <TextField
+        label="Timeslot from"
+        isRequired={false}
+        isReadOnly={false}
+        type="time"
+        value={TimeslotFrom}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom: value,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.TimeslotFrom ?? value;
+          }
+          if (errors.TimeslotFrom?.hasError) {
+            runValidationTasks("TimeslotFrom", value);
+          }
+          setTimeslotFrom(value);
+        }}
+        onBlur={() => runValidationTasks("TimeslotFrom", TimeslotFrom)}
+        errorMessage={errors.TimeslotFrom?.errorMessage}
+        hasError={errors.TimeslotFrom?.hasError}
+        {...getOverrideProps(overrides, "TimeslotFrom")}
+      ></TextField>
+      <TextField
+        label="Timeslot to"
+        isRequired={false}
+        isReadOnly={false}
+        type="time"
+        value={TimeslotTo}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo: value,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.TimeslotTo ?? value;
+          }
+          if (errors.TimeslotTo?.hasError) {
+            runValidationTasks("TimeslotTo", value);
+          }
+          setTimeslotTo(value);
+        }}
+        onBlur={() => runValidationTasks("TimeslotTo", TimeslotTo)}
+        errorMessage={errors.TimeslotTo?.errorMessage}
+        hasError={errors.TimeslotTo?.hasError}
+        {...getOverrideProps(overrides, "TimeslotTo")}
+      ></TextField>
+      <TextField
+        label="Time left"
+        isRequired={false}
+        isReadOnly={false}
+        type="time"
+        value={TimeLeft}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft: value,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.TimeLeft ?? value;
+          }
+          if (errors.TimeLeft?.hasError) {
+            runValidationTasks("TimeLeft", value);
+          }
+          setTimeLeft(value);
+        }}
+        onBlur={() => runValidationTasks("TimeLeft", TimeLeft)}
+        errorMessage={errors.TimeLeft?.errorMessage}
+        hasError={errors.TimeLeft?.hasError}
+        {...getOverrideProps(overrides, "TimeLeft")}
+      ></TextField>
+      <TextField
+        label="Time arrived"
+        isRequired={false}
+        isReadOnly={false}
+        type="time"
+        value={TimeArrived}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived: value,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.TimeArrived ?? value;
+          }
+          if (errors.TimeArrived?.hasError) {
+            runValidationTasks("TimeArrived", value);
+          }
+          setTimeArrived(value);
+        }}
+        onBlur={() => runValidationTasks("TimeArrived", TimeArrived)}
+        errorMessage={errors.TimeArrived?.errorMessage}
+        hasError={errors.TimeArrived?.hasError}
+        {...getOverrideProps(overrides, "TimeArrived")}
+      ></TextField>
+      <TextField
+        label="Date"
+        isRequired={false}
+        isReadOnly={false}
+        type="date"
+        value={Date}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date: value,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.Date ?? value;
+          }
+          if (errors.Date?.hasError) {
+            runValidationTasks("Date", value);
+          }
+          setDate(value);
+        }}
+        onBlur={() => runValidationTasks("Date", Date)}
+        errorMessage={errors.Date?.errorMessage}
+        hasError={errors.Date?.hasError}
+        {...getOverrideProps(overrides, "Date")}
+      ></TextField>
+      <TextField
+        label="Table"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={Table}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table: value,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.Table ?? value;
+          }
+          if (errors.Table?.hasError) {
+            runValidationTasks("Table", value);
+          }
+          setTable(value);
+        }}
+        onBlur={() => runValidationTasks("Table", Table)}
+        errorMessage={errors.Table?.errorMessage}
+        hasError={errors.Table?.hasError}
+        {...getOverrideProps(overrides, "Table")}
+      ></TextField>
+      <TextField
+        label="Orders"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={Orders}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders: value,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.Orders ?? value;
+          }
+          if (errors.Orders?.hasError) {
+            runValidationTasks("Orders", value);
+          }
+          setOrders(value);
+        }}
+        onBlur={() => runValidationTasks("Orders", Orders)}
+        errorMessage={errors.Orders?.errorMessage}
+        hasError={errors.Orders?.hasError}
+        {...getOverrideProps(overrides, "Orders")}
+      ></TextField>
+      <SwitchField
+        label="Prepaid"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={Prepaid}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid: value,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.Prepaid ?? value;
+          }
+          if (errors.Prepaid?.hasError) {
+            runValidationTasks("Prepaid", value);
+          }
+          setPrepaid(value);
+        }}
+        onBlur={() => runValidationTasks("Prepaid", Prepaid)}
+        errorMessage={errors.Prepaid?.errorMessage}
+        hasError={errors.Prepaid?.hasError}
+        {...getOverrideProps(overrides, "Prepaid")}
+      ></SwitchField>
+      <TextField
+        label="Total spent"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={TotalSpent}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent: value,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.TotalSpent ?? value;
+          }
+          if (errors.TotalSpent?.hasError) {
+            runValidationTasks("TotalSpent", value);
+          }
+          setTotalSpent(value);
+        }}
+        onBlur={() => runValidationTasks("TotalSpent", TotalSpent)}
+        errorMessage={errors.TotalSpent?.errorMessage}
+        hasError={errors.TotalSpent?.hasError}
+        {...getOverrideProps(overrides, "TotalSpent")}
+      ></TextField>
+      <TextField
+        label="Adults"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={Adults}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults: value,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.Adults ?? value;
+          }
+          if (errors.Adults?.hasError) {
+            runValidationTasks("Adults", value);
+          }
+          setAdults(value);
+        }}
+        onBlur={() => runValidationTasks("Adults", Adults)}
+        errorMessage={errors.Adults?.errorMessage}
+        hasError={errors.Adults?.hasError}
+        {...getOverrideProps(overrides, "Adults")}
+      ></TextField>
+      <TextField
+        label="Children"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={Children}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children: value,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.Children ?? value;
+          }
+          if (errors.Children?.hasError) {
+            runValidationTasks("Children", value);
+          }
+          setChildren(value);
+        }}
+        onBlur={() => runValidationTasks("Children", Children)}
+        errorMessage={errors.Children?.errorMessage}
+        hasError={errors.Children?.hasError}
+        {...getOverrideProps(overrides, "Children")}
+      ></TextField>
+      <SwitchField
+        label="Arrived"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={Arrived}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived: value,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.Arrived ?? value;
+          }
+          if (errors.Arrived?.hasError) {
+            runValidationTasks("Arrived", value);
+          }
+          setArrived(value);
+        }}
+        onBlur={() => runValidationTasks("Arrived", Arrived)}
+        errorMessage={errors.Arrived?.errorMessage}
+        hasError={errors.Arrived?.hasError}
+        {...getOverrideProps(overrides, "Arrived")}
+      ></SwitchField>
+      <SwitchField
+        label="Left center"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={LeftCenter}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter: value,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.LeftCenter ?? value;
+          }
+          if (errors.LeftCenter?.hasError) {
+            runValidationTasks("LeftCenter", value);
+          }
+          setLeftCenter(value);
+        }}
+        onBlur={() => runValidationTasks("LeftCenter", LeftCenter)}
+        errorMessage={errors.LeftCenter?.errorMessage}
+        hasError={errors.LeftCenter?.hasError}
+        {...getOverrideProps(overrides, "LeftCenter")}
+      ></SwitchField>
+      <TextField
+        label="Extra tables"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={ExtraTables}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables: value,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.ExtraTables ?? value;
+          }
+          if (errors.ExtraTables?.hasError) {
+            runValidationTasks("ExtraTables", value);
+          }
+          setExtraTables(value);
+        }}
+        onBlur={() => runValidationTasks("ExtraTables", ExtraTables)}
+        errorMessage={errors.ExtraTables?.errorMessage}
+        hasError={errors.ExtraTables?.hasError}
+        {...getOverrideProps(overrides, "ExtraTables")}
+      ></TextField>
+      <TextField
+        label="Telephone"
+        isRequired={false}
+        isReadOnly={false}
+        value={Telephone}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone: value,
+              orderid,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            value = result?.Telephone ?? value;
+          }
+          if (errors.Telephone?.hasError) {
+            runValidationTasks("Telephone", value);
+          }
+          setTelephone(value);
+        }}
+        onBlur={() => runValidationTasks("Telephone", Telephone)}
+        errorMessage={errors.Telephone?.errorMessage}
+        hasError={errors.Telephone?.hasError}
+        {...getOverrideProps(overrides, "Telephone")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid: values,
+              Age,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            values = result?.orderid ?? values;
+          }
+          setOrderid(values);
+          setCurrentOrderidValue("");
+        }}
+        currentFieldValue={currentOrderidValue}
+        label={"Orderid"}
+        items={orderid}
+        hasError={errors?.orderid?.hasError}
+        errorMessage={errors?.orderid?.errorMessage}
+        setFieldValue={setCurrentOrderidValue}
+        inputFieldRef={orderidRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Orderid"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentOrderidValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.orderid?.hasError) {
+              runValidationTasks("orderid", value);
+            }
+            setCurrentOrderidValue(value);
+          }}
+          onBlur={() => runValidationTasks("orderid", currentOrderidValue)}
+          errorMessage={errors.orderid?.errorMessage}
+          hasError={errors.orderid?.hasError}
+          ref={orderidRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "orderid")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age: values,
+              ExtraNames,
+            };
+            const result = onChange(modelFields);
+            values = result?.Age ?? values;
+          }
+          setAge(values);
+          setCurrentAgeValue("");
+        }}
+        currentFieldValue={currentAgeValue}
+        label={"Age"}
+        items={Age}
+        hasError={errors?.Age?.hasError}
+        errorMessage={errors?.Age?.errorMessage}
+        setFieldValue={setCurrentAgeValue}
+        inputFieldRef={AgeRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Age"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentAgeValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Age?.hasError) {
+              runValidationTasks("Age", value);
+            }
+            setCurrentAgeValue(value);
+          }}
+          onBlur={() => runValidationTasks("Age", currentAgeValue)}
+          errorMessage={errors.Age?.errorMessage}
+          hasError={errors.Age?.hasError}
+          ref={AgeRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "Age")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.ExtraNames ?? values;
+          }
+          setExtraNames(values);
+          setCurrentExtraNamesValue("");
+        }}
+        currentFieldValue={currentExtraNamesValue}
+        label={"Extra names"}
+        items={ExtraNames}
+        hasError={errors?.ExtraNames?.hasError}
+        errorMessage={errors?.ExtraNames?.errorMessage}
+        setFieldValue={setCurrentExtraNamesValue}
+        inputFieldRef={ExtraNamesRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Extra names"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentExtraNamesValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.ExtraNames?.hasError) {
+              runValidationTasks("ExtraNames", value);
+            }
+            setCurrentExtraNamesValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks("ExtraNames", currentExtraNamesValue)
+          }
+          errorMessage={errors.ExtraNames?.errorMessage}
+          hasError={errors.ExtraNames?.hasError}
+          ref={ExtraNamesRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "ExtraNames")}
+        ></TextField>
+      </ArrayField>
+      <Flex
+        justifyContent="space-between"
+        {...getOverrideProps(overrides, "CTAFlex")}
+      >
+        <Button
+          children="Reset"
+          type="reset"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || sessionsModelProp)}
+          {...getOverrideProps(overrides, "ResetButton")}
+        ></Button>
+        <Flex
+          gap="15px"
+          {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
+        >
+          <Button
+            children="Submit"
+            type="submit"
+            variation="primary"
+            isDisabled={
+              !(idProp || sessionsModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
+            {...getOverrideProps(overrides, "SubmitButton")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}

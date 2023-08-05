@@ -6,6 +6,68 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 
 
 
+type EagerHomePage = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<HomePage, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Message?: string | null;
+  readonly Number?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyHomePage = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<HomePage, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Message?: string | null;
+  readonly Number?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type HomePage = LazyLoading extends LazyLoadingDisabled ? EagerHomePage : LazyHomePage
+
+export declare const HomePage: (new (init: ModelInit<HomePage>) => HomePage) & {
+  copyOf(source: HomePage, mutator: (draft: MutableModel<HomePage>) => MutableModel<HomePage> | void): HomePage;
+}
+
+type EagerCustomerScreen = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<CustomerScreen, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Message?: string | null;
+  readonly Show?: boolean | null;
+  readonly Number?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyCustomerScreen = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<CustomerScreen, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Message?: string | null;
+  readonly Show?: boolean | null;
+  readonly Number?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type CustomerScreen = LazyLoading extends LazyLoadingDisabled ? EagerCustomerScreen : LazyCustomerScreen
+
+export declare const CustomerScreen: (new (init: ModelInit<CustomerScreen>) => CustomerScreen) & {
+  copyOf(source: CustomerScreen, mutator: (draft: MutableModel<CustomerScreen>) => MutableModel<CustomerScreen> | void): CustomerScreen;
+}
+
 type EagerExtras = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Extras, 'id'>;
