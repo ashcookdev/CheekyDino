@@ -1,4 +1,7 @@
-import CustomerEdit from '../customer-pages/customeredit.jsx';
+import CustomerEdit from './customeredit.jsx';
+import CustomerEvent from './customerevent.jsx';
+import TrexModel from './trexmodel.jsx';
+import './customerfont.css'
 
 
 const collections = [
@@ -24,14 +27,11 @@ const collections = [
   
   export default function Example() {
     return (
-      <div className="relative bg-white">
-      {/* Hero section */}
-      <CustomerEdit />
-
-      {/* Collections section */}
+      <div className="relative bg-white mb-5">
+        <CustomerEdit />
       <section
         aria-labelledby="collection-heading"
-        className="relative mt-8 sm:mt-0"
+        className="relative mt-8 sm:mt-5"
       >
         <h2 id="collection-heading" className="sr-only">
           Collections
@@ -58,12 +58,10 @@ const collections = [
                 </div>
                 <div className="absolute inset-0 flex items-end rounded-lg p-6">
                   <div>
-                    <p aria-hidden="true" className="text-sm text-white">
-                      Shop the collection
-                    </p>
-                    <h3 className="mt-1 font-semibold text-white">
+                    
+                    <h3 className="mt-1 font-semibold text-white component-title">
                       <a href={collection.href}>
-                        <span className="absolute inset-0" />
+                        <span className="absolute inset-0 component-title" />
                         {collection.name}
                       </a>
                     </h3>
@@ -74,6 +72,8 @@ const collections = [
           ))}
         </div>
       </section>
+
     </div>
+    
     );
             }    

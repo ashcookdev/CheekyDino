@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
 import { HomePage } from '../staffpages/models';
+import './customerfont.css'
 
 export default function HeroSection() {
   const [homescreen, setHomescreen] = useState([]);
@@ -14,31 +15,26 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <div className="bg-white">
-      <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center">
-          {homescreen.map((home) => (
-            <div key={home.id}>
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                {home.TopSectionTitle}
-              </h2>
-              <img src={home.TopSectionPic} alt={home.TopSectionTitle} />
-              <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">{home.TopSectionWriting}</p>
+    homescreen.map((home) => (
+      <div
+        key={home.id}
+        className="bg-contain bg-center w-full"
+        style={{ backgroundImage: `url(${home.TopSectionPic})` }}
+      >
+        <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
+          <div className="mx-auto text-center">
+          <h2 className="text-15xl component-title font-bold tracking-tight text-white sm:text-4xl">{home.TopSectionTitle}</h2>
+            <p className="mx-auto component-title w-full mt-6 max-w-xl text-lg leading-8 text-white">{home.TopSectionWriting}</p>
+            <div className="mt-10 flex items-center justify-center gap-x-6">
+              
             </div>
-          ))}
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            <a
-              href="#"
-              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Get started
-            </a>
-            <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-              Learn more <span aria-hidden="true">→</span>
-            </a>
           </div>
         </div>
       </div>
-    </div>
+    ))
   );
+  
+  
+  
+  
 }
