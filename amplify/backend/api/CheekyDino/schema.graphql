@@ -1,7 +1,11 @@
 type HomePage @model @auth(rules: [{allow: private}]) {
   id: ID!
-  Message: String
-  Number: Int
+  TopSectionTitle: String
+  TopSectionPic: String
+  TopSectionWriting: String
+  EventTitle: String
+  EventPic: String
+  EventWriting: String
 }
 
 type CustomerScreen @model @auth(rules: [{allow: private}, {allow: owner}]) {

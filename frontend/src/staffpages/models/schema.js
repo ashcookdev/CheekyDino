@@ -10,17 +10,45 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "Message": {
-                    "name": "Message",
+                "TopSectionTitle": {
+                    "name": "TopSectionTitle",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
-                "Number": {
-                    "name": "Number",
+                "TopSectionPic": {
+                    "name": "TopSectionPic",
                     "isArray": false,
-                    "type": "Int",
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "TopSectionWriting": {
+                    "name": "TopSectionWriting",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "EventTitle": {
+                    "name": "EventTitle",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "EventPic": {
+                    "name": "EventPic",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "EventWriting": {
+                    "name": "EventWriting",
+                    "isArray": false,
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -2405,5 +2433,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "6b9cd7285243e819e5cbbf8cbaaf2fe9"
+    "version": "beb92f3c6b079700a571a8021adb3e48"
 };

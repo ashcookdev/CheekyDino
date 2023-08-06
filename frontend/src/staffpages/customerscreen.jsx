@@ -3,20 +3,19 @@ import { DataStore } from 'aws-amplify';
 import { format } from 'date-fns';
 import CustomerTables  from './customertables';
 import { CustomerScreen } from './models';
+import "./progress.css"
 
 
 
 const imagesAndMessages = [
-  {
-    image: 'https://media.giphy.com/media/Qw4X3FOknVexRVd1j5m/giphy.gif',
-    message: 'Order your Food from your table, scan the QR code on your table to get started!'
-  },
+  
   {
     image: 'https://media.giphy.com/media/CIUUKp7vsPdy8/giphy.gif',
     message: 'Book your Party with us!, scan the QR code on your table to get started!'
   },
   {
-    component: <CustomerTables />
+    image: 'https://media.giphy.com/media/Qw4X3FOknVexRVd1j5m/giphy.gif',
+    message: 'Order your Food from your table, scan the QR code on your table to get started!'
   }
 ];
 
@@ -30,6 +29,9 @@ export default function Example() {
   const [showOriginalComponent, setShowOriginalComponent] = useState(true);
   const [numbers, setNumbers] = useState('');
   const [audioSrc, setAudioSrc] = useState('');
+  const [nowFalse, setFalse] = useState(true);
+  const [messageCount, setMessageCount] = useState(0);
+  const [displayMessage, setDisplayMessage] = useState('');
 
   console.log(numbers);
 
@@ -79,9 +81,22 @@ export default function Example() {
 
     };
     
+    console.log(numbers)
   
+    useEffect(() => {
+      const interval = setInterval(() => {
+        const currentTime = format(new Date(), 'HH:mm');
+        if (timesToDisplay[currentTime] && messageCount < 2) {
+          setDisplayMessage(timesToDisplay[currentTime]);
+          setShowOriginalComponent(false);
+          setMessageCount(prev => prev + 1);
+          setTimeout(() => setShowOriginalComponent(true), 300000); // show original component after 5 minutes
+        }
+      }, 60000); // check every minute
+    
+      return () => clearInterval(interval);
+    }, [messageCount]);
   
-  const [displayMessage, setDisplayMessage] = useState(null);
   
   useEffect(() => {
     const interval = setInterval(() => {
@@ -96,13 +111,21 @@ export default function Example() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const nowFalse = setInterval(() => {
+      setFalse(false)
+    }, 60000);
+    return () => clearInterval(nowFalse);
+  }, []);
+
+
  
   useEffect(() => {
     let newAudioSrc = '';
     if (numbers === 1) {
       newAudioSrc = './announcements/partyGuests.mp3';
     } else if (numbers === 2) {
-      newAudioSrc = './audio/file2.mp3';
+      newAudioSrc = './announcements/leaving.mp3';
     } else if (numbers === 3) {
       newAudioSrc = './audio/file3.mp3';
     }
@@ -110,51 +133,62 @@ export default function Example() {
   }, [numbers]);  
 
 
-  const leavingAudioSrc = './announcements/leaving.mp3';
+  if (nowFalse === false) {
+    async function updateAllEntries() {
+      const entries = await DataStore.query(CustomerScreen);
+      for (const entry of entries) {
+        await DataStore.save(
+          CustomerScreen.copyOf(entry, updated => {
+            updated.Show = false;
+          })
+        );
+      }
+    }
+    updateAllEntries();
+    
+    
+  }
 
 
   return (
     <>
-    
-      {showOriginalComponent ? (
-        <div className="relative bg-orange-500">
-          <div className="mx-auto max-w-7xl lg:grid lg:grid-cols-12 lg:gap-x-8 lg:px-8">
-            <div className="px-6 pb-24 pt-10 sm:pb-32 lg:col-span-7 lg:px-0 lg:pb-56 lg:pt-48 xl:col-span-6">
-              <div className="mx-auto max-w-2xl lg:mx-0">
+      <div className="flex">
+        <div className="w-1/2">
+          <div className="overflow-hidden h-full">
+            <div className="">
+              
+
+              <CustomerTables />
+            </div>
+          </div>
+        </div>
+        {showOriginalComponent ? (
+          <div className="w-1/2 flex flex-col">
+            <div className="flex-1">
+              {showMessage ? (
                 <>
-                  {showMessage ? (
-                    <>
-                      <h1 className="mt-24 text-4xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-6xl">
-                        {message}
-                      </h1>
-                      <audio 
-                        autoPlay
-                        controls
-                        src={audioSrc}
-                        className="hidden"
-
-                      />
-
-                    </>
+                  <h1 className="mt-24 text-4xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-6xl">
+                    {message}
+                  </h1>
+                  <audio autoPlay controls src={audioSrc} className="hidden" />
+                </>
+              ) : (
+                <>
+                  <p>Current time: {time}</p>
+                  {imagesAndMessages[index].component ? (
+                    imagesAndMessages[index].component.message
                   ) : (
                     <>
-                      <p>Current time: {time}</p>
-                      {imagesAndMessages[index].component ? (
-                        imagesAndMessages[index].component
-                      ) : (
-                        <>
-                          <h1 className="mt-24 text-4xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-6xl">
-                            {imagesAndMessages[index].message}
-                          </h1>
-                        </>
-                      )}
+                      <h1 className="mt-24 text-4xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-6xl">
+                        {imagesAndMessages[index].message}
+                      </h1>
                     </>
                   )}
                 </>
-              </div>
+              )}
             </div>
             {!showMessage && !imagesAndMessages[index].component && (
-              <div className="relative lg:col-span-5 lg:-mr-8 xl:absolute xl:inset-0 xl:left-1/2 xl:mr-0">
+              <div className="flex-1 relative">
                 <img
                   className="aspect-[3/2] w-full bg-orange-500 object-contain lg:absolute lg:inset-0 lg:aspect-auto lg:h-full"
                   src={imagesAndMessages[index].image}
@@ -163,31 +197,14 @@ export default function Example() {
               </div>
             )}
           </div>
-        </div>
-      ) : (
-        <div className="relative bg-orange-500">
-        <h1 className="animate-pulse mt-24 text-4xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-6xl bg-orange-500">
-        {displayMessage}
-       
-        </h1>
-
-        <div>
-        <audio
-          autoPlay
-          controls
-          src={leavingAudioSrc}
-          className=""
-        />
-        </div>
-        <div>
-        <CustomerTables/>
-
-        </div>
-
-        </div>
-      )}
+        ) : (
+          <div className="w-1/2 relative bg-white">
+            <h1 className="animate-pulse mt-24 text-4xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-6xl bg-orange-500">
+              {displayMessage}
+            </h1>
+          </div>
+        )}
+      </div>
     </>
   );
-}  
-
-
+        }  

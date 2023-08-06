@@ -36,7 +36,7 @@ export default function Announcement() {
           new CustomerScreen({
             Message: comment,
             Show: true,
-            Number: number,
+            Number: Number(number)
           })
         );
         // reset the comment state
@@ -105,9 +105,12 @@ export default function Announcement() {
               >
                 Post
               </button>
+
             </div>
           </div>
         </form>
+       
+
       </div>
     </div>
   )

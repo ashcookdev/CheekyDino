@@ -12,8 +12,12 @@ type EagerHomePage = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly Message?: string | null;
-  readonly Number?: number | null;
+  readonly TopSectionTitle?: string | null;
+  readonly TopSectionPic?: string | null;
+  readonly TopSectionWriting?: string | null;
+  readonly EventTitle?: string | null;
+  readonly EventPic?: string | null;
+  readonly EventWriting?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -24,8 +28,12 @@ type LazyHomePage = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly Message?: string | null;
-  readonly Number?: number | null;
+  readonly TopSectionTitle?: string | null;
+  readonly TopSectionPic?: string | null;
+  readonly TopSectionWriting?: string | null;
+  readonly EventTitle?: string | null;
+  readonly EventPic?: string | null;
+  readonly EventWriting?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

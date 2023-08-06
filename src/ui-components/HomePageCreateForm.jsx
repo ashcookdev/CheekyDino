@@ -23,20 +23,44 @@ export default function HomePageCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    Message: "",
-    Number: "",
+    TopSectionTitle: "",
+    TopSectionPic: "",
+    TopSectionWriting: "",
+    EventTitle: "",
+    EventPic: "",
+    EventWriting: "",
   };
-  const [Message, setMessage] = React.useState(initialValues.Message);
-  const [Number, setNumber] = React.useState(initialValues.Number);
+  const [TopSectionTitle, setTopSectionTitle] = React.useState(
+    initialValues.TopSectionTitle
+  );
+  const [TopSectionPic, setTopSectionPic] = React.useState(
+    initialValues.TopSectionPic
+  );
+  const [TopSectionWriting, setTopSectionWriting] = React.useState(
+    initialValues.TopSectionWriting
+  );
+  const [EventTitle, setEventTitle] = React.useState(initialValues.EventTitle);
+  const [EventPic, setEventPic] = React.useState(initialValues.EventPic);
+  const [EventWriting, setEventWriting] = React.useState(
+    initialValues.EventWriting
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setMessage(initialValues.Message);
-    setNumber(initialValues.Number);
+    setTopSectionTitle(initialValues.TopSectionTitle);
+    setTopSectionPic(initialValues.TopSectionPic);
+    setTopSectionWriting(initialValues.TopSectionWriting);
+    setEventTitle(initialValues.EventTitle);
+    setEventPic(initialValues.EventPic);
+    setEventWriting(initialValues.EventWriting);
     setErrors({});
   };
   const validations = {
-    Message: [],
-    Number: [],
+    TopSectionTitle: [],
+    TopSectionPic: [],
+    TopSectionWriting: [],
+    EventTitle: [],
+    EventPic: [],
+    EventWriting: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -64,8 +88,12 @@ export default function HomePageCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          Message,
-          Number,
+          TopSectionTitle,
+          TopSectionPic,
+          TopSectionWriting,
+          EventTitle,
+          EventPic,
+          EventWriting,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -112,58 +140,180 @@ export default function HomePageCreateForm(props) {
       {...rest}
     >
       <TextField
-        label="Message"
+        label="Top section title"
         isRequired={false}
         isReadOnly={false}
-        value={Message}
+        value={TopSectionTitle}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Message: value,
-              Number,
+              TopSectionTitle: value,
+              TopSectionPic,
+              TopSectionWriting,
+              EventTitle,
+              EventPic,
+              EventWriting,
             };
             const result = onChange(modelFields);
-            value = result?.Message ?? value;
+            value = result?.TopSectionTitle ?? value;
           }
-          if (errors.Message?.hasError) {
-            runValidationTasks("Message", value);
+          if (errors.TopSectionTitle?.hasError) {
+            runValidationTasks("TopSectionTitle", value);
           }
-          setMessage(value);
+          setTopSectionTitle(value);
         }}
-        onBlur={() => runValidationTasks("Message", Message)}
-        errorMessage={errors.Message?.errorMessage}
-        hasError={errors.Message?.hasError}
-        {...getOverrideProps(overrides, "Message")}
+        onBlur={() => runValidationTasks("TopSectionTitle", TopSectionTitle)}
+        errorMessage={errors.TopSectionTitle?.errorMessage}
+        hasError={errors.TopSectionTitle?.hasError}
+        {...getOverrideProps(overrides, "TopSectionTitle")}
       ></TextField>
       <TextField
-        label="Number"
+        label="Top section pic"
         isRequired={false}
         isReadOnly={false}
-        type="number"
-        step="any"
-        value={Number}
+        value={TopSectionPic}
         onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Message,
-              Number: value,
+              TopSectionTitle,
+              TopSectionPic: value,
+              TopSectionWriting,
+              EventTitle,
+              EventPic,
+              EventWriting,
             };
             const result = onChange(modelFields);
-            value = result?.Number ?? value;
+            value = result?.TopSectionPic ?? value;
           }
-          if (errors.Number?.hasError) {
-            runValidationTasks("Number", value);
+          if (errors.TopSectionPic?.hasError) {
+            runValidationTasks("TopSectionPic", value);
           }
-          setNumber(value);
+          setTopSectionPic(value);
         }}
-        onBlur={() => runValidationTasks("Number", Number)}
-        errorMessage={errors.Number?.errorMessage}
-        hasError={errors.Number?.hasError}
-        {...getOverrideProps(overrides, "Number")}
+        onBlur={() => runValidationTasks("TopSectionPic", TopSectionPic)}
+        errorMessage={errors.TopSectionPic?.errorMessage}
+        hasError={errors.TopSectionPic?.hasError}
+        {...getOverrideProps(overrides, "TopSectionPic")}
+      ></TextField>
+      <TextField
+        label="Top section writing"
+        isRequired={false}
+        isReadOnly={false}
+        value={TopSectionWriting}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              TopSectionTitle,
+              TopSectionPic,
+              TopSectionWriting: value,
+              EventTitle,
+              EventPic,
+              EventWriting,
+            };
+            const result = onChange(modelFields);
+            value = result?.TopSectionWriting ?? value;
+          }
+          if (errors.TopSectionWriting?.hasError) {
+            runValidationTasks("TopSectionWriting", value);
+          }
+          setTopSectionWriting(value);
+        }}
+        onBlur={() =>
+          runValidationTasks("TopSectionWriting", TopSectionWriting)
+        }
+        errorMessage={errors.TopSectionWriting?.errorMessage}
+        hasError={errors.TopSectionWriting?.hasError}
+        {...getOverrideProps(overrides, "TopSectionWriting")}
+      ></TextField>
+      <TextField
+        label="Event title"
+        isRequired={false}
+        isReadOnly={false}
+        value={EventTitle}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              TopSectionTitle,
+              TopSectionPic,
+              TopSectionWriting,
+              EventTitle: value,
+              EventPic,
+              EventWriting,
+            };
+            const result = onChange(modelFields);
+            value = result?.EventTitle ?? value;
+          }
+          if (errors.EventTitle?.hasError) {
+            runValidationTasks("EventTitle", value);
+          }
+          setEventTitle(value);
+        }}
+        onBlur={() => runValidationTasks("EventTitle", EventTitle)}
+        errorMessage={errors.EventTitle?.errorMessage}
+        hasError={errors.EventTitle?.hasError}
+        {...getOverrideProps(overrides, "EventTitle")}
+      ></TextField>
+      <TextField
+        label="Event pic"
+        isRequired={false}
+        isReadOnly={false}
+        value={EventPic}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              TopSectionTitle,
+              TopSectionPic,
+              TopSectionWriting,
+              EventTitle,
+              EventPic: value,
+              EventWriting,
+            };
+            const result = onChange(modelFields);
+            value = result?.EventPic ?? value;
+          }
+          if (errors.EventPic?.hasError) {
+            runValidationTasks("EventPic", value);
+          }
+          setEventPic(value);
+        }}
+        onBlur={() => runValidationTasks("EventPic", EventPic)}
+        errorMessage={errors.EventPic?.errorMessage}
+        hasError={errors.EventPic?.hasError}
+        {...getOverrideProps(overrides, "EventPic")}
+      ></TextField>
+      <TextField
+        label="Event writing"
+        isRequired={false}
+        isReadOnly={false}
+        value={EventWriting}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              TopSectionTitle,
+              TopSectionPic,
+              TopSectionWriting,
+              EventTitle,
+              EventPic,
+              EventWriting: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.EventWriting ?? value;
+          }
+          if (errors.EventWriting?.hasError) {
+            runValidationTasks("EventWriting", value);
+          }
+          setEventWriting(value);
+        }}
+        onBlur={() => runValidationTasks("EventWriting", EventWriting)}
+        errorMessage={errors.EventWriting?.errorMessage}
+        hasError={errors.EventWriting?.hasError}
+        {...getOverrideProps(overrides, "EventWriting")}
       ></TextField>
       <Flex
         justifyContent="space-between"

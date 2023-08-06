@@ -13,18 +13,30 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type HomePageCreateFormInputValues = {
-    Message?: string;
-    Number?: number;
+    TopSectionTitle?: string;
+    TopSectionPic?: string;
+    TopSectionWriting?: string;
+    EventTitle?: string;
+    EventPic?: string;
+    EventWriting?: string;
 };
 export declare type HomePageCreateFormValidationValues = {
-    Message?: ValidationFunction<string>;
-    Number?: ValidationFunction<number>;
+    TopSectionTitle?: ValidationFunction<string>;
+    TopSectionPic?: ValidationFunction<string>;
+    TopSectionWriting?: ValidationFunction<string>;
+    EventTitle?: ValidationFunction<string>;
+    EventPic?: ValidationFunction<string>;
+    EventWriting?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type HomePageCreateFormOverridesProps = {
     HomePageCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    Message?: PrimitiveOverrideProps<TextFieldProps>;
-    Number?: PrimitiveOverrideProps<TextFieldProps>;
+    TopSectionTitle?: PrimitiveOverrideProps<TextFieldProps>;
+    TopSectionPic?: PrimitiveOverrideProps<TextFieldProps>;
+    TopSectionWriting?: PrimitiveOverrideProps<TextFieldProps>;
+    EventTitle?: PrimitiveOverrideProps<TextFieldProps>;
+    EventPic?: PrimitiveOverrideProps<TextFieldProps>;
+    EventWriting?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type HomePageCreateFormProps = React.PropsWithChildren<{
     overrides?: HomePageCreateFormOverridesProps | undefined | null;
