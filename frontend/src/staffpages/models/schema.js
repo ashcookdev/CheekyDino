@@ -52,6 +52,48 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "EventTwoTitle": {
+                    "name": "EventTwoTitle",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "EventTwoPic": {
+                    "name": "EventTwoPic",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "EventTwoWriting": {
+                    "name": "EventTwoWriting",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "EventThreeTitle": {
+                    "name": "EventThreeTitle",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "EventThreePic": {
+                    "name": "EventThreePic",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "EventThreeWriting": {
+                    "name": "EventThreeWriting",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -510,17 +552,19 @@ export const schema = {
                 },
                 "ClockInTime": {
                     "name": "ClockInTime",
-                    "isArray": false,
+                    "isArray": true,
                     "type": "AWSTime",
                     "isRequired": false,
-                    "attributes": []
+                    "attributes": [],
+                    "isArrayNullable": true
                 },
                 "ClockOutTime": {
                     "name": "ClockOutTime",
-                    "isArray": false,
+                    "isArray": true,
                     "type": "AWSTime",
                     "isRequired": false,
-                    "attributes": []
+                    "attributes": [],
+                    "isArrayNullable": true
                 },
                 "Hours": {
                     "name": "Hours",
@@ -529,22 +573,39 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "Date": {
-                    "name": "Date",
-                    "isArray": false,
+                "Dates": {
+                    "name": "Dates",
+                    "isArray": true,
                     "type": "AWSDate",
                     "isRequired": false,
-                    "attributes": []
+                    "attributes": [],
+                    "isArrayNullable": true
                 },
                 "ShiftStart": {
                     "name": "ShiftStart",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
+                "ShiftFinish": {
+                    "name": "ShiftFinish",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
+                "WeekNumber": {
+                    "name": "WeekNumber",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
-                "ShiftFinish": {
-                    "name": "ShiftFinish",
+                "StaffNam": {
+                    "name": "StaffNam",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -2433,5 +2494,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "beb92f3c6b079700a571a8021adb3e48"
+    "version": "30bd18c7bfb0ccc5aa68f9adf286df96"
 };

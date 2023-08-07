@@ -13,6 +13,12 @@ import {
   HomeIcon,
   UsersIcon,
   XMarkIcon,
+  CurrencyPoundIcon,
+  ChatBubbleBottomCenterIcon,
+  ArrowLeftIcon,
+  TableCellsIcon,
+  PencilIcon
+
 } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
@@ -53,12 +59,15 @@ const teams = [{ id: 1, name: 'Orders', href: '/orders', initial: 'O', current: 
 { id: 3, name: 'Parties', href: '/partyhistory', initial: 'P', current: false },]
 
 
+
 const navigation = [
-{ name: 'Home', href: '/dashboard', icon: HomeIcon, current: true },
-{ name: 'Chat', href: '/chat', icon: UsersIcon, current: false },
-{ name: 'Till', href: '/till', icon: FolderIcon, current: false },
-{ name: 'Tables', href: '/Tables', icon: CalendarIcon, current: false },
-{ name: 'Tasks', href: '/Tasks', icon: CalendarIcon, current: false },
+  { name: 'Home', href: '/', icon: HomeIcon, current: false},
+  { name: 'Till', href: '/till', icon: CurrencyPoundIcon, current: true },
+{ name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
+{ name: 'Kitchen', href: '/kitchen', icon: ArrowLeftIcon , current: false },
+{ name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
+{ name: 'Edit', href: '/edithome', icon: PencilIcon, current: false },
+{name: 'Staff', href: '/tasks', icon: UsersIcon, current: false },
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },
 ]
 
@@ -401,7 +410,7 @@ return (
             <span className="sr-only">Open sidebar</span>
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
-          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Dashboard</div>
+          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Finance</div>
           <a href="#">
             <span className="sr-only">Your profile</span>
             <img

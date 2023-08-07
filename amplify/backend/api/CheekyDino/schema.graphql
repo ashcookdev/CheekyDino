@@ -6,6 +6,12 @@ type HomePage @model @auth(rules: [{allow: private}]) {
   EventTitle: String
   EventPic: String
   EventWriting: String
+  EventTwoTitle: String
+  EventTwoPic: String
+  EventTwoWriting: String
+  EventThreeTitle: String
+  EventThreePic: String
+  EventThreeWriting: String
 }
 
 type CustomerScreen @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -51,12 +57,14 @@ type TimeEntry @model @auth(rules: [{allow: private}, {allow: owner}]) {
   id: ID!
   Staff: [Staff] @manyToMany(relationName: "TimeEntryStaff")
   StaffID: String
-  ClockInTime: AWSTime
-  ClockOutTime: AWSTime
+  ClockInTime: [AWSTime]
+  ClockOutTime: [AWSTime]
   Hours: Float
-  Date: AWSDate
-  ShiftStart: String
-  ShiftFinish: String
+  Dates: [AWSDate]
+  ShiftStart: [String]
+  ShiftFinish: [String]
+  WeekNumber: String
+  StaffNam: String
 }
 
 type Staff @model @auth(rules: [{allow: private}]) {

@@ -18,6 +18,12 @@ type EagerHomePage = {
   readonly EventTitle?: string | null;
   readonly EventPic?: string | null;
   readonly EventWriting?: string | null;
+  readonly EventTwoTitle?: string | null;
+  readonly EventTwoPic?: string | null;
+  readonly EventTwoWriting?: string | null;
+  readonly EventThreeTitle?: string | null;
+  readonly EventThreePic?: string | null;
+  readonly EventThreeWriting?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -34,6 +40,12 @@ type LazyHomePage = {
   readonly EventTitle?: string | null;
   readonly EventPic?: string | null;
   readonly EventWriting?: string | null;
+  readonly EventTwoTitle?: string | null;
+  readonly EventTwoPic?: string | null;
+  readonly EventTwoWriting?: string | null;
+  readonly EventThreeTitle?: string | null;
+  readonly EventThreePic?: string | null;
+  readonly EventThreeWriting?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -202,12 +214,14 @@ type EagerTimeEntry = {
   readonly id: string;
   readonly Staff?: (TimeEntryStaff | null)[] | null;
   readonly StaffID?: string | null;
-  readonly ClockInTime?: string | null;
-  readonly ClockOutTime?: string | null;
+  readonly ClockInTime?: (string | null)[] | null;
+  readonly ClockOutTime?: (string | null)[] | null;
   readonly Hours?: number | null;
-  readonly Date?: string | null;
-  readonly ShiftStart?: string | null;
-  readonly ShiftFinish?: string | null;
+  readonly Dates?: (string | null)[] | null;
+  readonly ShiftStart?: (string | null)[] | null;
+  readonly ShiftFinish?: (string | null)[] | null;
+  readonly WeekNumber?: string | null;
+  readonly StaffNam?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -220,12 +234,14 @@ type LazyTimeEntry = {
   readonly id: string;
   readonly Staff: AsyncCollection<TimeEntryStaff>;
   readonly StaffID?: string | null;
-  readonly ClockInTime?: string | null;
-  readonly ClockOutTime?: string | null;
+  readonly ClockInTime?: (string | null)[] | null;
+  readonly ClockOutTime?: (string | null)[] | null;
   readonly Hours?: number | null;
-  readonly Date?: string | null;
-  readonly ShiftStart?: string | null;
-  readonly ShiftFinish?: string | null;
+  readonly Dates?: (string | null)[] | null;
+  readonly ShiftStart?: (string | null)[] | null;
+  readonly ShiftFinish?: (string | null)[] | null;
+  readonly WeekNumber?: string | null;
+  readonly StaffNam?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

@@ -67,6 +67,7 @@ const navigation = [
   { name: 'Kitchen', href: '/kitchen', icon: ArrowLeftIcon , current: false },
   { name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
   { name: 'Edit', href: '/edithome', icon: PencilIcon, current: false },
+  {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },
 ]
 

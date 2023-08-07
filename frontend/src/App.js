@@ -43,6 +43,7 @@ import SessionCalendar from './staffpages/sessionCalender';
 import KidsMenu from './staffpages/kidsmenu'
 import SessionToday from './staffpages/todaysbookings';
 import EditHome from './staffpages/edithome';
+import Shifts from './staffpages/shifts';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -153,6 +154,7 @@ function App() {
             <Route path= "/Customerscreen" element={<CustomerScreen />} />
             <Route path= "/timeslot" element={<SessionToday/>} />
             <Route path= "/edithome" element={<EditHome/>} />
+            <Route path= "/staff" element = {<Shifts/>} />
             
 
           </>

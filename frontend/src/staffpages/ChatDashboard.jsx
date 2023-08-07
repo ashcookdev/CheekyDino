@@ -14,6 +14,12 @@ import {
   HomeIcon,
   UsersIcon,
   XMarkIcon,
+  CurrencyPoundIcon,
+  ChatBubbleBottomCenterIcon,
+  TableCellsIcon,
+  PencilIcon,
+  ArrowLeftIcon
+
 } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
@@ -120,13 +126,14 @@ function App() {
   { id: 3, name: 'Parties', href: '/partyhistory', initial: 'P', current: false },]
 
 
-const navigation = [
-  { name: 'Home', href: '/dashboard', icon: HomeIcon, current: true },
-{ name: 'Chat', href: '/chat', icon: UsersIcon, current: false },
-{ name: 'Kitchen', href: '/kitchen', icon: FolderIcon, current: false },
-{ name: 'Till', href: '/Till', icon: FolderIcon, current: false },
-{ name: 'Tables', href: '/Tables', icon: CalendarIcon, current: false },
-{ name: 'Tasks', href: '/Tasks', icon: CalendarIcon, current: false },
+  const navigation = [
+    { name: 'Home', href: '/dashboard', icon: HomeIcon, current: false},
+    { name: 'Till', href: '/till', icon: CurrencyPoundIcon, current: true },
+  { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
+  { name: 'Kitchen', href: '/kitchen', icon: ArrowLeftIcon , current: false },
+  { name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
+  { name: 'Edit', href: '/edithome', icon: PencilIcon, current: false },
+  {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },
 ]
     
@@ -207,7 +214,7 @@ const navigation = [
                     <div className="flex h-16 shrink-0 items-center">
                       <img
                         className="h-8 w-auto"
-                        src="./verse.gif"
+                        src="./versa.gif"
                         alt="Your Company"
                       />
                     </div>
@@ -355,12 +362,12 @@ const navigation = [
             <span className="sr-only">Open sidebar</span>
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
-          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Dashboard</div>
+          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Chat Dashboard</div>
           <a href="#">
             <span className="sr-only">Your profile</span>
             <img
               className="h-8 w-8 rounded-full bg-gray-50"
-              src="./verse.gif"
+              src="./versa.gif"
               alt=""
             />
           </a>

@@ -18,7 +18,7 @@ export default function HeroSection() {
     homescreen.map((home) => (
       <div
         key={home.id}
-        className="bg-contain bg-center w-full"
+        className="bg-cover bg-center w-full"
         style={{ backgroundImage: `url(${home.TopSectionPic})` }}
       >
         <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">

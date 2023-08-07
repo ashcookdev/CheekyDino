@@ -1,124 +1,144 @@
-import { ChevronRightIcon } from '@heroicons/react/20/solid'
-import {Auth} from 'aws-amplify'
-import { useState, useEffect } from 'react'
-import { DataStore, Predicates } from 'aws-amplify'
-import { PartyBooking } from './models'
-import { Staff } from './models'
-import PartyBookingForm from './partybookingform'
+import React, { useState, useEffect } from 'react';
+import { DataStore } from 'aws-amplify';
+import { Staff, TimeEntry } from './models';
+import {
+  format,
+  startOfWeek,
+  endOfWeek,
+  eachDayOfInterval,
+} from 'date-fns';
 
-  
+const ShiftBooking = () => {
+  const [staff, setStaff] = useState([]);
+  const [shifts, setShifts] = useState({});
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const weekStart = startOfWeek(currentDate);
+  const weekEnd = endOfWeek(currentDate);
+  const weekDates = eachDayOfInterval({ start: weekStart, end: weekEnd });
 
-export default function Tasks() {
-    const [staff, setStaff] = useState([])
-    const [partys, setBookings] = useState([])
-    const [info, setInfo] = useState('')
-    const [next, setNext] = useState(false)
+  useEffect(() => {
+    const fetchStaff = async () => {
+      const staffData = await DataStore.query(Staff);
+      setStaff(staffData);
+      setShifts(
+        staffData.reduce((acc, curr) => {
+          acc[curr.id] = {
+            mon: { start: '', end: '' },
+            tue: { start: '', end: '' },
+            wed: { start: '', end: '' },
+            thu: { start: '', end: '' },
+            fri: { start: '', end: '' },
+            sat: { start: '', end: '' },
+            sun: { start: '', end: '' },
+          };
+          return acc;
+        }, {})
+      );
+    };
+    fetchStaff();
+  }, []);
 
-// get auth user
+  const handleInputChange = (e, staffId, day) => {
+    const { name, value } = e.target;
+    setShifts((prevShifts) => ({
+      ...prevShifts,
+      [staffId]: {
+        ...prevShifts[staffId],
+        [day]: {
+          ...prevShifts[staffId][day],
+          [name]: value,
+        },
+      },
+    }));
+  };
 
-console.log(staff)
-console.log(partys)
-
-
-
-    useEffect(() => {
-        async function getStaffAndBookings() {
-          // Get authenticated user
-          const user = await Auth.currentAuthenticatedUser()
-          // Get email from authenticated user
-          const email = user.attributes.email
-          // Get staff member with matching email
-          const staff = await DataStore.query(Staff, Predicates.ALL, {
-            filter: c => c.email("eq", email)
-          })
-          setStaff(staff)
-          // Get bookings where PartyHostAssigned matches staff member's name
-          const bookings = await DataStore.query(PartyBooking, Predicates.ALL, {
-            filter: c => c.PartyHostAssigned("eq", staff[0].name)
-          })
-          setBookings(bookings)
+  const handleSave = async () => {
+    for (const staffId in shifts) {
+      const shiftStarts = [];
+      const shiftEnds = [];
+      const dates = [];
+      for (const day in shifts[staffId]) {
+        const shift = shifts[staffId][day];
+        if (shift.start && shift.end) {
+          shiftStarts.push(shift.start);
+          shiftEnds.push(shift.end);
+          const dateIndex = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].indexOf(day);
+          const date = weekDates[dateIndex];
+          dates.push(format(date, 'yyyy-MM-dd'));
         }
-        getStaffAndBookings()
-      }, [])
-
-if (next === true) {
-    return (
-        <PartyBookingForm partyid={info} />
-    )
-
-}
-
-
+      }
+      await DataStore.save(
+        new TimeEntry({
+          StaffID: staff.find((s) => s.id === staffId).Name,
+          ShiftStart: shiftStarts,
+          ShiftFinish: shiftEnds,
+          Dates: dates,
+          WeekNumber: format(weekStart, 'w'),
+        })
+      );
+    }
+  };
+  
+  
 
   return (
-    
-    <ul role="list" className="divide-y divide-gray-100">
-        <h5 className="text-lg font-medium text-gray-900">Tasks</h5>
-        {staff.map((staff) => (
-            <li
-            key={staff.id}
-            className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6 lg:px-8"
-            >
-            <div className="flex gap-x-4">
-            <div className="min-w-0 flex-auto">
-            <p className="text-sm font-semibold leading-6 text-gray-900">
-            {staff.Name}
-            </p>
-            <p className="mt-1 flex text-xs leading-5 text-gray-500">
-            {staff.Email}
-            </p>
-            <p className="mt-1 flex text-xs leading-5 text-gray-500">
-            {staff.Role}
-            </p>
-            </div>
-            </div>
-            </li>
-        ))}
-        
-       
-
-
-
-        {partys
-        .slice()
-        .sort((a, b) => new Date(a.PartyDate) - new Date(b.PartyDate))
-        .map(party => (
-      <li
-        key={party.id}
-        className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6 lg:px-8"
+    <div className="flex flex-col items-center">
+      <div className="mb-4">
+        Current Week: {format(weekStart, 'MMM do')} -{' '}
+        {format(weekEnd, 'MMM do, yyyy')}
+      </div>
+      <div className="overflow-x-auto">
+        <table className="table-auto border-collapse border border-gray-300">
+          <thead>
+            <tr>
+              <th className="border border-gray-300 px-4 py-2">Staff</th>
+              {weekDates.map((date) => (
+                <th key={date} className="border border-gray-300 px-4 py-2">
+                  {format(date, 'EEE do')}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {staff.map((staffMember) => (
+              <tr key={staffMember.id}>
+                <td className="border border-gray-300 px-4 py-2">
+                  {staffMember.Name}
+                </td>
+                {['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map((day) => (
+                  <td key={day} className="border border-gray-300 px-4 py-2">
+                    <input
+                      type="time"
+                      name="start"
+                      value={shifts[staffMember.id]?.[day]?.start || ''}
+                      onChange={(e) =>
+                        handleInputChange(e, staffMember.id, day)
+                      }
+                      className="border rounded-md p-1"
+                    />
+                    <input
+                      type="time"
+                      name="end"
+                      value={shifts[staffMember.id]?.[day]?.end || ''}
+                      onChange={(e) =>
+                        handleInputChange(e, staffMember.id, day)
+                      }
+                      className="border rounded-md p-1"
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <button
+        onClick={handleSave}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
       >
-        <div className="flex gap-x-4">
-          <div className="min-w-0 flex-auto">
-            <p className="text-sm font-semibold leading-6 text-gray-900">
-              {party.PartyType}
-            </p>
-            <p className="mt-1 flex text-xs leading-5 text-gray-500">
-              Child Name: {party.ChildName}
-            </p>
-            <p className="mt-1 flex text-xs leading-5 text-gray-500">
-              Child Age: {party.ChildAge}
-            </p>
-            <p className="mt-1 flex text-xs leading-5 text-gray-500">
-              Party Date: {party.PartyDate}
-            </p>
-            <p className="mt-1 flex text-xs leading-5 text-gray-500">
-              Party Time: {party.PartyTime}
-            </p>
-            <p className="mt-1 flex text-xs leading-5 text-gray-500">
-              Party Finish: {party.PartyFinish}
-            </p>
-            <p className="mt-1 flex text-xs leading-5 text-gray-500">
-              No. of Children: {party.NoOfChildren}
-            </p>
-          </div>
-          <button onClick={()=> {setInfo(party.id)|| setNext(true)}} className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            More Information
-            </button>
-
-        </div>
-      </li>
-    ))}
-  </ul>
-  
-  )
-}
+        Save
+      </button>
+    </div>
+  );
+                    }  
+export default ShiftBooking;

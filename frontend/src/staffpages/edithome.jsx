@@ -9,6 +9,12 @@ export default function Example() {
   const [eventTitle, setEventTitle] = useState('');
   const [eventPic, setEventPic] = useState('');
   const [eventWriting, setEventWriting] = useState('');
+    const [eventTitleTwo, setEventTitleTwo] = useState('');
+    const [eventPicTwo, setEventPicTwo] = useState('');
+    const [eventWritingTwo, setEventWritingTwo] = useState('');
+    const [eventTitleThree, setEventTitleThree] = useState('');
+    const [eventPicThree, setEventPicThree] = useState('');
+    const [eventWritingThree, setEventWritingThree] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -22,7 +28,46 @@ export default function Example() {
     );
   };
 
+    const handleEvent = async (event) => {
+    event.preventDefault();
+    await DataStore.save(
+        new HomePage({
+            EventTitle: eventTitle,
+            EventPic: eventPic,
+            EventWriting: eventWriting,
+        })
+    );
+    };
+
+    const handleEventTwo = async (event) => {
+        event.preventDefault();
+        await DataStore.save(
+
+            new HomePage({
+                EventTitleTwo: eventTitleTwo,
+                EventPicTwo: eventPicTwo,
+                EventWritingTwo: eventWritingTwo,
+            })
+        );
+    };
+
+    const handleEventThree = async (event) => {
+        event.preventDefault();
+        await DataStore.save(
+
+            new HomePage({
+                EventTitleThree: eventTitleThree,
+                EventPicThree: eventPicThree,
+                EventWritingThree: eventWritingThree,
+            })
+        );
+    };
+
+
+
+
   return (
+    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="top-section-title" className="block text-sm font-medium leading-6 text-gray-900">
@@ -71,7 +116,16 @@ export default function Example() {
             onChange={(e) => setTopSectionWriting(e.target.value)}
           />
         </div>
+        <button
+
+            type="submit"
+            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
+        >
+            Save
+        </button>
       </div>
+      </form>
+        <form onSubmit={handleEvent} className='mt-10'>
       <div>
         <label htmlFor="event-title" className="block text-sm font-medium leading-6 text-gray-900">
           Event Title
@@ -88,7 +142,7 @@ export default function Example() {
           />
         </div>
       </div>
-      {/* <div>
+       <div>
         <label htmlFor="event-pic" className="block text-sm font-medium leading-6 text-gray-900">
           Event Picture
         </label>
@@ -102,24 +156,24 @@ export default function Example() {
             value={eventPic}
             onChange={(e) => setEventPic(e.target.value)}
             />
-        </div>
-        </div>
-        <div>
-        <label htmlFor="event-writing" className="block text-sm font-medium leading-6 text-gray-900">
-            Event Writing
-        </label>
-        <div className="mt-2">
-            <textarea
-            name="event-writing"
+       </div>
+       </div>
+      <div>
+       <label htmlFor="event-writing" className="block text-sm font-medium leading-6 text-gray-900">
+         Event Writing
+         </label>
+         <div className="mt-2">
+             <textarea
+           name="event-writing"
             id="event-writing"
-            rows={3}
+             rows={3}
             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            placeholder="Event Writing"
+             placeholder="Event Writing"
             value={eventWriting}
             onChange={(e) => setEventWriting(e.target.value)}
             />
         </div>
-        </div> */}
+         </div> 
         <div className="mt-6">
         <button
 
@@ -130,6 +184,130 @@ export default function Example() {
         </button>
         </div>
     </form>
+    <form onSubmit={handleEventTwo} className='mt-10'>
+        <div>
+        <label htmlFor="event-title-two" className="block text-sm font-medium leading-6 text-gray-900">
+            Event Title 2
+        </label>
+        <div className="mt-2">
+            <input
+            type="text"
+            name="event-title-two"
+            id="event-title-two"
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            placeholder="Event Title"
+            value={eventTitleTwo}
+            onChange={(e) => setEventTitleTwo(e.target.value)}
+            />
+
+    </div>
+    </div>
+    <div>
+        <label htmlFor="event-pic-two" className="block text-sm font-medium leading-6 text-gray-900">
+            Event Picture 2
+        </label>
+        <div className="mt-2">
+            <input
+            type="text"
+            name="event-pic-two"
+            id="event-pic-two"
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            placeholder="Event Picture"
+            value={eventPicTwo}
+            onChange={(e) => setEventPicTwo(e.target.value)}
+            />
+        </div>
+    </div>
+    <div>
+        <label htmlFor="event-writing-two" className="block text-sm font-medium leading-6 text-gray-900">
+            Event Writing 2
+        </label>
+        <div className="mt-2">
+            <textarea
+            name="event-writing-two"
+            id="event-writing-two"
+            rows={3}
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            placeholder="Event Writing"
+            value={eventWritingTwo}
+            onChange={(e) => setEventWritingTwo(e.target.value)}
+            />
+        </div>
+    </div>
+    <div className="mt-6">
+        <button
+
+            type="submit"
+            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
+        >
+            Save
+        </button>
+    </div>
+    </form>
+    <form onSubmit={handleEventThree} className='mt-10'>
+        <div>
+        <label htmlFor="event-title-three" className="block text-sm font-medium leading-6 text-gray-900">
+            Event Title 3
+        </label>
+        <div className="mt-2">
+            <input
+            type="text"
+            name="event-title-three"
+            id="event-title-three"
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            placeholder="Event Title"
+            value={eventTitleThree}
+            onChange={(e) => setEventTitleThree(e.target.value)}
+            />
+
+    </div>
+    </div>
+    <div>
+        <label htmlFor="event-pic-three" className="block text-sm font-medium leading-6 text-gray-900">
+            Event Picture 3
+        </label>
+        <div className="mt-2">
+            <input
+            type="text"
+            name="event-pic-three"
+            id="event-pic-three"
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            placeholder="Event Picture"
+            value={eventPicThree}
+            onChange={(e) => setEventPicThree(e.target.value)}
+            />
+        </div>
+    </div>
+    <div>
+        <label htmlFor="event-writing-three" className="block text-sm font-medium leading-6 text-gray-900">
+            Event Writing 3
+        </label>
+        <div className="mt-2">
+            <textarea
+            name="event-writing-three"
+            id="event-writing-three"
+            rows={3}
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            placeholder="Event Writing"
+            value={eventWritingThree}
+
+            onChange={(e) => setEventWritingThree(e.target.value)}
+            />
+
+    </div>
+    </div>
+    <div className="mt-6">
+        <button
+
+            type="submit"
+            className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
+        >
+            Save
+        </button>
+
+    </div>
+    </form>
+    </div>
     );
 }
 

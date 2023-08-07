@@ -20,7 +20,7 @@ const product = {
     '- Party host.',
     
   ],
-  imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-05-product-01.jpg',
+  imageSrc: 'https://media.giphy.com/media/hW4pOhW4dK7JI7hFno/giphy.gif',
   imageAlt: 'Sample of 30 icons with friendly and fun details in outline, filled, and brand color styles.',
 }
 const reviews = {
@@ -115,7 +115,7 @@ export default function Character() {
           <div className="mx-auto mt-14 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none">
             <div className="flex flex-col-reverse">
               <div className="mt-4">
-                <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{product.name}</h1>
+                <h1 className="text-2xl font-bold tracking-tight component-title text-gray-900 sm:text-3xl">{product.name}</h1>
 
                 <h2 id="information-heading" className="sr-only">
                   Product information
@@ -124,7 +124,7 @@ export default function Character() {
               </div>
 
               <div>
-                <h3 className="sr-only">Reviews</h3>
+                <h3 className="sr-only component-title">Reviews</h3>
                 <div className="flex items-center">
                  
                 </div>
@@ -213,7 +213,7 @@ export default function Character() {
 
               }}
                 type="button"
-                className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                className="flex w-full items-center component-title justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
               >
                 Book Now {product.price}
               </button>
@@ -221,7 +221,7 @@ export default function Character() {
             </div>
 
             <div className="mt-10 border-t border-gray-200 pt-10">
-              <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
+              <h3 className="text-sm font-medium component-title text-gray-900">Highlights</h3>
               <div className="prose prose-sm mt-4 text-gray-500">
                 <ul role="list">
                   {product.highlights.map((highlight) => (

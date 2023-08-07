@@ -9,6 +9,12 @@ import {
   HomeIcon,
   UsersIcon,
   XMarkIcon,
+  CurrencyPoundIcon,
+  ChatBubbleBottomCenterIcon,
+  ArrowLeftIcon,
+  TableCellsIcon,
+  PencilIcon
+
 } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
@@ -37,15 +43,17 @@ export default function Kitchen() {
   { id: 3, name: 'Parties', href: '/partyhistory', initial: 'P', current: false },]
 
 
-const navigation = [
-  { name: 'Home', href: '/dashboard', icon: HomeIcon, current: true },
-{ name: 'Chat', href: '/chat', icon: UsersIcon, current: false },
-{ name: 'Kitchen', href: '/kitchen', icon: DocumentDuplicateIcon, current: false },
-{ name: 'Till', href: '/till', icon: FolderIcon, current: false },
-{ name: 'Tables', href: '/Tables', icon: CalendarIcon, current: false },
-{ name: 'Tasks', href: '/Tasks', icon: CalendarIcon, current: false },
+  const navigation = [
+    { name: 'Till', href: '/till', icon: CurrencyPoundIcon, current: true },
+    { name: 'Home', href: '/dashboard', icon: HomeIcon, current: false },
+  { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
+  { name: 'Kitchen', href: '/kitchen', icon: ArrowLeftIcon , current: false },
+  { name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
+  { name: 'Edit', href: '/edithome', icon: PencilIcon, current: false },
+  {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },
 ]
+
 
 
 

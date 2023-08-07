@@ -191,30 +191,16 @@ export default function SessionCalender() {
   return (
     <>
        <div className="md:flex md:items-center md:justify-between mt-10">
-      <div className="min-w-0 flex-1">
-        <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight text-center">
-          Select a Date
-        </h2>
-        <form onSubmit={handleSubmit} className="flex justify-center mt-4">
-          <input
-            type="date"
-            value={inputDate}
-            onChange={(e) => setInputDate(e.target.value)}
-            className="border border-gray-300 rounded-md p-2"
-          />
-          <button type="submit" className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Submit
-          </button>
-        </form>
-      </div>
-      <button onClick={() => setSession(true)}
-                  type="button"
-                  className="mt-8 w-1/2 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
-                  >
-                  Show All
-                  </button>
+      
+      
     </div>
       <ul role="list" className="divide-y divide-gray-100 mt-4">
+      <button onClick={() => setSession(true)}
+                  type="button"
+                  className="mt-8 w-1/5 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
+                  >
+                  Show Details
+                  </button>
         {freeTablesPerTimeslot.map((item, index) => (
           <li key={item.timeslot.start} className="flex justify-between gap-x-6 py-5">
             <div className="flex gap-x-4">

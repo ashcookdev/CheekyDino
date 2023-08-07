@@ -5,6 +5,7 @@ import './customerfont.css'
 
 export default function HeroSection() {
   const [homescreen, setHomescreen] = useState([]);
+  const [currentEventIndex, setCurrentEventIndex] = useState(0);
 
   useEffect(() => {
     const fetchHomescreen = async () => {
@@ -14,27 +15,49 @@ export default function HeroSection() {
     fetchHomescreen();
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentEventIndex((currentEventIndex + 1) % 3);
+    }, 15000);
+    return () => clearInterval(interval);
+  }, [currentEventIndex]);
+
   return (
-    homescreen.map((home) => (
-      <div
-        key={home.id}
-        className="bg-contain bg-center w-full"
-        style={{ backgroundImage: `url(${home.EventPic})` }}
-      >
-        <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
-          <div className="mx-auto text-center">
-          <h2 className="text-15xl component-title font-bold tracking-tight text-white sm:text-4xl">{home.EventTitle}</h2>
-            <p className="mx-auto component-title w-full mt-6 max-w-xl text-lg leading-8 text-white">{home.EventWriting}</p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              
+    <div className="flex flex-col items-center justify-center bg-white">
+      {homescreen.map((home) => (
+        <div key={home.id}>
+          <div className={`flex w-full ${currentEventIndex === 0 ? '' : 'hidden'}`}>
+            <div className="w-1/2 p-6">
+              <h2 className="text-4xl component-title font-bold tracking-tight text-green-500">{home.EventTitle}</h2>
+              <p className="mt-6 text-lg leading-8 text-black component-title">{home.EventWriting}</p>
             </div>
+            <div
+              className="w-1/2 bg-contain bg-center"
+              style={{ backgroundImage: `url(${home.EventPic})` }}
+            />
+          </div>
+          <div className={`flex w-full ${currentEventIndex === 1 ? '' : 'hidden'}`}>
+            <div className="w-1/2 p-6">
+              <h2 className="text-4xl component-title font-bold tracking-tight text-black">{home.EventTwoTitle}</h2>
+              <p className="mt-6 text-lg leading-8 text-black">{home.EventTwoWriting}</p>
+            </div>
+            <div
+              className="w-1/2 bg-contain bg-center"
+              style={{ backgroundImage: `url(${home.EventTwoPic})` }}
+            />
+          </div>
+          <div className={`flex w-full ${currentEventIndex === 2 ? '' : 'hidden'}`}>
+            <div className="w-1/2 p-6">
+              <h2 className="text-4xl component-title font-bold tracking-tight text-orange-500">{home.EventThreeTitle}</h2>
+              <p className="mt-6 text-lg leading-8 text-black">{home.EventThreeWriting}</p>
+            </div>
+            <div
+              className="w-1/2 bg-contain bg-center"
+              style={{ backgroundImage: `url(${home.EventThreePic})` }}
+            />
           </div>
         </div>
-      </div>
-    ))
+      ))}
+    </div>
   );
-  
-  
-  
-  
 }
