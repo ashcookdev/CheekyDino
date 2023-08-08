@@ -75,7 +75,7 @@ function classNames(...classes) {
 
 const publishingOptions = [
   { title: 'Spiderman', description: 'An hours entertainment with New Yorks favourite Superhero Spiderman, with games and prizes to be won, a show which all the family will enjoy.', current: true },
-  { title: 'Elsa', description: 'This job posting will no longer be publicly accessible.', current: false },
+  { title: 'Elsa', description: 'A Frozen Elsa kids party is a magical and enchanting experience for children. The party lasts for 2.5 hours and is filled with fun games and activities that will keep the children entertained and engaged. There are also plenty of prizes to be won, so everyone has a chance to take home something special. With Elsa as the star of the show, this party is sure to be a hit with all the little ones! 🎉🎁👑', current: false },
   { title: 'Batman', description: 'This job posting will no longer be publicly accessible.', current: false },
 
 ]

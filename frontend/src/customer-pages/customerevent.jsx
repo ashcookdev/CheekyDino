@@ -26,33 +26,33 @@ export default function HeroSection() {
     <div className="flex flex-col items-center justify-center bg-white">
       {homescreen.map((home) => (
         <div key={home.id}>
-          <div className={`flex w-full ${currentEventIndex === 0 ? '' : 'hidden'}`}>
-            <div className="w-1/2 p-6">
+          <div className={`flex flex-col md:flex-row w-full ${currentEventIndex === 0 ? '' : 'hidden'}`}>
+            <div className="w-full md:w-1/2 p-6">
               <h2 className="text-4xl component-title font-bold tracking-tight text-green-500">{home.EventTitle}</h2>
               <p className="mt-6 text-lg leading-8 text-black component-title">{home.EventWriting}</p>
             </div>
             <div
-              className="w-1/2 bg-contain bg-center"
+              className="w-full md:w-1/2 bg-contain bg-center"
               style={{ backgroundImage: `url(${home.EventPic})` }}
             />
           </div>
-          <div className={`flex w-full ${currentEventIndex === 1 ? '' : 'hidden'}`}>
-            <div className="w-1/2 p-6">
+          <div className={`flex flex-col md:flex-row w-full ${currentEventIndex === 1 ? '' : 'hidden'}`}>
+            <div className="w-full md:w-1/2 p-6">
               <h2 className="text-4xl component-title font-bold tracking-tight text-black">{home.EventTwoTitle}</h2>
               <p className="mt-6 text-lg leading-8 text-black">{home.EventTwoWriting}</p>
             </div>
             <div
-              className="w-1/2 bg-contain bg-center"
+              className="w-full md:w-1/2 bg-contain bg-center"
               style={{ backgroundImage: `url(${home.EventTwoPic})` }}
             />
           </div>
-          <div className={`flex w-full ${currentEventIndex === 2 ? '' : 'hidden'}`}>
-            <div className="w-1/2 p-6">
+          <div className={`flex flex-col md:flex-row w-full ${currentEventIndex === 2 ? '' : 'hidden'}`}>
+            <div className="w-full md:w-1/2 p-6">
               <h2 className="text-4xl component-title font-bold tracking-tight text-orange-500">{home.EventThreeTitle}</h2>
               <p className="mt-6 text-lg leading-8 text-black">{home.EventThreeWriting}</p>
             </div>
             <div
-              className="w-1/2 bg-contain bg-center"
+              className="w-full md:w-1/2 bg-contain bg-center"
               style={{ backgroundImage: `url(${home.EventThreePic})` }}
             />
           </div>
@@ -60,4 +60,4 @@ export default function HeroSection() {
       ))}
     </div>
   );
-}
+      }  

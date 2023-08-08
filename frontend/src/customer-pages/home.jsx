@@ -13,7 +13,7 @@ const collections = [
     },
     {
       name: "Book a Party",
-      href: '#',
+      href: '/packages',
       imageSrc: 'https://media.giphy.com/media/SZsIexGQJc03oNSM7K/giphy.gif',
       imageAlt: 'Man wearing a charcoal gray cotton t-shirt.',
     },

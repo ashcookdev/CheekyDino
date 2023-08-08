@@ -9,7 +9,7 @@ import { PartyBooking } from '../../staffpages/models'
 import { useNavigate } from 'react-router-dom'// ...
 import { useLocation } from 'react-router-dom';
 import { useCallback } from 'react';
-
+import '../customerfont.css'
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -180,135 +180,113 @@ export default function ThemedCalender() {
     });
   };
 
-
+let imageURL = "https://media.giphy.com/media/4njbG9gEe2c5j2RIWD/giphy.gif"
 
   return (
-    <div className="flex h-full flex-col">
-      <header className="flex flex-none items-center justify-between border-b border-gray-200 px-6 py-4">
-        <div>
-          <h1 className="text-base font-semibold leading-6 text-gray-900">
-            <time dateTime={format(currentDate, 'yyyy-MM-dd')} className="sm:hidden">
-              {format(currentDate, 'MMM d, yyyy')}
-            </time>
-            <time dateTime={format(currentDate, 'yyyy-MM-dd')} className="hidden sm:inline">
-              {format(currentDate, 'MMMM d, yyyy')}
-            </time>
-          </h1>
-          <p className="mt-1 text-sm text-gray-500">{format(currentDate, 'EEEE')}</p>        </div>
-        <div className="flex items-center">
-          <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
-            <div
-              className="pointer-events-none absolute inset-0 rounded-md ring-1 ring-inset ring-gray-300"
-              aria-hidden="true"
-            />
-          </div>
-        </div>
-
-
-
-      </header>
-      <div className="flex flex-auto justify-center">
-  <div className="max-w-md flex-none border-l border-gray-100 px-8 py-10 md:block">
-    {selectedPartyDetails && (
-      <div className="p-4 border rounded-lg mb-4 shadow-md">
-        <h2 className="text-lg font-semi-bold text-center mb-4">
-          Date: {format(new Date(selectedDate), 'dd/MM/yyyy')}
+    <div className="flex flex-col h-full">
+      <div className="md:flex md:items-center md:justify-between">
+      <div className="min-w-0 flex-1">
+        <h2 className="text-2xl font-bold leading-7 component-title text-orange-500 text-center sm:truncate sm:text-3xl sm:tracking-tight">
+          Pick Your Time
         </h2>
-        {selectedPartyDetails.map(timeSlot => (
-          // Only display a card if there are available appointments for this time slot
-          timeSlot.availableAppointments > 0 && (
-            <div key={timeSlot.timeSlot} className="mb-4 p-4 border rounded-lg shadow-sm">
-              <h3 className="text-center mb-2">Time: {timeSlot.timeSlot}</h3>
-              {partyid.map(party => (
-                <div key={party.id} className="mb-2">
-                  <p className="text-center mb-1">Party: {party.name}</p>
-                  <p className="text-center mb-1">Price: {party.price}</p>
-                </div>
-              ))}
-              <button
-                className="rounded-full bg-indigo-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 block mx-auto"
-                onClick={() => handleBookAppointment(timeSlot.timeSlot)}
-              >
-                Book Party
-              </button>
-            </div>
-          )
-        ))}
       </div>
-    )}
+      
+    </div>
+      <header className="flex flex-none items-center justify-between border-b border-gray-200 px-6 py-4">
+  <div className="flex items-center">
+    <button
+      onClick={handlePrevMonthClick}
+      type="button"
+      className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+    >
+      <span className="sr-only">Previous month</span>
+      <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+    </button>
   </div>
-</div>
+  <h1 className="text-base font-semibold leading-6 text-center justify-center text-gray-900 ml-4">
+    <time dateTime={format(currentDate, "yyyy-MM-dd")} className="sm:hidden">
+      {format(currentDate, "MMMM d, yyyy")}
+    </time>
+    <time dateTime={format(currentDate, "yyyy-MM-dd")} className="hidden sm:inline">
+      {format(currentDate, "MMMM d, yyyy")}
+    </time>
+  </h1> 
+  <div className="flex items-center">
+    <button
+      onClick={handleNextMonthClick}
+      type="button"
+      className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+    >
+      <span className="sr-only">Next month</span>
+      <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+    </button>
+  </div>
+</header>
+<section   className="bg-cover bg-center min-h-screen"
 
-
-
-
-
-
-
-      <div ref={containerOffset} className="flex flex-auto flex-col min-h-0">
-        <div className=" max-w-md flex-none border-l border-gray-100 px-8 py-10 md:block">
-          <div className="flex items-center text-center text-gray-900">
-            <button onClick={handlePrevMonthClick}
-              type="button"
-              className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
-            >
-              <span className="sr-only">Previous month</span>
-              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-            <div className="flex-auto text-sm font-semibold">{format(currentDate, 'MMMM yyyy')}</div>
-            <button onClick={handleNextMonthClick}
-              type="button"
-              className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
-            >
-              <span className="sr-only">Next month</span>
-              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-          </div>
-<div className=' justify-center'>
-          <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200">
-            {daysAvailability.map((day, dayIdx) => (<button
-              key={day.date}
-              onClick={() => handleDayClick(day.date)}
-              type="button"
-              className={classNames(
-                'py-1.5 hover:bg-gray-100 focus:z-10',
-                day.isCurrentMonth ? 'bg-white' : 'bg-gray-50',
-                (day.isSelected || day.isToday) && 'font-bold',
-                day.isSelected && 'text-white',
-                !day.isSelected && day.isCurrentMonth && !day.isToday && 'text-gray-900',
-                !day.isSelected && !day.isCurrentMonth && !day.isToday && 'text-gray-400',
-                day.isToday && !day.isSelected && 'bg-white-500', // Add this line to change the background color of today's date to blue
-                day.isToday && !day.isSelected && 'text-black animate-pulse',
-                day.hasAvailableAppointments && 'bg-green',
-                !day.hasAvailableAppointments && 'bg-red', // Add this line to change the background color to red if there are no available appointments
-                day.isPast && 'bg-red-500',
-                dayIdx === 0 && 'rounded-tl-lg',
-                dayIdx === 6 && 'rounded-tr-lg',
-                dayIdx === days.length - 7 && 'rounded-bl-lg',
-                dayIdx === days.length - 1 && 'rounded-br-lg'
+          style={{ backgroundImage: `url(${imageURL})` }}>
+    
+<div className="flex flex-auto justify-center">
+        <div className="w-full max-w-md px-8 py-10 md:block">
+          {selectedPartyDetails && (
+            <div className="p-4 border rounded-lg mb-4 shadow-md">
+              <h2 className="text-lg font-semi-bold text-center component-title mb-4">
+                Date: {format(new Date(selectedDate), "dd/MM/yyyy")}
+              </h2>
+              {selectedPartyDetails.map((timeSlot) =>
+                timeSlot.availableAppointments > 0 ? (
+                  <div key={timeSlot.timeSlot} className="mb-4 p-4 border rounded-lg shadow-sm">
+                    <h3 className="text-center component-title mb-2">Time: {timeSlot.timeSlot}</h3>
+                    {partyid.map((party) => (
+                      <div key={party.id} className="mb-2">
+                        <p className="text-center component-title mb-1">Party: {party.name}</p>
+                        <p className="text-center component-title mb-1">Price: {party.price}</p>
+                      </div>
+                    ))}
+                    <button
+                      className="rounded-full bg-indigo-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:ring focus-visible:ring-indigo-600 block mx-auto"
+                      onClick={() => handleBookAppointment(timeSlot.timeSlot)}
+                    >
+                      Book Party
+                    </button>
+                  </div>
+                ) : null
               )}
-            >
-              <time
-                dateTime={day.date}
-                className={classNames(
-                  'mx-auto flex flex-col items-center justify-center rounded-full',
-                  day.isSelected && day.isToday && 'bg-indigo-600',
-                  day.isSelected && !day.isToday && 'bg-gray-900'
-                )}
-              >
-                <span className="text-xs font-semibold">{format(new Date(day.date), 'E')}</span>
-                <span className="mt-1 text-sm">{day.date.split('-').pop().replace(/^0/, '')}</span>
-              </time>
-            </button>
-            ))}
-
-          </div>
-          
+            </div>
+          )}
         </div>
-
       </div>
-    </div>
-    </div>
+  
+          <div className="justify-center">
+            <div className="flex flex-wrap justify-center">
+              {daysAvailability.map((day) => {
+                if (day.hasAvailableAppointments) {
+                  return (
+                    <button
+                      key={day.date}
+                      onClick={() => handleDayClick(day.date)}
+                      className="m-2 px-4 py-2 bg-blue-500 text-white component-title rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                      >
+                       {format(new Date(day.date), "EEEE, MMMM do, yyyy")}
 
-  )
-}
+                      </button>
+                    );
+                  }
+                })}
+              </div>
+            </div>
+          </section>
+          </div>
+
+
+      
+    );
+    
+              
+
+
+  
+              }
+
+  
+

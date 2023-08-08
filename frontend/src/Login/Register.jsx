@@ -36,6 +36,7 @@ function App({ signOut, user }) {
         ) {
           // Redirect the user to the /chat page
           navigate('/chat');
+          window.location.reload();
         }
       });
     }
