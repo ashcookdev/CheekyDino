@@ -31,7 +31,7 @@ const TillParty = ({ selectedParty }) => {
           updated.CurrentGuests = partyBook.CurrentGuests + 1;
         })
       );
-  
+  window.location.reload();
       // Record the event with Amplify Analytics
      
     } catch (error) {
@@ -77,6 +77,7 @@ const TillParty = ({ selectedParty }) => {
       })
     );
     setPartyGuests(partyGuests.filter((g) => g.id !== guest.id));
+    window.location.reload();
   };
 
  const handlePartyFinish = async function (selectedParty) {

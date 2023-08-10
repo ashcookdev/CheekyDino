@@ -56,6 +56,14 @@ export default function GuestDashboard() {
     getGuestsData();
   }
 
+  async function handleDelete(guestId) {
+    // Get guest by ID
+    const guest = await DataStore.query(PartyGuests, guestId);
+    // Delete guest from PartyGuests model
+    await DataStore.delete(guest);
+    // Re-query PartyGuests model to update guestsData state
+    getGuestsData();
+  }
   return (
     <form onSubmit={handleFormSubmit} className="p-4">
       <table className="w-full text-left border-collapse">
@@ -74,8 +82,11 @@ export default function GuestDashboard() {
               Allergies
             </th>
             <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">
-              Contact Info Email
+            Email
             </th>
+            <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">
+            Actions
+          </th>
           </tr>
         </thead>
   
@@ -103,33 +114,51 @@ export default function GuestDashboard() {
                 )}
               </td>
               <td
-                data-label="Food Option"
-                className="py-4 px-6 border-b border-grey-light"
-              >
-                {guestsData[i]?.FoodOption ? (
-                  guestsData[i].FoodOption
-                ) : (
-                  <input
-                    type="text"
-                    name={`foodOption${i}`}
-                    className="border rounded w-full py-2 px-3"
-                  />
-                )}
-              </td>
-              <td
-                data-label="Allergies"
-                className="py-4 px-6 border-b border-grey-light"
-              >
-                {guestsData[i]?.Allergies ? (
-                  guestsData[i].Allergies
-                ) : (
-                  <input
-                    type="text"
-                    name={`allergies${i}`}
-                    className="border rounded w-full py-2 px-3"
-                  />
-                )}
-              </td>
+  data-label="Food Option"
+  className="py-4 px-6 border-b border-grey-light"
+>
+  {guestsData[i]?.FoodOption ? (
+    guestsData[i].FoodOption
+  ) : (
+    <select
+      name={`foodOption${i}`}
+      className="border rounded w-full py-2 px-3"
+    >
+      <option value="">--Please choose an option--</option>
+      <option value="Nuggets">Nuggets</option>
+      <option value="FishFingers">Fish Fingers</option>
+      <option value="Burger">Burger</option>
+      <option value="MozzarellaSticks">Mozzarella Sticks</option>
+      <option value="Sausages">Sausages</option>
+      <option value="ChickenBurger"> Chicken Burger</option>
+    </select>
+  )}
+</td>
+
+<td
+  data-label="Allergies"
+  className="py-4 px-6 border-b border-grey-light"
+>
+  {guestsData[i]?.Allergies ? (
+    guestsData[i].Allergies
+  ) : (
+    <select
+      name={`allergies${i}`}
+      className="border rounded w-full py-2 px-3"
+    >
+      <option value="">--Please choose an option--</option>
+      <option value="option1">No</option>
+      <option value="Tree nuts">Tree nuts</option>
+      <option value="Milk">Milk</option>
+      <option value="Eggs">Eggs</option>
+      <option value="Wheat">Wheat</option>
+      <option value="Soy">Soy</option>
+      <option value="Fish">Fish</option>
+      <option value="Shellfish">Shellfish</option>
+    </select>
+  )}
+</td>
+
               <td
                 data-label="Contact Info Email"
                 className="py-4 px-6 border-b border-grey-light"
@@ -144,6 +173,20 @@ export default function GuestDashboard() {
                   />
                 )}
               </td>
+              <td
+              data-label="Actions"
+              className="py-4 px-6 border-b border-grey-light"
+            >
+              {guestsData[i] && (
+                <button
+                  type="button"
+                  onClick={() => handleDelete(guestsData[i].id)}
+                  className="text-sm text-red-500 hover:text-red-700"
+                >
+                  Delete
+                </button>
+              )}
+            </td>
             </tr>
           ))}
         </tbody>

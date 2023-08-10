@@ -23,8 +23,8 @@ export declare type PartyBookingUpdateFormInputValues = {
     ThirdPartyContactedDate?: boolean;
     FoodOptionSelected?: string;
     Total?: number;
-    AdultHotFoodQty?: number;
-    AdultColdFoodQty?: number;
+    AdultHotFoodQty?: string[];
+    AdultColdFoodQty?: string[];
     SweetConesSelected?: boolean;
     CharacterSelected?: string;
     BearVoiceRecorders?: boolean;
@@ -51,8 +51,8 @@ export declare type PartyBookingUpdateFormValidationValues = {
     ThirdPartyContactedDate?: ValidationFunction<boolean>;
     FoodOptionSelected?: ValidationFunction<string>;
     Total?: ValidationFunction<number>;
-    AdultHotFoodQty?: ValidationFunction<number>;
-    AdultColdFoodQty?: ValidationFunction<number>;
+    AdultHotFoodQty?: ValidationFunction<string>;
+    AdultColdFoodQty?: ValidationFunction<string>;
     SweetConesSelected?: ValidationFunction<boolean>;
     CharacterSelected?: ValidationFunction<string>;
     BearVoiceRecorders?: ValidationFunction<boolean>;

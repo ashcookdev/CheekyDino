@@ -552,19 +552,7 @@ type EagerPartyAdultFood = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly ChickenNugget?: number | null;
-  readonly CocktailSausage?: number | null;
-  readonly OnionRings?: number | null;
-  readonly FishFingers?: number | null;
-  readonly MozzarellaSticks?: number | null;
-  readonly GarlicBread?: number | null;
-  readonly GarlicMushrooms?: number | null;
-  readonly TraySandwiches?: number | null;
-  readonly PepperoniPizza?: number | null;
-  readonly MargheritaPizza?: number | null;
-  readonly BBQChickenPizza?: number | null;
-  readonly VegPizza?: number | null;
-  readonly AdultFoodComplete?: boolean | null;
+  readonly Name?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -575,19 +563,7 @@ type LazyPartyAdultFood = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly ChickenNugget?: number | null;
-  readonly CocktailSausage?: number | null;
-  readonly OnionRings?: number | null;
-  readonly FishFingers?: number | null;
-  readonly MozzarellaSticks?: number | null;
-  readonly GarlicBread?: number | null;
-  readonly GarlicMushrooms?: number | null;
-  readonly TraySandwiches?: number | null;
-  readonly PepperoniPizza?: number | null;
-  readonly MargheritaPizza?: number | null;
-  readonly BBQChickenPizza?: number | null;
-  readonly VegPizza?: number | null;
-  readonly AdultFoodComplete?: boolean | null;
+  readonly Name?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -660,9 +636,6 @@ type EagerPartyBooking = {
   readonly FoodOptionSelected?: string | null;
   readonly Total: number;
   readonly PartyGuests?: (PartyGuests | null)[] | null;
-  readonly AdultHotFoodQty?: number | null;
-  readonly AdultColdFoodQty?: number | null;
-  readonly PartyAdultFood?: PartyAdultFood | null;
   readonly SweetConesSelected?: boolean | null;
   readonly CharacterSelected?: string | null;
   readonly BearVoiceRecorders?: boolean | null;
@@ -678,9 +651,12 @@ type EagerPartyBooking = {
   readonly LeftBranchTime?: string | null;
   readonly Table?: number | null;
   readonly PartyFoodDelivered?: boolean | null;
+  readonly AmountPaid?: string | null;
+  readonly PartyAdultFoodChoices?: (string | null)[] | null;
+  readonly Email?: string | null;
+  readonly Telephone?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly partyBookingPartyAdultFoodId?: string | null;
 }
 
 type LazyPartyBooking = {
@@ -699,9 +675,6 @@ type LazyPartyBooking = {
   readonly FoodOptionSelected?: string | null;
   readonly Total: number;
   readonly PartyGuests: AsyncCollection<PartyGuests>;
-  readonly AdultHotFoodQty?: number | null;
-  readonly AdultColdFoodQty?: number | null;
-  readonly PartyAdultFood: AsyncItem<PartyAdultFood | undefined>;
   readonly SweetConesSelected?: boolean | null;
   readonly CharacterSelected?: string | null;
   readonly BearVoiceRecorders?: boolean | null;
@@ -717,9 +690,12 @@ type LazyPartyBooking = {
   readonly LeftBranchTime?: string | null;
   readonly Table?: number | null;
   readonly PartyFoodDelivered?: boolean | null;
+  readonly AmountPaid?: string | null;
+  readonly PartyAdultFoodChoices?: (string | null)[] | null;
+  readonly Email?: string | null;
+  readonly Telephone?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly partyBookingPartyAdultFoodId?: string | null;
 }
 
 export declare type PartyBooking = LazyLoading extends LazyLoadingDisabled ? EagerPartyBooking : LazyPartyBooking

@@ -1617,94 +1617,10 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "ChickenNugget": {
-                    "name": "ChickenNugget",
+                "Name": {
+                    "name": "Name",
                     "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "CocktailSausage": {
-                    "name": "CocktailSausage",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "OnionRings": {
-                    "name": "OnionRings",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "FishFingers": {
-                    "name": "FishFingers",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "MozzarellaSticks": {
-                    "name": "MozzarellaSticks",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "GarlicBread": {
-                    "name": "GarlicBread",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "GarlicMushrooms": {
-                    "name": "GarlicMushrooms",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "TraySandwiches": {
-                    "name": "TraySandwiches",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "PepperoniPizza": {
-                    "name": "PepperoniPizza",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "MargheritaPizza": {
-                    "name": "MargheritaPizza",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "BBQChickenPizza": {
-                    "name": "BBQChickenPizza",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "VegPizza": {
-                    "name": "VegPizza",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "AdultFoodComplete": {
-                    "name": "AdultFoodComplete",
-                    "isArray": false,
-                    "type": "Boolean",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -1737,70 +1653,12 @@ export const schema = {
                     "properties": {
                         "rules": [
                             {
-                                "groupClaim": "cognito:groups",
-                                "provider": "userPools",
-                                "allow": "groups",
-                                "groups": [
-                                    "Staff"
-                                ],
+                                "allow": "public",
                                 "operations": [
-                                    "read",
-                                    "update"
-                                ]
-                            },
-                            {
-                                "groupClaim": "cognito:groups",
-                                "provider": "userPools",
-                                "allow": "groups",
-                                "groups": [
-                                    "Developer"
-                                ],
-                                "operations": [
-                                    "read",
                                     "create",
                                     "update",
-                                    "delete"
-                                ]
-                            },
-                            {
-                                "groupClaim": "cognito:groups",
-                                "provider": "userPools",
-                                "allow": "groups",
-                                "groups": [
-                                    "PartHosts"
-                                ],
-                                "operations": [
-                                    "read",
-                                    "update",
-                                    "create"
-                                ]
-                            },
-                            {
-                                "groupClaim": "cognito:groups",
-                                "provider": "userPools",
-                                "allow": "groups",
-                                "groups": [
-                                    "TeamLeader"
-                                ],
-                                "operations": [
-                                    "read",
-                                    "create",
-                                    "update",
-                                    "delete"
-                                ]
-                            },
-                            {
-                                "groupClaim": "cognito:groups",
-                                "provider": "userPools",
-                                "allow": "groups",
-                                "groups": [
-                                    "SuperUser"
-                                ],
-                                "operations": [
-                                    "read",
-                                    "create",
-                                    "update",
-                                    "delete"
+                                    "delete",
+                                    "read"
                                 ]
                             },
                             {
@@ -1808,6 +1666,15 @@ export const schema = {
                                 "ownerField": "owner",
                                 "allow": "owner",
                                 "identityClaim": "cognito:username",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            },
+                            {
+                                "allow": "private",
                                 "operations": [
                                     "create",
                                     "update",
@@ -2116,38 +1983,6 @@ export const schema = {
                         ]
                     }
                 },
-                "AdultHotFoodQty": {
-                    "name": "AdultHotFoodQty",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "AdultColdFoodQty": {
-                    "name": "AdultColdFoodQty",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "PartyAdultFood": {
-                    "name": "PartyAdultFood",
-                    "isArray": false,
-                    "type": {
-                        "model": "PartyAdultFood"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": [
-                            "id"
-                        ],
-                        "targetNames": [
-                            "partyBookingPartyAdultFoodId"
-                        ]
-                    }
-                },
                 "SweetConesSelected": {
                     "name": "SweetConesSelected",
                     "isArray": false,
@@ -2253,6 +2088,35 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "AmountPaid": {
+                    "name": "AmountPaid",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "PartyAdultFoodChoices": {
+                    "name": "PartyAdultFoodChoices",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
+                "Email": {
+                    "name": "Email",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Telephone": {
+                    "name": "Telephone",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -2268,13 +2132,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
-                },
-                "partyBookingPartyAdultFoodId": {
-                    "name": "partyBookingPartyAdultFoodId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
                 }
             },
             "syncable": true,
@@ -2494,5 +2351,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "30bd18c7bfb0ccc5aa68f9adf286df96"
+    "version": "a1600db761b18272c73015838ac35ba4"
 };

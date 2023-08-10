@@ -109,10 +109,17 @@ const updatedSession = await DataStore.save(
 // Update the state with the updated session
 
 // Create a new CafeOrder with the order information
-const timeZone = 'Europe/London';
-const zonedDate = utcToZonedTime(new Date(), timeZone);
-const createdTime = format(zonedDate, 'HH:mm', { timeZone });
-const createdDate = format(zonedDate, 'yyyy-MM-dd', { timeZone });
+const currentTime = new Date();
+      const options = {
+        timeZone: 'Europe/London',
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        millisecond: '2-digit',
+      };
+
+      const createdTime = currentTime.toLocaleTimeString('en-GB', options);
 
 const hotItems = orders.flatMap((order) => [
   order.product,
@@ -123,7 +130,7 @@ const hotItems = orders.flatMap((order) => [
 const newCafeOrder = await DataStore.save(
   new CafeOrder({
     CreatedTime: createdTime,
-    CreatedDate: createdDate,
+    CreatedDate: new Date().toISOString().split('T')[0],
     Total: totalCost,
     Table: session.Table,
     Sessionid: session.id,

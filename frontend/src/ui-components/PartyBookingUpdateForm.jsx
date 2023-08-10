@@ -7,16 +7,180 @@
 /* eslint-disable */
 import * as React from "react";
 import {
+  Badge,
   Button,
+  Divider,
   Flex,
   Grid,
+  Icon,
+  ScrollView,
   SwitchField,
+  Text,
   TextField,
+  useTheme,
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { PartyBooking } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== "" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height="inherit" width="inherit" maxHeight={"7rem"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: "pointer",
+                  alignItems: "center",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? "#B8CEF9" : "",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: "pointer",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: "M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z",
+                      stroke: "black",
+                    },
+                  ]}
+                  ariaLabel="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation="horizontal" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent="flex-end">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children="Cancel"
+              type="button"
+              size="small"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size="small"
+            variation="link"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? "Save" : "Add"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
 export default function PartyBookingUpdateForm(props) {
   const {
     id: idProp,
@@ -39,8 +203,8 @@ export default function PartyBookingUpdateForm(props) {
     ThirdPartyContactedDate: false,
     FoodOptionSelected: "",
     Total: "",
-    AdultHotFoodQty: "",
-    AdultColdFoodQty: "",
+    AdultHotFoodQty: [],
+    AdultColdFoodQty: [],
     SweetConesSelected: false,
     CharacterSelected: "",
     BearVoiceRecorders: false,
@@ -133,8 +297,10 @@ export default function PartyBookingUpdateForm(props) {
     setThirdPartyContactedDate(cleanValues.ThirdPartyContactedDate);
     setFoodOptionSelected(cleanValues.FoodOptionSelected);
     setTotal(cleanValues.Total);
-    setAdultHotFoodQty(cleanValues.AdultHotFoodQty);
-    setAdultColdFoodQty(cleanValues.AdultColdFoodQty);
+    setAdultHotFoodQty(cleanValues.AdultHotFoodQty ?? []);
+    setCurrentAdultHotFoodQtyValue("");
+    setAdultColdFoodQty(cleanValues.AdultColdFoodQty ?? []);
+    setCurrentAdultColdFoodQtyValue("");
     setSweetConesSelected(cleanValues.SweetConesSelected);
     setCharacterSelected(cleanValues.CharacterSelected);
     setBearVoiceRecorders(cleanValues.BearVoiceRecorders);
@@ -165,6 +331,12 @@ export default function PartyBookingUpdateForm(props) {
     queryData();
   }, [idProp, partyBookingModelProp]);
   React.useEffect(resetStateValues, [partyBookingRecord]);
+  const [currentAdultHotFoodQtyValue, setCurrentAdultHotFoodQtyValue] =
+    React.useState("");
+  const AdultHotFoodQtyRef = React.createRef();
+  const [currentAdultColdFoodQtyValue, setCurrentAdultColdFoodQtyValue] =
+    React.useState("");
+  const AdultColdFoodQtyRef = React.createRef();
   const validations = {
     PartyType: [{ type: "Required" }],
     ChildName: [{ type: "Required" }],
@@ -750,17 +922,9 @@ export default function PartyBookingUpdateForm(props) {
         hasError={errors.Total?.hasError}
         {...getOverrideProps(overrides, "Total")}
       ></TextField>
-      <TextField
-        label="Adult hot food qty"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={AdultHotFoodQty}
-        onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
           if (onChange) {
             const modelFields = {
               PartyType,
@@ -772,7 +936,7 @@ export default function PartyBookingUpdateForm(props) {
               ThirdPartyContactedDate,
               FoodOptionSelected,
               Total,
-              AdultHotFoodQty: value,
+              AdultHotFoodQty: values,
               AdultColdFoodQty,
               SweetConesSelected,
               CharacterSelected,
@@ -791,29 +955,45 @@ export default function PartyBookingUpdateForm(props) {
               PartyFoodDelivered,
             };
             const result = onChange(modelFields);
-            value = result?.AdultHotFoodQty ?? value;
+            values = result?.AdultHotFoodQty ?? values;
           }
-          if (errors.AdultHotFoodQty?.hasError) {
-            runValidationTasks("AdultHotFoodQty", value);
-          }
-          setAdultHotFoodQty(value);
+          setAdultHotFoodQty(values);
+          setCurrentAdultHotFoodQtyValue("");
         }}
-        onBlur={() => runValidationTasks("AdultHotFoodQty", AdultHotFoodQty)}
-        errorMessage={errors.AdultHotFoodQty?.errorMessage}
-        hasError={errors.AdultHotFoodQty?.hasError}
-        {...getOverrideProps(overrides, "AdultHotFoodQty")}
-      ></TextField>
-      <TextField
-        label="Adult cold food qty"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={AdultColdFoodQty}
-        onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
+        currentFieldValue={currentAdultHotFoodQtyValue}
+        label={"Adult hot food qty"}
+        items={AdultHotFoodQty}
+        hasError={errors?.AdultHotFoodQty?.hasError}
+        errorMessage={errors?.AdultHotFoodQty?.errorMessage}
+        setFieldValue={setCurrentAdultHotFoodQtyValue}
+        inputFieldRef={AdultHotFoodQtyRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Adult hot food qty"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentAdultHotFoodQtyValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.AdultHotFoodQty?.hasError) {
+              runValidationTasks("AdultHotFoodQty", value);
+            }
+            setCurrentAdultHotFoodQtyValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks("AdultHotFoodQty", currentAdultHotFoodQtyValue)
+          }
+          errorMessage={errors.AdultHotFoodQty?.errorMessage}
+          hasError={errors.AdultHotFoodQty?.hasError}
+          ref={AdultHotFoodQtyRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "AdultHotFoodQty")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
           if (onChange) {
             const modelFields = {
               PartyType,
@@ -826,7 +1006,7 @@ export default function PartyBookingUpdateForm(props) {
               FoodOptionSelected,
               Total,
               AdultHotFoodQty,
-              AdultColdFoodQty: value,
+              AdultColdFoodQty: values,
               SweetConesSelected,
               CharacterSelected,
               BearVoiceRecorders,
@@ -844,18 +1024,42 @@ export default function PartyBookingUpdateForm(props) {
               PartyFoodDelivered,
             };
             const result = onChange(modelFields);
-            value = result?.AdultColdFoodQty ?? value;
+            values = result?.AdultColdFoodQty ?? values;
           }
-          if (errors.AdultColdFoodQty?.hasError) {
-            runValidationTasks("AdultColdFoodQty", value);
-          }
-          setAdultColdFoodQty(value);
+          setAdultColdFoodQty(values);
+          setCurrentAdultColdFoodQtyValue("");
         }}
-        onBlur={() => runValidationTasks("AdultColdFoodQty", AdultColdFoodQty)}
-        errorMessage={errors.AdultColdFoodQty?.errorMessage}
-        hasError={errors.AdultColdFoodQty?.hasError}
-        {...getOverrideProps(overrides, "AdultColdFoodQty")}
-      ></TextField>
+        currentFieldValue={currentAdultColdFoodQtyValue}
+        label={"Adult cold food qty"}
+        items={AdultColdFoodQty}
+        hasError={errors?.AdultColdFoodQty?.hasError}
+        errorMessage={errors?.AdultColdFoodQty?.errorMessage}
+        setFieldValue={setCurrentAdultColdFoodQtyValue}
+        inputFieldRef={AdultColdFoodQtyRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Adult cold food qty"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentAdultColdFoodQtyValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.AdultColdFoodQty?.hasError) {
+              runValidationTasks("AdultColdFoodQty", value);
+            }
+            setCurrentAdultColdFoodQtyValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks("AdultColdFoodQty", currentAdultColdFoodQtyValue)
+          }
+          errorMessage={errors.AdultColdFoodQty?.errorMessage}
+          hasError={errors.AdultColdFoodQty?.hasError}
+          ref={AdultColdFoodQtyRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "AdultColdFoodQty")}
+        ></TextField>
+      </ArrayField>
       <SwitchField
         label="Sweet cones selected"
         defaultChecked={false}

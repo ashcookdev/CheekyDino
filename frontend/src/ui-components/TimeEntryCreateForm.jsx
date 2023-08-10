@@ -6,11 +6,180 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { TimeEntry } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== "" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height="inherit" width="inherit" maxHeight={"7rem"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: "pointer",
+                  alignItems: "center",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? "#B8CEF9" : "",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: "pointer",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: "M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z",
+                      stroke: "black",
+                    },
+                  ]}
+                  ariaLabel="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation="horizontal" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent="flex-end">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children="Cancel"
+              type="button"
+              size="small"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size="small"
+            variation="link"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? "Save" : "Add"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
 export default function TimeEntryCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -24,12 +193,14 @@ export default function TimeEntryCreateForm(props) {
   } = props;
   const initialValues = {
     StaffID: "",
-    ClockInTime: "",
-    ClockOutTime: "",
+    ClockInTime: [],
+    ClockOutTime: [],
     Hours: "",
-    Date: "",
-    ShiftStart: "",
-    ShiftFinish: "",
+    Dates: [],
+    ShiftStart: [],
+    ShiftFinish: [],
+    WeekNumber: "",
+    StaffNam: "",
   };
   const [StaffID, setStaffID] = React.useState(initialValues.StaffID);
   const [ClockInTime, setClockInTime] = React.useState(
@@ -39,30 +210,55 @@ export default function TimeEntryCreateForm(props) {
     initialValues.ClockOutTime
   );
   const [Hours, setHours] = React.useState(initialValues.Hours);
-  const [Date, setDate] = React.useState(initialValues.Date);
+  const [Dates, setDates] = React.useState(initialValues.Dates);
   const [ShiftStart, setShiftStart] = React.useState(initialValues.ShiftStart);
   const [ShiftFinish, setShiftFinish] = React.useState(
     initialValues.ShiftFinish
   );
+  const [WeekNumber, setWeekNumber] = React.useState(initialValues.WeekNumber);
+  const [StaffNam, setStaffNam] = React.useState(initialValues.StaffNam);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setStaffID(initialValues.StaffID);
     setClockInTime(initialValues.ClockInTime);
+    setCurrentClockInTimeValue("");
     setClockOutTime(initialValues.ClockOutTime);
+    setCurrentClockOutTimeValue("");
     setHours(initialValues.Hours);
-    setDate(initialValues.Date);
+    setDates(initialValues.Dates);
+    setCurrentDatesValue("");
     setShiftStart(initialValues.ShiftStart);
+    setCurrentShiftStartValue("");
     setShiftFinish(initialValues.ShiftFinish);
+    setCurrentShiftFinishValue("");
+    setWeekNumber(initialValues.WeekNumber);
+    setStaffNam(initialValues.StaffNam);
     setErrors({});
   };
+  const [currentClockInTimeValue, setCurrentClockInTimeValue] =
+    React.useState("");
+  const ClockInTimeRef = React.createRef();
+  const [currentClockOutTimeValue, setCurrentClockOutTimeValue] =
+    React.useState("");
+  const ClockOutTimeRef = React.createRef();
+  const [currentDatesValue, setCurrentDatesValue] = React.useState("");
+  const DatesRef = React.createRef();
+  const [currentShiftStartValue, setCurrentShiftStartValue] =
+    React.useState("");
+  const ShiftStartRef = React.createRef();
+  const [currentShiftFinishValue, setCurrentShiftFinishValue] =
+    React.useState("");
+  const ShiftFinishRef = React.createRef();
   const validations = {
     StaffID: [],
     ClockInTime: [],
     ClockOutTime: [],
     Hours: [],
-    Date: [],
+    Dates: [],
     ShiftStart: [],
     ShiftFinish: [],
+    WeekNumber: [],
+    StaffNam: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -94,9 +290,11 @@ export default function TimeEntryCreateForm(props) {
           ClockInTime,
           ClockOutTime,
           Hours,
-          Date,
+          Dates,
           ShiftStart,
           ShiftFinish,
+          WeekNumber,
+          StaffNam,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -155,9 +353,11 @@ export default function TimeEntryCreateForm(props) {
               ClockInTime,
               ClockOutTime,
               Hours,
-              Date,
+              Dates,
               ShiftStart,
               ShiftFinish,
+              WeekNumber,
+              StaffNam,
             };
             const result = onChange(modelFields);
             value = result?.StaffID ?? value;
@@ -172,68 +372,112 @@ export default function TimeEntryCreateForm(props) {
         hasError={errors.StaffID?.hasError}
         {...getOverrideProps(overrides, "StaffID")}
       ></TextField>
-      <TextField
-        label="Clock in time"
-        isRequired={false}
-        isReadOnly={false}
-        type="time"
-        value={ClockInTime}
-        onChange={(e) => {
-          let { value } = e.target;
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
           if (onChange) {
             const modelFields = {
               StaffID,
-              ClockInTime: value,
+              ClockInTime: values,
               ClockOutTime,
               Hours,
-              Date,
+              Dates,
               ShiftStart,
               ShiftFinish,
+              WeekNumber,
+              StaffNam,
             };
             const result = onChange(modelFields);
-            value = result?.ClockInTime ?? value;
+            values = result?.ClockInTime ?? values;
           }
-          if (errors.ClockInTime?.hasError) {
-            runValidationTasks("ClockInTime", value);
-          }
-          setClockInTime(value);
+          setClockInTime(values);
+          setCurrentClockInTimeValue("");
         }}
-        onBlur={() => runValidationTasks("ClockInTime", ClockInTime)}
-        errorMessage={errors.ClockInTime?.errorMessage}
-        hasError={errors.ClockInTime?.hasError}
-        {...getOverrideProps(overrides, "ClockInTime")}
-      ></TextField>
-      <TextField
-        label="Clock out time"
-        isRequired={false}
-        isReadOnly={false}
-        type="time"
-        value={ClockOutTime}
-        onChange={(e) => {
-          let { value } = e.target;
+        currentFieldValue={currentClockInTimeValue}
+        label={"Clock in time"}
+        items={ClockInTime}
+        hasError={errors?.ClockInTime?.hasError}
+        errorMessage={errors?.ClockInTime?.errorMessage}
+        setFieldValue={setCurrentClockInTimeValue}
+        inputFieldRef={ClockInTimeRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Clock in time"
+          isRequired={false}
+          isReadOnly={false}
+          type="time"
+          value={currentClockInTimeValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.ClockInTime?.hasError) {
+              runValidationTasks("ClockInTime", value);
+            }
+            setCurrentClockInTimeValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks("ClockInTime", currentClockInTimeValue)
+          }
+          errorMessage={errors.ClockInTime?.errorMessage}
+          hasError={errors.ClockInTime?.hasError}
+          ref={ClockInTimeRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "ClockInTime")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
           if (onChange) {
             const modelFields = {
               StaffID,
               ClockInTime,
-              ClockOutTime: value,
+              ClockOutTime: values,
               Hours,
-              Date,
+              Dates,
               ShiftStart,
               ShiftFinish,
+              WeekNumber,
+              StaffNam,
             };
             const result = onChange(modelFields);
-            value = result?.ClockOutTime ?? value;
+            values = result?.ClockOutTime ?? values;
           }
-          if (errors.ClockOutTime?.hasError) {
-            runValidationTasks("ClockOutTime", value);
-          }
-          setClockOutTime(value);
+          setClockOutTime(values);
+          setCurrentClockOutTimeValue("");
         }}
-        onBlur={() => runValidationTasks("ClockOutTime", ClockOutTime)}
-        errorMessage={errors.ClockOutTime?.errorMessage}
-        hasError={errors.ClockOutTime?.hasError}
-        {...getOverrideProps(overrides, "ClockOutTime")}
-      ></TextField>
+        currentFieldValue={currentClockOutTimeValue}
+        label={"Clock out time"}
+        items={ClockOutTime}
+        hasError={errors?.ClockOutTime?.hasError}
+        errorMessage={errors?.ClockOutTime?.errorMessage}
+        setFieldValue={setCurrentClockOutTimeValue}
+        inputFieldRef={ClockOutTimeRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Clock out time"
+          isRequired={false}
+          isReadOnly={false}
+          type="time"
+          value={currentClockOutTimeValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.ClockOutTime?.hasError) {
+              runValidationTasks("ClockOutTime", value);
+            }
+            setCurrentClockOutTimeValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks("ClockOutTime", currentClockOutTimeValue)
+          }
+          errorMessage={errors.ClockOutTime?.errorMessage}
+          hasError={errors.ClockOutTime?.hasError}
+          ref={ClockOutTimeRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "ClockOutTime")}
+        ></TextField>
+      </ArrayField>
       <TextField
         label="Hours"
         isRequired={false}
@@ -251,9 +495,11 @@ export default function TimeEntryCreateForm(props) {
               ClockInTime,
               ClockOutTime,
               Hours: value,
-              Date,
+              Dates,
               ShiftStart,
               ShiftFinish,
+              WeekNumber,
+              StaffNam,
             };
             const result = onChange(modelFields);
             value = result?.Hours ?? value;
@@ -268,72 +514,166 @@ export default function TimeEntryCreateForm(props) {
         hasError={errors.Hours?.hasError}
         {...getOverrideProps(overrides, "Hours")}
       ></TextField>
-      <TextField
-        label="Date"
-        isRequired={false}
-        isReadOnly={false}
-        type="date"
-        value={Date}
-        onChange={(e) => {
-          let { value } = e.target;
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
           if (onChange) {
             const modelFields = {
               StaffID,
               ClockInTime,
               ClockOutTime,
               Hours,
-              Date: value,
+              Dates: values,
               ShiftStart,
               ShiftFinish,
+              WeekNumber,
+              StaffNam,
             };
             const result = onChange(modelFields);
-            value = result?.Date ?? value;
+            values = result?.Dates ?? values;
           }
-          if (errors.Date?.hasError) {
-            runValidationTasks("Date", value);
-          }
-          setDate(value);
+          setDates(values);
+          setCurrentDatesValue("");
         }}
-        onBlur={() => runValidationTasks("Date", Date)}
-        errorMessage={errors.Date?.errorMessage}
-        hasError={errors.Date?.hasError}
-        {...getOverrideProps(overrides, "Date")}
-      ></TextField>
-      <TextField
-        label="Shift start"
-        isRequired={false}
-        isReadOnly={false}
-        value={ShiftStart}
-        onChange={(e) => {
-          let { value } = e.target;
+        currentFieldValue={currentDatesValue}
+        label={"Dates"}
+        items={Dates}
+        hasError={errors?.Dates?.hasError}
+        errorMessage={errors?.Dates?.errorMessage}
+        setFieldValue={setCurrentDatesValue}
+        inputFieldRef={DatesRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Dates"
+          isRequired={false}
+          isReadOnly={false}
+          type="date"
+          value={currentDatesValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Dates?.hasError) {
+              runValidationTasks("Dates", value);
+            }
+            setCurrentDatesValue(value);
+          }}
+          onBlur={() => runValidationTasks("Dates", currentDatesValue)}
+          errorMessage={errors.Dates?.errorMessage}
+          hasError={errors.Dates?.hasError}
+          ref={DatesRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "Dates")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
           if (onChange) {
             const modelFields = {
               StaffID,
               ClockInTime,
               ClockOutTime,
               Hours,
-              Date,
-              ShiftStart: value,
+              Dates,
+              ShiftStart: values,
               ShiftFinish,
+              WeekNumber,
+              StaffNam,
             };
             const result = onChange(modelFields);
-            value = result?.ShiftStart ?? value;
+            values = result?.ShiftStart ?? values;
           }
-          if (errors.ShiftStart?.hasError) {
-            runValidationTasks("ShiftStart", value);
-          }
-          setShiftStart(value);
+          setShiftStart(values);
+          setCurrentShiftStartValue("");
         }}
-        onBlur={() => runValidationTasks("ShiftStart", ShiftStart)}
-        errorMessage={errors.ShiftStart?.errorMessage}
-        hasError={errors.ShiftStart?.hasError}
-        {...getOverrideProps(overrides, "ShiftStart")}
-      ></TextField>
+        currentFieldValue={currentShiftStartValue}
+        label={"Shift start"}
+        items={ShiftStart}
+        hasError={errors?.ShiftStart?.hasError}
+        errorMessage={errors?.ShiftStart?.errorMessage}
+        setFieldValue={setCurrentShiftStartValue}
+        inputFieldRef={ShiftStartRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Shift start"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentShiftStartValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.ShiftStart?.hasError) {
+              runValidationTasks("ShiftStart", value);
+            }
+            setCurrentShiftStartValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks("ShiftStart", currentShiftStartValue)
+          }
+          errorMessage={errors.ShiftStart?.errorMessage}
+          hasError={errors.ShiftStart?.hasError}
+          ref={ShiftStartRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "ShiftStart")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              StaffID,
+              ClockInTime,
+              ClockOutTime,
+              Hours,
+              Dates,
+              ShiftStart,
+              ShiftFinish: values,
+              WeekNumber,
+              StaffNam,
+            };
+            const result = onChange(modelFields);
+            values = result?.ShiftFinish ?? values;
+          }
+          setShiftFinish(values);
+          setCurrentShiftFinishValue("");
+        }}
+        currentFieldValue={currentShiftFinishValue}
+        label={"Shift finish"}
+        items={ShiftFinish}
+        hasError={errors?.ShiftFinish?.hasError}
+        errorMessage={errors?.ShiftFinish?.errorMessage}
+        setFieldValue={setCurrentShiftFinishValue}
+        inputFieldRef={ShiftFinishRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Shift finish"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentShiftFinishValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.ShiftFinish?.hasError) {
+              runValidationTasks("ShiftFinish", value);
+            }
+            setCurrentShiftFinishValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks("ShiftFinish", currentShiftFinishValue)
+          }
+          errorMessage={errors.ShiftFinish?.errorMessage}
+          hasError={errors.ShiftFinish?.hasError}
+          ref={ShiftFinishRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "ShiftFinish")}
+        ></TextField>
+      </ArrayField>
       <TextField
-        label="Shift finish"
+        label="Week number"
         isRequired={false}
         isReadOnly={false}
-        value={ShiftFinish}
+        value={WeekNumber}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -342,22 +682,56 @@ export default function TimeEntryCreateForm(props) {
               ClockInTime,
               ClockOutTime,
               Hours,
-              Date,
+              Dates,
               ShiftStart,
-              ShiftFinish: value,
+              ShiftFinish,
+              WeekNumber: value,
+              StaffNam,
             };
             const result = onChange(modelFields);
-            value = result?.ShiftFinish ?? value;
+            value = result?.WeekNumber ?? value;
           }
-          if (errors.ShiftFinish?.hasError) {
-            runValidationTasks("ShiftFinish", value);
+          if (errors.WeekNumber?.hasError) {
+            runValidationTasks("WeekNumber", value);
           }
-          setShiftFinish(value);
+          setWeekNumber(value);
         }}
-        onBlur={() => runValidationTasks("ShiftFinish", ShiftFinish)}
-        errorMessage={errors.ShiftFinish?.errorMessage}
-        hasError={errors.ShiftFinish?.hasError}
-        {...getOverrideProps(overrides, "ShiftFinish")}
+        onBlur={() => runValidationTasks("WeekNumber", WeekNumber)}
+        errorMessage={errors.WeekNumber?.errorMessage}
+        hasError={errors.WeekNumber?.hasError}
+        {...getOverrideProps(overrides, "WeekNumber")}
+      ></TextField>
+      <TextField
+        label="Staff nam"
+        isRequired={false}
+        isReadOnly={false}
+        value={StaffNam}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              StaffID,
+              ClockInTime,
+              ClockOutTime,
+              Hours,
+              Dates,
+              ShiftStart,
+              ShiftFinish,
+              WeekNumber,
+              StaffNam: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.StaffNam ?? value;
+          }
+          if (errors.StaffNam?.hasError) {
+            runValidationTasks("StaffNam", value);
+          }
+          setStaffNam(value);
+        }}
+        onBlur={() => runValidationTasks("StaffNam", StaffNam)}
+        errorMessage={errors.StaffNam?.errorMessage}
+        hasError={errors.StaffNam?.hasError}
+        {...getOverrideProps(overrides, "StaffNam")}
       ></TextField>
       <Flex
         justifyContent="space-between"

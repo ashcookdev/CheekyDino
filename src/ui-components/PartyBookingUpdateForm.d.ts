@@ -23,8 +23,6 @@ export declare type PartyBookingUpdateFormInputValues = {
     ThirdPartyContactedDate?: boolean;
     FoodOptionSelected?: string;
     Total?: number;
-    AdultHotFoodQty?: number;
-    AdultColdFoodQty?: number;
     SweetConesSelected?: boolean;
     CharacterSelected?: string;
     BearVoiceRecorders?: boolean;
@@ -40,6 +38,10 @@ export declare type PartyBookingUpdateFormInputValues = {
     LeftBranchTime?: string;
     Table?: number;
     PartyFoodDelivered?: boolean;
+    AmountPaid?: string;
+    PartyAdultFoodChoices?: string[];
+    Email?: string;
+    Telephone?: string;
 };
 export declare type PartyBookingUpdateFormValidationValues = {
     PartyType?: ValidationFunction<string>;
@@ -51,8 +53,6 @@ export declare type PartyBookingUpdateFormValidationValues = {
     ThirdPartyContactedDate?: ValidationFunction<boolean>;
     FoodOptionSelected?: ValidationFunction<string>;
     Total?: ValidationFunction<number>;
-    AdultHotFoodQty?: ValidationFunction<number>;
-    AdultColdFoodQty?: ValidationFunction<number>;
     SweetConesSelected?: ValidationFunction<boolean>;
     CharacterSelected?: ValidationFunction<string>;
     BearVoiceRecorders?: ValidationFunction<boolean>;
@@ -68,6 +68,10 @@ export declare type PartyBookingUpdateFormValidationValues = {
     LeftBranchTime?: ValidationFunction<string>;
     Table?: ValidationFunction<number>;
     PartyFoodDelivered?: ValidationFunction<boolean>;
+    AmountPaid?: ValidationFunction<string>;
+    PartyAdultFoodChoices?: ValidationFunction<string>;
+    Email?: ValidationFunction<string>;
+    Telephone?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type PartyBookingUpdateFormOverridesProps = {
@@ -81,8 +85,6 @@ export declare type PartyBookingUpdateFormOverridesProps = {
     ThirdPartyContactedDate?: PrimitiveOverrideProps<SwitchFieldProps>;
     FoodOptionSelected?: PrimitiveOverrideProps<TextFieldProps>;
     Total?: PrimitiveOverrideProps<TextFieldProps>;
-    AdultHotFoodQty?: PrimitiveOverrideProps<TextFieldProps>;
-    AdultColdFoodQty?: PrimitiveOverrideProps<TextFieldProps>;
     SweetConesSelected?: PrimitiveOverrideProps<SwitchFieldProps>;
     CharacterSelected?: PrimitiveOverrideProps<TextFieldProps>;
     BearVoiceRecorders?: PrimitiveOverrideProps<SwitchFieldProps>;
@@ -98,6 +100,10 @@ export declare type PartyBookingUpdateFormOverridesProps = {
     LeftBranchTime?: PrimitiveOverrideProps<TextFieldProps>;
     Table?: PrimitiveOverrideProps<TextFieldProps>;
     PartyFoodDelivered?: PrimitiveOverrideProps<SwitchFieldProps>;
+    AmountPaid?: PrimitiveOverrideProps<TextFieldProps>;
+    PartyAdultFoodChoices?: PrimitiveOverrideProps<TextFieldProps>;
+    Email?: PrimitiveOverrideProps<TextFieldProps>;
+    Telephone?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type PartyBookingUpdateFormProps = React.PropsWithChildren<{
     overrides?: PartyBookingUpdateFormOverridesProps | undefined | null;

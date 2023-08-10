@@ -17,8 +17,8 @@ export declare type PartyBookingCreateFormInputValues = {
     ChildAge?: number;
     NoOfChildren?: number;
     FoodOptionSelected?: string;
-    AdultHotFoodQty?: number;
-    AdultColdFoodQty?: number;
+    AdultHotFoodQty?: string[];
+    AdultColdFoodQty?: string[];
     Total?: number;
     partybookingID?: string;
     PartyFoodComplete?: boolean;
@@ -33,8 +33,8 @@ export declare type PartyBookingCreateFormValidationValues = {
     ChildAge?: ValidationFunction<number>;
     NoOfChildren?: ValidationFunction<number>;
     FoodOptionSelected?: ValidationFunction<string>;
-    AdultHotFoodQty?: ValidationFunction<number>;
-    AdultColdFoodQty?: ValidationFunction<number>;
+    AdultHotFoodQty?: ValidationFunction<string>;
+    AdultColdFoodQty?: ValidationFunction<string>;
     Total?: ValidationFunction<number>;
     partybookingID?: ValidationFunction<string>;
     PartyFoodComplete?: ValidationFunction<boolean>;

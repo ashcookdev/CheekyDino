@@ -32,9 +32,11 @@ export default function CustomerScreenUpdateForm(props) {
   const initialValues = {
     Message: "",
     Show: false,
+    Number: "",
   };
   const [Message, setMessage] = React.useState(initialValues.Message);
   const [Show, setShow] = React.useState(initialValues.Show);
+  const [Number, setNumber] = React.useState(initialValues.Number);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = customerScreenRecord
@@ -42,6 +44,7 @@ export default function CustomerScreenUpdateForm(props) {
       : initialValues;
     setMessage(cleanValues.Message);
     setShow(cleanValues.Show);
+    setNumber(cleanValues.Number);
     setErrors({});
   };
   const [customerScreenRecord, setCustomerScreenRecord] = React.useState(
@@ -60,6 +63,7 @@ export default function CustomerScreenUpdateForm(props) {
   const validations = {
     Message: [],
     Show: [],
+    Number: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -89,6 +93,7 @@ export default function CustomerScreenUpdateForm(props) {
         let modelFields = {
           Message,
           Show,
+          Number,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -146,6 +151,7 @@ export default function CustomerScreenUpdateForm(props) {
             const modelFields = {
               Message: value,
               Show,
+              Number,
             };
             const result = onChange(modelFields);
             value = result?.Message ?? value;
@@ -171,6 +177,7 @@ export default function CustomerScreenUpdateForm(props) {
             const modelFields = {
               Message,
               Show: value,
+              Number,
             };
             const result = onChange(modelFields);
             value = result?.Show ?? value;
@@ -185,6 +192,36 @@ export default function CustomerScreenUpdateForm(props) {
         hasError={errors.Show?.hasError}
         {...getOverrideProps(overrides, "Show")}
       ></SwitchField>
+      <TextField
+        label="Number"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={Number}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Message,
+              Show,
+              Number: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Number ?? value;
+          }
+          if (errors.Number?.hasError) {
+            runValidationTasks("Number", value);
+          }
+          setNumber(value);
+        }}
+        onBlur={() => runValidationTasks("Number", Number)}
+        errorMessage={errors.Number?.errorMessage}
+        hasError={errors.Number?.hasError}
+        {...getOverrideProps(overrides, "Number")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

@@ -16,16 +16,19 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type CustomerScreenUpdateFormInputValues = {
     Message?: string;
     Show?: boolean;
+    Number?: number;
 };
 export declare type CustomerScreenUpdateFormValidationValues = {
     Message?: ValidationFunction<string>;
     Show?: ValidationFunction<boolean>;
+    Number?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomerScreenUpdateFormOverridesProps = {
     CustomerScreenUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     Message?: PrimitiveOverrideProps<TextFieldProps>;
     Show?: PrimitiveOverrideProps<SwitchFieldProps>;
+    Number?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type CustomerScreenUpdateFormProps = React.PropsWithChildren<{
     overrides?: CustomerScreenUpdateFormOverridesProps | undefined | null;

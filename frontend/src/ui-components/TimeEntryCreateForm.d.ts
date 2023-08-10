@@ -14,21 +14,25 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type TimeEntryCreateFormInputValues = {
     StaffID?: string;
-    ClockInTime?: string;
-    ClockOutTime?: string;
+    ClockInTime?: string[];
+    ClockOutTime?: string[];
     Hours?: number;
-    Date?: string;
-    ShiftStart?: string;
-    ShiftFinish?: string;
+    Dates?: string[];
+    ShiftStart?: string[];
+    ShiftFinish?: string[];
+    WeekNumber?: string;
+    StaffNam?: string;
 };
 export declare type TimeEntryCreateFormValidationValues = {
     StaffID?: ValidationFunction<string>;
     ClockInTime?: ValidationFunction<string>;
     ClockOutTime?: ValidationFunction<string>;
     Hours?: ValidationFunction<number>;
-    Date?: ValidationFunction<string>;
+    Dates?: ValidationFunction<string>;
     ShiftStart?: ValidationFunction<string>;
     ShiftFinish?: ValidationFunction<string>;
+    WeekNumber?: ValidationFunction<string>;
+    StaffNam?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type TimeEntryCreateFormOverridesProps = {
@@ -37,9 +41,11 @@ export declare type TimeEntryCreateFormOverridesProps = {
     ClockInTime?: PrimitiveOverrideProps<TextFieldProps>;
     ClockOutTime?: PrimitiveOverrideProps<TextFieldProps>;
     Hours?: PrimitiveOverrideProps<TextFieldProps>;
-    Date?: PrimitiveOverrideProps<TextFieldProps>;
+    Dates?: PrimitiveOverrideProps<TextFieldProps>;
     ShiftStart?: PrimitiveOverrideProps<TextFieldProps>;
     ShiftFinish?: PrimitiveOverrideProps<TextFieldProps>;
+    WeekNumber?: PrimitiveOverrideProps<TextFieldProps>;
+    StaffNam?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type TimeEntryCreateFormProps = React.PropsWithChildren<{
     overrides?: TimeEntryCreateFormOverridesProps | undefined | null;

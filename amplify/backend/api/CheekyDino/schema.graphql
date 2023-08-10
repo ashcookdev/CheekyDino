@@ -152,21 +152,9 @@ type Messages @model @auth(rules: [{allow: private}, {allow: groups, groups: ["A
   delivered: Boolean
 }
 
-type PartyAdultFood @model @auth(rules: [{allow: groups, groups: ["Staff"], operations: [read, update]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartHosts"], operations: [read, update, create]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: owner}]) {
+type PartyAdultFood @model @auth(rules: [{allow: public}, {allow: owner}, {allow: private}]) {
   id: ID!
-  ChickenNugget: Int
-  CocktailSausage: Int
-  OnionRings: Int
-  FishFingers: Int
-  MozzarellaSticks: Int
-  GarlicBread: Int
-  GarlicMushrooms: Int
-  TraySandwiches: Int
-  PepperoniPizza: Int
-  MargheritaPizza: Int
-  BBQChickenPizza: Int
-  VegPizza: Int
-  AdultFoodComplete: Boolean
+  Name: String
 }
 
 type PartyGuests @model @auth(rules: [{allow: owner}, {allow: groups, groups: ["PartHosts"], operations: [read, update]}, {allow: groups, groups: ["Staff"], operations: [create, read]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: groups, groups: ["TeamLeader"], operations: [read, update]}, {allow: private}]) {
@@ -195,9 +183,6 @@ type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: [
   FoodOptionSelected: String
   Total: Float!
   PartyGuests: [PartyGuests] @hasMany(indexName: "byPartyBooking", fields: ["id"])
-  AdultHotFoodQty: Int
-  AdultColdFoodQty: Int
-  PartyAdultFood: PartyAdultFood @hasOne
   SweetConesSelected: Boolean
   CharacterSelected: String
   BearVoiceRecorders: Boolean
@@ -213,5 +198,9 @@ type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: [
   LeftBranchTime: AWSTime
   Table: Int
   PartyFoodDelivered: Boolean
+  AmountPaid: String
+  PartyAdultFoodChoices: [String]
+  Email: String
+  Telephone: String
 }
  

@@ -217,6 +217,7 @@ export default function Kitchen() {
           <legend className="sr-only">Party guests</legend>
           <div className="relative -space-y-px rounded-md bg-white">
             {partyGuests.map((guest) => (
+              
               <div key={guest.ChildName} className="relative flex cursor-pointer flex-col border p-4 focus:outline-none md:grid md:grid-cols-3 md:pl-4 md:pr-6">
                 <label className="flex items-center text-sm">
                   <input

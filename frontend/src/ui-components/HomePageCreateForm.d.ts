@@ -13,15 +13,48 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type HomePageCreateFormInputValues = {
-    Message?: string;
+    TopSectionTitle?: string;
+    TopSectionPic?: string;
+    TopSectionWriting?: string;
+    EventTitle?: string;
+    EventPic?: string;
+    EventWriting?: string;
+    EventTwoTitle?: string;
+    EventTwoPic?: string;
+    EventTwoWriting?: string;
+    EventThreeTitle?: string;
+    EventThreePic?: string;
+    EventThreeWriting?: string;
 };
 export declare type HomePageCreateFormValidationValues = {
-    Message?: ValidationFunction<string>;
+    TopSectionTitle?: ValidationFunction<string>;
+    TopSectionPic?: ValidationFunction<string>;
+    TopSectionWriting?: ValidationFunction<string>;
+    EventTitle?: ValidationFunction<string>;
+    EventPic?: ValidationFunction<string>;
+    EventWriting?: ValidationFunction<string>;
+    EventTwoTitle?: ValidationFunction<string>;
+    EventTwoPic?: ValidationFunction<string>;
+    EventTwoWriting?: ValidationFunction<string>;
+    EventThreeTitle?: ValidationFunction<string>;
+    EventThreePic?: ValidationFunction<string>;
+    EventThreeWriting?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type HomePageCreateFormOverridesProps = {
     HomePageCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    Message?: PrimitiveOverrideProps<TextFieldProps>;
+    TopSectionTitle?: PrimitiveOverrideProps<TextFieldProps>;
+    TopSectionPic?: PrimitiveOverrideProps<TextFieldProps>;
+    TopSectionWriting?: PrimitiveOverrideProps<TextFieldProps>;
+    EventTitle?: PrimitiveOverrideProps<TextFieldProps>;
+    EventPic?: PrimitiveOverrideProps<TextFieldProps>;
+    EventWriting?: PrimitiveOverrideProps<TextFieldProps>;
+    EventTwoTitle?: PrimitiveOverrideProps<TextFieldProps>;
+    EventTwoPic?: PrimitiveOverrideProps<TextFieldProps>;
+    EventTwoWriting?: PrimitiveOverrideProps<TextFieldProps>;
+    EventThreeTitle?: PrimitiveOverrideProps<TextFieldProps>;
+    EventThreePic?: PrimitiveOverrideProps<TextFieldProps>;
+    EventThreeWriting?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type HomePageCreateFormProps = React.PropsWithChildren<{
     overrides?: HomePageCreateFormOverridesProps | undefined | null;

@@ -7,16 +7,180 @@
 /* eslint-disable */
 import * as React from "react";
 import {
+  Badge,
   Button,
+  Divider,
   Flex,
   Grid,
+  Icon,
+  ScrollView,
   SwitchField,
+  Text,
   TextField,
+  useTheme,
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { PartyBooking } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== "" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height="inherit" width="inherit" maxHeight={"7rem"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: "pointer",
+                  alignItems: "center",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? "#B8CEF9" : "",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: "pointer",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: "M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z",
+                      stroke: "black",
+                    },
+                  ]}
+                  ariaLabel="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation="horizontal" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent="flex-end">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children="Cancel"
+              type="button"
+              size="small"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size="small"
+            variation="link"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? "Save" : "Add"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
 export default function PartyBookingCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -43,6 +207,10 @@ export default function PartyBookingCreateForm(props) {
     LeftBranchTime: "",
     Table: "",
     PartyFoodDelivered: false,
+    AmountPaid: "",
+    PartyAdultFoodChoices: [],
+    Email: "",
+    Telephone: "",
   };
   const [ChildName, setChildName] = React.useState(initialValues.ChildName);
   const [ChildAge, setChildAge] = React.useState(initialValues.ChildAge);
@@ -76,6 +244,12 @@ export default function PartyBookingCreateForm(props) {
   const [PartyFoodDelivered, setPartyFoodDelivered] = React.useState(
     initialValues.PartyFoodDelivered
   );
+  const [AmountPaid, setAmountPaid] = React.useState(initialValues.AmountPaid);
+  const [PartyAdultFoodChoices, setPartyAdultFoodChoices] = React.useState(
+    initialValues.PartyAdultFoodChoices
+  );
+  const [Email, setEmail] = React.useState(initialValues.Email);
+  const [Telephone, setTelephone] = React.useState(initialValues.Telephone);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setChildName(initialValues.ChildName);
@@ -92,8 +266,18 @@ export default function PartyBookingCreateForm(props) {
     setLeftBranchTime(initialValues.LeftBranchTime);
     setTable(initialValues.Table);
     setPartyFoodDelivered(initialValues.PartyFoodDelivered);
+    setAmountPaid(initialValues.AmountPaid);
+    setPartyAdultFoodChoices(initialValues.PartyAdultFoodChoices);
+    setCurrentPartyAdultFoodChoicesValue("");
+    setEmail(initialValues.Email);
+    setTelephone(initialValues.Telephone);
     setErrors({});
   };
+  const [
+    currentPartyAdultFoodChoicesValue,
+    setCurrentPartyAdultFoodChoicesValue,
+  ] = React.useState("");
+  const PartyAdultFoodChoicesRef = React.createRef();
   const validations = {
     ChildName: [{ type: "Required" }],
     ChildAge: [{ type: "Required" }],
@@ -109,6 +293,10 @@ export default function PartyBookingCreateForm(props) {
     LeftBranchTime: [],
     Table: [],
     PartyFoodDelivered: [],
+    AmountPaid: [],
+    PartyAdultFoodChoices: [],
+    Email: [],
+    Telephone: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -150,6 +338,10 @@ export default function PartyBookingCreateForm(props) {
           LeftBranchTime,
           Table,
           PartyFoodDelivered,
+          AmountPaid,
+          PartyAdultFoodChoices,
+          Email,
+          Telephone,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -175,11 +367,29 @@ export default function PartyBookingCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value.trim() === "") {
-              modelFields[key] = undefined;
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
             }
           });
-          await DataStore.save(new PartyBooking(modelFields));
+          const modelFieldsToSave = {
+            ChildName: modelFields.ChildName,
+            ChildAge: modelFields.ChildAge,
+            NoOfChildren: modelFields.NoOfChildren,
+            FoodOptionSelected: modelFields.FoodOptionSelected,
+            Total: modelFields.Total,
+            partybookingID: modelFields.partybookingID,
+            PartyFoodComplete: modelFields.PartyFoodComplete,
+            LeftBranch: modelFields.LeftBranch,
+            CurrentGuests: modelFields.CurrentGuests,
+            LeftBranchTime: modelFields.LeftBranchTime,
+            Table: modelFields.Table,
+            PartyFoodDelivered: modelFields.PartyFoodDelivered,
+            AmountPaid: modelFields.AmountPaid,
+            PartyAdultFoodChoices: modelFields.PartyAdultFoodChoices,
+            Email: modelFields.Email,
+            Telephone: modelFields.Telephone,
+          };
+          await DataStore.save(new PartyBooking(modelFieldsToSave));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -218,6 +428,10 @@ export default function PartyBookingCreateForm(props) {
               LeftBranchTime,
               Table,
               PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
             };
             const result = onChange(modelFields);
             value = result?.ChildName ?? value;
@@ -259,6 +473,10 @@ export default function PartyBookingCreateForm(props) {
               LeftBranchTime,
               Table,
               PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
             };
             const result = onChange(modelFields);
             value = result?.ChildAge ?? value;
@@ -300,6 +518,10 @@ export default function PartyBookingCreateForm(props) {
               LeftBranchTime,
               Table,
               PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
             };
             const result = onChange(modelFields);
             value = result?.NoOfChildren ?? value;
@@ -337,6 +559,10 @@ export default function PartyBookingCreateForm(props) {
               LeftBranchTime,
               Table,
               PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
             };
             const result = onChange(modelFields);
             value = result?.FoodOptionSelected ?? value;
@@ -354,16 +580,10 @@ export default function PartyBookingCreateForm(props) {
         {...getOverrideProps(overrides, "FoodOptionSelected")}
       ></TextField>
       <TextField
-        label="Adult hot food qty"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
+        label="Label"
         value={AdultHotFoodQty}
         onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
               ChildName,
@@ -380,6 +600,10 @@ export default function PartyBookingCreateForm(props) {
               LeftBranchTime,
               Table,
               PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
             };
             const result = onChange(modelFields);
             value = result?.AdultHotFoodQty ?? value;
@@ -395,16 +619,10 @@ export default function PartyBookingCreateForm(props) {
         {...getOverrideProps(overrides, "AdultHotFoodQty")}
       ></TextField>
       <TextField
-        label="Adult cold food qty"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
+        label="Label"
         value={AdultColdFoodQty}
         onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
               ChildName,
@@ -421,6 +639,10 @@ export default function PartyBookingCreateForm(props) {
               LeftBranchTime,
               Table,
               PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
             };
             const result = onChange(modelFields);
             value = result?.AdultColdFoodQty ?? value;
@@ -462,6 +684,10 @@ export default function PartyBookingCreateForm(props) {
               LeftBranchTime,
               Table,
               PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
             };
             const result = onChange(modelFields);
             value = result?.Total ?? value;
@@ -499,6 +725,10 @@ export default function PartyBookingCreateForm(props) {
               LeftBranchTime,
               Table,
               PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
             };
             const result = onChange(modelFields);
             value = result?.partybookingID ?? value;
@@ -536,6 +766,10 @@ export default function PartyBookingCreateForm(props) {
               LeftBranchTime,
               Table,
               PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
             };
             const result = onChange(modelFields);
             value = result?.PartyFoodComplete ?? value;
@@ -575,6 +809,10 @@ export default function PartyBookingCreateForm(props) {
               LeftBranchTime,
               Table,
               PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
             };
             const result = onChange(modelFields);
             value = result?.LeftBranch ?? value;
@@ -616,6 +854,10 @@ export default function PartyBookingCreateForm(props) {
               LeftBranchTime,
               Table,
               PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
             };
             const result = onChange(modelFields);
             value = result?.CurrentGuests ?? value;
@@ -654,6 +896,10 @@ export default function PartyBookingCreateForm(props) {
               LeftBranchTime: value,
               Table,
               PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
             };
             const result = onChange(modelFields);
             value = result?.LeftBranchTime ?? value;
@@ -695,6 +941,10 @@ export default function PartyBookingCreateForm(props) {
               LeftBranchTime,
               Table: value,
               PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
             };
             const result = onChange(modelFields);
             value = result?.Table ?? value;
@@ -732,6 +982,10 @@ export default function PartyBookingCreateForm(props) {
               LeftBranchTime,
               Table,
               PartyFoodDelivered: value,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
             };
             const result = onChange(modelFields);
             value = result?.PartyFoodDelivered ?? value;
@@ -748,6 +1002,193 @@ export default function PartyBookingCreateForm(props) {
         hasError={errors.PartyFoodDelivered?.hasError}
         {...getOverrideProps(overrides, "PartyFoodDelivered")}
       ></SwitchField>
+      <TextField
+        label="Amount paid"
+        isRequired={false}
+        isReadOnly={false}
+        value={AmountPaid}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              ChildName,
+              ChildAge,
+              NoOfChildren,
+              FoodOptionSelected,
+              AdultHotFoodQty,
+              AdultColdFoodQty,
+              Total,
+              partybookingID,
+              PartyFoodComplete,
+              LeftBranch,
+              CurrentGuests,
+              LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
+              AmountPaid: value,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
+            };
+            const result = onChange(modelFields);
+            value = result?.AmountPaid ?? value;
+          }
+          if (errors.AmountPaid?.hasError) {
+            runValidationTasks("AmountPaid", value);
+          }
+          setAmountPaid(value);
+        }}
+        onBlur={() => runValidationTasks("AmountPaid", AmountPaid)}
+        errorMessage={errors.AmountPaid?.errorMessage}
+        hasError={errors.AmountPaid?.hasError}
+        {...getOverrideProps(overrides, "AmountPaid")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              ChildName,
+              ChildAge,
+              NoOfChildren,
+              FoodOptionSelected,
+              AdultHotFoodQty,
+              AdultColdFoodQty,
+              Total,
+              partybookingID,
+              PartyFoodComplete,
+              LeftBranch,
+              CurrentGuests,
+              LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices: values,
+              Email,
+              Telephone,
+            };
+            const result = onChange(modelFields);
+            values = result?.PartyAdultFoodChoices ?? values;
+          }
+          setPartyAdultFoodChoices(values);
+          setCurrentPartyAdultFoodChoicesValue("");
+        }}
+        currentFieldValue={currentPartyAdultFoodChoicesValue}
+        label={"Party adult food choices"}
+        items={PartyAdultFoodChoices}
+        hasError={errors?.PartyAdultFoodChoices?.hasError}
+        errorMessage={errors?.PartyAdultFoodChoices?.errorMessage}
+        setFieldValue={setCurrentPartyAdultFoodChoicesValue}
+        inputFieldRef={PartyAdultFoodChoicesRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Party adult food choices"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentPartyAdultFoodChoicesValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.PartyAdultFoodChoices?.hasError) {
+              runValidationTasks("PartyAdultFoodChoices", value);
+            }
+            setCurrentPartyAdultFoodChoicesValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              "PartyAdultFoodChoices",
+              currentPartyAdultFoodChoicesValue
+            )
+          }
+          errorMessage={errors.PartyAdultFoodChoices?.errorMessage}
+          hasError={errors.PartyAdultFoodChoices?.hasError}
+          ref={PartyAdultFoodChoicesRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "PartyAdultFoodChoices")}
+        ></TextField>
+      </ArrayField>
+      <TextField
+        label="Email"
+        isRequired={false}
+        isReadOnly={false}
+        value={Email}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              ChildName,
+              ChildAge,
+              NoOfChildren,
+              FoodOptionSelected,
+              AdultHotFoodQty,
+              AdultColdFoodQty,
+              Total,
+              partybookingID,
+              PartyFoodComplete,
+              LeftBranch,
+              CurrentGuests,
+              LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email: value,
+              Telephone,
+            };
+            const result = onChange(modelFields);
+            value = result?.Email ?? value;
+          }
+          if (errors.Email?.hasError) {
+            runValidationTasks("Email", value);
+          }
+          setEmail(value);
+        }}
+        onBlur={() => runValidationTasks("Email", Email)}
+        errorMessage={errors.Email?.errorMessage}
+        hasError={errors.Email?.hasError}
+        {...getOverrideProps(overrides, "Email")}
+      ></TextField>
+      <TextField
+        label="Telephone"
+        isRequired={false}
+        isReadOnly={false}
+        value={Telephone}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              ChildName,
+              ChildAge,
+              NoOfChildren,
+              FoodOptionSelected,
+              AdultHotFoodQty,
+              AdultColdFoodQty,
+              Total,
+              partybookingID,
+              PartyFoodComplete,
+              LeftBranch,
+              CurrentGuests,
+              LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Telephone ?? value;
+          }
+          if (errors.Telephone?.hasError) {
+            runValidationTasks("Telephone", value);
+          }
+          setTelephone(value);
+        }}
+        onBlur={() => runValidationTasks("Telephone", Telephone)}
+        errorMessage={errors.Telephone?.errorMessage}
+        hasError={errors.Telephone?.hasError}
+        {...getOverrideProps(overrides, "Telephone")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
