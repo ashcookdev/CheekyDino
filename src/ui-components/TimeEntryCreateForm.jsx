@@ -199,8 +199,8 @@ export default function TimeEntryCreateForm(props) {
     Dates: [],
     ShiftStart: [],
     ShiftFinish: [],
-    WeekNumber: "",
-    StaffNam: "",
+    Month: "",
+    StaffName: "",
   };
   const [StaffID, setStaffID] = React.useState(initialValues.StaffID);
   const [ClockInTime, setClockInTime] = React.useState(
@@ -215,8 +215,8 @@ export default function TimeEntryCreateForm(props) {
   const [ShiftFinish, setShiftFinish] = React.useState(
     initialValues.ShiftFinish
   );
-  const [WeekNumber, setWeekNumber] = React.useState(initialValues.WeekNumber);
-  const [StaffNam, setStaffNam] = React.useState(initialValues.StaffNam);
+  const [Month, setMonth] = React.useState(initialValues.Month);
+  const [StaffName, setStaffName] = React.useState(initialValues.StaffName);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setStaffID(initialValues.StaffID);
@@ -231,8 +231,8 @@ export default function TimeEntryCreateForm(props) {
     setCurrentShiftStartValue("");
     setShiftFinish(initialValues.ShiftFinish);
     setCurrentShiftFinishValue("");
-    setWeekNumber(initialValues.WeekNumber);
-    setStaffNam(initialValues.StaffNam);
+    setMonth(initialValues.Month);
+    setStaffName(initialValues.StaffName);
     setErrors({});
   };
   const [currentClockInTimeValue, setCurrentClockInTimeValue] =
@@ -257,8 +257,8 @@ export default function TimeEntryCreateForm(props) {
     Dates: [],
     ShiftStart: [],
     ShiftFinish: [],
-    WeekNumber: [],
-    StaffNam: [],
+    Month: [],
+    StaffName: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -293,8 +293,8 @@ export default function TimeEntryCreateForm(props) {
           Dates,
           ShiftStart,
           ShiftFinish,
-          WeekNumber,
-          StaffNam,
+          Month,
+          StaffName,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -356,8 +356,8 @@ export default function TimeEntryCreateForm(props) {
               Dates,
               ShiftStart,
               ShiftFinish,
-              WeekNumber,
-              StaffNam,
+              Month,
+              StaffName,
             };
             const result = onChange(modelFields);
             value = result?.StaffID ?? value;
@@ -384,8 +384,8 @@ export default function TimeEntryCreateForm(props) {
               Dates,
               ShiftStart,
               ShiftFinish,
-              WeekNumber,
-              StaffNam,
+              Month,
+              StaffName,
             };
             const result = onChange(modelFields);
             values = result?.ClockInTime ?? values;
@@ -437,8 +437,8 @@ export default function TimeEntryCreateForm(props) {
               Dates,
               ShiftStart,
               ShiftFinish,
-              WeekNumber,
-              StaffNam,
+              Month,
+              StaffName,
             };
             const result = onChange(modelFields);
             values = result?.ClockOutTime ?? values;
@@ -498,8 +498,8 @@ export default function TimeEntryCreateForm(props) {
               Dates,
               ShiftStart,
               ShiftFinish,
-              WeekNumber,
-              StaffNam,
+              Month,
+              StaffName,
             };
             const result = onChange(modelFields);
             value = result?.Hours ?? value;
@@ -526,8 +526,8 @@ export default function TimeEntryCreateForm(props) {
               Dates: values,
               ShiftStart,
               ShiftFinish,
-              WeekNumber,
-              StaffNam,
+              Month,
+              StaffName,
             };
             const result = onChange(modelFields);
             values = result?.Dates ?? values;
@@ -577,8 +577,8 @@ export default function TimeEntryCreateForm(props) {
               Dates,
               ShiftStart: values,
               ShiftFinish,
-              WeekNumber,
-              StaffNam,
+              Month,
+              StaffName,
             };
             const result = onChange(modelFields);
             values = result?.ShiftStart ?? values;
@@ -629,8 +629,8 @@ export default function TimeEntryCreateForm(props) {
               Dates,
               ShiftStart,
               ShiftFinish: values,
-              WeekNumber,
-              StaffNam,
+              Month,
+              StaffName,
             };
             const result = onChange(modelFields);
             values = result?.ShiftFinish ?? values;
@@ -670,10 +670,10 @@ export default function TimeEntryCreateForm(props) {
         ></TextField>
       </ArrayField>
       <TextField
-        label="Week number"
+        label="Month"
         isRequired={false}
         isReadOnly={false}
-        value={WeekNumber}
+        value={Month}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -685,27 +685,27 @@ export default function TimeEntryCreateForm(props) {
               Dates,
               ShiftStart,
               ShiftFinish,
-              WeekNumber: value,
-              StaffNam,
+              Month: value,
+              StaffName,
             };
             const result = onChange(modelFields);
-            value = result?.WeekNumber ?? value;
+            value = result?.Month ?? value;
           }
-          if (errors.WeekNumber?.hasError) {
-            runValidationTasks("WeekNumber", value);
+          if (errors.Month?.hasError) {
+            runValidationTasks("Month", value);
           }
-          setWeekNumber(value);
+          setMonth(value);
         }}
-        onBlur={() => runValidationTasks("WeekNumber", WeekNumber)}
-        errorMessage={errors.WeekNumber?.errorMessage}
-        hasError={errors.WeekNumber?.hasError}
-        {...getOverrideProps(overrides, "WeekNumber")}
+        onBlur={() => runValidationTasks("Month", Month)}
+        errorMessage={errors.Month?.errorMessage}
+        hasError={errors.Month?.hasError}
+        {...getOverrideProps(overrides, "Month")}
       ></TextField>
       <TextField
-        label="Staff nam"
+        label="Staff name"
         isRequired={false}
         isReadOnly={false}
-        value={StaffNam}
+        value={StaffName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -717,21 +717,21 @@ export default function TimeEntryCreateForm(props) {
               Dates,
               ShiftStart,
               ShiftFinish,
-              WeekNumber,
-              StaffNam: value,
+              Month,
+              StaffName: value,
             };
             const result = onChange(modelFields);
-            value = result?.StaffNam ?? value;
+            value = result?.StaffName ?? value;
           }
-          if (errors.StaffNam?.hasError) {
-            runValidationTasks("StaffNam", value);
+          if (errors.StaffName?.hasError) {
+            runValidationTasks("StaffName", value);
           }
-          setStaffNam(value);
+          setStaffName(value);
         }}
-        onBlur={() => runValidationTasks("StaffNam", StaffNam)}
-        errorMessage={errors.StaffNam?.errorMessage}
-        hasError={errors.StaffNam?.hasError}
-        {...getOverrideProps(overrides, "StaffNam")}
+        onBlur={() => runValidationTasks("StaffName", StaffName)}
+        errorMessage={errors.StaffName?.errorMessage}
+        hasError={errors.StaffName?.hasError}
+        {...getOverrideProps(overrides, "StaffName")}
       ></TextField>
       <Flex
         justifyContent="space-between"

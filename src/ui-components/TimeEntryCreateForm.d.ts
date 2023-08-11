@@ -20,8 +20,8 @@ export declare type TimeEntryCreateFormInputValues = {
     Dates?: string[];
     ShiftStart?: string[];
     ShiftFinish?: string[];
-    WeekNumber?: string;
-    StaffNam?: string;
+    Month?: string;
+    StaffName?: string;
 };
 export declare type TimeEntryCreateFormValidationValues = {
     StaffID?: ValidationFunction<string>;
@@ -31,8 +31,8 @@ export declare type TimeEntryCreateFormValidationValues = {
     Dates?: ValidationFunction<string>;
     ShiftStart?: ValidationFunction<string>;
     ShiftFinish?: ValidationFunction<string>;
-    WeekNumber?: ValidationFunction<string>;
-    StaffNam?: ValidationFunction<string>;
+    Month?: ValidationFunction<string>;
+    StaffName?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type TimeEntryCreateFormOverridesProps = {
@@ -44,8 +44,8 @@ export declare type TimeEntryCreateFormOverridesProps = {
     Dates?: PrimitiveOverrideProps<TextFieldProps>;
     ShiftStart?: PrimitiveOverrideProps<TextFieldProps>;
     ShiftFinish?: PrimitiveOverrideProps<TextFieldProps>;
-    WeekNumber?: PrimitiveOverrideProps<TextFieldProps>;
-    StaffNam?: PrimitiveOverrideProps<TextFieldProps>;
+    Month?: PrimitiveOverrideProps<TextFieldProps>;
+    StaffName?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type TimeEntryCreateFormProps = React.PropsWithChildren<{
     overrides?: TimeEntryCreateFormOverridesProps | undefined | null;

@@ -106,11 +106,10 @@ export default function CustomerOrderProgress() {
     }
 
     return (
-      <div className="container mx-auto my-4 p-4 rounded-lg shadow-md bg-orange-500 bg-contain" style={{ backgroundImage: backgroundImage }}
-      >
+      <div className="container mx-auto my-4 p-4 rounded-lg shadow-md bg-orange-500 bg-cover" style={{ backgroundImage: backgroundImage }}>
         <div className="flex flex-col items-center mb-4 bg-transparent">
           <h2 className="text-2xl font-semibold mb-2 component-title text-white">Order Information</h2>
-          <div className="flex">
+          <div className="flex flex-col md:flex-row">
             <p className="text-lg mr-4 component-title text-white">Table: {cafeOrder.Table}</p>
             <p className="text-lg text-white">Hot Items:</p>
             <ol role="list" className="list-disc list-inside ml-4 mr-4 text-white">
@@ -122,16 +121,16 @@ export default function CustomerOrderProgress() {
         </div>
     
         <div className="flex justify-center mb-4">
-          <ol role="list" className="flex text-lg ">
+          <ol role="list" className="flex flex-col md:flex-row text-lg ">
             {timeline.map((event, eventIdx) => (
-              <li key={event.id} className="flex flex-col items-center">
+              <li key={event.id} className="flex flex-col items-center mb-4 mr-5 md:mb-0">
                 <div className="relative pb-8">
-                  <div className="relative flex space-x-3 mr-5">
+                  <div className="relative flex flex-col items-center space-y-3 mr-5">
                     <div>
                       <span
                         className={classNames(
                           event.iconBackground,
-                          'h-12 w-12 rounded-full flex items-center justify-center ring-8 ring-white'
+                          'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white'
                         )}
                       >
                         <event.icon
@@ -155,10 +154,9 @@ export default function CustomerOrderProgress() {
             ))}
           </ol>
         </div>
-    
-       
       </div>
     );
+    
     
       
 }

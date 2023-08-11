@@ -63,8 +63,8 @@ type TimeEntry @model @auth(rules: [{allow: private}, {allow: owner}]) {
   Dates: [AWSDate]
   ShiftStart: [String]
   ShiftFinish: [String]
-  WeekNumber: String
-  StaffNam: String
+  Month: String
+  StaffName: String
 }
 
 type Staff @model @auth(rules: [{allow: private}]) {

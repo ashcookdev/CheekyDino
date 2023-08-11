@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { Staff, TimeEntry } from './models';
 import {
-  format,
-  startOfWeek,
-  endOfWeek,
+  startOfMonth,
+  endOfMonth,
   eachDayOfInterval,
+  format,
 } from 'date-fns';
+import { Staff, TimeEntry } from '../staffpages/models';
+import { useNavigate } from 'react-router-dom';
 
 const ShiftBooking = () => {
   const [staff, setStaff] = useState([]);
   const [shifts, setShifts] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date());
-  const weekStart = startOfWeek(currentDate);
-  const weekEnd = endOfWeek(currentDate);
-  const weekDates = eachDayOfInterval({ start: weekStart, end: weekEnd });
+  const monthStart = startOfMonth(currentDate);
+  const monthEnd = endOfMonth(currentDate);
+  const monthDates = eachDayOfInterval({ start: monthStart, end: monthEnd });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStaff = async () => {
@@ -22,15 +25,11 @@ const ShiftBooking = () => {
       setStaff(staffData);
       setShifts(
         staffData.reduce((acc, curr) => {
-          acc[curr.id] = {
-            mon: { start: '', end: '' },
-            tue: { start: '', end: '' },
-            wed: { start: '', end: '' },
-            thu: { start: '', end: '' },
-            fri: { start: '', end: '' },
-            sat: { start: '', end: '' },
-            sun: { start: '', end: '' },
-          };
+          acc[curr.id] = monthDates.reduce((acc2, curr2) => {
+            const date = format(curr2, 'yyyy-MM-dd');
+            acc2[date] = { start: '', end: '' };
+            return acc2;
+          }, {});
           return acc;
         }, {})
       );
@@ -38,14 +37,14 @@ const ShiftBooking = () => {
     fetchStaff();
   }, []);
 
-  const handleInputChange = (e, staffId, day) => {
+  const handleInputChange = (e, staffId, date) => {
     const { name, value } = e.target;
     setShifts((prevShifts) => ({
       ...prevShifts,
       [staffId]: {
         ...prevShifts[staffId],
-        [day]: {
-          ...prevShifts[staffId][day],
+        [date]: {
+          ...prevShifts[staffId][date],
           [name]: value,
         },
       },
@@ -57,44 +56,68 @@ const ShiftBooking = () => {
       const shiftStarts = [];
       const shiftEnds = [];
       const dates = [];
-      for (const day in shifts[staffId]) {
-        const shift = shifts[staffId][day];
+      for (const date in shifts[staffId]) {
+        const shift = shifts[staffId][date];
         if (shift.start && shift.end) {
           shiftStarts.push(shift.start);
           shiftEnds.push(shift.end);
-          const dateIndex = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].indexOf(day);
-          const date = weekDates[dateIndex];
-          dates.push(format(date, 'yyyy-MM-dd'));
+          dates.push(date);
         }
       }
       await DataStore.save(
         new TimeEntry({
-          StaffID: staff.find((s) => s.id === staffId).Name,
+          StaffID: staff.find((s) => s.id === staffId).Email,
           ShiftStart: shiftStarts,
           ShiftFinish: shiftEnds,
           Dates: dates,
-          WeekNumber: format(weekStart, 'w'),
+          WeekNumber: format(monthStart, 'w'),
         })
       );
     }
+    console.log('Saved!');
+    navigate ('/staff')
   };
-  
-  
+
+  // Group dates by week
+  const weeks = [];
+  let currentWeek = [];
+  monthDates.forEach((date) => {
+    currentWeek.push(date);
+    if (currentWeek.length === 7) {
+      weeks.push(currentWeek);
+      currentWeek = [];
+    }
+  });
+  if (currentWeek.length > 0) {
+    weeks.push(currentWeek);
+  }
+
+  // Determine current week and day
+  const today = new Date();
+  const currentWeekIndex = weeks.findIndex((week) =>
+    week.some((date) => format(date, 'yyyy-MM-dd') === format(today, 'yyyy-MM-dd'))
+  );
+  const currentDay = format(today, 'EEE do');
 
   return (
     <div className="flex flex-col items-center">
       <div className="mb-4">
-        Current Week: {format(weekStart, 'MMM do')} -{' '}
-        {format(weekEnd, 'MMM do, yyyy')}
+        Current Month:{' '}
+        {format(monthStart, 'MMM yyyy')}
       </div>
       <div className="overflow-x-auto">
-        <table className="table-auto border-collapse border border-gray-300">
+        <table className="table-auto border-collapse border border-gray-300 w-full">
           <thead>
             <tr>
               <th className="border border-gray-300 px-4 py-2">Staff</th>
-              {weekDates.map((date) => (
-                <th key={date} className="border border-gray-300 px-4 py-2">
-                  {format(date, 'EEE do')}
+              {weeks.map((week, index) => (
+                <th
+                  key={index}
+                  className={`border border-gray-300 px-4 py-2 ${
+                    index === currentWeekIndex ? 'bg-green-100' : ''
+                  }`}
+                >
+                  Week {index + 1}
                 </th>
               ))}
             </tr>
@@ -105,26 +128,40 @@ const ShiftBooking = () => {
                 <td className="border border-gray-300 px-4 py-2">
                   {staffMember.Name}
                 </td>
-                {['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map((day) => (
-                  <td key={day} className="border border-gray-300 px-4 py-2">
-                    <input
-                      type="time"
-                      name="start"
-                      value={shifts[staffMember.id]?.[day]?.start || ''}
-                      onChange={(e) =>
-                        handleInputChange(e, staffMember.id, day)
-                      }
-                      className="border rounded-md p-1"
-                    />
-                    <input
-                      type="time"
-                      name="end"
-                      value={shifts[staffMember.id]?.[day]?.end || ''}
-                      onChange={(e) =>
-                        handleInputChange(e, staffMember.id, day)
-                      }
-                      className="border rounded-md p-1"
-                    />
+                {weeks.map((week, index) => (
+                  <td key={index} className="border border-gray-300 px-4 py-2">
+                    {week.map((date) => {
+                      const dateString = format(date, 'yyyy-MM-dd');
+                      return (
+                        <div
+                          key={dateString}
+                          className={`${
+                            format(date, 'EEE do') === currentDay ? 'bg-yellow-100' : ''
+                          }`}
+                        >
+                          {format(date, 'EEE do')}
+                          <br />
+                          <input
+                            type="time"
+                            name="start"
+                            value={shifts[staffMember.id]?.[dateString]?.start || ''}
+                            onChange={(e) =>
+                              handleInputChange(e, staffMember.id, dateString)
+                            }
+                            className="border rounded-md p-1"
+                          />
+                          <input
+                            type="time"
+                            name="end"
+                            value={shifts[staffMember.id]?.[dateString]?.end || ''}
+                            onChange={(e) =>
+                              handleInputChange(e, staffMember.id, dateString)
+                            }
+                            className="border rounded-md p-1"
+                          />
+                        </div>
+                      );
+                    })}
                   </td>
                 ))}
               </tr>
@@ -140,5 +177,6 @@ const ShiftBooking = () => {
       </button>
     </div>
   );
-                    }  
+};
+
 export default ShiftBooking;

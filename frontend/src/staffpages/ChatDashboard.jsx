@@ -47,11 +47,11 @@ function App() {
   React.useEffect(() => {
     fetchMessages();
     const subscription = DataStore.observe(Messages).subscribe(() =>
+    
       fetchMessages()
+      
     );
-    if ('vibrate' in navigator) {
-      navigator.vibrate(200);
-    }
+    
     Auth.currentAuthenticatedUser().then((user) =>
       setUserEmail(user.attributes.email)
     );
@@ -60,8 +60,11 @@ function App() {
 
   async function fetchMessages() {
     const messagesData = await DataStore.query(Messages);
-    setMessages(messagesData);
+    const sortedMessages = messagesData.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    setMessages(sortedMessages);
+
   }
+  
 
   async function handleAddMessage() {
     const user = await Auth.currentAuthenticatedUser();
@@ -80,6 +83,8 @@ function App() {
       setShouldFlash(true);
     }
   }
+
+  
 
   async function handleDelivery(message) {
 
@@ -153,17 +158,6 @@ function App() {
 
   // Format the time and date using date-fns
   const time = format(now, "h:mm a");
-
-
-
-
-
-  
-  
-
-
-
-  // Add your kitchen stats here
 
 
   return (

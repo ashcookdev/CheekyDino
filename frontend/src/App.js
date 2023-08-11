@@ -111,16 +111,32 @@ function App() {
   return (
     <>
       {isSignedIn &&
-  !allowedGroups.includes(userGroup) &&
-  !['/dashboard', '/kitchen','/Tables','/finance','/chat'].includes(location.pathname) ? (
-    <CustomerNav />
-  ) : isSignedIn &&
-    allowedGroups.includes(userGroup) &&
-    !['/dashboard', '/kitchen','/Tables','/finance','/chat', '/till'].includes(location.pathname) ? (
-    <StaffNav />
-  ) : !['/dashboard', '/kitchen', '/Tables','/finance','/chat', '/till'].includes(location.pathname) ? (
-    <Navbar />
-  ) : null}
+        !allowedGroups.includes(userGroup) &&
+        !['/dashboard', '/kitchen', '/Tables', '/finance', '/chat'].includes(
+          location.pathname
+        ) ? (
+        <CustomerNav />
+      ) : isSignedIn &&
+        allowedGroups.includes(userGroup) &&
+        ![
+          '/dashboard',
+          '/kitchen',
+          '/Tables',
+          '/finance',
+          '/chat',
+          '/till',
+        ].includes(location.pathname) ? (
+        <StaffNav />
+      ) : ![
+          '/dashboard',
+          '/kitchen',
+          '/Tables',
+          '/finance',
+          '/chat',
+          '/till',
+        ].includes(location.pathname) ? (
+        <Navbar />
+      ) : null}
       <Routes>
         {isSignedIn && !allowedGroups.includes(userGroup) && (
           <>
@@ -128,8 +144,7 @@ function App() {
             <Route path="/add-guests" element={<PartyGuests />} />
             <Route path="/sessionbookings" element={<SessionBooking />} />
             <Route path="/order" element={<Order />} />
-            <Route path="/order/kidsmenu" element = {<KidsMenu />} />
-
+            <Route path="/order/kidsmenu" element={<KidsMenu />} />
           </>
         )}
       </Routes>
@@ -138,25 +153,22 @@ function App() {
           <>
             <Route path="/calender" element={<AuthenticatedCalender />} />
             <Route path="/chat" element={<AuthenticatedChat />} />
-            
-            <Route path= "/kitchen" element={<AuthenticatedKitchen />} />
+            <Route path="/kitchen" element={<AuthenticatedKitchen />} />
             <Route path="/Till" element={<AuthenticatedTill />} />
             <Route path="/dashboard" element={<AuthenticatedDashBoard />} />
-            <Route path= "/Barcode" element={<Barcode />} />
-            <Route path= "/Tables" element={<AuthenticatedTables />} />
-            <Route path= "/TillBooking" element={<TillBooking />} />
-            <Route path= "/orders" element={<OrderHistory />} />
-            <Route path= "/sessionhistory" element={<SessionHistory/>} />
-            <Route path= "/partyhistory" element={<PartyHistory />} />
-            <Route path= "/finance" element={<Finance />} />
-            <Route path= "/Graph" element={<Graph />} />
-            <Route path= "/Tasks" element={<Task />} />
-            <Route path= "/Customerscreen" element={<CustomerScreen />} />
-            <Route path= "/timeslot" element={<SessionToday/>} />
-            <Route path= "/edithome" element={<EditHome/>} />
-            <Route path= "/staff" element = {<Shifts/>} />
-            
-
+            <Route path="/Barcode" element={<Barcode />} />
+            <Route path="/Tables" element={<AuthenticatedTables />} />
+            <Route path="/TillBooking" element={<TillBooking />} />
+            <Route path="/orders" element={<OrderHistory />} />
+            <Route path="/sessionhistory" element={<SessionHistory />} />
+            <Route path="/partyhistory" element={<PartyHistory />} />
+            <Route path="/finance" element={<Finance />} />
+            <Route path="/Graph" element={<Graph />} />
+            <Route path="/staff/shiftbooking" element={<Task />} />
+            <Route path="/Customerscreen" element={<CustomerScreen />} />
+            <Route path="/timeslot" element={<SessionToday />} />
+            <Route path="/edithome" element={<EditHome />} />
+            <Route path="/staff" element={<Shifts />} />
           </>
         )}
       </Routes>
@@ -166,17 +178,31 @@ function App() {
         <Route path="/character" element={<Character />} />
         <Route path="/packages" element={<Packages />} />
         <Route path="/login" element={<Login />} />
-        <Route path= "/sessionlogin" element= {<SessionLogin/>} />
+        <Route path="/sessionlogin" element={<SessionLogin />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/trexparty/calendar" element={<TRexCalendar />} />
-        <Route path="/themed" element={<ThemedCalendar />} />
-        <Route path="/session" element={<SessionBook />} />
-        <Route path="/" element={<Home />} />
-        
+        <Route
+          path="/trexparty/calendar"
+          element={<TRexCalendar />}
+        />
+        <Route
+          path="/themed"
+          element={<ThemedCalendar />}
+        />
+        <Route
+          path="/session"
+          element={<SessionBook />}
+        />
+        <Route
+          path="/" 
+          element={
+             
+                  <Home />
+              } 
+         /> 
       </Routes>
-      
     </>
   );
+  
 }
 
 export default App;

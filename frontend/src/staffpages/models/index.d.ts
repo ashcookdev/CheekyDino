@@ -220,8 +220,8 @@ type EagerTimeEntry = {
   readonly Dates?: (string | null)[] | null;
   readonly ShiftStart?: (string | null)[] | null;
   readonly ShiftFinish?: (string | null)[] | null;
-  readonly WeekNumber?: string | null;
-  readonly StaffNam?: string | null;
+  readonly Month?: string | null;
+  readonly StaffName?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -240,8 +240,8 @@ type LazyTimeEntry = {
   readonly Dates?: (string | null)[] | null;
   readonly ShiftStart?: (string | null)[] | null;
   readonly ShiftFinish?: (string | null)[] | null;
-  readonly WeekNumber?: string | null;
-  readonly StaffNam?: string | null;
+  readonly Month?: string | null;
+  readonly StaffName?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

@@ -597,15 +597,15 @@ export const schema = {
                     "attributes": [],
                     "isArrayNullable": true
                 },
-                "WeekNumber": {
-                    "name": "WeekNumber",
+                "Month": {
+                    "name": "Month",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
-                "StaffNam": {
-                    "name": "StaffNam",
+                "StaffName": {
+                    "name": "StaffName",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -2351,5 +2351,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "a1600db761b18272c73015838ac35ba4"
+    "version": "6d7e923372f64a9337beaee7df9c06d3"
 };

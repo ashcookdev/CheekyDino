@@ -2,43 +2,64 @@ import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
 import { Staff, TimeEntry } from './models';
 import {
-    format,
-    startOfWeek,
-    endOfWeek,
-    eachDayOfInterval,
-    addWeeks,
-    } from 'date-fns';
-    import { Auth } from 'aws-amplify'
+  format,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  addWeeks,
+  isSameDay,
+} from 'date-fns';
+import { Auth } from 'aws-amplify';
+import { useNavigate } from 'react-router-dom';
+import Tasks from './Task';
 
-   const ShiftBooking = () => {
+const ShiftBooking = () => {
+  const navigate = useNavigate();
 
+  // find out the current user's group if Developer or Admin then render a new button
 
-// find out the current user's group if Developer or Admin then render a new button
-
-const [userGroups, setUserGroups] = useState([])
-
-useEffect(() => {
-    async function getUserGroups() {
-        const user = await Auth.currentAuthenticatedUser()
-        const groups = user.signInUserSession.accessToken.payload['cognito:groups']
-        setUserGroups(groups)
-    }
-    getUserGroups()
-}, [])
-
-
-
-
-
-
-
+  const [userGroups, setUserGroups] = useState([]);
+  const [userEmail, setUserEmail] = useState('');
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   const [staff, setStaff] = useState([]);
   const [shifts, setShifts] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date());
-  const weekStart = startOfWeek(currentDate);
-  const weekEnd = endOfWeek(currentDate);
-  const weekDates = eachDayOfInterval({ start: weekStart, end: weekEnd });
+  const [clockedIn, setClockIn] = useState(false);
+  const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
+  const [booking, setBooking] = useState(false);
+
+  const monthStart = startOfMonth(currentDate);
+  const monthEnd = endOfMonth(currentDate);
+  const monthDates = eachDayOfInterval({ start: monthStart, end: monthEnd });
+
+  useEffect(() => {
+    async function getUserGroups() {
+      const user = await Auth.currentAuthenticatedUser();
+      const groups =
+        user.signInUserSession.accessToken.payload['cognito:groups'];
+      setUserGroups(groups);
+    }
+    getUserGroups();
+  }, []);
+
+  // if the user is a developer or admin then render the button
+
+  useEffect(() => {
+    async function getUserEmail() {
+      const user = await Auth.currentAuthenticatedUser();
+      const email = user.attributes.email;
+      setUserEmail(email);
+    }
+    getUserEmail();
+  }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000); // update every minute
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     const fetchStaff = async () => {
@@ -46,24 +67,32 @@ useEffect(() => {
       setStaff(staffData);
       const timeEntries = await DataStore.query(TimeEntry);
       const shiftsData = staffData.reduce((acc, curr) => {
-        acc[curr.id] = {
-          mon: { start: '', end: '' },
-          tue: { start: '', end: '' },
-          wed: { start: '', end: '' },
-          thu: { start: '', end: '' },
-          fri: { start: '', end: '' },
-          sat: { start: '', end: '' },
-          sun: { start: '', end: '' },
-        };
+        acc[curr.id] = {};
+        monthDates.forEach((date) => {
+          acc[curr.id][format(date, 'yyyy-MM-dd')] = {
+            start: '',
+            end: '',
+            clockIn: '',
+            clockOut: '',
+          };
+        });
         const staffTimeEntry = timeEntries.find(
-          (te) => te.StaffID === curr.Name && te.WeekNumber === format(weekStart, 'w')
+          (te) =>
+            te.StaffID === curr.Email && te.Month === format(monthStart, 'M')
         );
         if (staffTimeEntry) {
           staffTimeEntry.Dates.forEach((date, index) => {
-            const day = format(new Date(date), 'iii').toLowerCase();
-            acc[curr.id][day] = {
+            acc[curr.id][date] = {
               start: staffTimeEntry.ShiftStart[index],
               end: staffTimeEntry.ShiftFinish[index],
+              clockIn:
+                staffTimeEntry.ClockIn && staffTimeEntry.ClockIn[index]
+                  ? format(new Date(staffTimeEntry.ClockIn[index]), 'p')
+                  : '',
+              clockOut:
+                staffTimeEntry.ClockOut && staffTimeEntry.ClockOut[index]
+                  ? format(new Date(staffTimeEntry.ClockOut[index]), 'p')
+                  : '',
             };
           });
         }
@@ -72,63 +101,126 @@ useEffect(() => {
       setShifts(shiftsData);
     };
     fetchStaff();
-  }, [weekStart]);
+  }, [monthDates, monthStart]);
   
-  const handleNextWeek = () => {
-    setCurrentDate((prevDate) => addWeeks(prevDate, 1));
-  };
 
-  
-  
+  const weeks = [];
+let currentWeek = [];
+monthDates.forEach((date) => {
+  currentWeek.push(date);
+  if (currentWeek.length === 7) {
+    weeks.push(currentWeek);
+    currentWeek = [];
+  }
+});
+if (currentWeek.length > 0) {
+  weeks.push(currentWeek);
+}
+
+const today = new Date();
+
+const currentDay = format(today, 'dd-MM-yyyy');
+
+
+if (booking === true) {
   return (
-    <div className="container mx-auto px-4">
-      <div className="text-center mb-4">
-        <h1 className="text-2xl font-bold">Shift Booking</h1>
-        <h2 className="text-lg">
-          Week {format(weekStart, 'w')}: {format(weekStart, 'MMM do')} -{' '}
-          {format(weekEnd, 'MMM do, yyyy')}
-        </h2>
+    navigate('/staff/shiftbooking')
+  )
+}
+
+return (
+  <div className="px-4 sm:px-6 lg:px-8">
+    <div className="sm:flex sm:items-center">
+      <div className="sm:flex-auto">
+        <h1 className="text-base font-bold leading-6 text-center text-gray-900">Shifts</h1>
+        <p className="mt-2 text-sm text-gray-700">
+Todays Date: {currentDay}        </p>
       </div>
-      <div className="overflow-x-auto">
-        <table className="table-auto w-full border-collapse border border-gray-300 text-sm">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 px-4 py-2">Staff</th>
-              {weekDates.map((date) => (
-                <th key={date} className="border border-gray-300 px-4 py-2">
-                  {format(date, 'EEE do')}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {staff.map((staffMember) => (
-              <tr key={staffMember.id}>
-                <td className="border border-gray-300 px-4 py-2">
-                  {staffMember.Name}
-                </td>
-                {['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map((day) => (
-                  <td key={day} className="border border-gray-300 px-4 py-2">
-                    <div>{shifts[staffMember.id]?.[day]?.start || '-'}</div>
-                    <div>{shifts[staffMember.id]?.[day]?.end || '-'}</div>
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="text-center mt-4">
-        <button
-          onClick={handleNextWeek}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      {userGroups.includes('Admin') || userGroups.includes('Developer') ? (
+      <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+        <button onClick={() => setBooking(true)}
+          type="button"
+          className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          Next
+          Book Shifts
         </button>
       </div>
+
+    ) : null}
     </div>
+
+    <div className="mt-8 flow-root">
+      <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+            <div className="flex justify-between mb-4">
+              <button
+                onClick={() => setCurrentWeekIndex((i) => Math.max(i - 1, 0))}
+                disabled={currentWeekIndex === 0}
+                type="button"
+                className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Previous
+              </button>
+              <button
+                onClick={() => setCurrentWeekIndex((i) => Math.min(i + 1, weeks.length - 1))}
+                disabled={currentWeekIndex === weeks.length - 1}
+                type="button"
+                className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Next
+              </button>
+            </div>
+            <table className="min-w-full divide-y divide-gray-300">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"></th>
+                  {weeks[currentWeekIndex].map((date) => (
+                    <th
+                      key={date}
+                      scope="col"
+                      className={`px-3 py-3.5 text-left text-sm font-semibold text-gray-900 ${
+                        isSameDay(date, today) ? 'bg-purple-100' : ''
+                      }`}
+                    >
+                      {format(date, 'EEE do')}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {staff.map((staffMember) => (
+                  <tr key={staffMember.id}>
+                    <td className="whitespacenowrap py-4 pl-4 pr-3 text-sm font-bold text-purple-900 sm:pl-6">
+  {staffMember.Name}
+</td>
+{weeks[currentWeekIndex].map((date) => {
+  const dateString = format(date, 'yyyy-MM-dd');
+  return (
+    <td key={dateString} className="whitespace-nowrap px-3 py-4 text-sm text-bold text-black">
+      Start: {shifts[staffMember.id]?.[dateString]?.start || ''}
+      <br />
+      End: {shifts[staffMember.id]?.[dateString]?.end || ''}
+      <br />
+      Clock In: {shifts[staffMember.id]?.[dateString]?.clockIn || ''}
+      <br />
+      Clock Out: {shifts[staffMember.id]?.[dateString]?.clockOut || ''}
+    </td>
   );
+})}
+</tr>
+))}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+);
+
+
+
 };
 
-
-        export default ShiftBooking;
+export default ShiftBooking;

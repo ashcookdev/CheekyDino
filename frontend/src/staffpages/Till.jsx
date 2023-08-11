@@ -3,7 +3,6 @@ import { DataStore, Predicates } from "aws-amplify";
 import { format, parse, set } from "date-fns";
 import { PartyBooking } from './models';
 import { PartyGuests } from './models';
-import { Messages } from './models';
 import BarCodeScanner from "./barcodescanner";
 import TillBooking from "./tillbooking";
 import { Sessions } from "./models";
@@ -301,7 +300,7 @@ useEffect(() => {
         <h2 className="font-bold text-lg mb-4">Menu:</h2>
         <div className="grid grid-cols-4 gap-4">
           <button
-            className="w-full h-full bg-gray-200 rounded-md p-2"
+            className="w-full h-full bg-red-500 rounded-md p-2"
             onClick={() =>
               setShowSoftDrinks(true) ||
               setShowHotDrinks(false) ||
@@ -312,14 +311,10 @@ useEffect(() => {
 
             }
           >
-            <img
-              className="w-full h-full object-cover rounded-md"
-              src="<URL of Soft Drinks image>"
-              alt="Soft Drinks"
-            />
+           Soft Drinks
           </button>
           <button
-            className="w-full h-full bg-gray-200 rounded-md p-2"
+            className="w-full h-full bg-blue-500 rounded-md p-2"
             onClick={() =>
               setShowHotDrinks(true) ||
               setShowSoftDrinks(false) ||
@@ -330,14 +325,10 @@ useEffect(() => {
 
             }
           >
-            <img
-              className="w-full h-full object-cover rounded-md"
-              src="<URL of Hot Drinks image>"
-              alt="Hot Drinks"
-            />
+          Hot Drinks
           </button>
           <button
-            className="w-full h-full bg-gray-200 rounded-md p-2"
+            className="w-full h-full bg-orange-500 rounded-md p-2"
             onClick={() =>
               setShowKidsMeal(true) ||
               setShowHotDrinks(false) ||
@@ -347,15 +338,11 @@ useEffect(() => {
 
             }
           >
-            <img
-              className="w-full h-full object-cover rounded-md"
-              src="<URL of Kids Meal image>"
-              alt="Kids Meal"
-            />
+           Kids Meal
           </button>
 
           <button
-            className="w-full h-full bg-gray-200 rounded-md p-2"
+            className="w-full h-full bg-green-500 rounded-md p-2"
             onClick={() =>
               setShowConfectionary(true) ||
               setShowSoftDrinks(false) ||
@@ -366,14 +353,11 @@ useEffect(() => {
               setShowExtras(false)
             }
           >
-            <img
-              className="w-full h-full object-cover rounded-md"
-              src="<URL of Sweets/Cakes image>"
-              alt="Sweets/Cakes"
-            />
+            Confectionary
+            
           </button>
           <button
-            className="w-full h-full bg-gray-200 rounded-md p-2"
+            className="w-full h-full bg-yellow-500 rounded-md p-2"
             onClick={() =>
               setShowHotFood(true) ||
               setShowSoftDrinks(false) ||
@@ -383,11 +367,7 @@ useEffect(() => {
               setShowExtras(false)
             }
           >
-            <img
-              className="w-full h-full object-cover rounded-md"
-              src="<URL of Hot Food image>"
-              alt="Hot Food"
-            />
+            Hot Food
           </button>
         </div>
       </div>
