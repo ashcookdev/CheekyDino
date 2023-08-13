@@ -256,12 +256,12 @@ export default function Kitchen() {
             <span className="sr-only">Open sidebar</span>
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
-          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Dashboard</div>
+          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Tables</div>
           <a href="#">
             <span className="sr-only">Your profile</span>
             <img
               className="h-8 w-8 rounded-full bg-gray-50"
-              src="./verse.gif"
+              src="./versa.gif"
               alt=""
             />
           </a>

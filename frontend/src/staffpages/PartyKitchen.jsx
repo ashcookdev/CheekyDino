@@ -18,6 +18,7 @@ export default function Kitchen() {
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
   const [fieldsetVisible, setFieldsetVisible] = useState(false);
   const [noPartyBookings, setNoPartyBookings] = useState(false);
+  const [adultFood, setAdultFood] = useState(false);
 
   const currentDate = new Date();
   const formattedDate = format(currentDate, 'MMMM dd, yyyy');
@@ -120,6 +121,17 @@ export default function Kitchen() {
     window.location.reload();
   }
 
+  async function handleAdultFoodClick() {
+    setAdultFood((prevAdultFood) => !prevAdultFood);
+  }
+
+
+
+
+
+
+   
+
   return (
    
 
@@ -165,19 +177,23 @@ export default function Kitchen() {
                     <p className="mt-1 truncate text-xs leading-5 text-white">
                       Party Food Time: {party.PartyFoodTimeDue}
                     </p>
+                   
 
                   {/* Render guest information */}
 <ul className="mt-4 space-y-2">
   {Object.keys(selected).map((key) => {
     if (selected[key] && selected[key].Arrived === true) {
       return (
+
         <li key={key}>
           {selected[key].ChildName} - {selected[key].FoodOption}
         </li>
       );
     }
   })}
+  
 </ul>
+
 
 
 
@@ -204,6 +220,13 @@ export default function Kitchen() {
                     disabled={!selected}
                   >
                     Confirm
+                  </button>
+                  <button 
+                    onClick={handleAdultFoodClick}
+                    className= 'bg-green-500 hover:bg-green-700 px-4 py-2 rounded-md text-white mr-2'
+                    
+                  >
+                    Adult Party Food
                   </button>
                 </div>
 
@@ -235,6 +258,20 @@ export default function Kitchen() {
           </div>
         </fieldset>
       )}
+      {adultFood && (
+        <fieldset>
+          <legend className="sr-only">Adult Food </legend>
+          <div className="relative -space-y-px rounded-md bg-white">
+            {party.map((partys) => (
+              <li key={partys.id} className="relative flex cursor-pointer flex-col border p-4 focus:outline-none md:grid md:grid-cols-3 md:pl-4 md:pr-6">
+<p>{partys.PartyAdultFoodChoices.join(', ')}</p>    
+              </li>
+            ))}
+          </div>
+        </fieldset>
+      )              
+          }
+      
 
 
 

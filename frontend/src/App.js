@@ -74,8 +74,10 @@ function App() {
   React.useEffect(() => {
     const subscription = DataStore.observe(Messages).subscribe((msg) => {
       if (allowedGroups.includes(userGroup) && allowedLocations.includes(location.pathname)) {
+        const audio = new Audio('/message.mp3');
+        audio.play();
         setShowModal(true);
-        setModalContent(msg.element.content)
+        setModalContent(msg.element)
       }
     });
     return () => subscription.unsubscribe();
@@ -148,7 +150,10 @@ function App() {
           </>
         )}
       </Routes>
+      {showModal && <Modal content={modalContent} />}
+
       <Routes>
+        
         {allowedGroups.includes(userGroup) && (
           <>
             <Route path="/calender" element={<AuthenticatedCalender />} />
@@ -171,6 +176,8 @@ function App() {
             <Route path="/staff" element={<Shifts />} />
           </>
         )}
+      
+      
       </Routes>
       <Routes>
         <Route path="/trexparty" element={<Trex />} />
@@ -200,6 +207,7 @@ function App() {
               } 
          /> 
       </Routes>
+    
     </>
   );
   

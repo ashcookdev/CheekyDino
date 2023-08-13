@@ -14,6 +14,8 @@ export { default as CustomerScreenCreateForm } from "./CustomerScreenCreateForm"
 export { default as CustomerScreenUpdateForm } from "./CustomerScreenUpdateForm";
 export { default as ExtrasCreateForm } from "./ExtrasCreateForm";
 export { default as ExtrasUpdateForm } from "./ExtrasUpdateForm";
+export { default as HolidayCreateForm } from "./HolidayCreateForm";
+export { default as HolidayUpdateForm } from "./HolidayUpdateForm";
 export { default as HomePageCreateForm } from "./HomePageCreateForm";
 export { default as HomePageUpdateForm } from "./HomePageUpdateForm";
 export { default as HotDrinksCreateForm } from "./HotDrinksCreateForm";

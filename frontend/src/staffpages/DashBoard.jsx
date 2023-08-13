@@ -20,7 +20,7 @@ import {
 } from '@heroicons/react/24/outline'
 import TodaysBookings from './todaysbookings'
 import Announcements from './Announcement'
-import { ArrowLeftIcon, ChatBubbleBottomCenterIcon, CurrencyPoundIcon, PencilIcon, TableCellsIcon } from '@heroicons/react/20/solid'
+import { ArrowLeftIcon, CakeIcon, ChatBubbleBottomCenterIcon, CurrencyPoundIcon, PencilIcon, TableCellsIcon } from '@heroicons/react/20/solid'
 
 
 const secondaryNavigation = [
@@ -64,7 +64,7 @@ export default function Dashboard() {
 const navigation = [
     { name: 'Till', href: '/till', icon: CurrencyPoundIcon, current: true },
   { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
-  { name: 'Kitchen', href: '/kitchen', icon: ArrowLeftIcon , current: false },
+  { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
   { name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
   { name: 'Edit', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },

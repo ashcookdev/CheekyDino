@@ -20,6 +20,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { CakeIcon } from "@heroicons/react/20/solid";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -48,7 +49,7 @@ export default function Kitchen() {
     { name: 'Home', href: '/dashboard', icon: HomeIcon, current: false},
     { name: 'Till', href: '/till', icon: CurrencyPoundIcon, current: true },
   { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
-  { name: 'Kitchen', href: '/kitchen', icon: ArrowLeftIcon , current: false },
+  { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
   { name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
   { name: 'Edit', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },

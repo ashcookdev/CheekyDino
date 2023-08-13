@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DataStore } from 'aws-amplify';
+import { DataStore, Predicates } from 'aws-amplify';
 import { Staff, TimeEntry } from './models';
 import {
   format,
@@ -12,6 +12,7 @@ import {
 import { Auth } from 'aws-amplify';
 import { useNavigate } from 'react-router-dom';
 import Tasks from './Task';
+import Holiday from './holiday';
 
 const ShiftBooking = () => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ const ShiftBooking = () => {
   const [clockedIn, setClockIn] = useState(false);
   const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
   const [booking, setBooking] = useState(false);
+  const [holiday, setHoliday] = useState(false);
 
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
@@ -128,6 +130,63 @@ if (booking === true) {
   )
 }
 
+if (holiday === true) {
+  return (
+    <Holiday email ={userEmail}/>
+  )
+}
+
+const handleClockIn = async (staffId, date) => {
+  const timeEntry = await DataStore.query(TimeEntry, Predicates.ALL, {
+    filter: (c) =>
+      c.StaffID('eq', staffId).Month('eq', format(monthStart, 'M')),
+  });
+  
+  //update the current datastore entry with the clock in time
+  if (timeEntry.length > 0) {
+    const clockInIndex = timeEntry[0].Dates.findIndex((d) => d === date);
+    if (clockInIndex > -1) {
+      const clockIn = new Date();
+      const clockInTime = format(clockIn, 'p');
+      const updatedTimeEntry = await DataStore.save(
+        TimeEntry.copyOf(timeEntry[0], (updated) => {
+          updated.ClockIn[clockInIndex] = clockIn;
+        })
+      );
+
+
+      
+      const updatedShifts = { ...shifts };
+      updatedShifts[staffId][date].clockIn = clockInTime;
+      setShifts(updatedShifts);
+    }
+  }
+};
+
+const handleClockOut = async (staffId, date) => {
+  const timeEntry = await DataStore.query(TimeEntry, (c) =>
+    c.StaffID('eq', staffId).Month('eq', format(monthStart, 'M'))
+  );
+  //update the current datastore entry with the clock in time
+  if (timeEntry.length > 0) {
+    const clockOutIndex = timeEntry[0].Dates.findIndex((d) => d === date);
+    if (clockOutIndex > -1) {
+      const clockOut = new Date();
+      const clockOutTime = format(clockOut, 'p');
+      const updatedTimeEntry = await DataStore.save(
+        TimeEntry.copyOf(timeEntry[0], (updated) => {
+          updated.ClockOut[clockOutIndex] = clockOut;
+        })
+      );
+      const updatedShifts = { ...shifts };
+      updatedShifts[staffId][date].clockOut = clockOutTime;
+      setShifts(updatedShifts);
+    }
+  }
+};
+
+
+
 return (
   <div className="px-4 sm:px-6 lg:px-8">
     <div className="sm:flex sm:items-center">
@@ -137,16 +196,21 @@ return (
 Todays Date: {currentDay}        </p>
       </div>
       {userGroups.includes('Admin') || userGroups.includes('Developer') ? (
-      <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+      <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none flex justify-between ml-5">
         <button onClick={() => setBooking(true)}
           type="button"
-          className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="block rounded-md bg-green-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Book Shifts
         </button>
+
       </div>
 
     ) : null}
+    <button onClick={()=> setHoliday(true)} type='button'className='block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+    >
+      Request Holiday
+    </button>
     </div>
 
     <div className="mt-8 flow-root">
@@ -205,9 +269,29 @@ Todays Date: {currentDay}        </p>
       Clock In: {shifts[staffMember.id]?.[dateString]?.clockIn || ''}
       <br />
       Clock Out: {shifts[staffMember.id]?.[dateString]?.clockOut || ''}
+      <br />
+      {isSameDay(date, today) && (
+        <>
+          <button
+            onClick={() => handleClockIn(staffMember.id, dateString)}
+            type="button"
+            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Clock In
+          </button>
+          <button
+            onClick={() => handleClockOut(staffMember.id, dateString)}
+            type="button"
+            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Clock Out
+          </button>
+        </>
+      )}
     </td>
   );
 })}
+
 </tr>
 ))}
 </tbody>
