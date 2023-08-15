@@ -11,8 +11,8 @@ import '../customerfont.css'
 
 
 const product = {
-  name: 'Football Party',
-  price: '290',
+  name: 'Private Hire',
+  price: '395',
   description:
   'Is it time to light another candle on the cake? As a parent, of course, you want the coolest birthday party for your child! We are 100% your partner in crime, ready to throw a party you have never seen before!',
     highlights: [
@@ -22,7 +22,7 @@ const product = {
     '- Party Host.',
     
   ],
-  imageSrc: 'https://media.giphy.com/media/kvSp97J1kBVqo/giphy.gif',
+  imageSrc: 'https://media.giphy.com/media/26tPghhb310muUkEw/giphy.gif',
   imageAlt: 'Sample of 30 icons with friendly and fun details in outline, filled, and brand color styles.',
 }
 const reviews = {
@@ -88,7 +88,7 @@ export default function Character() {
 
 
   if (click === "clicked") {
-    navigate("/themed", { state: { details: details } });
+    navigate("/privatehirecalender", { state: { details: details } });
     
   }
 

@@ -104,6 +104,8 @@ const ShiftBooking = () => {
     };
     fetchStaff();
   }, [monthDates, monthStart]);
+
+  
   
 
   const weeks = [];
@@ -118,6 +120,41 @@ monthDates.forEach((date) => {
 if (currentWeek.length > 0) {
   weeks.push(currentWeek);
 }
+
+const [totalHours, setTotalHours] = useState({});
+
+useEffect(() => {
+  const fetchTotalHours = async () => {
+    const timeEntries = await DataStore.query(TimeEntry);
+    const hours = staff.reduce((acc, curr) => {
+      acc[curr.id] = weeks.map((week) => {
+        let weekHours = 0;
+        week.forEach((date) => {
+          const dateString = format(date, 'yyyy-MM-dd');
+          const timeEntry = timeEntries.find(
+            (te) =>
+              te.StaffID === curr.Email &&
+              te.Month === format(monthStart, 'M') &&
+              te.Dates.includes(dateString)
+          );
+          if (timeEntry) {
+            const dateIndex = timeEntry.Dates.findIndex((d) => d === dateString);
+            if (timeEntry.ShiftStart[dateIndex] && timeEntry.ShiftFinish[dateIndex]) {
+              const start = new Date(`1970-01-01T${timeEntry.ShiftStart[dateIndex]}Z`);
+              const end = new Date(`1970-01-01T${timeEntry.ShiftFinish[dateIndex]}Z`);
+              weekHours += (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+            }
+          }
+        });
+        return weekHours;
+      });
+      return acc;
+    }, {});
+    setTotalHours(hours);
+  };
+  fetchTotalHours();
+}, [staff, weeks, monthStart]);
+
 
 const today = new Date();
 
@@ -152,8 +189,9 @@ const handleClockIn = async (staffId, date) => {
         TimeEntry.copyOf(timeEntry[0], (updated) => {
           updated.ClockIn[clockInIndex] = clockIn;
         })
+        
       );
-
+console.log(updatedTimeEntry);
 
       
       const updatedShifts = { ...shifts };
@@ -258,6 +296,8 @@ Todays Date: {currentDay}        </p>
                     <td className="whitespacenowrap py-4 pl-4 pr-3 text-sm font-bold text-purple-900 sm:pl-6">
   {staffMember.Name}
 </td>
+
+
 {weeks[currentWeekIndex].map((date) => {
   const dateString = format(date, 'yyyy-MM-dd');
   return (

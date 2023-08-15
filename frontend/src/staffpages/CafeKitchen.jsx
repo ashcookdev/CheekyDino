@@ -60,8 +60,15 @@ export default function CafeKitchen() {
     useEffect(() => {
         fetchTodaysOrders();
         const subscription = DataStore.observe(CafeOrder).subscribe(() =>
+        
             fetchTodaysOrders()
+            //play sound
+
         );
+        
+        const audio = new Audio('/message.mp3');
+        audio.play();
+        
         return () => subscription.unsubscribe();
     }
     , []);

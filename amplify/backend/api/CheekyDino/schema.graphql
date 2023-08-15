@@ -1,3 +1,8 @@
+type Teddys @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  Name: String
+}
+
 type Holiday @model @auth(rules: [{allow: private}, {allow: owner}]) {
   id: ID!
   Name: String

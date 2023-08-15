@@ -34,6 +34,8 @@ export { default as SoftDrinksCreateForm } from "./SoftDrinksCreateForm";
 export { default as SoftDrinksUpdateForm } from "./SoftDrinksUpdateForm";
 export { default as StaffCreateForm } from "./StaffCreateForm";
 export { default as StaffUpdateForm } from "./StaffUpdateForm";
+export { default as TeddysCreateForm } from "./TeddysCreateForm";
+export { default as TeddysUpdateForm } from "./TeddysUpdateForm";
 export { default as TimeEntryCreateForm } from "./TimeEntryCreateForm";
 export { default as TimeEntryUpdateForm } from "./TimeEntryUpdateForm";
 export { default as studioTheme } from "./studioTheme";

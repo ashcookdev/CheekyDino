@@ -71,14 +71,14 @@ export default function ThemedCalender() {
     const maxAppointments = 1;
 
     // Define the available time slots
-    const timeSlots = ['14:30'];
+    const timeSlots = ['16:30'];
 
     // Create an array to store the availability information for each time slot
     let availability = [];
 
     // Check if the selected date is a Saturday or Sunday
     const dayOfWeek = new Date(date).getDay();
-    if (dayOfWeek === 6 || dayOfWeek === 0) {
+    if (dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0) {
       // Loop through each time slot
       timeSlots.forEach(timeSlot => {
         // Filter bookings by PartyTime

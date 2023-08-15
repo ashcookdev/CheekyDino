@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import {DataStore} from '@aws-amplify/datastore';
 import { PartyBooking, Sessions } from '../../staffpages/models';
-import PartyGuests  from './PartyGuests'
 import { CheckIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
@@ -68,38 +67,10 @@ console.log(userId);
     console.log(recommendedTable);
     
     
-    let basePrice;
-    let childPrice;
-    if (partyid[0].name === 'Laser') {
-      basePrice = 190;
-      childPrice = 19.95;
-    } else if (partyid[0].name === 'T-Rex') {
-      basePrice = 145;
-      childPrice = 14.50;
-    } else if (partyid[0].name === 'Character') {
-      basePrice = 290;
-      childPrice = 19.95;
-    } else if (partyid[0].name === 'Teddy') {
-      basePrice = 215;
-      childPrice = 19.95;
-    } else if (partyid[0].name === 'Football') {
-      basePrice = 290;
-      childPrice = 19.95;
-    } else if (partyid[0].name === 'Disco') {
-      basePrice = 290;
-      childPrice = 19.95;}
+    const totalPrice = partyid[0].price;
 
     
 
-    let totalPrice = basePrice;
-
-    if (noOfChildren > 10) {
-        totalPrice += (noOfChildren - 10) * childPrice;
-    }
-    
-console.log(totalPrice);
-console.log(childPrice);
-console.log(basePrice);
 
   
     try {

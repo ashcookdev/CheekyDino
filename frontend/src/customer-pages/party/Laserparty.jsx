@@ -7,22 +7,24 @@ import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
 import '../customerfont.css'
 
 
+
 // use navigate to redirect to another page
 
 
 const product = {
-  name: 'Football Party',
-  price: '290',
+  name: 'Laser Party',
+  price: '190',
   description:
   'Is it time to light another candle on the cake? As a parent, of course, you want the coolest birthday party for your child! We are 100% your partner in crime, ready to throw a party you have never seen before!',
     highlights: [
     '- Price Includes up to 10 children, if you need to add more children you can customise your party on your booking form.',
      '- 1 hour 30 minutes of play in the play area.',
-    '- Food and drinks included.',
+    '- 40 Minutes in the party room for food and cake.',
+    '- 40 Minutes of Laser Quest.',
     '- Party Host.',
     
   ],
-  imageSrc: 'https://media.giphy.com/media/kvSp97J1kBVqo/giphy.gif',
+  imageSrc: 'https://media.giphy.com/media/ntoC59BF4CRqM/giphy.gif',
   imageAlt: 'Sample of 30 icons with friendly and fun details in outline, filled, and brand color styles.',
 }
 const reviews = {
@@ -88,7 +90,7 @@ export default function Character() {
 
 
   if (click === "clicked") {
-    navigate("/themed", { state: { details: details } });
+    navigate("/laserparty", { state: { details: details } });
     
   }
 
@@ -133,9 +135,9 @@ export default function Character() {
               <button onClick={function NextPage(event) {
                 event.preventDefault()
                 setDetails( [{
-                  name: "Football",
+                  name: "Laser",
                   price: product.price,
-                  description: "Football Party",
+                  description: "Laser Party",
 
                 }])
                 setClick("clicked")
@@ -147,7 +149,7 @@ export default function Character() {
 
               }}
                 type="button"
-                className="flex w-full component-title items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                className="flex w-full items-center component-title justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
               >
                 Book Now £{product.price}
               </button>

@@ -62,19 +62,23 @@ console.log(childData[0].name)
 
     
 
-useEffect(() => {
-  const FetchAvailability = async () => {
-    console.log('Fetching availability data for date:', date);
-    const bookings = await DataStore.query(Sessions, c => c.Date.eq(date));
-    console.log('Query result:', bookings);
-    const guests = children + adults;
-
-    // Calculate free tables per timeslot
+    useEffect(() => {
+      const FetchAvailability = async () => {
+        console.log('Fetching availability data for date:', date);
+        const bookings = await DataStore.query(Sessions, c => c.Date.eq(date));
+        console.log('Query result:', bookings);
+        const guests = children + adults;
+    
+        // Calculate free tables per timeslot
+       // Calculate free tables per timeslot
     const freeTablesPerTimeslot = timeslots.map(timeslot => {
       let freeTables = tableData.filter(table => {
+        // Exclude tables 40, 41, and 42
+        if ([40, 41, 42].includes(table.table)) {
+          return false;
+        }
         const isBooked = bookings.some(booking => {
           const {TimeslotFrom, TimeslotTo, Table} = booking;
-          console.log('Booking:', booking);
           // use timeslot to show how many tables are available
           return (
             TimeslotFrom < timeslot.end &&
@@ -84,10 +88,10 @@ useEffect(() => {
         });
         return !isBooked;
       });
-
+    
       // Sort free tables by capacity in descending order
       freeTables.sort((a, b) => b.capacity - a.capacity);
-
+    
       // Recommend multiple tables if needed
       let recommendedTables = [];
       let guestsLeft = guests;
@@ -95,24 +99,25 @@ useEffect(() => {
         recommendedTables.push(freeTables[i].table);
         guestsLeft -= freeTables[i].capacity;
       }
-
+    
       return {
         timeslot,
         freeTables: freeTables.length,
         recommendedTables
       };
     });
-
-    setFreeTablesPerTimeslot(freeTablesPerTimeslot);
-
-    // Log free tables and recommended tables per timeslot
-    freeTablesPerTimeslot.forEach(item => {
-      console.log(`Timeslot: ${item.timeslot.start} - ${item.timeslot.end}, Free Tables: ${item.freeTables}, Recommended Tables: ${item.recommendedTables}`);
-    });
-  };
-
-  FetchAvailability();
-}, []);
+    
+    
+        setFreeTablesPerTimeslot(freeTablesPerTimeslot);
+    
+        // Log free tables and recommended tables per timeslot
+        freeTablesPerTimeslot.forEach(item => {
+          console.log(`Timeslot: ${item.timeslot.start} - ${item.timeslot.end}, Free Tables: ${item.freeTables}, Recommended Tables: ${item.recommendedTables}`);
+        });
+      };
+    
+      FetchAvailability();
+    }, []);
 
     // Handle booking
 function handleBook(item) {

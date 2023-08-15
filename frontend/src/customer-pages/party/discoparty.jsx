@@ -11,7 +11,7 @@ import '../customerfont.css'
 
 
 const product = {
-  name: 'Football Party',
+  name: 'Disco Party',
   price: '290',
   description:
   'Is it time to light another candle on the cake? As a parent, of course, you want the coolest birthday party for your child! We are 100% your partner in crime, ready to throw a party you have never seen before!',
@@ -22,7 +22,7 @@ const product = {
     '- Party Host.',
     
   ],
-  imageSrc: 'https://media.giphy.com/media/kvSp97J1kBVqo/giphy.gif',
+  imageSrc: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExam1zYnJta21qNmVneGFzNG5ldnE5Y29vYWcxbGpkbG8zYjV4aWc3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/wcfQ8BPg1QK1aEut8a/giphy.gif',
   imageAlt: 'Sample of 30 icons with friendly and fun details in outline, filled, and brand color styles.',
 }
 const reviews = {
@@ -133,9 +133,10 @@ export default function Character() {
               <button onClick={function NextPage(event) {
                 event.preventDefault()
                 setDetails( [{
-                  name: "Football",
+                  name: "Disco",
                   price: product.price,
-                  description: "Football Party",
+                  description: "",
+                  party: "Disco",
 
                 }])
                 setClick("clicked")
@@ -147,7 +148,7 @@ export default function Character() {
 
               }}
                 type="button"
-                className="flex w-full component-title items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                className="flex w-full items-center component-title justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
               >
                 Book Now £{product.price}
               </button>

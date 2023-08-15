@@ -62,38 +62,43 @@ useEffect(() => {
     const guests = children + adults;
 
     // Calculate free tables per timeslot
-    const freeTablesPerTimeslot = timeslots.map(timeslot => {
-      let freeTables = tableData.filter(table => {
-        const isBooked = bookings.some(booking => {
-          const {TimeslotFrom, TimeslotTo, Table} = booking;
-          console.log('Booking:', booking);
-          // use timeslot to show how many tables are available
-          return (
-            TimeslotFrom < timeslot.end &&
-            TimeslotTo > timeslot.start &&
-            Table === table.table
-          );
-        });
-        return !isBooked;
-      });
-
-      // Sort free tables by capacity in descending order
-      freeTables.sort((a, b) => b.capacity - a.capacity);
-
-      // Recommend multiple tables if needed
-      let recommendedTables = [];
-      let guestsLeft = guests;
-      for (let i = 0; i < freeTables.length && guestsLeft > 0; i++) {
-        recommendedTables.push(freeTables[i].table);
-        guestsLeft -= freeTables[i].capacity;
-      }
-
-      return {
-        timeslot,
-        freeTables: freeTables.length,
-        recommendedTables
-      };
+   // Calculate free tables per timeslot
+const freeTablesPerTimeslot = timeslots.map(timeslot => {
+  let freeTables = tableData.filter(table => {
+    // Exclude tables 40, 41, and 42
+    if ([40, 41, 42].includes(table.table)) {
+      return false;
+    }
+    const isBooked = bookings.some(booking => {
+      const {TimeslotFrom, TimeslotTo, Table} = booking;
+      // use timeslot to show how many tables are available
+      return (
+        TimeslotFrom < timeslot.end &&
+        TimeslotTo > timeslot.start &&
+        Table === table.table
+      );
     });
+    return !isBooked;
+  });
+
+  // Sort free tables by capacity in descending order
+  freeTables.sort((a, b) => b.capacity - a.capacity);
+
+  // Recommend multiple tables if needed
+  let recommendedTables = [];
+  let guestsLeft = guests;
+  for (let i = 0; i < freeTables.length && guestsLeft > 0; i++) {
+    recommendedTables.push(freeTables[i].table);
+    guestsLeft -= freeTables[i].capacity;
+  }
+
+  return {
+    timeslot,
+    freeTables: freeTables.length,
+    recommendedTables
+  };
+});
+
 
     setFreeTablesPerTimeslot(freeTablesPerTimeslot);
 
@@ -111,6 +116,8 @@ function handleBook(item) {
 
   const name = childData[0].name
   const extraNames = childData.length > 1 ? childData.slice(1).map(item => item.name) : null;
+
+  
   
 
   // Save booking information to DataStore

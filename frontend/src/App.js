@@ -44,6 +44,15 @@ import KidsMenu from './staffpages/kidsmenu'
 import SessionToday from './staffpages/todaysbookings';
 import EditHome from './staffpages/edithome';
 import Shifts from './staffpages/shifts';
+import DiscoParty from './customer-pages/party/discoparty';
+import LaserParty from './customer-pages/party/Laserparty';
+import LaserPartyCalender from './customer-pages/party/laserpartycalender';
+import TeddyParty from './customer-pages/party/Teddyparty';
+import TeddyPartyCalender from './customer-pages/party/teddycalender';
+import PrivateHire from './customer-pages/party/privatehire';
+import PrivateHireCalender from './customer-pages/party/privatehirecalender';
+import PrivateHireRegister from './customer-pages/party/privatehireregister';
+
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -174,6 +183,7 @@ function App() {
             <Route path="/timeslot" element={<SessionToday />} />
             <Route path="/edithome" element={<EditHome />} />
             <Route path="/staff" element={<Shifts />} />
+
           </>
         )}
       
@@ -181,12 +191,25 @@ function App() {
       </Routes>
       <Routes>
         <Route path="/trexparty" element={<Trex />} />
+        <Route path="/disco" element={<DiscoParty />} />
+        <Route path="/laser" element={<LaserParty />} />
+        <Route path="/laserparty" element={<LaserPartyCalender />} />
+        <Route path="/teddy" element={<TeddyParty />} />
+        <Route path="/teddyparty" element={<TeddyPartyCalender />} />
+        <Route path="/privatehire" element={<PrivateHire />} />
+        <Route path="/privatehirecalender" element={<PrivateHireCalender />} />
+
+        
         <Route path="/football" element={<Football />} />
         <Route path="/character" element={<Character />} />
         <Route path="/packages" element={<Packages />} />
         <Route path="/login" element={<Login />} />
         <Route path="/sessionlogin" element={<SessionLogin />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/privatehireregister" element={<PrivateHireRegister />} />
+        
+
+
         <Route
           path="/trexparty/calendar"
           element={<TRexCalendar />}

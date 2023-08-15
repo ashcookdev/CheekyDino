@@ -6,6 +6,34 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 
 
 
+type EagerTeddys = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Teddys, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Name?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyTeddys = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Teddys, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Name?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Teddys = LazyLoading extends LazyLoadingDisabled ? EagerTeddys : LazyTeddys
+
+export declare const Teddys: (new (init: ModelInit<Teddys>) => Teddys) & {
+  copyOf(source: Teddys, mutator: (draft: MutableModel<Teddys>) => MutableModel<Teddys> | void): Teddys;
+}
+
 type EagerHoliday = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Holiday, 'id'>;

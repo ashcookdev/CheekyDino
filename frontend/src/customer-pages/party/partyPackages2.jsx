@@ -41,7 +41,7 @@ Book Now                  </p>
               <div className="flex items-end p-6 sm:absolute sm:inset-0">
                 <div>
                   <h3 className="font-semibold text-white">
-                    <a href="/character">
+                    <a href="/laser">
                       <span className="absolute inset-0" />
 Laser Party               </a>
                   </h3>
@@ -63,9 +63,9 @@ Book Now                  </p>
               <div className="flex items-end p-6 sm:absolute sm:inset-0">
                 <div>
                   <h3 className="font-semibold text-white">
-                    <a href="#">
+                    <a href="/teddy">
                       <span className="absolute inset-0" />
-Private Hire                    </a>
+Teddy Party                  </a>
                   </h3>
                   <p aria-hidden="true" className="mt-1 text-sm text-white">
                     Shop now

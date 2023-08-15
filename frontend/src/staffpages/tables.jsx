@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { DataStore } from 'aws-amplify';
+import { DataStore, Predicates } from 'aws-amplify';
 import { Sessions } from './models';
 import { isToday, format, differenceInMinutes, parse } from 'date-fns';
 import TableData from './TableData.json';
@@ -85,27 +85,40 @@ function OccupiedTables() {
     };
   });
 
-  async function handleLeftCenter(table) {
-    // Retrieve the records with the matching id
-    const records = await DataStore.query(Sessions, table.id);
-
-    if (!records || records.length === 0) {
-      console.error('Record not found:', table.id);
+  async function handleLeftCenter(event, table) {
+    event.preventDefault();
+  
+    // Retrieve all records
+    const records = await DataStore.query(Sessions, Predicates.ALL);
+  
+    // Find the record with the matching table number, Arrived === true, and LeftCenter === false
+    const record = records.find(
+      (c) =>
+        c.Table === table.number && c.Arrived === true && c.LeftCenter === false
+    );
+  
+    if (!record) {
+      console.error('Record not found:', table.number);
       return;
     }
-
-    // Update the LeftCenter field for all matching records
-    for (const record of records) {
-      await DataStore.save(
-        Sessions.copyOf(record, (updated) => {
-          updated.LeftCenter = true;
-          updated.TimeLeft = format(new Date(), 'HH:mm:ss.SSS');
-        })
-      );
-    }
+  
+    // Update the LeftCenter field for the matching record
+    await DataStore.save(
+      Sessions.copyOf(record, (updated) => {
+        updated.LeftCenter = true;
+        updated.TimeLeft = format(new Date(), 'HH:mm:ss.SSS');
+      })
+    );
     window.location.reload();
   }
-
+  
+  
+  
+  
+  
+  
+  
+  
 
 
 
@@ -279,8 +292,10 @@ const Delivered = async (order) => {
           <div className="ml-auto flex-shrink-0 flex items-center space-x-4 mt-4 sm:mt-0">
           <button
       type="button"
-      onClick={() => handleLeftCenter(table)}
-
+ onClick={(event) => {
+    console.log('table:', table);
+    handleLeftCenter(event, table);
+  }}
       className="inline-flex items-center gap-x-2 rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
     >
       Left Center

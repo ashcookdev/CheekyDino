@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'// ...
 import { useLocation } from 'react-router-dom';
 import { useCallback } from 'react';
 import '../customerfont.css'
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -243,7 +244,7 @@ let imageURL = "https://media.giphy.com/media/4njbG9gEe2c5j2RIWD/giphy.gif"
                     {partyid.map((party) => (
                       <div key={party.id} className="mb-2">
                         <p className="text-center component-title mb-1">Party: {party.name}</p>
-                        <p className="text-center component-title mb-1">Price: {party.price}</p>
+                        <p className="text-center component-title mb-1">Price: £{party.price}</p>
                       </div>
                     ))}
                     <button

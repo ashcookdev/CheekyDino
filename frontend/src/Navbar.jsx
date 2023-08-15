@@ -45,10 +45,10 @@ export default function Example() {
                     Party Packages
                   </a>
                   <a
-                    href="#"
+                    href="/privatehire"
                     className="inline-flex items-center border-b-2 border-transparent component-title px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                   >
-                    About Us
+                    Private Hire
                   </a>
                   <a
                     href="/login"

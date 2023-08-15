@@ -6,13 +6,14 @@ import {
   eachDayOfInterval,
   format,
 } from 'date-fns';
-import { Staff, TimeEntry } from '../staffpages/models';
+import { Staff, TimeEntry, Holiday } from '../staffpages/models';
 import { useNavigate } from 'react-router-dom';
 
 const ShiftBooking = () => {
   const [staff, setStaff] = useState([]);
   const [shifts, setShifts] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [holiday, setHoliday] = useState([]);
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
   const monthDates = eachDayOfInterval({ start: monthStart, end: monthEnd });
@@ -51,7 +52,25 @@ const ShiftBooking = () => {
     }));
   };
 
+  const calculateTotalHours = () => {
+    const hours = {};
+    for (const staffId in shifts) {
+      hours[staffId] = {};
+      for (const date in shifts[staffId]) {
+        const shift = shifts[staffId][date];
+        if (shift.start && shift.end) {
+          const start = new Date(`1970-01-01T${shift.start}Z`);
+          const end = new Date(`1970-01-01T${shift.end}Z`);
+          hours[staffId][date] = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+        }
+      }
+    }
+    return hours;
+  };
+      
+
   const handleSave = async () => {
+    const hours = calculateTotalHours();
     for (const staffId in shifts) {
       const shiftStarts = [];
       const shiftEnds = [];
@@ -70,14 +89,16 @@ const ShiftBooking = () => {
           ShiftStart: shiftStarts,
           ShiftFinish: shiftEnds,
           Dates: dates,
-          WeekNumber: format(monthStart, 'w'),
+          Month: format(monthStart, 'M'),
+          Hours: Object.values(hours[staffId]).reduce((a, b) => a + b, 0),
         })
       );
     }
     console.log('Saved!');
-    navigate ('/staff')
+    navigate('/staff');
   };
-
+  
+  
   // Group dates by week
   const weeks = [];
   let currentWeek = [];
@@ -99,13 +120,50 @@ const ShiftBooking = () => {
   );
   const currentDay = format(today, 'EEE do');
 
+
+  useEffect(() => {
+    const fetchHoliday = async () => {
+      const holidayData = await DataStore.query(Holiday);
+      // only return holiday for current month
+      const holidays = holidayData.filter((h) => h.Month === format(monthStart, 'M'));
+
+      setHoliday(holidays);
+    };
+    fetchHoliday();
+  }, []);
+
+
   return (
     <div className="flex flex-col items-center">
-      <div className="mb-4">
+      <div className="mb-4 text-bold">
         Current Month:{' '}
-        {format(monthStart, 'MMM yyyy')}
+        {format(monthStart, 'MMMM yyyy')}
       </div>
-      <div className="overflow-x-auto">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      {holiday.map((person) => (
+        <div
+          key={person.email}
+          className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
+        >
+          <div className="flex-shrink-0">
+          </div>
+          <div className="min-w-0 flex-1">
+            <a href="#" className="focus:outline-none">
+              <span className="absolute inset-0" aria-hidden="true" />
+              <h5> Holiday Request</h5>
+              <p className="text-sm font-medium text-gray-900">{person.Name}</p>
+              <p className="truncate text-sm text-gray-500">{person.StartDate}</p>
+              <p className="truncate text-sm text-gray-500">{person.EndDate}</p>
+              <p className="truncate text-sm text-gray-500">{person.Description}</p>
+
+
+
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>        
+      <div className="overflow-x-auto mt-5">
         <table className="table-auto border-collapse border border-gray-300 w-full">
           <thead>
             <tr>

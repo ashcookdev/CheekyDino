@@ -4,9 +4,10 @@ import { schema } from './schema';
 
 
 
-const { Holiday, HomePage, CustomerScreen, Extras, Breakfast, KidsMenu, TimeEntry, Staff, Confectionary, SoftDrinks, HotDrinks, Sessions, CafeOrder, Messages, PartyAdultFood, PartyGuests, PartyBooking, TimeEntryStaff } = initSchema(schema);
+const { Teddys, Holiday, HomePage, CustomerScreen, Extras, Breakfast, KidsMenu, TimeEntry, Staff, Confectionary, SoftDrinks, HotDrinks, Sessions, CafeOrder, Messages, PartyAdultFood, PartyGuests, PartyBooking, TimeEntryStaff } = initSchema(schema);
 
 export {
+  Teddys,
   Holiday,
   HomePage,
   CustomerScreen,

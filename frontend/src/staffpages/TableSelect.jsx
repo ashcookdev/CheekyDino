@@ -58,6 +58,8 @@ export default function TableSelect({ availableTables, onSelect, details }) {
         const extraNames = savedDetails.Name.slice(1).map(item => item.name);
         const age = savedDetails.Name.map(item => item.age);
 
+        
+
     
         //save to database
         DataStore.save(
@@ -100,11 +102,15 @@ export default function TableSelect({ availableTables, onSelect, details }) {
             console.error('Error saving data:', error);
         });
     }
-      
+
+    let guests = parseInt(savedDetails.Children) + parseInt(savedDetails.Adults)      
 
     return (
         <div>
             <div className="flex flex-wrap">
+                <p className="w-full text-center font-bold">Select A Table</p>
+                <p className="w-full text-center font-bold">Party Size: {guests} </p>
+
                 {availableTables.map(table => (
                     <button
                         key={table.table}
@@ -112,10 +118,17 @@ export default function TableSelect({ availableTables, onSelect, details }) {
                         className={`m-1 ${
                             selectedTables.includes(table)
                                 ? 'bg-blue-500 text-white'
+                                : [40, 41, 42].includes(table.table)
+                                ? 'bg-red-500 text-white'
                                 : 'bg-white text-black border border-black'
                         }`}
                     >
                         {table.table} ({table.capacity} seats)
+                        {table.table === 40  && <div>Party Room</div>}
+                        {table.table === 41  && <div>Party Room</div>}
+                        {table.table === 42  && <div>Party Room</div>}
+
+
                     </button>
                 ))}
             </div>
@@ -127,4 +140,4 @@ export default function TableSelect({ availableTables, onSelect, details }) {
             </button>
         </div>
     );
-}
+                    }    

@@ -34,7 +34,12 @@
   { "table": 33, "capacity": 4 },
   { "table": 34, "capacity": 3 },
   { "table": 35, "capacity": 3 },
-  { "table": 40, "capacity": 20 }
+  { "table": 40, "capacity": 20 },
+  { "table": 41, "capacity": 20 },
+  { "table": 42, "capacity": 20 }
+
+
+
 
 
 

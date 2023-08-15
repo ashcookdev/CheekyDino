@@ -10,7 +10,7 @@ import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
 
 const product = {
   name: 'Character Party',
-  price: '£290',
+  price: '290',
   description:
   'Is it time to light another candle on the cake? As a parent, of course, you want the coolest birthday party for your child! We are 100% your partner in crime, ready to throw a party you have never seen before!',
     highlights: [
@@ -200,8 +200,10 @@ export default function Character() {
               <button onClick={function NextPage(event) {
                 event.preventDefault()
                 setDetails( [{
-                  name: selected.title,
+                  name: "Character",
+                  character: selected.title,
                   price: product.price,
+                  party: product.party,
 
                 }])
                 setClick("clicked")
@@ -215,7 +217,7 @@ export default function Character() {
                 type="button"
                 className="flex w-full items-center component-title justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
               >
-                Book Now {product.price}
+                Book Now £{product.price}
               </button>
               
             </div>

@@ -48,6 +48,7 @@ export default function Dashboard() {
     const [currentGuests, setCurrentGuests] = useState(0)
     const [futureBookings, setFutureBookings] = useState([])
     const [currentorder, setCurrent] = useState([])
+    const [totalAmount, setTotalAmount] = useState(0)
 
     console.log(currentorder)
 
@@ -147,13 +148,25 @@ const navigation = [
         }
 
         fetchTodaysOrders()
+        getAmount(order)
 
 
     }, [])
 
+    const getAmount = (order, currentGuests) => {
+      const date = new Date();
+      // use date to get todays total 
+      const dateString = date.toISOString().split('T')[0];
+      const currentTime = format(currentDate, 'h:mm:ss a');
+      const currentorder = order.filter(order => order.CreatedDate === dateString && order.Completed === false && order.Delivered === false)
+
+      const totalAmount = currentorder.reduce((total, order) => total + order.Total, 0)
+setTotalAmount(totalAmount)    }
+
+
+
 
     //map through orders and get total amount
-    const totalAmount = orders.reduce((total, order) => total + order.Total, 0)
 
     console.log(totalAmount)
 

@@ -1,28 +1,39 @@
-import { useNavigate } from "react-router-dom";
-import { Fragment, useState } from 'react'
+/*
+  This example requires some changes to your config:
+  
+  ```
+  // tailwind.config.js
+  module.exports = {
+    // ...
+    plugins: [
+      // ...
+      require('@tailwindcss/typography'),
+      require('@tailwindcss/aspect-ratio'),
+    ],
+  }
+  ```
+*/
+import { Fragment } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { Tab } from '@headlessui/react'
-import { Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
+import { useNavigate } from 'react-router-dom'
 import '../customerfont.css'
 
 
-// use navigate to redirect to another page
-
-
 const product = {
-  name: 'Football Party',
-  price: '290',
+  name: 'Teddy Party',
+  price: '£215',
   description:
   'Is it time to light another candle on the cake? As a parent, of course, you want the coolest birthday party for your child! We are 100% your partner in crime, ready to throw a party you have never seen before!',
     highlights: [
     '- Price Includes up to 10 children, if you need to add more children you can customise your party on your booking form.',
      '- 1 hour 30 minutes of play in the play area.',
     '- Food and drinks included.',
-    '- Party Host.',
+    '- Party host.',
     
   ],
-  imageSrc: 'https://media.giphy.com/media/kvSp97J1kBVqo/giphy.gif',
+  imageSrc:"https://media.giphy.com/media/YPFTnF2RlsmegYZdGF/giphy.gif",
+
   imageAlt: 'Sample of 30 icons with friendly and fun details in outline, filled, and brand color styles.',
 }
 const reviews = {
@@ -75,23 +86,14 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
+export default function Trex() {
 
+const Navigate = useNavigate();
 
-
-
-export default function Character() {
-  const [click, setClick] = useState("");
-  const [details, setDetails] = useState("");
-  console.log(click);
-  console.log(details);
-  const navigate = useNavigate();
-
-
-  if (click === "clicked") {
-    navigate("/themed", { state: { details: details } });
-    
+  function handleClick() {
+    console.log('The link was clicked.')
+    Navigate('/teddyparty')
   }
-
 
 
   return (
@@ -129,27 +131,11 @@ export default function Character() {
             <p className="mt-6 text-gray-500">{product.description}</p>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-
-              <button onClick={function NextPage(event) {
-                event.preventDefault()
-                setDetails( [{
-                  name: "Football",
-                  price: product.price,
-                  description: "Football Party",
-
-                }])
-                setClick("clicked")
-
-            // get value of checkbox
-
-
-
-
-              }}
+              <button onClick={handleClick}
                 type="button"
                 className="flex w-full component-title items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
               >
-                Book Now £{product.price}
+                Book Now {product.price}
               </button>
               
             </div>

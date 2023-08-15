@@ -138,45 +138,7 @@ export default function SessionCalender() {
     FetchAvailability();
   }, [date])
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(inputDate);
-
-    let date = format(new Date(inputDate), 'yyyy-MM-dd');
-
-      console.log('Fetching availability data for date:', date);
-      const bookings = await DataStore.query(Sessions, c => c.Date.eq(date));
-      console.log('Query result:', bookings);
   
-      // Calculate free tables per timeslot
-      const freeTablesPerTimeslot = timeslots.map(timeslot => {
-        let freeTables = tableData.filter(table => {
-          const isBooked = bookings.some(booking => {
-            const {TimeslotFrom, TimeslotTo, Table} = booking;
-            console.log('Booking:', booking);
-            // use timeslot to show how many tables are available
-            return (
-              TimeslotFrom < timeslot.end &&
-              TimeslotTo > timeslot.start &&
-              Table === table.table
-            );
-          });
-          return !isBooked;
-        });
-  
-        return {
-          timeslot,
-          freeTables: freeTables.length,
-        };
-      });
-  
-      setFreeTablesPerTimeslot(freeTablesPerTimeslot);
-  
-      // Log free tables per timeslot
-      freeTablesPerTimeslot.forEach(item => {
-        console.log(`Timeslot: ${item.timeslot.start} - ${item.timeslot.end}, Free Tables: ${item.freeTables}`);
-      });
-    };
   
     if (session === true) {
       return (<SessionHistory />)
@@ -191,16 +153,16 @@ export default function SessionCalender() {
   return (
     <>
        <div className="md:flex md:items-center md:justify-between mt-10">
-      
-      
-    </div>
-      <ul role="list" className="divide-y divide-gray-100 mt-4">
-      <button onClick={() => setSession(true)}
+       <button onClick={() => setSession(true)}
                   type="button"
-                  className="mt-8 w-1/5 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
+                  className="mt-8 w-1/8 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
                   >
                   Show Details
                   </button>
+      
+    </div>
+    <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+     
         {freeTablesPerTimeslot.map((item, index) => (
           <li key={item.timeslot.start} className="flex justify-between gap-x-6 py-5">
             <div className="flex gap-x-4">
@@ -210,6 +172,9 @@ export default function SessionCalender() {
                 </p>
                 <p className="text-sm font-semibold leading-6 text-gray-900 mt-1">
                   Occupied Tables: {item.freeTables}/{tableData.length}
+                </p>
+                <p className="text-sm font-italic leading-6 text-gray-900 mt-1">
+                  Including Party Tables 36,37,38
                 </p>
                 <p className="text-sm font-semibold leading-6 text-gray-900 mt-1">
                  Total Guests: {totalGuestsPerTimeslot[index].totalGuests}/{totalCapacity}

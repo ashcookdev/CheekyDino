@@ -10,14 +10,18 @@ import { useNavigate } from 'react-router-dom'// ...
 import { useLocation } from 'react-router-dom';
 import { useCallback } from 'react';
 import '../customerfont.css'
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function ThemedCalender() {
 
-  const location = useLocation();
-  const { details } = location.state;
+  const details = [{
+      name: "Teddy",
+     price: 215,
+     description: "Teddy",
+    }]
 
 
   function getDetails() {
@@ -71,7 +75,7 @@ export default function ThemedCalender() {
     const maxAppointments = 1;
 
     // Define the available time slots
-    const timeSlots = ['14:30'];
+    const timeSlots = ['09:30', '10:00', '10:30', '12:00', '12:30'];
 
     // Create an array to store the availability information for each time slot
     let availability = [];
@@ -290,3 +294,14 @@ let imageURL = "https://media.giphy.com/media/4njbG9gEe2c5j2RIWD/giphy.gif"
 
   
 
+
+
+
+    //const maxAppointments = 1;
+  
+    // Define the available time slots
+    // const timeSlots = ['09:30', '10:00', '10:30', '12:00', '12:30'];
+  //    const timeSlots = ['09:30', '10:00', '10:30', '12:00', '12:30'];
+  //
+
+  
