@@ -18,14 +18,17 @@
       "notifications": {
         "Pinpoint": {
           "Name": "cheekydino-staging",
-          "Id": "e1f5e18071f340cb9eb03cf3bac5ce39"
+          "Id": "56d3caea6b5f4e82926cd96881baa15c",
+          "Region": "eu-west-2"
         }
       },
       "analytics": {
         "Pinpoint": {
           "Name": "cheekydino-staging",
-          "Id": "e1f5e18071f340cb9eb03cf3bac5ce39"
-        }
+          "Id": "56d3caea6b5f4e82926cd96881baa15c",
+          "Region": "eu-west-2"
+        },
+        "cheekydino": {}
       },
       "api": {
         "CheekyDino": {}

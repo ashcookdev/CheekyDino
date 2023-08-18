@@ -1,5 +1,10 @@
 {
-  "analytics": {},
+  "analytics": {
+    "cheekydino": {
+      "providerPlugin": "awscloudformation",
+      "service": "Pinpoint"
+    }
+  },
   "api": {
     "CheekyDino": {
       "dependsOn": [
@@ -94,6 +99,14 @@
         }
       ]
     },
+    "AMPLIFY_analytics_Pinpoint_Region": {
+      "usedBy": [
+        {
+          "category": "analytics",
+          "resourceName": "Pinpoint"
+        }
+      ]
+    },
     "AMPLIFY_notifications_Pinpoint_Id": {
       "usedBy": [
         {
@@ -103,6 +116,14 @@
       ]
     },
     "AMPLIFY_notifications_Pinpoint_Name": {
+      "usedBy": [
+        {
+          "category": "notifications",
+          "resourceName": "Pinpoint"
+        }
+      ]
+    },
+    "AMPLIFY_notifications_Pinpoint_Region": {
       "usedBy": [
         {
           "category": "notifications",
