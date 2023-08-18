@@ -29,8 +29,13 @@ export default function MyBooking() {
 
     console.log(id);
     console.log(partyType)
+    console.log(email)
 
     const deposit = total * 0.5;
+    
+let formattedNum = deposit.toFixed(2);
+console.log(formattedNum); // "3.14"
+
     console.log(deposit);
 
     const navigate = useNavigate();
@@ -44,6 +49,11 @@ export default function MyBooking() {
             const partyBookings = (await DataStore.query(PartyBooking)).filter(booking => booking.partybookingID === userId);
             const partyBooking = partyBookings[0];
 
+            console.log(partyBooking.Telephone);
+
+            setEmail(partyBooking.Email);
+            setTelephone(partyBooking.Telephone)
+
           setFullName(partyBooking.ChildName);
           setPartyType(partyBooking.PartyType);
           setTime(partyBooking.PartyTime);
@@ -55,7 +65,6 @@ export default function MyBooking() {
 setChildAge(partyBooking.ChildAge);  
 setId(partyBooking.id)
 setAdultFood(partyBooking.PartyAdultFoodChoices.join(', '));      
-setEmail(partyBooking.Email);
 setTelephone(partyBooking.Telephone);}
         getPartyBooking();
         
@@ -82,13 +91,19 @@ setTelephone(partyBooking.Telephone);}
       
         className="rounded-full bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
       >
-        Pay Deposit £{deposit}
+        Pay Deposit £{formattedNum}
       </button>
       <button onClick={() => setAdultFood(true)}
         className="rounded-full bg-indigo-600 px-2.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
       >
         Adult Food Choices
       </button>
+      
+
+        
+
+
+        
       <button onClick={() => {
           navigate('/add-guests', { state: { id, noOfChildren, partyType } });
         }}

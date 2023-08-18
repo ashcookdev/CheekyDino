@@ -15,38 +15,35 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type TimeEntryUpdateFormInputValues = {
     StaffID?: string;
-    ClockInTime?: string[];
-    ClockOutTime?: string[];
     Hours?: number;
     Dates?: string[];
     ShiftStart?: string[];
     ShiftFinish?: string[];
     Month?: string;
     StaffName?: string;
+    Holiday?: string[];
 };
 export declare type TimeEntryUpdateFormValidationValues = {
     StaffID?: ValidationFunction<string>;
-    ClockInTime?: ValidationFunction<string>;
-    ClockOutTime?: ValidationFunction<string>;
     Hours?: ValidationFunction<number>;
     Dates?: ValidationFunction<string>;
     ShiftStart?: ValidationFunction<string>;
     ShiftFinish?: ValidationFunction<string>;
     Month?: ValidationFunction<string>;
     StaffName?: ValidationFunction<string>;
+    Holiday?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type TimeEntryUpdateFormOverridesProps = {
     TimeEntryUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     StaffID?: PrimitiveOverrideProps<TextFieldProps>;
-    ClockInTime?: PrimitiveOverrideProps<TextFieldProps>;
-    ClockOutTime?: PrimitiveOverrideProps<TextFieldProps>;
     Hours?: PrimitiveOverrideProps<TextFieldProps>;
     Dates?: PrimitiveOverrideProps<TextFieldProps>;
     ShiftStart?: PrimitiveOverrideProps<TextFieldProps>;
     ShiftFinish?: PrimitiveOverrideProps<TextFieldProps>;
     Month?: PrimitiveOverrideProps<TextFieldProps>;
     StaffName?: PrimitiveOverrideProps<TextFieldProps>;
+    Holiday?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type TimeEntryUpdateFormProps = React.PropsWithChildren<{
     overrides?: TimeEntryUpdateFormOverridesProps | undefined | null;

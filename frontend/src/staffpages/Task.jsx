@@ -14,6 +14,7 @@ const ShiftBooking = () => {
   const [shifts, setShifts] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date());
   const [holiday, setHoliday] = useState([]);
+  const [newStaff, setNewStaff] = useState(false);
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
   const monthDates = eachDayOfInterval({ start: monthStart, end: monthEnd });
@@ -135,10 +136,39 @@ const ShiftBooking = () => {
 
   return (
     <div className="flex flex-col items-center">
+      <div className="bg-white">
+      <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
+        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          Book In Your Shifts For The Month 
+          <br />
+        </h2>
+        <div className="mt-10 flex items-center gap-x-6">
+        <button
+            className="mr-2 px-2 py-1 border border-gray-300 rounded-md bg-blue-700 text-white"
+            onClick={() => setNewStaff(true)}
+          >
+            Edit Staff Details
+          </button>
+        </div>
+      </div>
+    </div>
       <div className="mb-4 text-bold">
         Current Month:{' '}
         {format(monthStart, 'MMMM yyyy')}
       </div>
+      <div className="flex flex-col items-center mb-4">
+        <div className="flex items-center mb-2">
+         
+          </div>
+          </div>
+
+
+
+
+         
+
+
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       {holiday.map((person) => (
         <div

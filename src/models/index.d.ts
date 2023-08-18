@@ -25,6 +25,9 @@ type EagerClockIn = {
   readonly ClockedOut?: boolean | null;
   readonly StaffName?: string | null;
   readonly StaffRole?: string | null;
+  readonly Break?: boolean | null;
+  readonly BreakStart?: string | null;
+  readonly BreakEnd?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -48,6 +51,9 @@ type LazyClockIn = {
   readonly ClockedOut?: boolean | null;
   readonly StaffName?: string | null;
   readonly StaffRole?: string | null;
+  readonly Break?: boolean | null;
+  readonly BreakStart?: string | null;
+  readonly BreakEnd?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

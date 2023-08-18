@@ -27,8 +27,7 @@
           "Name": "cheekydino-staging",
           "Id": "e1f5e18071f340cb9eb03cf3bac5ce39",
           "Region": "eu-west-2"
-        },
-        "cheekydino": {}
+        }
       },
       "api": {
         "CheekyDino": {}

@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -17,12 +17,14 @@ export declare type HolidayCreateFormInputValues = {
     StartDate?: string;
     Description?: string;
     EndDate?: string;
+    Approved?: boolean;
 };
 export declare type HolidayCreateFormValidationValues = {
     Name?: ValidationFunction<string>;
     StartDate?: ValidationFunction<string>;
     Description?: ValidationFunction<string>;
     EndDate?: ValidationFunction<string>;
+    Approved?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type HolidayCreateFormOverridesProps = {
@@ -31,6 +33,7 @@ export declare type HolidayCreateFormOverridesProps = {
     StartDate?: PrimitiveOverrideProps<TextFieldProps>;
     Description?: PrimitiveOverrideProps<TextFieldProps>;
     EndDate?: PrimitiveOverrideProps<TextFieldProps>;
+    Approved?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type HolidayCreateFormProps = React.PropsWithChildren<{
     overrides?: HolidayCreateFormOverridesProps | undefined | null;

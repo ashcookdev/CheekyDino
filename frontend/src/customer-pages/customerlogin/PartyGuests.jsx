@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DataStore } from '@aws-amplify/datastore';
 import { PartyBooking } from '../../staffpages/models';
-import { PartyGuests } from '../../staffpages/models';
+
+import { PartyGuests, Teddys } from '../../staffpages/models';
 import { CheckIcon } from '@heroicons/react/24/solid';
 import "./customer.css";
+import { set } from 'date-fns';
 
 
 function classNames(...classes) {
@@ -17,11 +19,38 @@ export default function GuestDashboard() {
 
   // State to keep track of the guests data
   const [guestsData, setGuestsData] = useState([]);
+  const [party, setPartyType] = useState('');
+  const [teddys, setTeddys] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedTeddy, setSelectedTeddy] = useState(null);
+
+  console.log(teddys)
+
+  function Party () {
+    setPartyType(partyType);
+  }
 
   // Query the PartyGuests model to get the guests data
   useEffect(() => {
     getGuestsData();
+    Party();
   }, [id]);
+
+
+  async function getTeddys () {
+    const teddys = await DataStore.query(Teddys);
+    setTeddys(teddys);
+  }
+
+
+  useEffect(() => {
+    getTeddys();
+  }, []);
+
+
+
+  
+
 
   async function getGuestsData() {
     const guests = await DataStore.query(PartyGuests);
@@ -40,12 +69,18 @@ export default function GuestDashboard() {
     for (let i = 0; i < noOfChildren; i++) {
       // Only save fields that have a value
       if (formData.get(`childName${i}`)) {
+        const selectedTeddyName = formData.get(`selectedTeddy${i}`);
+        const selectedTeddyImgSrc = teddys.find(
+          (teddy) => teddy.Name === selectedTeddyName
+        ).ImgSrc;
         await DataStore.save(
           new PartyGuests({
             ChildName: formData.get(`childName${i}`),
             FoodOption: formData.get(`foodOption${i}`),
             Allergies: formData.get(`allergies${i}`),
             ContactInfoEmail: formData.get(`contactInfoEmail${i}`),
+            TeddyTasticBear: selectedTeddyName,
+            ImgSrc: selectedTeddyImgSrc,
             partybookingID: partyBookingId,
             Arrived: false,
           })
@@ -55,7 +90,8 @@ export default function GuestDashboard() {
     // Re-query PartyGuests model to update guestsData state
     getGuestsData();
   }
-
+  
+  
   async function handleDelete(guestId) {
     // Get guest by ID
     const guest = await DataStore.query(PartyGuests, guestId);
@@ -64,9 +100,41 @@ export default function GuestDashboard() {
     // Re-query PartyGuests model to update guestsData state
     getGuestsData();
   }
+
+
+const backgroundImage = "https://media.giphy.com/media/ZdIdb8TWH8VW6fpuUt/giphy.gif"
+
+
+
+
+
   return (
-    <form onSubmit={handleFormSubmit} className="p-4">
-      <table className="w-full text-left border-collapse">
+    <div className="min-h-screen bg-gray-100">
+  <div className="bg-white">
+    <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+      <h2 className="text-2xl font-extrabold tracking-tight text-center text-gray-900 component-title">Teddys</h2>
+      <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+        {teddys.map((product) => (
+          <div key={product.id} className="group relative">
+            <div className="w-full h-32 overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75">
+              <img
+                src={product.ImgSrc}
+                alt={product.imageAlt}
+                className="h-full w-full object-contain object-center"
+              />
+            </div>
+            <p className="text-sm text-center mt-2 component-title">{product.Name}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  
+
+    
+    <form onSubmit={handleFormSubmit}>
+<div className='overflow-x-auto'> <table className="w-full text-left border-collapse">
         <thead>
           <tr>
             <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">
@@ -84,6 +152,14 @@ export default function GuestDashboard() {
             <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">
             Email
             </th>
+            {party === 'Teddy' && (
+              <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">
+                Teddy
+              </th>
+            )}
+            
+           
+  
             <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">
             Actions
           </th>
@@ -124,7 +200,6 @@ export default function GuestDashboard() {
       name={`foodOption${i}`}
       className="border rounded w-full py-2 px-3"
     >
-      <option value="">--Please choose an option--</option>
       <option value="Nuggets">Nuggets</option>
       <option value="FishFingers">Fish Fingers</option>
       <option value="Burger">Burger</option>
@@ -146,8 +221,7 @@ export default function GuestDashboard() {
       name={`allergies${i}`}
       className="border rounded w-full py-2 px-3"
     >
-      <option value="">--Please choose an option--</option>
-      <option value="option1">No</option>
+      <option value="No">No</option>
       <option value="Tree nuts">Tree nuts</option>
       <option value="Milk">Milk</option>
       <option value="Eggs">Eggs</option>
@@ -173,22 +247,55 @@ export default function GuestDashboard() {
                   />
                 )}
               </td>
+              
+              
               <td
-              data-label="Actions"
-              className="py-4 px-6 border-b border-grey-light"
-            >
-              {guestsData[i] && (
-                <button
-                  type="button"
-                  onClick={() => handleDelete(guestsData[i].id)}
-                  className="text-sm text-red-500 hover:text-red-700"
-                >
-                  Delete
-                </button>
-              )}
-            </td>
-            </tr>
+  data-label="Teddy"
+  className="py-4 px-6 border-b border-blue-light"
+>
+  {party === 'Teddy' && (
+    <>
+      {!guestsData[i]?.SelectedTeddy && (
+        <select
+          name={`selectedTeddy${i}`}
+          className="border rounded w-full py-2 px-3"
+        >
+          {teddys.map((teddy) => (
+            <option key={teddy.Name} value={teddy.Name}>
+              {teddy.Name}
+            </option>
           ))}
+        </select>
+      )}
+      {guestsData[i]?.TeddyTasticBear && (
+        <img
+        src={guestsData[i].ImgSrc}
+        alt={guestsData[i].TeddyTasticBear}
+        className="w-24 h-24 object-cover rounded-full mt-2"
+      />
+
+      
+          
+      )}
+    </>
+  )}
+</td>
+<td>
+  {guestsData[i] && (
+    <button
+      type="button"
+      onClick={() => handleDelete(guestsData[i].id)}
+      className="text-sm text-red-500 hover:text-red-700"
+    >
+      Delete
+    </button>
+  )}
+</td>
+
+
+</tr>
+))}
+
         </tbody>
       </table>
       <button
@@ -197,6 +304,13 @@ export default function GuestDashboard() {
       >
         Submit
       </button>
+      </div>
+      
+
+
+
     </form>
+    </div>
+
   );
                 }  

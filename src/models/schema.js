@@ -119,6 +119,27 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "Break": {
+                    "name": "Break",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "BreakStart": {
+                    "name": "BreakStart",
+                    "isArray": false,
+                    "type": "AWSTime",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "BreakEnd": {
+                    "name": "BreakEnd",
+                    "isArray": false,
+                    "type": "AWSTime",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -3195,5 +3216,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "96cb618cd95e9acce1275b7f5cc8dc7c"
+    "version": "9ef48a631e3bce830f8e66b642a37993"
 };

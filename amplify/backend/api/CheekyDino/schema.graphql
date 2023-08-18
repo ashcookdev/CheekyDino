@@ -1,6 +1,27 @@
+type ClockIn @model @auth(rules: [{allow: private}, {allow: owner}]) {
+  id: ID!
+  ClockIn: AWSTime
+  ClockOut: AWSTime
+  Sick: Boolean
+  Holiday: String
+  staffs: [Staff] @manyToMany(relationName: "StaffClockIn")
+  timeentrys: [TimeEntry] @manyToMany(relationName: "TimeEntryClockIn")
+  StaffId: String
+  TimeEntryId: String
+  Date: AWSDate
+  ClockedIn: Boolean
+  ClockedOut: Boolean
+  StaffName: String
+  StaffRole: String
+  Break: Boolean
+  BreakStart: AWSTime
+  BreakEnd: AWSTime
+}
+
 type Teddys @model @auth(rules: [{allow: private}]) {
   id: ID!
   Name: String
+  ImgSrc: String
 }
 
 type Holiday @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -9,6 +30,9 @@ type Holiday @model @auth(rules: [{allow: private}, {allow: owner}]) {
   StartDate: String
   Description: String
   EndDate: String
+  timeentrys: [TimeEntry] @manyToMany(relationName: "TimeEntryHoliday")
+  staffs: [Staff] @manyToMany(relationName: "StaffHoliday")
+  Approved: Boolean
 }
 
 type HomePage @model @auth(rules: [{allow: private}]) {
@@ -70,23 +94,27 @@ type TimeEntry @model @auth(rules: [{allow: private}, {allow: owner}]) {
   id: ID!
   Staff: [Staff] @manyToMany(relationName: "TimeEntryStaff")
   StaffID: String
-  ClockInTime: [AWSTime]
-  ClockOutTime: [AWSTime]
   Hours: Float
   Dates: [AWSDate]
   ShiftStart: [String]
   ShiftFinish: [String]
   Month: String
   StaffName: String
+  ClockIns: [ClockIn] @manyToMany(relationName: "TimeEntryClockIn")
+  Holidays: [Holiday] @manyToMany(relationName: "TimeEntryHoliday")
+  Holiday: [AWSDate]
 }
 
-type Staff @model @auth(rules: [{allow: private}]) {
+type Staff @model @auth(rules: [{allow: private}, {allow: owner}]) {
   id: ID!
   Name: String
   Email: String
   TimeEntries: String
   timeentriess: [TimeEntry] @manyToMany(relationName: "TimeEntryStaff")
   Role: String
+  HourlyRate: Float
+  ClockIns: [ClockIn] @manyToMany(relationName: "StaffClockIn")
+  Holidays: [Holiday] @manyToMany(relationName: "StaffHoliday")
 }
 
 type Confectionary @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -182,6 +210,7 @@ type PartyGuests @model @auth(rules: [{allow: owner}, {allow: groups, groups: ["
   TeddyTasticBear: String
   Completed: Boolean
   Arrived: Boolean
+  ImgSrc: String
 }
 
 type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: ["PartHosts"], operations: [read, update, create]}, {allow: groups, groups: ["TeamLeader"], operations: [create, read, update]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Staff"], operations: [create, read, update]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: public, operations: [read]}]) {

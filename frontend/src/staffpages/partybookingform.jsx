@@ -120,6 +120,35 @@ const partyhosts = await DataStore.query(Staff, Predicates.ALL, {
       handleSave();
     };
 
+    async function addGuest() {
+      // Prompt the user to enter the guest's information
+      const childName = prompt('Enter the child name:');
+      const foodOption = prompt('Enter the food option:');
+      const allergies = prompt('Enter any allergies:');
+      const contactInfoEmail = prompt('Enter the contact info email:');
+      const Teddy = prompt('Enter if Teddy Tastic Bear is required:');
+
+
+
+      
+    
+      // Create a new PartyGuests object with the entered information
+      const newGuest = await DataStore.save(
+        new PartyGuests({
+          ChildName: childName,
+          FoodOption: foodOption,
+          Allergies: allergies,
+          ContactInfoEmail: contactInfoEmail,
+          partybookingID: partyid,
+          Arrived: false,
+          TeddyTasticBear: Teddy
+        })
+      );
+    
+      // Update the partyGuests state variable to include the new guest
+      setPartyGuests([...partyGuests, newGuest]);
+    }
+    
 
 
     const handleSave = async () => {
@@ -214,35 +243,76 @@ const partyhosts = await DataStore.query(Staff, Predicates.ALL, {
     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => showAllGuests()}>Show All Guests</button>
   </div>
   {showTable && (
-    <>
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4" onClick={() => addGuest()}>Add Guest</button>
-      <table className="table-auto w-full">
-        <thead>
-          <tr>
-            <th className="px-4 py-2 text-left text-gray-600 uppercase tracking-wider">Child Name</th>
-            <th className="px-4 py-2 text-left text-gray-600 uppercase tracking-wider">Food Option</th>
-            <th className="px-4 py-2 text-left text-gray-600 uppercase tracking-wider">Allergies</th>
-            <th className="px-4 py-2 text-left text-gray-600 uppercase tracking-wider">Contact Info</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200">
-          {partyGuests.map(guest => (
-            <tr key={guest.id}>
-              <td className="px-4 py-2">{guest.ChildName}</td>
-              <td className="px-4 py-2">{guest.FoodOption}</td>
-              <td className="px-4 py-2">{guest.Allergies}</td>
-              <td className="px-4 py-2">{guest.ContactInfoEmail}</td>
-              <td className="px-4 py-2">
-                <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" onClick={() => deleteGuest(guest.id)}>Delete</button>
-              </td>
+  <div className="px-4 sm:px-6 lg:px-8">
+    <div className="sm:flex sm:items-center">
+      <div className="sm:flex-auto">
+        <h1 className="text-base font-semibold leading-6 text-gray-900">Party Guests</h1>
+        <p className="mt-2 text-sm text-gray-700">
+          A list of all the guests in your party including their name, food option, allergies, and contact information.
+        </p>
+      </div>
+      <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+        <button
+          type="button"
+          onClick={() => addGuest()}
+          className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          Add Guest
+        </button>
+      </div>
+    </div>
+    <div className="mt-8 flow-root">
+      <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <table className="min-w-full divide-y divide-gray-300">
+            <thead>
+              <tr>
+                <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                  Child Name
+                </th>
+                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  Food Option
+                </th>
+                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  Allergies
+                </th>
+                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  Contact Info Email
+                </th>
+                {partyType === "Teddy" && (
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  Teddy
+                </th>
+              )}
+              <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                <span className="sr-only">Delete</span>
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </>
-  )}
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {partyGuests.map(guest => (
+              <tr key={guest.id}>
+                <td className="whitespace-no-wrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{guest.ChildName}</td>
+                <td className="whitespace-no-wrap px-3 py-4 text-sm text-gray-500">{guest.FoodOption}</td>
+                <td className="whitespace-no-wrap px-3 py-4 text-sm text-gray-500">{guest.Allergies}</td>
+                <td className="whitespace-no-wrap px-3 py-4 text-sm text-gray-500">{guest.ContactInfoEmail}</td>
+                {partyType === "Teddy Party" && (
+                  <td className="whitespace-no-wrap px-3 py-4 text-sm text-gray-500">{guest.TeddyTasticBear}</td>
+                )}
+                <td className="relative whitespace-no-wrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                  <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" onClick={() => deleteGuest(guest.id)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
+)}
+</div>
+
 
 
 

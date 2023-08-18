@@ -176,6 +176,46 @@ console.log(basePrice);
             <h2 className="text-4xl font-bold component-title tracking-tight text-gray-900 sm:text-6xl text-center">
               Your Booking
             </h2>
+            <div className='mt-5 mb-5 border-solid'>
+            {partyid[0].name === "Laser" && (
+  <p className="component-title text-center">
+    Any Number of Children over 10 - £19.95 per child
+  </p>
+)}
+{partyid[0].name === "Character" && (
+  <p className="component-title text-center">
+    Any Number of Children over 10 - £19.95 per child
+  </p>
+)}
+{partyid[0].name === "Football" && (
+  <p className="component-title text-center">
+    Any Number of Children over 10 - £19.95 per child
+  </p>
+)}
+  {partyid[0].name === "T-Rex" && (
+    <p className="component-title text-center">
+      Any Number of Children over 10 - £14.50 per child
+    </p>)}
+    {partyid[0].name === "Teddy" && (
+      <p className="component-title text-center">
+        Any Number of Children over 10 - £19.95 per child
+      </p>
+      
+    )
+
+    
+      }
+      {partyid[0].name === "Disco" && (
+        <p className="component-title text-center">
+          Any Number of Children over 10 - £19.95 per child
+        </p>
+      )}
+      </div>
+
+
+
+      
+
     
             {selectedDate && (
               <p className="component-title text-center">Date: {selectedDate}</p>

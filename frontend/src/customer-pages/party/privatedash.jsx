@@ -147,6 +147,10 @@ console.log(userId);
             <h2 className="text-4xl font-bold component-title tracking-tight text-gray-900 sm:text-6xl text-center">
               Your Booking
             </h2>
+            <p className="mt-5 mx-auto text-xl text-gray-500 text-center mb-5">
+              Please complete the form below to confirm your booking. You are able to book for up to 30 children with a Private Hire Booking.
+            </p>
+        
     
             {selectedDate && (
               <p className="component-title text-center">Date: {selectedDate}</p>

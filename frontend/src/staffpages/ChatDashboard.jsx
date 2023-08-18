@@ -23,6 +23,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import Online from './online';
 
 
 const templates = ['Party Host to Front Desk', 'Party Finished Clean Upstairs', 'Table (number) Food is Ready'];
@@ -370,6 +371,13 @@ function App() {
         <main className="py-10 lg:pl-72">
         <div className="p-4" style={{ fontFamily: "sans-serif" }}>
   <div className="mb-4 text-lg font-bold">Logged in as: {userEmail}</div>
+  <div className="mb-4">
+   <h5> Online Staff </h5>
+   <div>
+    <Online/>
+   </div>
+  </div>
+      
   <select
     multiple
     value={selectedGroups}

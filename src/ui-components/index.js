@@ -8,6 +8,8 @@ export { default as BreakfastCreateForm } from "./BreakfastCreateForm";
 export { default as BreakfastUpdateForm } from "./BreakfastUpdateForm";
 export { default as CafeOrderCreateForm } from "./CafeOrderCreateForm";
 export { default as CafeOrderUpdateForm } from "./CafeOrderUpdateForm";
+export { default as ClockInCreateForm } from "./ClockInCreateForm";
+export { default as ClockInUpdateForm } from "./ClockInUpdateForm";
 export { default as ConfectionaryCreateForm } from "./ConfectionaryCreateForm";
 export { default as ConfectionaryUpdateForm } from "./ConfectionaryUpdateForm";
 export { default as CustomerScreenCreateForm } from "./CustomerScreenCreateForm";

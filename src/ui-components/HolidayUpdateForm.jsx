@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Holiday } from "../models";
 import { fetchByPath, validateField } from "./utils";
@@ -28,6 +34,7 @@ export default function HolidayUpdateForm(props) {
     StartDate: "",
     Description: "",
     EndDate: "",
+    Approved: false,
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [StartDate, setStartDate] = React.useState(initialValues.StartDate);
@@ -35,6 +42,7 @@ export default function HolidayUpdateForm(props) {
     initialValues.Description
   );
   const [EndDate, setEndDate] = React.useState(initialValues.EndDate);
+  const [Approved, setApproved] = React.useState(initialValues.Approved);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = holidayRecord
@@ -44,6 +52,7 @@ export default function HolidayUpdateForm(props) {
     setStartDate(cleanValues.StartDate);
     setDescription(cleanValues.Description);
     setEndDate(cleanValues.EndDate);
+    setApproved(cleanValues.Approved);
     setErrors({});
   };
   const [holidayRecord, setHolidayRecord] = React.useState(holidayModelProp);
@@ -62,6 +71,7 @@ export default function HolidayUpdateForm(props) {
     StartDate: [],
     Description: [],
     EndDate: [],
+    Approved: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -93,6 +103,7 @@ export default function HolidayUpdateForm(props) {
           StartDate,
           Description,
           EndDate,
+          Approved,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -152,6 +163,7 @@ export default function HolidayUpdateForm(props) {
               StartDate,
               Description,
               EndDate,
+              Approved,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -179,6 +191,7 @@ export default function HolidayUpdateForm(props) {
               StartDate: value,
               Description,
               EndDate,
+              Approved,
             };
             const result = onChange(modelFields);
             value = result?.StartDate ?? value;
@@ -206,6 +219,7 @@ export default function HolidayUpdateForm(props) {
               StartDate,
               Description: value,
               EndDate,
+              Approved,
             };
             const result = onChange(modelFields);
             value = result?.Description ?? value;
@@ -233,6 +247,7 @@ export default function HolidayUpdateForm(props) {
               StartDate,
               Description,
               EndDate: value,
+              Approved,
             };
             const result = onChange(modelFields);
             value = result?.EndDate ?? value;
@@ -247,6 +262,34 @@ export default function HolidayUpdateForm(props) {
         hasError={errors.EndDate?.hasError}
         {...getOverrideProps(overrides, "EndDate")}
       ></TextField>
+      <SwitchField
+        label="Approved"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={Approved}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              StartDate,
+              Description,
+              EndDate,
+              Approved: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Approved ?? value;
+          }
+          if (errors.Approved?.hasError) {
+            runValidationTasks("Approved", value);
+          }
+          setApproved(value);
+        }}
+        onBlur={() => runValidationTasks("Approved", Approved)}
+        errorMessage={errors.Approved?.errorMessage}
+        hasError={errors.Approved?.hasError}
+        {...getOverrideProps(overrides, "Approved")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

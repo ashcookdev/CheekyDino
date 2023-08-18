@@ -28,6 +28,7 @@ export default function StaffUpdateForm(props) {
     Email: "",
     TimeEntries: "",
     Role: "",
+    HourlyRate: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Email, setEmail] = React.useState(initialValues.Email);
@@ -35,6 +36,7 @@ export default function StaffUpdateForm(props) {
     initialValues.TimeEntries
   );
   const [Role, setRole] = React.useState(initialValues.Role);
+  const [HourlyRate, setHourlyRate] = React.useState(initialValues.HourlyRate);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = staffRecord
@@ -44,6 +46,7 @@ export default function StaffUpdateForm(props) {
     setEmail(cleanValues.Email);
     setTimeEntries(cleanValues.TimeEntries);
     setRole(cleanValues.Role);
+    setHourlyRate(cleanValues.HourlyRate);
     setErrors({});
   };
   const [staffRecord, setStaffRecord] = React.useState(staffModelProp);
@@ -62,6 +65,7 @@ export default function StaffUpdateForm(props) {
     Email: [],
     TimeEntries: [],
     Role: [],
+    HourlyRate: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -93,6 +97,7 @@ export default function StaffUpdateForm(props) {
           Email,
           TimeEntries,
           Role,
+          HourlyRate,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -152,6 +157,7 @@ export default function StaffUpdateForm(props) {
               Email,
               TimeEntries,
               Role,
+              HourlyRate,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -179,6 +185,7 @@ export default function StaffUpdateForm(props) {
               Email: value,
               TimeEntries,
               Role,
+              HourlyRate,
             };
             const result = onChange(modelFields);
             value = result?.Email ?? value;
@@ -206,6 +213,7 @@ export default function StaffUpdateForm(props) {
               Email,
               TimeEntries: value,
               Role,
+              HourlyRate,
             };
             const result = onChange(modelFields);
             value = result?.TimeEntries ?? value;
@@ -233,6 +241,7 @@ export default function StaffUpdateForm(props) {
               Email,
               TimeEntries,
               Role: value,
+              HourlyRate,
             };
             const result = onChange(modelFields);
             value = result?.Role ?? value;
@@ -246,6 +255,38 @@ export default function StaffUpdateForm(props) {
         errorMessage={errors.Role?.errorMessage}
         hasError={errors.Role?.hasError}
         {...getOverrideProps(overrides, "Role")}
+      ></TextField>
+      <TextField
+        label="Hourly rate"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={HourlyRate}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeEntries,
+              Role,
+              HourlyRate: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.HourlyRate ?? value;
+          }
+          if (errors.HourlyRate?.hasError) {
+            runValidationTasks("HourlyRate", value);
+          }
+          setHourlyRate(value);
+        }}
+        onBlur={() => runValidationTasks("HourlyRate", HourlyRate)}
+        errorMessage={errors.HourlyRate?.errorMessage}
+        hasError={errors.HourlyRate?.hasError}
+        {...getOverrideProps(overrides, "HourlyRate")}
       ></TextField>
       <Flex
         justifyContent="space-between"

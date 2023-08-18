@@ -15,6 +15,7 @@ import TillPayments from "./TillPayments";
 import { useNavigate } from "react-router-dom";
 import Kitchen from "./KitchenHome";
 import Timeslot from "./todaysbookings";
+import Home from "./DashBoard";
 
 
 
@@ -47,6 +48,7 @@ const [selectedProduct, setSelectedProduct] = useState(null);
 const [extras, setExtras] = useState([]);
 const [ShowExtras, setShowExtras] = useState(false);
 const [kitchen, setKitchen] = useState(false);
+const [home, setHome] = useState(false);
 
 
 
@@ -206,6 +208,11 @@ useEffect(() => {
     );
   }
 
+  if (home === true) {
+    return <Home />
+  }
+    
+
 
   const handleTableChange = async (e) => {
     const tableNumber = parseInt(e.target.value);
@@ -227,6 +234,8 @@ useEffect(() => {
     }
   };
 
+  
+  
 
 
 
@@ -244,7 +253,7 @@ useEffect(() => {
         className="border rounded-md p-1 mr-2"
       />
       {childName && <p>Child Name: {childName}</p>}
-      <div className="flex-grow">
+      <div className="flex-grow justify-between">
         {party.map((partyBooking) => (
           <button
             className="w-16 h-16 bg-indigo-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center animate-pulse"
@@ -257,6 +266,12 @@ useEffect(() => {
           </button>
         ))}
       </div>
+      <button
+          className="w-16 h-16 bg-pink-500 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
+          onClick={() => setHome(true)}
+        >
+          Home
+        </button>
       <div className="flex">
         <button
           className="w-16 h-16 bg-green-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
@@ -268,7 +283,7 @@ useEffect(() => {
           className="w-16 h-16 bg-blue-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
           onClick={() => setArrival(true)}
         >
-          New Arrival
+          Make Booking
         </button>
         <button
           className="w-16 h-16 bg-red-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"

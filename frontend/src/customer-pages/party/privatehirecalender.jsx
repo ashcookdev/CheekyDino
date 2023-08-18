@@ -82,7 +82,7 @@ export default function ThemedCalender() {
 
     // Check if the selected date is a Saturday or Sunday
     const dayOfWeek = new Date(date).getDay();
-    if (daysOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0) {
+    if (dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0) {
       // Loop through each time slot
       timeSlots.forEach(timeSlot => {
         // Filter bookings by PartyTime
@@ -175,7 +175,7 @@ export default function ThemedCalender() {
 
   const handleBookAppointment = async timeSlot => {
     // Navigate to the Register page and pass the selected date, time slot, and party details as props
-    navigate('/register', {
+    navigate('/privatehireregister', {
       state: {
         selectedDate,
         selectedTimeSlot: timeSlot,

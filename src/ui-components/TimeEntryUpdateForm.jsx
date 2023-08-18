@@ -194,22 +194,15 @@ export default function TimeEntryUpdateForm(props) {
   } = props;
   const initialValues = {
     StaffID: "",
-    ClockInTime: [],
-    ClockOutTime: [],
     Hours: "",
     Dates: [],
     ShiftStart: [],
     ShiftFinish: [],
     Month: "",
     StaffName: "",
+    Holiday: [],
   };
   const [StaffID, setStaffID] = React.useState(initialValues.StaffID);
-  const [ClockInTime, setClockInTime] = React.useState(
-    initialValues.ClockInTime
-  );
-  const [ClockOutTime, setClockOutTime] = React.useState(
-    initialValues.ClockOutTime
-  );
   const [Hours, setHours] = React.useState(initialValues.Hours);
   const [Dates, setDates] = React.useState(initialValues.Dates);
   const [ShiftStart, setShiftStart] = React.useState(initialValues.ShiftStart);
@@ -218,16 +211,13 @@ export default function TimeEntryUpdateForm(props) {
   );
   const [Month, setMonth] = React.useState(initialValues.Month);
   const [StaffName, setStaffName] = React.useState(initialValues.StaffName);
+  const [Holiday, setHoliday] = React.useState(initialValues.Holiday);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = timeEntryRecord
       ? { ...initialValues, ...timeEntryRecord }
       : initialValues;
     setStaffID(cleanValues.StaffID);
-    setClockInTime(cleanValues.ClockInTime ?? []);
-    setCurrentClockInTimeValue("");
-    setClockOutTime(cleanValues.ClockOutTime ?? []);
-    setCurrentClockOutTimeValue("");
     setHours(cleanValues.Hours);
     setDates(cleanValues.Dates ?? []);
     setCurrentDatesValue("");
@@ -237,6 +227,8 @@ export default function TimeEntryUpdateForm(props) {
     setCurrentShiftFinishValue("");
     setMonth(cleanValues.Month);
     setStaffName(cleanValues.StaffName);
+    setHoliday(cleanValues.Holiday ?? []);
+    setCurrentHolidayValue("");
     setErrors({});
   };
   const [timeEntryRecord, setTimeEntryRecord] =
@@ -251,12 +243,6 @@ export default function TimeEntryUpdateForm(props) {
     queryData();
   }, [idProp, timeEntryModelProp]);
   React.useEffect(resetStateValues, [timeEntryRecord]);
-  const [currentClockInTimeValue, setCurrentClockInTimeValue] =
-    React.useState("");
-  const ClockInTimeRef = React.createRef();
-  const [currentClockOutTimeValue, setCurrentClockOutTimeValue] =
-    React.useState("");
-  const ClockOutTimeRef = React.createRef();
   const [currentDatesValue, setCurrentDatesValue] = React.useState("");
   const DatesRef = React.createRef();
   const [currentShiftStartValue, setCurrentShiftStartValue] =
@@ -265,16 +251,17 @@ export default function TimeEntryUpdateForm(props) {
   const [currentShiftFinishValue, setCurrentShiftFinishValue] =
     React.useState("");
   const ShiftFinishRef = React.createRef();
+  const [currentHolidayValue, setCurrentHolidayValue] = React.useState("");
+  const HolidayRef = React.createRef();
   const validations = {
     StaffID: [],
-    ClockInTime: [],
-    ClockOutTime: [],
     Hours: [],
     Dates: [],
     ShiftStart: [],
     ShiftFinish: [],
     Month: [],
     StaffName: [],
+    Holiday: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -303,14 +290,13 @@ export default function TimeEntryUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           StaffID,
-          ClockInTime,
-          ClockOutTime,
           Hours,
           Dates,
           ShiftStart,
           ShiftFinish,
           Month,
           StaffName,
+          Holiday,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -367,14 +353,13 @@ export default function TimeEntryUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               StaffID: value,
-              ClockInTime,
-              ClockOutTime,
               Hours,
               Dates,
               ShiftStart,
               ShiftFinish,
               Month,
               StaffName,
+              Holiday,
             };
             const result = onChange(modelFields);
             value = result?.StaffID ?? value;
@@ -389,112 +374,6 @@ export default function TimeEntryUpdateForm(props) {
         hasError={errors.StaffID?.hasError}
         {...getOverrideProps(overrides, "StaffID")}
       ></TextField>
-      <ArrayField
-        onChange={async (items) => {
-          let values = items;
-          if (onChange) {
-            const modelFields = {
-              StaffID,
-              ClockInTime: values,
-              ClockOutTime,
-              Hours,
-              Dates,
-              ShiftStart,
-              ShiftFinish,
-              Month,
-              StaffName,
-            };
-            const result = onChange(modelFields);
-            values = result?.ClockInTime ?? values;
-          }
-          setClockInTime(values);
-          setCurrentClockInTimeValue("");
-        }}
-        currentFieldValue={currentClockInTimeValue}
-        label={"Clock in time"}
-        items={ClockInTime}
-        hasError={errors?.ClockInTime?.hasError}
-        errorMessage={errors?.ClockInTime?.errorMessage}
-        setFieldValue={setCurrentClockInTimeValue}
-        inputFieldRef={ClockInTimeRef}
-        defaultFieldValue={""}
-      >
-        <TextField
-          label="Clock in time"
-          isRequired={false}
-          isReadOnly={false}
-          type="time"
-          value={currentClockInTimeValue}
-          onChange={(e) => {
-            let { value } = e.target;
-            if (errors.ClockInTime?.hasError) {
-              runValidationTasks("ClockInTime", value);
-            }
-            setCurrentClockInTimeValue(value);
-          }}
-          onBlur={() =>
-            runValidationTasks("ClockInTime", currentClockInTimeValue)
-          }
-          errorMessage={errors.ClockInTime?.errorMessage}
-          hasError={errors.ClockInTime?.hasError}
-          ref={ClockInTimeRef}
-          labelHidden={true}
-          {...getOverrideProps(overrides, "ClockInTime")}
-        ></TextField>
-      </ArrayField>
-      <ArrayField
-        onChange={async (items) => {
-          let values = items;
-          if (onChange) {
-            const modelFields = {
-              StaffID,
-              ClockInTime,
-              ClockOutTime: values,
-              Hours,
-              Dates,
-              ShiftStart,
-              ShiftFinish,
-              Month,
-              StaffName,
-            };
-            const result = onChange(modelFields);
-            values = result?.ClockOutTime ?? values;
-          }
-          setClockOutTime(values);
-          setCurrentClockOutTimeValue("");
-        }}
-        currentFieldValue={currentClockOutTimeValue}
-        label={"Clock out time"}
-        items={ClockOutTime}
-        hasError={errors?.ClockOutTime?.hasError}
-        errorMessage={errors?.ClockOutTime?.errorMessage}
-        setFieldValue={setCurrentClockOutTimeValue}
-        inputFieldRef={ClockOutTimeRef}
-        defaultFieldValue={""}
-      >
-        <TextField
-          label="Clock out time"
-          isRequired={false}
-          isReadOnly={false}
-          type="time"
-          value={currentClockOutTimeValue}
-          onChange={(e) => {
-            let { value } = e.target;
-            if (errors.ClockOutTime?.hasError) {
-              runValidationTasks("ClockOutTime", value);
-            }
-            setCurrentClockOutTimeValue(value);
-          }}
-          onBlur={() =>
-            runValidationTasks("ClockOutTime", currentClockOutTimeValue)
-          }
-          errorMessage={errors.ClockOutTime?.errorMessage}
-          hasError={errors.ClockOutTime?.hasError}
-          ref={ClockOutTimeRef}
-          labelHidden={true}
-          {...getOverrideProps(overrides, "ClockOutTime")}
-        ></TextField>
-      </ArrayField>
       <TextField
         label="Hours"
         isRequired={false}
@@ -509,14 +388,13 @@ export default function TimeEntryUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               StaffID,
-              ClockInTime,
-              ClockOutTime,
               Hours: value,
               Dates,
               ShiftStart,
               ShiftFinish,
               Month,
               StaffName,
+              Holiday,
             };
             const result = onChange(modelFields);
             value = result?.Hours ?? value;
@@ -537,14 +415,13 @@ export default function TimeEntryUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               StaffID,
-              ClockInTime,
-              ClockOutTime,
               Hours,
               Dates: values,
               ShiftStart,
               ShiftFinish,
               Month,
               StaffName,
+              Holiday,
             };
             const result = onChange(modelFields);
             values = result?.Dates ?? values;
@@ -588,14 +465,13 @@ export default function TimeEntryUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               StaffID,
-              ClockInTime,
-              ClockOutTime,
               Hours,
               Dates,
               ShiftStart: values,
               ShiftFinish,
               Month,
               StaffName,
+              Holiday,
             };
             const result = onChange(modelFields);
             values = result?.ShiftStart ?? values;
@@ -640,14 +516,13 @@ export default function TimeEntryUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               StaffID,
-              ClockInTime,
-              ClockOutTime,
               Hours,
               Dates,
               ShiftStart,
               ShiftFinish: values,
               Month,
               StaffName,
+              Holiday,
             };
             const result = onChange(modelFields);
             values = result?.ShiftFinish ?? values;
@@ -696,14 +571,13 @@ export default function TimeEntryUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               StaffID,
-              ClockInTime,
-              ClockOutTime,
               Hours,
               Dates,
               ShiftStart,
               ShiftFinish,
               Month: value,
               StaffName,
+              Holiday,
             };
             const result = onChange(modelFields);
             value = result?.Month ?? value;
@@ -728,14 +602,13 @@ export default function TimeEntryUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               StaffID,
-              ClockInTime,
-              ClockOutTime,
               Hours,
               Dates,
               ShiftStart,
               ShiftFinish,
               Month,
               StaffName: value,
+              Holiday,
             };
             const result = onChange(modelFields);
             value = result?.StaffName ?? value;
@@ -750,6 +623,56 @@ export default function TimeEntryUpdateForm(props) {
         hasError={errors.StaffName?.hasError}
         {...getOverrideProps(overrides, "StaffName")}
       ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              StaffID,
+              Hours,
+              Dates,
+              ShiftStart,
+              ShiftFinish,
+              Month,
+              StaffName,
+              Holiday: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.Holiday ?? values;
+          }
+          setHoliday(values);
+          setCurrentHolidayValue("");
+        }}
+        currentFieldValue={currentHolidayValue}
+        label={"Holiday"}
+        items={Holiday}
+        hasError={errors?.Holiday?.hasError}
+        errorMessage={errors?.Holiday?.errorMessage}
+        setFieldValue={setCurrentHolidayValue}
+        inputFieldRef={HolidayRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Holiday"
+          isRequired={false}
+          isReadOnly={false}
+          type="date"
+          value={currentHolidayValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Holiday?.hasError) {
+              runValidationTasks("Holiday", value);
+            }
+            setCurrentHolidayValue(value);
+          }}
+          onBlur={() => runValidationTasks("Holiday", currentHolidayValue)}
+          errorMessage={errors.Holiday?.errorMessage}
+          hasError={errors.Holiday?.hasError}
+          ref={HolidayRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "Holiday")}
+        ></TextField>
+      </ArrayField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

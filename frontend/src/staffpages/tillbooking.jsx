@@ -7,6 +7,7 @@ import TableSelect from './TableSelect';
 import { format, addHours, set } from 'date-fns';
 import tableData from './TableData.json';
 import SessionBooker from './sessionbooker';
+import StaffCalenderParty from './PartyStaffCalendar';
 
 
 
@@ -22,6 +23,7 @@ export default function SessionBook() {
   const [availableTables, setAvailableTables] = useState([]);
   const [truee, setTrue] = useState(false)
   const [details, setDetails] = useState({})
+  const [partyBooking , setPartyBooking] = useState(false)
 
   const [showForm, setShowForm] = useState(false);
 
@@ -159,6 +161,14 @@ if (next === true) {
     setTrue(true)
   }
 
+  if (partyBooking === true) {
+    return (
+      <StaffCalenderParty />
+    )
+  }
+    
+  
+
 
   // filter sessions for now or later using TimeSlotTo and TimeSlotFrom and Table 
   return (
@@ -166,14 +176,19 @@ if (next === true) {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0">
           <h2 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Book Your Session
+            Make A Reservation
           </h2>
           <div>
 <button            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
  onClick = {()=> setShowForm(true)}>Book For Today</button>
 
+       
+<button            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
+ onClick = {()=> setPartyBooking(true)}>New Party Booking</button>
+
             <button onClick={() => {setNext(true)}}            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
  >Book For Another Day</button>
+
             {showForm && (
             <div>
 

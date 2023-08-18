@@ -14,14 +14,17 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type TeddysCreateFormInputValues = {
     Name?: string;
+    ImgSrc?: string;
 };
 export declare type TeddysCreateFormValidationValues = {
     Name?: ValidationFunction<string>;
+    ImgSrc?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type TeddysCreateFormOverridesProps = {
     TeddysCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
     Name?: PrimitiveOverrideProps<TextFieldProps>;
+    ImgSrc?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type TeddysCreateFormProps = React.PropsWithChildren<{
     overrides?: TeddysCreateFormOverridesProps | undefined | null;
