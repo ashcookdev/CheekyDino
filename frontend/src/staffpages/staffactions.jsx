@@ -10,11 +10,13 @@ export default function StaffActions() {
 
     const [clockedInStaff, setClockedInStaff] = useState([]);
     const [breakTime, setBreak] = useState(false);
+    const [email, setEmail] = useState('');
 
     useEffect(() => {
         const fetchClockIn = async () => {
           const mail = await Auth.currentAuthenticatedUser();
           const userEmail = mail.attributes.email;
+          setEmail(userEmail);
           const today = new Date();
           // get timezone offset
           
@@ -172,6 +174,7 @@ window.location.reload();
   const handleBreakEnd = async () => {
     const mail = await Auth.currentAuthenticatedUser();
     const userEmail = mail.attributes.email;
+    
     const dateTime = new Date();
     // get timezone offset
     const timezoneOffset = dateTime.getTimezoneOffset() * 60000;
@@ -202,10 +205,13 @@ window.location.reload();
 
 
 
-  return (
+   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="bg-white rounded-lg shadow-lg p-6 mb-5">
         <h2 className="text-xl font-bold mb-4">Actions</h2>
+        <p className="text-gray-700 mb-2">
+            {email}
+            </p>
         <div className="flex flex-col sm:flex-row justify-evenly py-4 sm:mr-2">
           {clockedInStaff ? (
             <button

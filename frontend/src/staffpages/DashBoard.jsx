@@ -22,7 +22,7 @@ import {
 } from '@heroicons/react/24/outline'
 import TodaysBookings from './todaysbookings'
 import Announcements from './Announcement'
-import { ArrowLeftIcon, CakeIcon, ChatBubbleBottomCenterIcon, CurrencyPoundIcon, PencilIcon, TableCellsIcon } from '@heroicons/react/20/solid'
+import { ArrowLeftIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CurrencyPoundIcon, PencilIcon, TableCellsIcon } from '@heroicons/react/20/solid'
 
 
 const secondaryNavigation = [
@@ -70,8 +70,10 @@ const navigation = [
   { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
   { name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
   { name: 'Edit', href: '/edithome', icon: PencilIcon, current: false },
+  {name: 'Clock In', href: '/clockin', icon: ClockIcon, current: false },
   {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },
+
 ]
 
 
@@ -430,9 +432,9 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
         <main className="py-10 lg:pl-72">
                 <div className="relative isolate overflow-hidden pt-16"  
 >
-                <div className="bg-white px-6 py-24 sm:py-32 lg:px-8" style={{ backgroundImage: `url(${staffImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                <div className="bg-white px-6 py-24 sm:py-32 lg:px-8" >
       <div className="mx-auto max-w-2xl text-center">
-        <h2 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">DashBoard</h2>
+        <h2 className="text-4xl font-bold tracking-tight text-purple-500 sm:text-6xl">DashBoard</h2>
         
       </div>
     </div>

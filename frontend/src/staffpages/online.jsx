@@ -3,8 +3,11 @@ import { DataStore } from "@aws-amplify/datastore";
 import { ClockIn } from "./models";
 import { isSameDay } from "date-fns";
 
+
 export default function Online() {
   const [clockedInStaff, setClockedInStaff] = useState([]);
+
+  
   
 
   useEffect(() => {
@@ -16,6 +19,7 @@ export default function Online() {
           c.ClockedIn === true &&
           c.ClockedOut === false
       );
+      console.log(clockedInToday);
       setClockedInStaff(clockedInToday);
     };
 

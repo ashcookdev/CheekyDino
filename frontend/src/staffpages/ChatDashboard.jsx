@@ -18,7 +18,8 @@ import {
   ChatBubbleBottomCenterIcon,
   TableCellsIcon,
   PencilIcon,
-  ArrowLeftIcon
+  ArrowLeftIcon, 
+  ClockIcon
 
 } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
@@ -139,6 +140,8 @@ function App() {
   { name: 'Kitchen', href: '/kitchen', icon: ArrowLeftIcon , current: false },
   { name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
   { name: 'Edit', href: '/edithome', icon: PencilIcon, current: false },
+  {name: 'Clock In', href: '/clockin', icon: ClockIcon, current: false },
+
   {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },
 ]

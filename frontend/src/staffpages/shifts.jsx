@@ -175,7 +175,7 @@ const people = [
 
   return (
     <div className="flex flex-col">
-      <StaffActions />
+    
       <div>
     
 

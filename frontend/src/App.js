@@ -52,6 +52,7 @@ import TeddyPartyCalender from './customer-pages/party/teddycalender';
 import PrivateHire from './customer-pages/party/privatehire';
 import PrivateHireCalender from './customer-pages/party/privatehirecalender';
 import PrivateHireRegister from './customer-pages/party/privatehireregister';
+import ClockIn from './staffpages/staffactions';
 
 
 const AuthenticatedCalender = withAuthenticator(Calender);
@@ -183,6 +184,7 @@ function App() {
             <Route path="/timeslot" element={<SessionToday />} />
             <Route path="/edithome" element={<EditHome />} />
             <Route path="/staff" element={<Shifts />} />
+            <Route path="/clockin" element={<ClockIn />} />
 
           </>
         )}
