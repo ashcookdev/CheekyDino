@@ -38,38 +38,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "staffs": {
-                    "name": "staffs",
-                    "isArray": true,
-                    "type": {
-                        "model": "StaffClockIn"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": [
-                            "clockIn"
-                        ]
-                    }
-                },
-                "timeentrys": {
-                    "name": "timeentrys",
-                    "isArray": true,
-                    "type": {
-                        "model": "TimeEntryClockIn"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": [
-                            "clockIn"
-                        ]
-                    }
-                },
                 "StaffId": {
                     "name": "StaffId",
                     "isArray": false,
@@ -116,6 +84,27 @@ export const schema = {
                     "name": "StaffRole",
                     "isArray": false,
                     "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Break": {
+                    "name": "Break",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "BreakStart": {
+                    "name": "BreakStart",
+                    "isArray": false,
+                    "type": "AWSTime",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "BreakEnd": {
+                    "name": "BreakEnd",
+                    "isArray": false,
+                    "type": "AWSTime",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -276,38 +265,6 @@ export const schema = {
                     "type": "String",
                     "isRequired": false,
                     "attributes": []
-                },
-                "timeentrys": {
-                    "name": "timeentrys",
-                    "isArray": true,
-                    "type": {
-                        "model": "TimeEntryHoliday"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": [
-                            "holiday"
-                        ]
-                    }
-                },
-                "staffs": {
-                    "name": "staffs",
-                    "isArray": true,
-                    "type": {
-                        "model": "StaffHoliday"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": [
-                            "holiday"
-                        ]
-                    }
                 },
                 "Approved": {
                     "name": "Approved",
@@ -965,38 +922,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "ClockIns": {
-                    "name": "ClockIns",
-                    "isArray": true,
-                    "type": {
-                        "model": "TimeEntryClockIn"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": [
-                            "timeEntry"
-                        ]
-                    }
-                },
-                "Holidays": {
-                    "name": "Holidays",
-                    "isArray": true,
-                    "type": {
-                        "model": "TimeEntryHoliday"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": [
-                            "timeEntry"
-                        ]
-                    }
-                },
                 "Holiday": {
                     "name": "Holiday",
                     "isArray": true,
@@ -1119,38 +1044,6 @@ export const schema = {
                     "type": "Float",
                     "isRequired": false,
                     "attributes": []
-                },
-                "ClockIns": {
-                    "name": "ClockIns",
-                    "isArray": true,
-                    "type": {
-                        "model": "StaffClockIn"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": [
-                            "staff"
-                        ]
-                    }
-                },
-                "Holidays": {
-                    "name": "Holidays",
-                    "isArray": true,
-                    "type": {
-                        "model": "StaffHoliday"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": [
-                            "staff"
-                        ]
-                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -2701,398 +2594,6 @@ export const schema = {
                 }
             ]
         },
-        "StaffClockIn": {
-            "name": "StaffClockIn",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "clockInId": {
-                    "name": "clockInId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "staffId": {
-                    "name": "staffId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "clockIn": {
-                    "name": "clockIn",
-                    "isArray": false,
-                    "type": {
-                        "model": "ClockIn"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetNames": [
-                            "clockInId"
-                        ]
-                    }
-                },
-                "staff": {
-                    "name": "staff",
-                    "isArray": false,
-                    "type": {
-                        "model": "Staff"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetNames": [
-                            "staffId"
-                        ]
-                    }
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                }
-            },
-            "syncable": true,
-            "pluralName": "StaffClockIns",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byClockIn",
-                        "fields": [
-                            "clockInId"
-                        ]
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byStaff",
-                        "fields": [
-                            "staffId"
-                        ]
-                    }
-                }
-            ]
-        },
-        "TimeEntryClockIn": {
-            "name": "TimeEntryClockIn",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "clockInId": {
-                    "name": "clockInId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "timeEntryId": {
-                    "name": "timeEntryId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "clockIn": {
-                    "name": "clockIn",
-                    "isArray": false,
-                    "type": {
-                        "model": "ClockIn"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetNames": [
-                            "clockInId"
-                        ]
-                    }
-                },
-                "timeEntry": {
-                    "name": "timeEntry",
-                    "isArray": false,
-                    "type": {
-                        "model": "TimeEntry"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetNames": [
-                            "timeEntryId"
-                        ]
-                    }
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                }
-            },
-            "syncable": true,
-            "pluralName": "TimeEntryClockIns",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byClockIn",
-                        "fields": [
-                            "clockInId"
-                        ]
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byTimeEntry",
-                        "fields": [
-                            "timeEntryId"
-                        ]
-                    }
-                }
-            ]
-        },
-        "TimeEntryHoliday": {
-            "name": "TimeEntryHoliday",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "holidayId": {
-                    "name": "holidayId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "timeEntryId": {
-                    "name": "timeEntryId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "holiday": {
-                    "name": "holiday",
-                    "isArray": false,
-                    "type": {
-                        "model": "Holiday"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetNames": [
-                            "holidayId"
-                        ]
-                    }
-                },
-                "timeEntry": {
-                    "name": "timeEntry",
-                    "isArray": false,
-                    "type": {
-                        "model": "TimeEntry"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetNames": [
-                            "timeEntryId"
-                        ]
-                    }
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                }
-            },
-            "syncable": true,
-            "pluralName": "TimeEntryHolidays",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byHoliday",
-                        "fields": [
-                            "holidayId"
-                        ]
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byTimeEntry",
-                        "fields": [
-                            "timeEntryId"
-                        ]
-                    }
-                }
-            ]
-        },
-        "StaffHoliday": {
-            "name": "StaffHoliday",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "holidayId": {
-                    "name": "holidayId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "staffId": {
-                    "name": "staffId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "holiday": {
-                    "name": "holiday",
-                    "isArray": false,
-                    "type": {
-                        "model": "Holiday"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetNames": [
-                            "holidayId"
-                        ]
-                    }
-                },
-                "staff": {
-                    "name": "staff",
-                    "isArray": false,
-                    "type": {
-                        "model": "Staff"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetNames": [
-                            "staffId"
-                        ]
-                    }
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                }
-            },
-            "syncable": true,
-            "pluralName": "StaffHolidays",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byHoliday",
-                        "fields": [
-                            "holidayId"
-                        ]
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byStaff",
-                        "fields": [
-                            "staffId"
-                        ]
-                    }
-                }
-            ]
-        },
         "TimeEntryStaff": {
             "name": "TimeEntryStaff",
             "fields": {
@@ -3195,5 +2696,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "96cb618cd95e9acce1275b7f5cc8dc7c"
+    "version": "1dc53e3badba5d81456f8a88ba946f09"
 };

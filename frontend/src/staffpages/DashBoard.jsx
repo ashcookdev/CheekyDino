@@ -213,7 +213,7 @@ setTotalAmount(totalAmount)    }
         return () => subscription.unsubscribe()
     }, [])
 
-
+const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
     //current tables occupied & future bookings today and how many guests in branch
 
     return (
@@ -428,8 +428,14 @@ setTotalAmount(totalAmount)    }
         </div>
 
         <main className="py-10 lg:pl-72">
-          <div className="px-4 sm:px-6 lg:px-8"><main className='bg-custom-image'>
-                <div className="relative isolate overflow-hidden pt-16">
+                <div className="relative isolate overflow-hidden pt-16"  
+>
+                <div className="bg-white px-6 py-24 sm:py-32 lg:px-8" style={{ backgroundImage: `url(${staffImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <div className="mx-auto max-w-2xl text-center">
+        <h2 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">DashBoard</h2>
+        
+      </div>
+    </div>
                     {/* Secondary navigation */}
                    
 
@@ -557,8 +563,7 @@ setTotalAmount(totalAmount)    }
                     </div>
                 </div>
             </main></div>
-        </main>
-      </div>
+    
 
             
         </>

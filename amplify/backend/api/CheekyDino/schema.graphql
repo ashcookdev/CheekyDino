@@ -4,8 +4,6 @@ type ClockIn @model @auth(rules: [{allow: private}, {allow: owner}]) {
   ClockOut: AWSTime
   Sick: Boolean
   Holiday: String
-  staffs: [Staff] @manyToMany(relationName: "StaffClockIn")
-  timeentrys: [TimeEntry] @manyToMany(relationName: "TimeEntryClockIn")
   StaffId: String
   TimeEntryId: String
   Date: AWSDate
@@ -30,8 +28,6 @@ type Holiday @model @auth(rules: [{allow: private}, {allow: owner}]) {
   StartDate: String
   Description: String
   EndDate: String
-  timeentrys: [TimeEntry] @manyToMany(relationName: "TimeEntryHoliday")
-  staffs: [Staff] @manyToMany(relationName: "StaffHoliday")
   Approved: Boolean
 }
 
@@ -100,8 +96,6 @@ type TimeEntry @model @auth(rules: [{allow: private}, {allow: owner}]) {
   ShiftFinish: [String]
   Month: String
   StaffName: String
-  ClockIns: [ClockIn] @manyToMany(relationName: "TimeEntryClockIn")
-  Holidays: [Holiday] @manyToMany(relationName: "TimeEntryHoliday")
   Holiday: [AWSDate]
 }
 
@@ -113,8 +107,6 @@ type Staff @model @auth(rules: [{allow: private}, {allow: owner}]) {
   timeentriess: [TimeEntry] @manyToMany(relationName: "TimeEntryStaff")
   Role: String
   HourlyRate: Float
-  ClockIns: [ClockIn] @manyToMany(relationName: "StaffClockIn")
-  Holidays: [Holiday] @manyToMany(relationName: "StaffHoliday")
 }
 
 type Confectionary @model @auth(rules: [{allow: private}, {allow: owner}]) {

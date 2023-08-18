@@ -36,6 +36,14 @@ const awsmobile = {
     "aws_cognito_verification_mechanisms": [
         "EMAIL"
     ],
+    "aws_mobile_analytics_app_id": "e1f5e18071f340cb9eb03cf3bac5ce39",
+    "aws_mobile_analytics_app_region": "eu-west-2",
+    "Analytics": {
+        "AWSPinpoint": {
+            "appId": "e1f5e18071f340cb9eb03cf3bac5ce39",
+            "region": "eu-west-2"
+        }
+    },
     "aws_user_files_s3_bucket": "cheekydinoaiml135937-staging",
     "aws_user_files_s3_bucket_region": "eu-west-2"
 };

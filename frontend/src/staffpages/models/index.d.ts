@@ -16,8 +16,6 @@ type EagerClockIn = {
   readonly ClockOut?: string | null;
   readonly Sick?: boolean | null;
   readonly Holiday?: string | null;
-  readonly staffs?: (StaffClockIn | null)[] | null;
-  readonly timeentrys?: (TimeEntryClockIn | null)[] | null;
   readonly StaffId?: string | null;
   readonly TimeEntryId?: string | null;
   readonly Date?: string | null;
@@ -25,6 +23,9 @@ type EagerClockIn = {
   readonly ClockedOut?: boolean | null;
   readonly StaffName?: string | null;
   readonly StaffRole?: string | null;
+  readonly Break?: boolean | null;
+  readonly BreakStart?: string | null;
+  readonly BreakEnd?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -39,8 +40,6 @@ type LazyClockIn = {
   readonly ClockOut?: string | null;
   readonly Sick?: boolean | null;
   readonly Holiday?: string | null;
-  readonly staffs: AsyncCollection<StaffClockIn>;
-  readonly timeentrys: AsyncCollection<TimeEntryClockIn>;
   readonly StaffId?: string | null;
   readonly TimeEntryId?: string | null;
   readonly Date?: string | null;
@@ -48,6 +47,9 @@ type LazyClockIn = {
   readonly ClockedOut?: boolean | null;
   readonly StaffName?: string | null;
   readonly StaffRole?: string | null;
+  readonly Break?: boolean | null;
+  readonly BreakStart?: string | null;
+  readonly BreakEnd?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -98,8 +100,6 @@ type EagerHoliday = {
   readonly StartDate?: string | null;
   readonly Description?: string | null;
   readonly EndDate?: string | null;
-  readonly timeentrys?: (TimeEntryHoliday | null)[] | null;
-  readonly staffs?: (StaffHoliday | null)[] | null;
   readonly Approved?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -115,8 +115,6 @@ type LazyHoliday = {
   readonly StartDate?: string | null;
   readonly Description?: string | null;
   readonly EndDate?: string | null;
-  readonly timeentrys: AsyncCollection<TimeEntryHoliday>;
-  readonly staffs: AsyncCollection<StaffHoliday>;
   readonly Approved?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -342,8 +340,6 @@ type EagerTimeEntry = {
   readonly ShiftFinish?: (string | null)[] | null;
   readonly Month?: string | null;
   readonly StaffName?: string | null;
-  readonly ClockIns?: (TimeEntryClockIn | null)[] | null;
-  readonly Holidays?: (TimeEntryHoliday | null)[] | null;
   readonly Holiday?: (string | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -363,8 +359,6 @@ type LazyTimeEntry = {
   readonly ShiftFinish?: (string | null)[] | null;
   readonly Month?: string | null;
   readonly StaffName?: string | null;
-  readonly ClockIns: AsyncCollection<TimeEntryClockIn>;
-  readonly Holidays: AsyncCollection<TimeEntryHoliday>;
   readonly Holiday?: (string | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -388,8 +382,6 @@ type EagerStaff = {
   readonly timeentriess?: (TimeEntryStaff | null)[] | null;
   readonly Role?: string | null;
   readonly HourlyRate?: number | null;
-  readonly ClockIns?: (StaffClockIn | null)[] | null;
-  readonly Holidays?: (StaffHoliday | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -406,8 +398,6 @@ type LazyStaff = {
   readonly timeentriess: AsyncCollection<TimeEntryStaff>;
   readonly Role?: string | null;
   readonly HourlyRate?: number | null;
-  readonly ClockIns: AsyncCollection<StaffClockIn>;
-  readonly Holidays: AsyncCollection<StaffHoliday>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -834,142 +824,6 @@ export declare type PartyBooking = LazyLoading extends LazyLoadingDisabled ? Eag
 
 export declare const PartyBooking: (new (init: ModelInit<PartyBooking>) => PartyBooking) & {
   copyOf(source: PartyBooking, mutator: (draft: MutableModel<PartyBooking>) => MutableModel<PartyBooking> | void): PartyBooking;
-}
-
-type EagerStaffClockIn = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<StaffClockIn, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly clockInId?: string | null;
-  readonly staffId?: string | null;
-  readonly clockIn: ClockIn;
-  readonly staff: Staff;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-type LazyStaffClockIn = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<StaffClockIn, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly clockInId?: string | null;
-  readonly staffId?: string | null;
-  readonly clockIn: AsyncItem<ClockIn>;
-  readonly staff: AsyncItem<Staff>;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-export declare type StaffClockIn = LazyLoading extends LazyLoadingDisabled ? EagerStaffClockIn : LazyStaffClockIn
-
-export declare const StaffClockIn: (new (init: ModelInit<StaffClockIn>) => StaffClockIn) & {
-  copyOf(source: StaffClockIn, mutator: (draft: MutableModel<StaffClockIn>) => MutableModel<StaffClockIn> | void): StaffClockIn;
-}
-
-type EagerTimeEntryClockIn = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<TimeEntryClockIn, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly clockInId?: string | null;
-  readonly timeEntryId?: string | null;
-  readonly clockIn: ClockIn;
-  readonly timeEntry: TimeEntry;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-type LazyTimeEntryClockIn = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<TimeEntryClockIn, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly clockInId?: string | null;
-  readonly timeEntryId?: string | null;
-  readonly clockIn: AsyncItem<ClockIn>;
-  readonly timeEntry: AsyncItem<TimeEntry>;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-export declare type TimeEntryClockIn = LazyLoading extends LazyLoadingDisabled ? EagerTimeEntryClockIn : LazyTimeEntryClockIn
-
-export declare const TimeEntryClockIn: (new (init: ModelInit<TimeEntryClockIn>) => TimeEntryClockIn) & {
-  copyOf(source: TimeEntryClockIn, mutator: (draft: MutableModel<TimeEntryClockIn>) => MutableModel<TimeEntryClockIn> | void): TimeEntryClockIn;
-}
-
-type EagerTimeEntryHoliday = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<TimeEntryHoliday, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly holidayId?: string | null;
-  readonly timeEntryId?: string | null;
-  readonly holiday: Holiday;
-  readonly timeEntry: TimeEntry;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-type LazyTimeEntryHoliday = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<TimeEntryHoliday, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly holidayId?: string | null;
-  readonly timeEntryId?: string | null;
-  readonly holiday: AsyncItem<Holiday>;
-  readonly timeEntry: AsyncItem<TimeEntry>;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-export declare type TimeEntryHoliday = LazyLoading extends LazyLoadingDisabled ? EagerTimeEntryHoliday : LazyTimeEntryHoliday
-
-export declare const TimeEntryHoliday: (new (init: ModelInit<TimeEntryHoliday>) => TimeEntryHoliday) & {
-  copyOf(source: TimeEntryHoliday, mutator: (draft: MutableModel<TimeEntryHoliday>) => MutableModel<TimeEntryHoliday> | void): TimeEntryHoliday;
-}
-
-type EagerStaffHoliday = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<StaffHoliday, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly holidayId?: string | null;
-  readonly staffId?: string | null;
-  readonly holiday: Holiday;
-  readonly staff: Staff;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-type LazyStaffHoliday = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<StaffHoliday, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly holidayId?: string | null;
-  readonly staffId?: string | null;
-  readonly holiday: AsyncItem<Holiday>;
-  readonly staff: AsyncItem<Staff>;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-export declare type StaffHoliday = LazyLoading extends LazyLoadingDisabled ? EagerStaffHoliday : LazyStaffHoliday
-
-export declare const StaffHoliday: (new (init: ModelInit<StaffHoliday>) => StaffHoliday) & {
-  copyOf(source: StaffHoliday, mutator: (draft: MutableModel<StaffHoliday>) => MutableModel<StaffHoliday> | void): StaffHoliday;
 }
 
 type EagerTimeEntryStaff = {
