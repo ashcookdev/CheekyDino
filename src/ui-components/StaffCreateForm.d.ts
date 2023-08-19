@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -18,6 +18,13 @@ export declare type StaffCreateFormInputValues = {
     TimeEntries?: string;
     Role?: string;
     HourlyRate?: number;
+    StartDate?: string;
+    Current?: boolean;
+    Telephone?: string;
+    ContractType?: string;
+    EndDate?: string;
+    Age?: string;
+    DOB?: string;
 };
 export declare type StaffCreateFormValidationValues = {
     Name?: ValidationFunction<string>;
@@ -25,6 +32,13 @@ export declare type StaffCreateFormValidationValues = {
     TimeEntries?: ValidationFunction<string>;
     Role?: ValidationFunction<string>;
     HourlyRate?: ValidationFunction<number>;
+    StartDate?: ValidationFunction<string>;
+    Current?: ValidationFunction<boolean>;
+    Telephone?: ValidationFunction<string>;
+    ContractType?: ValidationFunction<string>;
+    EndDate?: ValidationFunction<string>;
+    Age?: ValidationFunction<string>;
+    DOB?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type StaffCreateFormOverridesProps = {
@@ -34,6 +48,13 @@ export declare type StaffCreateFormOverridesProps = {
     TimeEntries?: PrimitiveOverrideProps<TextFieldProps>;
     Role?: PrimitiveOverrideProps<TextFieldProps>;
     HourlyRate?: PrimitiveOverrideProps<TextFieldProps>;
+    StartDate?: PrimitiveOverrideProps<TextFieldProps>;
+    Current?: PrimitiveOverrideProps<SwitchFieldProps>;
+    Telephone?: PrimitiveOverrideProps<TextFieldProps>;
+    ContractType?: PrimitiveOverrideProps<TextFieldProps>;
+    EndDate?: PrimitiveOverrideProps<TextFieldProps>;
+    Age?: PrimitiveOverrideProps<TextFieldProps>;
+    DOB?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type StaffCreateFormProps = React.PropsWithChildren<{
     overrides?: StaffCreateFormOverridesProps | undefined | null;

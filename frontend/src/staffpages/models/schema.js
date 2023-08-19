@@ -1045,6 +1045,55 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "StartDate": {
+                    "name": "StartDate",
+                    "isArray": false,
+                    "type": "AWSDate",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Current": {
+                    "name": "Current",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Telephone": {
+                    "name": "Telephone",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "ContractType": {
+                    "name": "ContractType",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "EndDate": {
+                    "name": "EndDate",
+                    "isArray": false,
+                    "type": "AWSDate",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Age": {
+                    "name": "Age",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "DOB": {
+                    "name": "DOB",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -2696,5 +2745,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "1dc53e3badba5d81456f8a88ba946f09"
+    "version": "72e9cc5c6536440f32f736e7fa049694"
 };

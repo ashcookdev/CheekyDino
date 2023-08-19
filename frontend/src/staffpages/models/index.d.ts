@@ -382,6 +382,13 @@ type EagerStaff = {
   readonly timeentriess?: (TimeEntryStaff | null)[] | null;
   readonly Role?: string | null;
   readonly HourlyRate?: number | null;
+  readonly StartDate?: string | null;
+  readonly Current?: boolean | null;
+  readonly Telephone?: string | null;
+  readonly ContractType?: string | null;
+  readonly EndDate?: string | null;
+  readonly Age?: string | null;
+  readonly DOB?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -398,6 +405,13 @@ type LazyStaff = {
   readonly timeentriess: AsyncCollection<TimeEntryStaff>;
   readonly Role?: string | null;
   readonly HourlyRate?: number | null;
+  readonly StartDate?: string | null;
+  readonly Current?: boolean | null;
+  readonly Telephone?: string | null;
+  readonly ContractType?: string | null;
+  readonly EndDate?: string | null;
+  readonly Age?: string | null;
+  readonly DOB?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

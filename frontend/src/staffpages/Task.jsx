@@ -8,6 +8,7 @@ import {
 } from 'date-fns';
 import { Staff, TimeEntry, Holiday } from '../staffpages/models';
 import { useNavigate } from 'react-router-dom';
+import NewStaff from './starterform';
 
 const ShiftBooking = () => {
   const [staff, setStaff] = useState([]);
@@ -132,6 +133,11 @@ const ShiftBooking = () => {
     };
     fetchHoliday();
   }, []);
+
+  if (newStaff === true) {
+    return <NewStaff />;
+    
+  }
 
 
   return (

@@ -3,6 +3,14 @@
 
 const awsmobile = {
     "aws_project_region": "eu-west-2",
+    "aws_mobile_analytics_app_id": "56d3caea6b5f4e82926cd96881baa15c",
+    "aws_mobile_analytics_app_region": "eu-west-2",
+    "Analytics": {
+        "AWSPinpoint": {
+            "appId": "56d3caea6b5f4e82926cd96881baa15c",
+            "region": "eu-west-2"
+        }
+    },
     "aws_appsync_graphqlEndpoint": "https://vuczvd4n2bewdgycwte7x27hny.appsync-api.eu-west-2.amazonaws.com/graphql",
     "aws_appsync_region": "eu-west-2",
     "aws_appsync_authenticationType": "AMAZON_COGNITO_USER_POOLS",
@@ -36,14 +44,6 @@ const awsmobile = {
     "aws_cognito_verification_mechanisms": [
         "EMAIL"
     ],
-    "aws_mobile_analytics_app_id": "e1f5e18071f340cb9eb03cf3bac5ce39",
-    "aws_mobile_analytics_app_region": "eu-west-2",
-    "Analytics": {
-        "AWSPinpoint": {
-            "appId": "e1f5e18071f340cb9eb03cf3bac5ce39",
-            "region": "eu-west-2"
-        }
-    },
     "aws_user_files_s3_bucket": "cheekydinoaiml135937-staging",
     "aws_user_files_s3_bucket_region": "eu-west-2"
 };

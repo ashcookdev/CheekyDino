@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Staff } from "../models";
 import { fetchByPath, validateField } from "./utils";
@@ -29,6 +35,13 @@ export default function StaffUpdateForm(props) {
     TimeEntries: "",
     Role: "",
     HourlyRate: "",
+    StartDate: "",
+    Current: false,
+    Telephone: "",
+    ContractType: "",
+    EndDate: "",
+    Age: "",
+    DOB: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Email, setEmail] = React.useState(initialValues.Email);
@@ -37,6 +50,15 @@ export default function StaffUpdateForm(props) {
   );
   const [Role, setRole] = React.useState(initialValues.Role);
   const [HourlyRate, setHourlyRate] = React.useState(initialValues.HourlyRate);
+  const [StartDate, setStartDate] = React.useState(initialValues.StartDate);
+  const [Current, setCurrent] = React.useState(initialValues.Current);
+  const [Telephone, setTelephone] = React.useState(initialValues.Telephone);
+  const [ContractType, setContractType] = React.useState(
+    initialValues.ContractType
+  );
+  const [EndDate, setEndDate] = React.useState(initialValues.EndDate);
+  const [Age, setAge] = React.useState(initialValues.Age);
+  const [DOB, setDOB] = React.useState(initialValues.DOB);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = staffRecord
@@ -47,6 +69,13 @@ export default function StaffUpdateForm(props) {
     setTimeEntries(cleanValues.TimeEntries);
     setRole(cleanValues.Role);
     setHourlyRate(cleanValues.HourlyRate);
+    setStartDate(cleanValues.StartDate);
+    setCurrent(cleanValues.Current);
+    setTelephone(cleanValues.Telephone);
+    setContractType(cleanValues.ContractType);
+    setEndDate(cleanValues.EndDate);
+    setAge(cleanValues.Age);
+    setDOB(cleanValues.DOB);
     setErrors({});
   };
   const [staffRecord, setStaffRecord] = React.useState(staffModelProp);
@@ -66,6 +95,13 @@ export default function StaffUpdateForm(props) {
     TimeEntries: [],
     Role: [],
     HourlyRate: [],
+    StartDate: [],
+    Current: [],
+    Telephone: [],
+    ContractType: [],
+    EndDate: [],
+    Age: [],
+    DOB: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -98,6 +134,13 @@ export default function StaffUpdateForm(props) {
           TimeEntries,
           Role,
           HourlyRate,
+          StartDate,
+          Current,
+          Telephone,
+          ContractType,
+          EndDate,
+          Age,
+          DOB,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -158,6 +201,13 @@ export default function StaffUpdateForm(props) {
               TimeEntries,
               Role,
               HourlyRate,
+              StartDate,
+              Current,
+              Telephone,
+              ContractType,
+              EndDate,
+              Age,
+              DOB,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -186,6 +236,13 @@ export default function StaffUpdateForm(props) {
               TimeEntries,
               Role,
               HourlyRate,
+              StartDate,
+              Current,
+              Telephone,
+              ContractType,
+              EndDate,
+              Age,
+              DOB,
             };
             const result = onChange(modelFields);
             value = result?.Email ?? value;
@@ -214,6 +271,13 @@ export default function StaffUpdateForm(props) {
               TimeEntries: value,
               Role,
               HourlyRate,
+              StartDate,
+              Current,
+              Telephone,
+              ContractType,
+              EndDate,
+              Age,
+              DOB,
             };
             const result = onChange(modelFields);
             value = result?.TimeEntries ?? value;
@@ -242,6 +306,13 @@ export default function StaffUpdateForm(props) {
               TimeEntries,
               Role: value,
               HourlyRate,
+              StartDate,
+              Current,
+              Telephone,
+              ContractType,
+              EndDate,
+              Age,
+              DOB,
             };
             const result = onChange(modelFields);
             value = result?.Role ?? value;
@@ -274,6 +345,13 @@ export default function StaffUpdateForm(props) {
               TimeEntries,
               Role,
               HourlyRate: value,
+              StartDate,
+              Current,
+              Telephone,
+              ContractType,
+              EndDate,
+              Age,
+              DOB,
             };
             const result = onChange(modelFields);
             value = result?.HourlyRate ?? value;
@@ -287,6 +365,253 @@ export default function StaffUpdateForm(props) {
         errorMessage={errors.HourlyRate?.errorMessage}
         hasError={errors.HourlyRate?.hasError}
         {...getOverrideProps(overrides, "HourlyRate")}
+      ></TextField>
+      <TextField
+        label="Start date"
+        isRequired={false}
+        isReadOnly={false}
+        type="date"
+        value={StartDate}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeEntries,
+              Role,
+              HourlyRate,
+              StartDate: value,
+              Current,
+              Telephone,
+              ContractType,
+              EndDate,
+              Age,
+              DOB,
+            };
+            const result = onChange(modelFields);
+            value = result?.StartDate ?? value;
+          }
+          if (errors.StartDate?.hasError) {
+            runValidationTasks("StartDate", value);
+          }
+          setStartDate(value);
+        }}
+        onBlur={() => runValidationTasks("StartDate", StartDate)}
+        errorMessage={errors.StartDate?.errorMessage}
+        hasError={errors.StartDate?.hasError}
+        {...getOverrideProps(overrides, "StartDate")}
+      ></TextField>
+      <SwitchField
+        label="Current"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={Current}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeEntries,
+              Role,
+              HourlyRate,
+              StartDate,
+              Current: value,
+              Telephone,
+              ContractType,
+              EndDate,
+              Age,
+              DOB,
+            };
+            const result = onChange(modelFields);
+            value = result?.Current ?? value;
+          }
+          if (errors.Current?.hasError) {
+            runValidationTasks("Current", value);
+          }
+          setCurrent(value);
+        }}
+        onBlur={() => runValidationTasks("Current", Current)}
+        errorMessage={errors.Current?.errorMessage}
+        hasError={errors.Current?.hasError}
+        {...getOverrideProps(overrides, "Current")}
+      ></SwitchField>
+      <TextField
+        label="Telephone"
+        isRequired={false}
+        isReadOnly={false}
+        value={Telephone}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeEntries,
+              Role,
+              HourlyRate,
+              StartDate,
+              Current,
+              Telephone: value,
+              ContractType,
+              EndDate,
+              Age,
+              DOB,
+            };
+            const result = onChange(modelFields);
+            value = result?.Telephone ?? value;
+          }
+          if (errors.Telephone?.hasError) {
+            runValidationTasks("Telephone", value);
+          }
+          setTelephone(value);
+        }}
+        onBlur={() => runValidationTasks("Telephone", Telephone)}
+        errorMessage={errors.Telephone?.errorMessage}
+        hasError={errors.Telephone?.hasError}
+        {...getOverrideProps(overrides, "Telephone")}
+      ></TextField>
+      <TextField
+        label="Contract type"
+        isRequired={false}
+        isReadOnly={false}
+        value={ContractType}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeEntries,
+              Role,
+              HourlyRate,
+              StartDate,
+              Current,
+              Telephone,
+              ContractType: value,
+              EndDate,
+              Age,
+              DOB,
+            };
+            const result = onChange(modelFields);
+            value = result?.ContractType ?? value;
+          }
+          if (errors.ContractType?.hasError) {
+            runValidationTasks("ContractType", value);
+          }
+          setContractType(value);
+        }}
+        onBlur={() => runValidationTasks("ContractType", ContractType)}
+        errorMessage={errors.ContractType?.errorMessage}
+        hasError={errors.ContractType?.hasError}
+        {...getOverrideProps(overrides, "ContractType")}
+      ></TextField>
+      <TextField
+        label="End date"
+        isRequired={false}
+        isReadOnly={false}
+        type="date"
+        value={EndDate}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeEntries,
+              Role,
+              HourlyRate,
+              StartDate,
+              Current,
+              Telephone,
+              ContractType,
+              EndDate: value,
+              Age,
+              DOB,
+            };
+            const result = onChange(modelFields);
+            value = result?.EndDate ?? value;
+          }
+          if (errors.EndDate?.hasError) {
+            runValidationTasks("EndDate", value);
+          }
+          setEndDate(value);
+        }}
+        onBlur={() => runValidationTasks("EndDate", EndDate)}
+        errorMessage={errors.EndDate?.errorMessage}
+        hasError={errors.EndDate?.hasError}
+        {...getOverrideProps(overrides, "EndDate")}
+      ></TextField>
+      <TextField
+        label="Age"
+        isRequired={false}
+        isReadOnly={false}
+        value={Age}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeEntries,
+              Role,
+              HourlyRate,
+              StartDate,
+              Current,
+              Telephone,
+              ContractType,
+              EndDate,
+              Age: value,
+              DOB,
+            };
+            const result = onChange(modelFields);
+            value = result?.Age ?? value;
+          }
+          if (errors.Age?.hasError) {
+            runValidationTasks("Age", value);
+          }
+          setAge(value);
+        }}
+        onBlur={() => runValidationTasks("Age", Age)}
+        errorMessage={errors.Age?.errorMessage}
+        hasError={errors.Age?.hasError}
+        {...getOverrideProps(overrides, "Age")}
+      ></TextField>
+      <TextField
+        label="Dob"
+        isRequired={false}
+        isReadOnly={false}
+        value={DOB}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeEntries,
+              Role,
+              HourlyRate,
+              StartDate,
+              Current,
+              Telephone,
+              ContractType,
+              EndDate,
+              Age,
+              DOB: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.DOB ?? value;
+          }
+          if (errors.DOB?.hasError) {
+            runValidationTasks("DOB", value);
+          }
+          setDOB(value);
+        }}
+        onBlur={() => runValidationTasks("DOB", DOB)}
+        errorMessage={errors.DOB?.errorMessage}
+        hasError={errors.DOB?.hasError}
+        {...getOverrideProps(overrides, "DOB")}
       ></TextField>
       <Flex
         justifyContent="space-between"

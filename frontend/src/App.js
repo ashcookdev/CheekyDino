@@ -53,6 +53,7 @@ import PrivateHire from './customer-pages/party/privatehire';
 import PrivateHireCalender from './customer-pages/party/privatehirecalender';
 import PrivateHireRegister from './customer-pages/party/privatehireregister';
 import ClockIn from './staffpages/staffactions';
+import StarterForm from './staffpages/starterform';
 
 
 const AuthenticatedCalender = withAuthenticator(Calender);
@@ -179,7 +180,6 @@ function App() {
             <Route path="/partyhistory" element={<PartyHistory />} />
             <Route path="/finance" element={<Finance />} />
             <Route path="/Graph" element={<Graph />} />
-            <Route path="/staff/shiftbooking" element={<Task />} />
             <Route path="/Customerscreen" element={<CustomerScreen />} />
             <Route path="/timeslot" element={<SessionToday />} />
             <Route path="/edithome" element={<EditHome />} />
@@ -188,6 +188,7 @@ function App() {
 
           </>
         )}
+        
       
       
       </Routes>
@@ -232,7 +233,15 @@ function App() {
               } 
          /> 
       </Routes>
-    
+      <Routes>
+  {allowedGroups.includes(userGroup) && ['Developer', 'Admin'].includes(userGroup) && (
+    <>
+            <Route path= "/staff/starterform" element={<StarterForm />} />
+            <Route path="/staff/shiftbooking" element={<Task />} />
+          </>
+
+            )}
+</Routes>
     </>
   );
   

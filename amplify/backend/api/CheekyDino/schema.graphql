@@ -107,6 +107,13 @@ type Staff @model @auth(rules: [{allow: private}, {allow: owner}]) {
   timeentriess: [TimeEntry] @manyToMany(relationName: "TimeEntryStaff")
   Role: String
   HourlyRate: Float
+  StartDate: AWSDate
+  Current: Boolean
+  Telephone: String
+  ContractType: String
+  EndDate: AWSDate
+  Age: String
+  DOB: String
 }
 
 type Confectionary @model @auth(rules: [{allow: private}, {allow: owner}]) {
