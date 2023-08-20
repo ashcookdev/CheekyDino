@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
 import { PartyGuests, PartyBooking, Messages } from './models';
+import { useNavigate } from 'react-router-dom';
 
 const TillParty = ({ selectedParty }) => {
   const [partyGuests, setPartyGuests] = useState([]);
   const [clientArrived, setClientArrived] = useState(false);
   const [partyFinished, setPartyFinished] = useState(false);
+  const [back, setBack] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleGuestArrival = async (guest) => {
     try {
@@ -125,68 +129,88 @@ useEffect(() => {
 
 // create a table to display the party guests and have buttons to mark them as arrived and left
 return (
-    <div>
-        <table className="w-full text-left border-collapse">
-  <thead>
-    <tr>
-      <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Guest Name</th>
-      <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Arrived</th>
-      <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Cancel</th>
-    </tr>
-  </thead>
-  <tbody>
-    {partyGuests.map((guest) => (
-      <tr key={guest.id} className="hover:bg-grey-lighter">
-        <td className="py-4 px-6 border-b border-grey-light">{guest.ChildName}</td>
-        <td className="py-4 px-6 border-b border-grey-light">
-          {!guest.Arrived && (
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={() => handleGuestArrival(guest)}
-            >
-              Arrived
-            </button>
-          )}
-        </td>
-        <td className="py-4 px-6 border-b border-grey-light">
-          {guest.Arrived && (
-            <button
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-              onClick={() => handleMistake(guest)}
-            >
-              Cancel
-            </button>
-          )}
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+  <div className="mt-8 flow-root">
+    <button 
+      type="button"
+      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none"
+      onClick={() => {
+       window.location.reload();}
 
-{!clientArrived && (
-  <button
-    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
-    onClick={() => {
-      HandleClient(selectedParty);
-      setClientArrived(true);
-    }}
-  >
-    Client Arrived
-  </button>
-)}
-<button
-  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4 ml-2"
-  onClick={async () => {
-    await handlePartyFinish(selectedParty);
-    setPartyFinished(true);
-  }}
->
-  Party Finished
-</button>
+      }
+    >
+      Back
+    </button>
+    <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        <table className="min-w-full divide-y divide-gray-300">
+          <thead>
+            <tr>
+              <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                Guest Name
+              </th>
+              <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                Arrived
+              </th>
+              <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                Cancel
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {partyGuests.map((guest) => (
+              <tr key={guest.id}>
+                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                  {guest.ChildName}
+                </td>
+                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  {!guest.Arrived && (
+                    <button
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      onClick={() => handleGuestArrival(guest)}
+                    >
+                      Arrived
+                    </button>
+                  )}
+                </td>
+                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  {guest.Arrived && (
+                    <button
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                      onClick={() => handleMistake(guest)}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-    </div>  
-
+    {!clientArrived && (
+      <button
+        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
+        onClick={() => {
+          HandleClient(selectedParty);
+          setClientArrived(true);
+        }}
+      >
+        Client Arrived
+      </button>
+    )}
+    <button
+      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4 ml-2"
+      onClick={async () => {
+        await handlePartyFinish(selectedParty);
+        setPartyFinished(true);
+      }}
+    >
+      Party Finished
+    </button>
+  </div>
 );
 };
-      
+
 export default TillParty;

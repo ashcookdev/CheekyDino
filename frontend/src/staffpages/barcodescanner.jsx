@@ -38,6 +38,16 @@ export default function Qrscanner() {
   return (
     <>
       <div>
+      <button 
+      type="button"
+      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none mr-5"
+      onClick={() => {
+       window.location.reload();}
+
+      }
+    >
+      Back
+    </button>
         {isLoading ? (
           <div className="flex justify-center items-center">
             <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>

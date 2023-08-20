@@ -22,7 +22,7 @@ import {
 } from '@heroicons/react/24/outline'
 import TodaysBookings from './todaysbookings'
 import Announcements from './Announcement'
-import { ArrowLeftIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CurrencyPoundIcon, PencilIcon, TableCellsIcon } from '@heroicons/react/20/solid'
+import { ArrowLeftIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CogIcon, CurrencyPoundIcon, PencilIcon, TableCellsIcon } from '@heroicons/react/20/solid'
 
 
 const secondaryNavigation = [
@@ -73,6 +73,7 @@ const navigation = [
   {name: 'Clock In', href: '/clockin', icon: ClockIcon, current: false },
   {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },
+{name: 'Settings', href: '/settings', icon: CogIcon, current: false },
 
 ]
 

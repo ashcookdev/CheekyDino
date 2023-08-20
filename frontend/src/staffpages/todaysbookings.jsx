@@ -153,6 +153,16 @@ export default function SessionCalender() {
   return (
     <>
        <div className="md:flex md:items-center md:justify-between mt-10">
+       <button 
+      type="button"
+      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none"
+      onClick={() => {
+       window.location.reload();}
+
+      }
+    >
+      Back
+    </button>
        <button onClick={() => setSession(true)}
                   type="button"
                   className="mt-8 w-1/8 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"

@@ -23,6 +23,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { CogIcon } from '@heroicons/react/20/solid';
 
 
 function classNames(...classes) {
@@ -70,6 +71,7 @@ const navigation = [
 { name: 'Edit', href: '/edithome', icon: PencilIcon, current: false },
 {name: 'Staff', href: '/tasks', icon: UsersIcon, current: false },
 {name: 'Clock In', href: '/clockin', icon: ClockIcon, current: false },
+{name: 'Settings', href: '/settings', icon: CogIcon, current: false },
 
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },
 ]

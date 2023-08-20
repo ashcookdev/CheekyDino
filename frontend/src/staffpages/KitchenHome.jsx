@@ -21,7 +21,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { CakeIcon } from "@heroicons/react/20/solid";
+import { CakeIcon, CogIcon } from "@heroicons/react/20/solid";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -55,8 +55,10 @@ export default function Kitchen() {
   { name: 'Edit', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },
   {name: 'Clock In', href: '/clockin', icon: ClockIcon, current: false },
+  
 
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },
+{ name: 'Settings', href: '/settings', icon: CogIcon, current: false },
 ]
 
 

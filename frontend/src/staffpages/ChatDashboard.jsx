@@ -19,7 +19,8 @@ import {
   TableCellsIcon,
   PencilIcon,
   ArrowLeftIcon, 
-  ClockIcon
+  ClockIcon,
+  CogIcon
 
 } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
@@ -141,6 +142,7 @@ function App() {
   { name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
   { name: 'Edit', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Clock In', href: '/clockin', icon: ClockIcon, current: false },
+  {name: 'Settings', href: '/settings', icon: CogIcon, current: false },
 
   {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },

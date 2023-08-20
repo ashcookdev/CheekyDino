@@ -54,6 +54,9 @@ import PrivateHireCalender from './customer-pages/party/privatehirecalender';
 import PrivateHireRegister from './customer-pages/party/privatehireregister';
 import ClockIn from './staffpages/staffactions';
 import StarterForm from './staffpages/starterform';
+import StaffDetails from './staffpages/staffdetails';
+import Settings from './staffpages/settings';
+import TillProducts from './staffpages/tillproducts';
 
 
 const AuthenticatedCalender = withAuthenticator(Calender);
@@ -185,6 +188,8 @@ function App() {
             <Route path="/edithome" element={<EditHome />} />
             <Route path="/staff" element={<Shifts />} />
             <Route path="/clockin" element={<ClockIn />} />
+            <Route path="/starterform" element={<StarterForm />} />
+            <Route path="/settings" element={<Settings />} />
 
           </>
         )}
@@ -236,8 +241,10 @@ function App() {
       <Routes>
   {allowedGroups.includes(userGroup) && ['Developer', 'Admin'].includes(userGroup) && (
     <>
-            <Route path= "/staff/starterform" element={<StarterForm />} />
+            <Route path= "/staff/staffedit" element={<StaffDetails />} />
+
             <Route path="/staff/shiftbooking" element={<Task />} />
+            <Route path= "/settings/till-products" element={<TillProducts />} />
           </>
 
             )}
