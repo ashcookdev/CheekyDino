@@ -35,6 +35,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -58,6 +59,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -167,12 +169,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size="small"
-            variation="link"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size="small" variation="link" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? "Save" : "Add"}
           </Button>
         </Flex>
@@ -448,6 +445,9 @@ export default function MessagesUpdateForm(props) {
         label={"Group"}
         items={group}
         hasError={errors?.group?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("group", currentGroupValue)
+        }
         errorMessage={errors?.group?.errorMessage}
         setFieldValue={setCurrentGroupValue}
         inputFieldRef={groupRef}

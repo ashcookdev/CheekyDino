@@ -431,15 +431,8 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
         </div>
 
         <main className="py-10 lg:pl-72">
-                <div className="relative isolate overflow-hidden pt-16"  
->
-                <div className="bg-white px-6 py-24 sm:py-32 lg:px-8" >
-      <div className="mx-auto max-w-2xl text-center">
-        <h2 className="text-4xl font-bold tracking-tight text-purple-500 sm:text-6xl">DashBoard</h2>
-        
-      </div>
-    </div>
-                    {/* Secondary navigation */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                              
                    
 
                     {/* Stats */}

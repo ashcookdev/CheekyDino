@@ -57,7 +57,8 @@ import StarterForm from './staffpages/starterform';
 import StaffDetails from './staffpages/staffdetails';
 import Settings from './staffpages/settings';
 import TillProducts from './staffpages/tillproducts';
-
+import StockControl from './staffpages/stockcontrol';
+import BuildAMeal from './staffpages/buildameal';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -190,6 +191,8 @@ function App() {
             <Route path="/clockin" element={<ClockIn />} />
             <Route path="/starterform" element={<StarterForm />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path= "/stockcontrol" element={<StockControl />} />
+            <Route path="/buildameal" element={<BuildAMeal />} />
 
           </>
         )}

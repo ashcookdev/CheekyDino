@@ -24,6 +24,7 @@ export declare type BreakfastUpdateFormInputValues = {
     Sausage?: number;
     Bacon?: number;
     HashBrown?: number;
+    Prep?: string;
 };
 export declare type BreakfastUpdateFormValidationValues = {
     Name?: ValidationFunction<string>;
@@ -36,6 +37,7 @@ export declare type BreakfastUpdateFormValidationValues = {
     Sausage?: ValidationFunction<number>;
     Bacon?: ValidationFunction<number>;
     HashBrown?: ValidationFunction<number>;
+    Prep?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type BreakfastUpdateFormOverridesProps = {
@@ -50,6 +52,7 @@ export declare type BreakfastUpdateFormOverridesProps = {
     Sausage?: PrimitiveOverrideProps<TextFieldProps>;
     Bacon?: PrimitiveOverrideProps<TextFieldProps>;
     HashBrown?: PrimitiveOverrideProps<TextFieldProps>;
+    Prep?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type BreakfastUpdateFormProps = React.PropsWithChildren<{
     overrides?: BreakfastUpdateFormOverridesProps | undefined | null;

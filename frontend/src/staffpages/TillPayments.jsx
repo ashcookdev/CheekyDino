@@ -1,7 +1,7 @@
 
 import { DataStore, Predicates } from "aws-amplify";
 import { CafeOrder, Sessions } from "./models";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
@@ -12,6 +12,7 @@ export default function TillPayment({ order, total, table, setOrder, setTotal, c
   const [amountEntered, setAmountEntered] = useState(0);
     const [isFlashing, setIsFlashing] = useState(false);
     const [orders , setOrders] = useState([])
+    const [prep, setPrep] = useState([])
 
   
 
@@ -54,6 +55,12 @@ const navigate = useNavigate();
       );
       console.log('Session updated');
       const hotItems = orders.filter(item => item.Kitchen).map(item => item.Name);
+      
+// convert prep time to string
+const prepTime = prep.toString();
+
+
+
       const drinkItems = orders.filter(item => !item.Kitchen).map(item => item.Name);
       const kitchen = hotItems.length > 0;
       
@@ -68,7 +75,8 @@ const navigate = useNavigate();
           Completed: !kitchen,
           Sessionid: session.id,
           Delieved: !kitchen,
-          Kitchen: kitchen
+          Kitchen: kitchen,
+          HotOrderPrep: prepTime,
         })
       );
       
@@ -107,6 +115,21 @@ const handleCardClick = () => {
   setIsFlashing(true);
   setOrders(order)
 };
+
+
+useEffect(() => {
+
+let totalPrepInMinutes = 0;
+order.forEach((item) => {
+  const [hours, minutes] = item.Prep.split(":").map(Number);
+  totalPrepInMinutes += hours * 60 + minutes;
+});
+const totalHours = Math.floor(totalPrepInMinutes / 60);
+const totalMinutes = totalPrepInMinutes % 60;
+const totalPrep = `${totalHours}:${totalMinutes.toString().padStart(2, "0")}`;
+setPrep(totalPrep);
+}, [order]);
+
 
 return (
   <div className="grid grid-cols-3 gap-4 p-4">
@@ -173,12 +196,21 @@ return (
       <ul>
         {table && <li>Table: {table}</li>}
         {childName && <li>Child: {childName}</li>}
+        
         {order.map((item, index) => (
           <li key={index} className="mb-2">
             {item.Name} £{item.Price.toFixed(2)}
           </li>
+          
         ))}
       </ul>
+      {order.map((item, index) => (
+          <li key={index} className="mb-2">
+            {item.Prep}
+          </li>
+          
+        ))}
+
       {paymentMethod === 'cash' && (
         <>
           <p>Amount entered: £{amountEntered.toFixed(2)}</p>

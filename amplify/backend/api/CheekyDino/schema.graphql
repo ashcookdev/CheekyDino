@@ -1,3 +1,22 @@
+type DailyFinancials @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  Gross: Float
+  VATReturns: Float
+  Net: Float
+  Date: AWSDate
+}
+
+type StockControl @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  Name: String
+  Weight: Int
+  Quantity: Int
+  Price: Float
+  PreVAT: Float
+  Supplier: String
+  VAT: Float
+}
+
 type ClockIn @model @auth(rules: [{allow: private}, {allow: owner}]) {
   id: ID!
   ClockIn: AWSTime
@@ -73,17 +92,26 @@ type Breakfast @model @auth(rules: [{allow: private}]) {
   Sausage: Int
   Bacon: Int
   HashBrown: Int
+  Prep: AWSTime
 }
 
-type KidsMenu @model @auth(rules: [{allow: private}]) {
+type KitchenMenu @model @auth(rules: [{allow: private}]) {
   id: ID!
   Name: String
   Price: Float
   Description: String
-  Beans: Boolean
   Notes: String
   Kitchen: Boolean
   imageSrc: String
+  Prep: AWSTime
+  Ingredients: AWSJSON
+  Snooze: Boolean
+  Extras: [String]
+  Category: String
+  ExtrasPrice: [Float]
+  Quantitys: String
+  ProfitMargin: Float
+  Weight: String
 }
 
 type TimeEntry @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -178,6 +206,7 @@ type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
   TimeDelivered: AWSTime
   Notes: String
   Kitchen: Boolean
+  HotOrderPrep: String
 }
 
 type Messages @model @auth(rules: [{allow: private}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartHosts"], operations: [read, create]}, {allow: groups, groups: ["Staff"], operations: [read, create]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: owner, operations: [create, read]}]) {

@@ -1,5 +1,186 @@
 export const schema = {
     "models": {
+        "DailyFinancials": {
+            "name": "DailyFinancials",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "Gross": {
+                    "name": "Gross",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "VATReturns": {
+                    "name": "VATReturns",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Net": {
+                    "name": "Net",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Date": {
+                    "name": "Date",
+                    "isArray": false,
+                    "type": "AWSDate",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "DailyFinancials",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "private",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "StockControl": {
+            "name": "StockControl",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "Name": {
+                    "name": "Name",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Weight": {
+                    "name": "Weight",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Quantity": {
+                    "name": "Quantity",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Price": {
+                    "name": "Price",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "PreVAT": {
+                    "name": "PreVAT",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Supplier": {
+                    "name": "Supplier",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "VAT": {
+                    "name": "VAT",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "StockControls",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "private",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "ClockIn": {
             "name": "ClockIn",
             "fields": {
@@ -701,6 +882,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "Prep": {
+                    "name": "Prep",
+                    "isArray": false,
+                    "type": "AWSTime",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -743,8 +931,8 @@ export const schema = {
                 }
             ]
         },
-        "KidsMenu": {
-            "name": "KidsMenu",
+        "KitchenMenu": {
+            "name": "KitchenMenu",
             "fields": {
                 "id": {
                     "name": "id",
@@ -774,13 +962,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "Beans": {
-                    "name": "Beans",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
                 "Notes": {
                     "name": "Notes",
                     "isArray": false,
@@ -797,6 +978,71 @@ export const schema = {
                 },
                 "imageSrc": {
                     "name": "imageSrc",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Prep": {
+                    "name": "Prep",
+                    "isArray": false,
+                    "type": "AWSTime",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Ingredients": {
+                    "name": "Ingredients",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Snooze": {
+                    "name": "Snooze",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Extras": {
+                    "name": "Extras",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
+                "Category": {
+                    "name": "Category",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "ExtrasPrice": {
+                    "name": "ExtrasPrice",
+                    "isArray": true,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
+                "Quantitys": {
+                    "name": "Quantitys",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "ProfitMargin": {
+                    "name": "ProfitMargin",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Weight": {
+                    "name": "Weight",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -820,7 +1066,7 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "KidsMenus",
+            "pluralName": "KitchenMenus",
             "attributes": [
                 {
                     "type": "model",
@@ -1739,6 +1985,13 @@ export const schema = {
                     "name": "Kitchen",
                     "isArray": false,
                     "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "HotOrderPrep": {
+                    "name": "HotOrderPrep",
+                    "isArray": false,
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -2745,5 +2998,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "72e9cc5c6536440f32f736e7fa049694"
+    "version": "9d33b2dada40ff80866de3a85d9cc60b"
 };

@@ -72,7 +72,7 @@ export default function OrderHistory() {
   // Add these lines before the return statement
 const numberOfOrders = orders.length;
 const totalAmount = orders.reduce((acc, order) => acc + order.Total, 0);
-const totalAmountMinusVAT = totalAmount * 0.8;
+const totalAmountMinusVAT = totalAmount / 1.2;
 
   return (
     <>

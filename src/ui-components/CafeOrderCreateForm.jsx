@@ -35,6 +35,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -58,6 +59,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -167,12 +169,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size="small"
-            variation="link"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size="small" variation="link" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? "Save" : "Add"}
           </Button>
         </Flex>
@@ -205,6 +202,7 @@ export default function CafeOrderCreateForm(props) {
     TimeDelivered: "",
     Notes: "",
     Kitchen: false,
+    HotOrderPrep: "",
   };
   const [CreatedTime, setCreatedTime] = React.useState(
     initialValues.CreatedTime
@@ -224,6 +222,9 @@ export default function CafeOrderCreateForm(props) {
   );
   const [Notes, setNotes] = React.useState(initialValues.Notes);
   const [Kitchen, setKitchen] = React.useState(initialValues.Kitchen);
+  const [HotOrderPrep, setHotOrderPrep] = React.useState(
+    initialValues.HotOrderPrep
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setCreatedTime(initialValues.CreatedTime);
@@ -240,6 +241,7 @@ export default function CafeOrderCreateForm(props) {
     setTimeDelivered(initialValues.TimeDelivered);
     setNotes(initialValues.Notes);
     setKitchen(initialValues.Kitchen);
+    setHotOrderPrep(initialValues.HotOrderPrep);
     setErrors({});
   };
   const [currentDrinkItemsValue, setCurrentDrinkItemsValue] =
@@ -260,6 +262,7 @@ export default function CafeOrderCreateForm(props) {
     TimeDelivered: [],
     Notes: [],
     Kitchen: [],
+    HotOrderPrep: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -299,6 +302,7 @@ export default function CafeOrderCreateForm(props) {
           TimeDelivered,
           Notes,
           Kitchen,
+          HotOrderPrep,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -366,6 +370,7 @@ export default function CafeOrderCreateForm(props) {
               TimeDelivered,
               Notes,
               Kitchen,
+              HotOrderPrep,
             };
             const result = onChange(modelFields);
             value = result?.CreatedTime ?? value;
@@ -402,6 +407,7 @@ export default function CafeOrderCreateForm(props) {
               TimeDelivered,
               Notes,
               Kitchen,
+              HotOrderPrep,
             };
             const result = onChange(modelFields);
             value = result?.CreatedDate ?? value;
@@ -441,6 +447,7 @@ export default function CafeOrderCreateForm(props) {
               TimeDelivered,
               Notes,
               Kitchen,
+              HotOrderPrep,
             };
             const result = onChange(modelFields);
             value = result?.Total ?? value;
@@ -472,6 +479,7 @@ export default function CafeOrderCreateForm(props) {
               TimeDelivered,
               Notes,
               Kitchen,
+              HotOrderPrep,
             };
             const result = onChange(modelFields);
             values = result?.DrinkItems ?? values;
@@ -483,6 +491,9 @@ export default function CafeOrderCreateForm(props) {
         label={"Drink items"}
         items={DrinkItems}
         hasError={errors?.DrinkItems?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("DrinkItems", currentDrinkItemsValue)
+        }
         errorMessage={errors?.DrinkItems?.errorMessage}
         setFieldValue={setCurrentDrinkItemsValue}
         inputFieldRef={DrinkItemsRef}
@@ -527,6 +538,7 @@ export default function CafeOrderCreateForm(props) {
               TimeDelivered,
               Notes,
               Kitchen,
+              HotOrderPrep,
             };
             const result = onChange(modelFields);
             values = result?.HotItems ?? values;
@@ -538,6 +550,9 @@ export default function CafeOrderCreateForm(props) {
         label={"Hot items"}
         items={HotItems}
         hasError={errors?.HotItems?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("HotItems", currentHotItemsValue)
+        }
         errorMessage={errors?.HotItems?.errorMessage}
         setFieldValue={setCurrentHotItemsValue}
         inputFieldRef={HotItemsRef}
@@ -588,6 +603,7 @@ export default function CafeOrderCreateForm(props) {
               TimeDelivered,
               Notes,
               Kitchen,
+              HotOrderPrep,
             };
             const result = onChange(modelFields);
             value = result?.Table ?? value;
@@ -623,6 +639,7 @@ export default function CafeOrderCreateForm(props) {
               TimeDelivered,
               Notes,
               Kitchen,
+              HotOrderPrep,
             };
             const result = onChange(modelFields);
             value = result?.Completed ?? value;
@@ -658,6 +675,7 @@ export default function CafeOrderCreateForm(props) {
               TimeDelivered,
               Notes,
               Kitchen,
+              HotOrderPrep,
             };
             const result = onChange(modelFields);
             value = result?.Delieved ?? value;
@@ -693,6 +711,7 @@ export default function CafeOrderCreateForm(props) {
               TimeDelivered,
               Notes,
               Kitchen,
+              HotOrderPrep,
             };
             const result = onChange(modelFields);
             value = result?.Sessionid ?? value;
@@ -729,6 +748,7 @@ export default function CafeOrderCreateForm(props) {
               TimeDelivered: value,
               Notes,
               Kitchen,
+              HotOrderPrep,
             };
             const result = onChange(modelFields);
             value = result?.TimeDelivered ?? value;
@@ -764,6 +784,7 @@ export default function CafeOrderCreateForm(props) {
               TimeDelivered,
               Notes: value,
               Kitchen,
+              HotOrderPrep,
             };
             const result = onChange(modelFields);
             value = result?.Notes ?? value;
@@ -799,6 +820,7 @@ export default function CafeOrderCreateForm(props) {
               TimeDelivered,
               Notes,
               Kitchen: value,
+              HotOrderPrep,
             };
             const result = onChange(modelFields);
             value = result?.Kitchen ?? value;
@@ -813,6 +835,42 @@ export default function CafeOrderCreateForm(props) {
         hasError={errors.Kitchen?.hasError}
         {...getOverrideProps(overrides, "Kitchen")}
       ></SwitchField>
+      <TextField
+        label="Hot order prep"
+        isRequired={false}
+        isReadOnly={false}
+        value={HotOrderPrep}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              CreatedTime,
+              CreatedDate,
+              Total,
+              DrinkItems,
+              HotItems,
+              Table,
+              Completed,
+              Delieved,
+              Sessionid,
+              TimeDelivered,
+              Notes,
+              Kitchen,
+              HotOrderPrep: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.HotOrderPrep ?? value;
+          }
+          if (errors.HotOrderPrep?.hasError) {
+            runValidationTasks("HotOrderPrep", value);
+          }
+          setHotOrderPrep(value);
+        }}
+        onBlur={() => runValidationTasks("HotOrderPrep", HotOrderPrep)}
+        errorMessage={errors.HotOrderPrep?.errorMessage}
+        hasError={errors.HotOrderPrep?.hasError}
+        {...getOverrideProps(overrides, "HotOrderPrep")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

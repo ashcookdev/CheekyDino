@@ -9,7 +9,7 @@ import { Sessions } from "./models";
 import Tables from "./tables";
 import { Analytics } from 'aws-amplify';
 import TillSession from "./tillsession";
-import { HotDrinks, SoftDrinks, Confectionary, KidsMenu, Extras } from "./models";
+import { HotDrinks, SoftDrinks, Confectionary, KitchenMenu, Extras } from "./models";
 import TillParty from "./TillParty";
 import TillPayments from "./TillPayments";
 import { useNavigate } from "react-router-dom";
@@ -42,7 +42,8 @@ export default function Till() {
   const [confectionary, setConfectionary] = useState([]);
   const [showConfectionary, setShowConfectionary] = useState(false);
   const [ShowKidsMeal, setShowKidsMeal] = useState(false); 
-const [kidsMeal, setKidsMeal] = useState([]);
+
+const [kitchenMenu, setKitchenMenu] = useState([]);
 const [partyNow, setPartyNow] = useState(false);
 const [confirm, setConfirm] = useState(false);
 const [selectedProduct, setSelectedProduct] = useState(null);
@@ -69,13 +70,15 @@ useEffect(() => {
 
 
 
-  async function fetchKidsMeal() {
-    const allkidsMeal = await DataStore.query(KidsMenu);
-    setKidsMeal(allkidsMeal);
+  async function fetchKitchenMeal() {
+    const kitchensMenu = await DataStore.query(KitchenMenu);
+    setKitchenMenu(kitchensMenu);
+
+    
   }
   
   useEffect(() => {
-    fetchKidsMeal();
+    fetchKitchenMeal();
   }, []);
 
   //get all party bookings for today
@@ -106,6 +109,9 @@ useEffect(() => {
 
     // Update the total price
     setTotal(total => total + product.Price);
+    // add all prep times together for kitchen orders
+    
+    
 
 
 }
@@ -355,7 +361,7 @@ useEffect(() => {
 
             }
           >
-           Kids Meal
+           Kitchen Food
           </button>
 
           <button
@@ -379,7 +385,6 @@ useEffect(() => {
               setShowHotFood(true) ||
               setShowSoftDrinks(false) ||
               setShowHotDrinks(false) ||
-              setKidsMeal(false) ||
               setShowConfectionary(false)||
               setShowExtras(false)
             }
@@ -448,7 +453,7 @@ useEffect(() => {
               <h3 className="font-bold text-lg mb-4">Kids Menu:</h3>
               <div className="grid grid-cols-4 gap-4">
                 {/* Loop through the hotDrinks object and generate buttons for each drink here */}
-                {kidsMeal.map(product => (
+                {kitchenMenu.map(product => (
                   <button
                   key={product.id}
                   className="w-full h-full bg-green-200 rounded-md"

@@ -21,6 +21,9 @@ export declare type KidsMenuUpdateFormInputValues = {
     Notes?: string;
     Kitchen?: boolean;
     imageSrc?: string;
+    Prep?: string;
+    Ingredients?: string[];
+    Snooze?: boolean;
 };
 export declare type KidsMenuUpdateFormValidationValues = {
     Name?: ValidationFunction<string>;
@@ -30,6 +33,9 @@ export declare type KidsMenuUpdateFormValidationValues = {
     Notes?: ValidationFunction<string>;
     Kitchen?: ValidationFunction<boolean>;
     imageSrc?: ValidationFunction<string>;
+    Prep?: ValidationFunction<string>;
+    Ingredients?: ValidationFunction<string>;
+    Snooze?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type KidsMenuUpdateFormOverridesProps = {
@@ -41,6 +47,9 @@ export declare type KidsMenuUpdateFormOverridesProps = {
     Notes?: PrimitiveOverrideProps<TextFieldProps>;
     Kitchen?: PrimitiveOverrideProps<SwitchFieldProps>;
     imageSrc?: PrimitiveOverrideProps<TextFieldProps>;
+    Prep?: PrimitiveOverrideProps<TextFieldProps>;
+    Ingredients?: PrimitiveOverrideProps<TextFieldProps>;
+    Snooze?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type KidsMenuUpdateFormProps = React.PropsWithChildren<{
     overrides?: KidsMenuUpdateFormOverridesProps | undefined | null;

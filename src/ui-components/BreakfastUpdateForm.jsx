@@ -40,6 +40,7 @@ export default function BreakfastUpdateForm(props) {
     Sausage: "",
     Bacon: "",
     HashBrown: "",
+    Prep: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Price, setPrice] = React.useState(initialValues.Price);
@@ -51,6 +52,7 @@ export default function BreakfastUpdateForm(props) {
   const [Sausage, setSausage] = React.useState(initialValues.Sausage);
   const [Bacon, setBacon] = React.useState(initialValues.Bacon);
   const [HashBrown, setHashBrown] = React.useState(initialValues.HashBrown);
+  const [Prep, setPrep] = React.useState(initialValues.Prep);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = breakfastRecord
@@ -66,6 +68,7 @@ export default function BreakfastUpdateForm(props) {
     setSausage(cleanValues.Sausage);
     setBacon(cleanValues.Bacon);
     setHashBrown(cleanValues.HashBrown);
+    setPrep(cleanValues.Prep);
     setErrors({});
   };
   const [breakfastRecord, setBreakfastRecord] =
@@ -91,6 +94,7 @@ export default function BreakfastUpdateForm(props) {
     Sausage: [],
     Bacon: [],
     HashBrown: [],
+    Prep: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -128,6 +132,7 @@ export default function BreakfastUpdateForm(props) {
           Sausage,
           Bacon,
           HashBrown,
+          Prep,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -193,6 +198,7 @@ export default function BreakfastUpdateForm(props) {
               Sausage,
               Bacon,
               HashBrown,
+              Prep,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -230,6 +236,7 @@ export default function BreakfastUpdateForm(props) {
               Sausage,
               Bacon,
               HashBrown,
+              Prep,
             };
             const result = onChange(modelFields);
             value = result?.Price ?? value;
@@ -263,6 +270,7 @@ export default function BreakfastUpdateForm(props) {
               Sausage,
               Bacon,
               HashBrown,
+              Prep,
             };
             const result = onChange(modelFields);
             value = result?.WhiteBread ?? value;
@@ -296,6 +304,7 @@ export default function BreakfastUpdateForm(props) {
               Sausage,
               Bacon,
               HashBrown,
+              Prep,
             };
             const result = onChange(modelFields);
             value = result?.BrownBread ?? value;
@@ -333,6 +342,7 @@ export default function BreakfastUpdateForm(props) {
               Sausage,
               Bacon,
               HashBrown,
+              Prep,
             };
             const result = onChange(modelFields);
             value = result?.Egg ?? value;
@@ -366,6 +376,7 @@ export default function BreakfastUpdateForm(props) {
               Sausage,
               Bacon,
               HashBrown,
+              Prep,
             };
             const result = onChange(modelFields);
             value = result?.Fried ?? value;
@@ -399,6 +410,7 @@ export default function BreakfastUpdateForm(props) {
               Sausage,
               Bacon,
               HashBrown,
+              Prep,
             };
             const result = onChange(modelFields);
             value = result?.Scrambled ?? value;
@@ -436,6 +448,7 @@ export default function BreakfastUpdateForm(props) {
               Sausage: value,
               Bacon,
               HashBrown,
+              Prep,
             };
             const result = onChange(modelFields);
             value = result?.Sausage ?? value;
@@ -473,6 +486,7 @@ export default function BreakfastUpdateForm(props) {
               Sausage,
               Bacon: value,
               HashBrown,
+              Prep,
             };
             const result = onChange(modelFields);
             value = result?.Bacon ?? value;
@@ -510,6 +524,7 @@ export default function BreakfastUpdateForm(props) {
               Sausage,
               Bacon,
               HashBrown: value,
+              Prep,
             };
             const result = onChange(modelFields);
             value = result?.HashBrown ?? value;
@@ -523,6 +538,41 @@ export default function BreakfastUpdateForm(props) {
         errorMessage={errors.HashBrown?.errorMessage}
         hasError={errors.HashBrown?.hasError}
         {...getOverrideProps(overrides, "HashBrown")}
+      ></TextField>
+      <TextField
+        label="Prep"
+        isRequired={false}
+        isReadOnly={false}
+        type="time"
+        value={Prep}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Price,
+              WhiteBread,
+              BrownBread,
+              Egg,
+              Fried,
+              Scrambled,
+              Sausage,
+              Bacon,
+              HashBrown,
+              Prep: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Prep ?? value;
+          }
+          if (errors.Prep?.hasError) {
+            runValidationTasks("Prep", value);
+          }
+          setPrep(value);
+        }}
+        onBlur={() => runValidationTasks("Prep", Prep)}
+        errorMessage={errors.Prep?.errorMessage}
+        hasError={errors.Prep?.hasError}
+        {...getOverrideProps(overrides, "Prep")}
       ></TextField>
       <Flex
         justifyContent="space-between"

@@ -16,11 +16,12 @@ import {
   ScrollView,
   SwitchField,
   Text,
+  TextAreaField,
   TextField,
   useTheme,
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { KidsMenu } from "../models";
+import { KitchenMenu } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -178,10 +179,10 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function KidsMenuUpdateForm(props) {
+export default function KitchenMenuUpdateForm(props) {
   const {
     id: idProp,
-    kidsMenu: kidsMenuModelProp,
+    kitchenMenu: kitchenMenuModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -194,20 +195,24 @@ export default function KidsMenuUpdateForm(props) {
     Name: "",
     Price: "",
     Description: "",
-    Beans: false,
     Notes: "",
     Kitchen: false,
     imageSrc: "",
     Prep: "",
-    Ingredients: [],
+    Ingredients: "",
     Snooze: false,
+    Extras: [],
+    Category: "",
+    ExtrasPrice: [],
+    Quantitys: "",
+    ProfitMargin: "",
+    Weight: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Price, setPrice] = React.useState(initialValues.Price);
   const [Description, setDescription] = React.useState(
     initialValues.Description
   );
-  const [Beans, setBeans] = React.useState(initialValues.Beans);
   const [Notes, setNotes] = React.useState(initialValues.Notes);
   const [Kitchen, setKitchen] = React.useState(initialValues.Kitchen);
   const [imageSrc, setImageSrc] = React.useState(initialValues.imageSrc);
@@ -216,49 +221,78 @@ export default function KidsMenuUpdateForm(props) {
     initialValues.Ingredients
   );
   const [Snooze, setSnooze] = React.useState(initialValues.Snooze);
+  const [Extras, setExtras] = React.useState(initialValues.Extras);
+  const [Category, setCategory] = React.useState(initialValues.Category);
+  const [ExtrasPrice, setExtrasPrice] = React.useState(
+    initialValues.ExtrasPrice
+  );
+  const [Quantitys, setQuantitys] = React.useState(initialValues.Quantitys);
+  const [ProfitMargin, setProfitMargin] = React.useState(
+    initialValues.ProfitMargin
+  );
+  const [Weight, setWeight] = React.useState(initialValues.Weight);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = kidsMenuRecord
-      ? { ...initialValues, ...kidsMenuRecord }
+    const cleanValues = kitchenMenuRecord
+      ? { ...initialValues, ...kitchenMenuRecord }
       : initialValues;
     setName(cleanValues.Name);
     setPrice(cleanValues.Price);
     setDescription(cleanValues.Description);
-    setBeans(cleanValues.Beans);
     setNotes(cleanValues.Notes);
     setKitchen(cleanValues.Kitchen);
     setImageSrc(cleanValues.imageSrc);
     setPrep(cleanValues.Prep);
-    setIngredients(cleanValues.Ingredients ?? []);
-    setCurrentIngredientsValue("");
+    setIngredients(
+      typeof cleanValues.Ingredients === "string" ||
+        cleanValues.Ingredients === null
+        ? cleanValues.Ingredients
+        : JSON.stringify(cleanValues.Ingredients)
+    );
     setSnooze(cleanValues.Snooze);
+    setExtras(cleanValues.Extras ?? []);
+    setCurrentExtrasValue("");
+    setCategory(cleanValues.Category);
+    setExtrasPrice(cleanValues.ExtrasPrice ?? []);
+    setCurrentExtrasPriceValue("");
+    setQuantitys(cleanValues.Quantitys);
+    setProfitMargin(cleanValues.ProfitMargin);
+    setWeight(cleanValues.Weight);
     setErrors({});
   };
-  const [kidsMenuRecord, setKidsMenuRecord] = React.useState(kidsMenuModelProp);
+  const [kitchenMenuRecord, setKitchenMenuRecord] =
+    React.useState(kitchenMenuModelProp);
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? await DataStore.query(KidsMenu, idProp)
-        : kidsMenuModelProp;
-      setKidsMenuRecord(record);
+        ? await DataStore.query(KitchenMenu, idProp)
+        : kitchenMenuModelProp;
+      setKitchenMenuRecord(record);
     };
     queryData();
-  }, [idProp, kidsMenuModelProp]);
-  React.useEffect(resetStateValues, [kidsMenuRecord]);
-  const [currentIngredientsValue, setCurrentIngredientsValue] =
+  }, [idProp, kitchenMenuModelProp]);
+  React.useEffect(resetStateValues, [kitchenMenuRecord]);
+  const [currentExtrasValue, setCurrentExtrasValue] = React.useState("");
+  const ExtrasRef = React.createRef();
+  const [currentExtrasPriceValue, setCurrentExtrasPriceValue] =
     React.useState("");
-  const IngredientsRef = React.createRef();
+  const ExtrasPriceRef = React.createRef();
   const validations = {
     Name: [],
     Price: [],
     Description: [],
-    Beans: [],
     Notes: [],
     Kitchen: [],
     imageSrc: [],
     Prep: [],
-    Ingredients: [],
+    Ingredients: [{ type: "JSON" }],
     Snooze: [],
+    Extras: [],
+    Category: [],
+    ExtrasPrice: [],
+    Quantitys: [],
+    ProfitMargin: [],
+    Weight: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -289,13 +323,18 @@ export default function KidsMenuUpdateForm(props) {
           Name,
           Price,
           Description,
-          Beans,
           Notes,
           Kitchen,
           imageSrc,
           Prep,
           Ingredients,
           Snooze,
+          Extras,
+          Category,
+          ExtrasPrice,
+          Quantitys,
+          ProfitMargin,
+          Weight,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -326,7 +365,7 @@ export default function KidsMenuUpdateForm(props) {
             }
           });
           await DataStore.save(
-            KidsMenu.copyOf(kidsMenuRecord, (updated) => {
+            KitchenMenu.copyOf(kitchenMenuRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -339,7 +378,7 @@ export default function KidsMenuUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "KidsMenuUpdateForm")}
+      {...getOverrideProps(overrides, "KitchenMenuUpdateForm")}
       {...rest}
     >
       <TextField
@@ -354,13 +393,18 @@ export default function KidsMenuUpdateForm(props) {
               Name: value,
               Price,
               Description,
-              Beans,
               Notes,
               Kitchen,
               imageSrc,
               Prep,
               Ingredients,
               Snooze,
+              Extras,
+              Category,
+              ExtrasPrice,
+              Quantitys,
+              ProfitMargin,
+              Weight,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -391,13 +435,18 @@ export default function KidsMenuUpdateForm(props) {
               Name,
               Price: value,
               Description,
-              Beans,
               Notes,
               Kitchen,
               imageSrc,
               Prep,
               Ingredients,
               Snooze,
+              Extras,
+              Category,
+              ExtrasPrice,
+              Quantitys,
+              ProfitMargin,
+              Weight,
             };
             const result = onChange(modelFields);
             value = result?.Price ?? value;
@@ -424,13 +473,18 @@ export default function KidsMenuUpdateForm(props) {
               Name,
               Price,
               Description: value,
-              Beans,
               Notes,
               Kitchen,
               imageSrc,
               Prep,
               Ingredients,
               Snooze,
+              Extras,
+              Category,
+              ExtrasPrice,
+              Quantitys,
+              ProfitMargin,
+              Weight,
             };
             const result = onChange(modelFields);
             value = result?.Description ?? value;
@@ -445,39 +499,6 @@ export default function KidsMenuUpdateForm(props) {
         hasError={errors.Description?.hasError}
         {...getOverrideProps(overrides, "Description")}
       ></TextField>
-      <SwitchField
-        label="Beans"
-        defaultChecked={false}
-        isDisabled={false}
-        isChecked={Beans}
-        onChange={(e) => {
-          let value = e.target.checked;
-          if (onChange) {
-            const modelFields = {
-              Name,
-              Price,
-              Description,
-              Beans: value,
-              Notes,
-              Kitchen,
-              imageSrc,
-              Prep,
-              Ingredients,
-              Snooze,
-            };
-            const result = onChange(modelFields);
-            value = result?.Beans ?? value;
-          }
-          if (errors.Beans?.hasError) {
-            runValidationTasks("Beans", value);
-          }
-          setBeans(value);
-        }}
-        onBlur={() => runValidationTasks("Beans", Beans)}
-        errorMessage={errors.Beans?.errorMessage}
-        hasError={errors.Beans?.hasError}
-        {...getOverrideProps(overrides, "Beans")}
-      ></SwitchField>
       <TextField
         label="Notes"
         isRequired={false}
@@ -490,13 +511,18 @@ export default function KidsMenuUpdateForm(props) {
               Name,
               Price,
               Description,
-              Beans,
               Notes: value,
               Kitchen,
               imageSrc,
               Prep,
               Ingredients,
               Snooze,
+              Extras,
+              Category,
+              ExtrasPrice,
+              Quantitys,
+              ProfitMargin,
+              Weight,
             };
             const result = onChange(modelFields);
             value = result?.Notes ?? value;
@@ -523,13 +549,18 @@ export default function KidsMenuUpdateForm(props) {
               Name,
               Price,
               Description,
-              Beans,
               Notes,
               Kitchen: value,
               imageSrc,
               Prep,
               Ingredients,
               Snooze,
+              Extras,
+              Category,
+              ExtrasPrice,
+              Quantitys,
+              ProfitMargin,
+              Weight,
             };
             const result = onChange(modelFields);
             value = result?.Kitchen ?? value;
@@ -556,13 +587,18 @@ export default function KidsMenuUpdateForm(props) {
               Name,
               Price,
               Description,
-              Beans,
               Notes,
               Kitchen,
               imageSrc: value,
               Prep,
               Ingredients,
               Snooze,
+              Extras,
+              Category,
+              ExtrasPrice,
+              Quantitys,
+              ProfitMargin,
+              Weight,
             };
             const result = onChange(modelFields);
             value = result?.imageSrc ?? value;
@@ -590,13 +626,18 @@ export default function KidsMenuUpdateForm(props) {
               Name,
               Price,
               Description,
-              Beans,
               Notes,
               Kitchen,
               imageSrc,
               Prep: value,
               Ingredients,
               Snooze,
+              Extras,
+              Category,
+              ExtrasPrice,
+              Quantitys,
+              ProfitMargin,
+              Weight,
             };
             const result = onChange(modelFields);
             value = result?.Prep ?? value;
@@ -611,62 +652,44 @@ export default function KidsMenuUpdateForm(props) {
         hasError={errors.Prep?.hasError}
         {...getOverrideProps(overrides, "Prep")}
       ></TextField>
-      <ArrayField
-        onChange={async (items) => {
-          let values = items;
+      <TextAreaField
+        label="Ingredients"
+        isRequired={false}
+        isReadOnly={false}
+        value={Ingredients}
+        onChange={(e) => {
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
               Name,
               Price,
               Description,
-              Beans,
               Notes,
               Kitchen,
               imageSrc,
               Prep,
-              Ingredients: values,
+              Ingredients: value,
               Snooze,
+              Extras,
+              Category,
+              ExtrasPrice,
+              Quantitys,
+              ProfitMargin,
+              Weight,
             };
             const result = onChange(modelFields);
-            values = result?.Ingredients ?? values;
+            value = result?.Ingredients ?? value;
           }
-          setIngredients(values);
-          setCurrentIngredientsValue("");
+          if (errors.Ingredients?.hasError) {
+            runValidationTasks("Ingredients", value);
+          }
+          setIngredients(value);
         }}
-        currentFieldValue={currentIngredientsValue}
-        label={"Ingredients"}
-        items={Ingredients}
-        hasError={errors?.Ingredients?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks("Ingredients", currentIngredientsValue)
-        }
-        errorMessage={errors?.Ingredients?.errorMessage}
-        setFieldValue={setCurrentIngredientsValue}
-        inputFieldRef={IngredientsRef}
-        defaultFieldValue={""}
-      >
-        <TextField
-          label="Ingredients"
-          isRequired={false}
-          isReadOnly={false}
-          value={currentIngredientsValue}
-          onChange={(e) => {
-            let { value } = e.target;
-            if (errors.Ingredients?.hasError) {
-              runValidationTasks("Ingredients", value);
-            }
-            setCurrentIngredientsValue(value);
-          }}
-          onBlur={() =>
-            runValidationTasks("Ingredients", currentIngredientsValue)
-          }
-          errorMessage={errors.Ingredients?.errorMessage}
-          hasError={errors.Ingredients?.hasError}
-          ref={IngredientsRef}
-          labelHidden={true}
-          {...getOverrideProps(overrides, "Ingredients")}
-        ></TextField>
-      </ArrayField>
+        onBlur={() => runValidationTasks("Ingredients", Ingredients)}
+        errorMessage={errors.Ingredients?.errorMessage}
+        hasError={errors.Ingredients?.hasError}
+        {...getOverrideProps(overrides, "Ingredients")}
+      ></TextAreaField>
       <SwitchField
         label="Snooze"
         defaultChecked={false}
@@ -679,13 +702,18 @@ export default function KidsMenuUpdateForm(props) {
               Name,
               Price,
               Description,
-              Beans,
               Notes,
               Kitchen,
               imageSrc,
               Prep,
               Ingredients,
               Snooze: value,
+              Extras,
+              Category,
+              ExtrasPrice,
+              Quantitys,
+              ProfitMargin,
+              Weight,
             };
             const result = onChange(modelFields);
             value = result?.Snooze ?? value;
@@ -700,6 +728,286 @@ export default function KidsMenuUpdateForm(props) {
         hasError={errors.Snooze?.hasError}
         {...getOverrideProps(overrides, "Snooze")}
       ></SwitchField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Price,
+              Description,
+              Notes,
+              Kitchen,
+              imageSrc,
+              Prep,
+              Ingredients,
+              Snooze,
+              Extras: values,
+              Category,
+              ExtrasPrice,
+              Quantitys,
+              ProfitMargin,
+              Weight,
+            };
+            const result = onChange(modelFields);
+            values = result?.Extras ?? values;
+          }
+          setExtras(values);
+          setCurrentExtrasValue("");
+        }}
+        currentFieldValue={currentExtrasValue}
+        label={"Extras"}
+        items={Extras}
+        hasError={errors?.Extras?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("Extras", currentExtrasValue)
+        }
+        errorMessage={errors?.Extras?.errorMessage}
+        setFieldValue={setCurrentExtrasValue}
+        inputFieldRef={ExtrasRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Extras"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentExtrasValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Extras?.hasError) {
+              runValidationTasks("Extras", value);
+            }
+            setCurrentExtrasValue(value);
+          }}
+          onBlur={() => runValidationTasks("Extras", currentExtrasValue)}
+          errorMessage={errors.Extras?.errorMessage}
+          hasError={errors.Extras?.hasError}
+          ref={ExtrasRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "Extras")}
+        ></TextField>
+      </ArrayField>
+      <TextField
+        label="Category"
+        isRequired={false}
+        isReadOnly={false}
+        value={Category}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Price,
+              Description,
+              Notes,
+              Kitchen,
+              imageSrc,
+              Prep,
+              Ingredients,
+              Snooze,
+              Extras,
+              Category: value,
+              ExtrasPrice,
+              Quantitys,
+              ProfitMargin,
+              Weight,
+            };
+            const result = onChange(modelFields);
+            value = result?.Category ?? value;
+          }
+          if (errors.Category?.hasError) {
+            runValidationTasks("Category", value);
+          }
+          setCategory(value);
+        }}
+        onBlur={() => runValidationTasks("Category", Category)}
+        errorMessage={errors.Category?.errorMessage}
+        hasError={errors.Category?.hasError}
+        {...getOverrideProps(overrides, "Category")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Price,
+              Description,
+              Notes,
+              Kitchen,
+              imageSrc,
+              Prep,
+              Ingredients,
+              Snooze,
+              Extras,
+              Category,
+              ExtrasPrice: values,
+              Quantitys,
+              ProfitMargin,
+              Weight,
+            };
+            const result = onChange(modelFields);
+            values = result?.ExtrasPrice ?? values;
+          }
+          setExtrasPrice(values);
+          setCurrentExtrasPriceValue("");
+        }}
+        currentFieldValue={currentExtrasPriceValue}
+        label={"Extras price"}
+        items={ExtrasPrice}
+        hasError={errors?.ExtrasPrice?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("ExtrasPrice", currentExtrasPriceValue)
+        }
+        errorMessage={errors?.ExtrasPrice?.errorMessage}
+        setFieldValue={setCurrentExtrasPriceValue}
+        inputFieldRef={ExtrasPriceRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Extras price"
+          isRequired={false}
+          isReadOnly={false}
+          type="number"
+          step="any"
+          value={currentExtrasPriceValue}
+          onChange={(e) => {
+            let value = isNaN(parseFloat(e.target.value))
+              ? e.target.value
+              : parseFloat(e.target.value);
+            if (errors.ExtrasPrice?.hasError) {
+              runValidationTasks("ExtrasPrice", value);
+            }
+            setCurrentExtrasPriceValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks("ExtrasPrice", currentExtrasPriceValue)
+          }
+          errorMessage={errors.ExtrasPrice?.errorMessage}
+          hasError={errors.ExtrasPrice?.hasError}
+          ref={ExtrasPriceRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "ExtrasPrice")}
+        ></TextField>
+      </ArrayField>
+      <TextField
+        label="Quantitys"
+        isRequired={false}
+        isReadOnly={false}
+        value={Quantitys}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Price,
+              Description,
+              Notes,
+              Kitchen,
+              imageSrc,
+              Prep,
+              Ingredients,
+              Snooze,
+              Extras,
+              Category,
+              ExtrasPrice,
+              Quantitys: value,
+              ProfitMargin,
+              Weight,
+            };
+            const result = onChange(modelFields);
+            value = result?.Quantitys ?? value;
+          }
+          if (errors.Quantitys?.hasError) {
+            runValidationTasks("Quantitys", value);
+          }
+          setQuantitys(value);
+        }}
+        onBlur={() => runValidationTasks("Quantitys", Quantitys)}
+        errorMessage={errors.Quantitys?.errorMessage}
+        hasError={errors.Quantitys?.hasError}
+        {...getOverrideProps(overrides, "Quantitys")}
+      ></TextField>
+      <TextField
+        label="Profit margin"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={ProfitMargin}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Price,
+              Description,
+              Notes,
+              Kitchen,
+              imageSrc,
+              Prep,
+              Ingredients,
+              Snooze,
+              Extras,
+              Category,
+              ExtrasPrice,
+              Quantitys,
+              ProfitMargin: value,
+              Weight,
+            };
+            const result = onChange(modelFields);
+            value = result?.ProfitMargin ?? value;
+          }
+          if (errors.ProfitMargin?.hasError) {
+            runValidationTasks("ProfitMargin", value);
+          }
+          setProfitMargin(value);
+        }}
+        onBlur={() => runValidationTasks("ProfitMargin", ProfitMargin)}
+        errorMessage={errors.ProfitMargin?.errorMessage}
+        hasError={errors.ProfitMargin?.hasError}
+        {...getOverrideProps(overrides, "ProfitMargin")}
+      ></TextField>
+      <TextField
+        label="Weight"
+        isRequired={false}
+        isReadOnly={false}
+        value={Weight}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Price,
+              Description,
+              Notes,
+              Kitchen,
+              imageSrc,
+              Prep,
+              Ingredients,
+              Snooze,
+              Extras,
+              Category,
+              ExtrasPrice,
+              Quantitys,
+              ProfitMargin,
+              Weight: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Weight ?? value;
+          }
+          if (errors.Weight?.hasError) {
+            runValidationTasks("Weight", value);
+          }
+          setWeight(value);
+        }}
+        onBlur={() => runValidationTasks("Weight", Weight)}
+        errorMessage={errors.Weight?.errorMessage}
+        hasError={errors.Weight?.hasError}
+        {...getOverrideProps(overrides, "Weight")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
@@ -711,7 +1019,7 @@ export default function KidsMenuUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || kidsMenuModelProp)}
+          isDisabled={!(idProp || kitchenMenuModelProp)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -723,7 +1031,7 @@ export default function KidsMenuUpdateForm(props) {
             type="submit"
             variation="primary"
             isDisabled={
-              !(idProp || kidsMenuModelProp) ||
+              !(idProp || kitchenMenuModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, "SubmitButton")}

@@ -25,6 +25,7 @@ export declare type CafeOrderCreateFormInputValues = {
     TimeDelivered?: string;
     Notes?: string;
     Kitchen?: boolean;
+    HotOrderPrep?: string;
 };
 export declare type CafeOrderCreateFormValidationValues = {
     CreatedTime?: ValidationFunction<string>;
@@ -39,6 +40,7 @@ export declare type CafeOrderCreateFormValidationValues = {
     TimeDelivered?: ValidationFunction<string>;
     Notes?: ValidationFunction<string>;
     Kitchen?: ValidationFunction<boolean>;
+    HotOrderPrep?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CafeOrderCreateFormOverridesProps = {
@@ -55,6 +57,7 @@ export declare type CafeOrderCreateFormOverridesProps = {
     TimeDelivered?: PrimitiveOverrideProps<TextFieldProps>;
     Notes?: PrimitiveOverrideProps<TextFieldProps>;
     Kitchen?: PrimitiveOverrideProps<SwitchFieldProps>;
+    HotOrderPrep?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type CafeOrderCreateFormProps = React.PropsWithChildren<{
     overrides?: CafeOrderCreateFormOverridesProps | undefined | null;

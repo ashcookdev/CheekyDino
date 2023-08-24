@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Dialog, Switch } from '@headlessui/react'
-import { Bars3Icon } from '@heroicons/react/20/solid'
+import { Bars3Icon, CakeIcon } from '@heroicons/react/20/solid'
 import {
   BellIcon,
   CreditCardIcon,
@@ -63,7 +63,9 @@ export default function Example() {
        
         ...(userGroups.includes('Developer') || userGroups.includes('Admin')
           ? [{ name: 'Till Products', href: '/settings/till-products', icon: UsersIcon, current: false },
-          { name: 'Plan', href: '#', icon: CubeIcon, current: false },
+          { name: 'Stock Control ', href: '/stockcontrol', icon: CubeIcon, current: false },
+
+          { name: 'Add Stock Items ', href: '/buildameal', icon: CakeIcon, current: false },
           { name: 'Billing', href: '#', icon: CreditCardIcon, current: false },]
 
 

@@ -5,59 +5,74 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextAreaFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type KidsMenuCreateFormInputValues = {
+export declare type KitchenMenuCreateFormInputValues = {
     Name?: string;
     Price?: number;
     Description?: string;
-    Beans?: boolean;
     Notes?: string;
     Kitchen?: boolean;
     imageSrc?: string;
     Prep?: string;
-    Ingredients?: string[];
+    Ingredients?: string;
     Snooze?: boolean;
+    Extras?: string[];
+    Category?: string;
+    ExtrasPrice?: number[];
+    Quantitys?: string;
+    ProfitMargin?: number;
+    Weight?: string;
 };
-export declare type KidsMenuCreateFormValidationValues = {
+export declare type KitchenMenuCreateFormValidationValues = {
     Name?: ValidationFunction<string>;
     Price?: ValidationFunction<number>;
     Description?: ValidationFunction<string>;
-    Beans?: ValidationFunction<boolean>;
     Notes?: ValidationFunction<string>;
     Kitchen?: ValidationFunction<boolean>;
     imageSrc?: ValidationFunction<string>;
     Prep?: ValidationFunction<string>;
     Ingredients?: ValidationFunction<string>;
     Snooze?: ValidationFunction<boolean>;
+    Extras?: ValidationFunction<string>;
+    Category?: ValidationFunction<string>;
+    ExtrasPrice?: ValidationFunction<number>;
+    Quantitys?: ValidationFunction<string>;
+    ProfitMargin?: ValidationFunction<number>;
+    Weight?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type KidsMenuCreateFormOverridesProps = {
-    KidsMenuCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+export declare type KitchenMenuCreateFormOverridesProps = {
+    KitchenMenuCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
     Name?: PrimitiveOverrideProps<TextFieldProps>;
     Price?: PrimitiveOverrideProps<TextFieldProps>;
     Description?: PrimitiveOverrideProps<TextFieldProps>;
-    Beans?: PrimitiveOverrideProps<SwitchFieldProps>;
     Notes?: PrimitiveOverrideProps<TextFieldProps>;
     Kitchen?: PrimitiveOverrideProps<SwitchFieldProps>;
     imageSrc?: PrimitiveOverrideProps<TextFieldProps>;
     Prep?: PrimitiveOverrideProps<TextFieldProps>;
-    Ingredients?: PrimitiveOverrideProps<TextFieldProps>;
+    Ingredients?: PrimitiveOverrideProps<TextAreaFieldProps>;
     Snooze?: PrimitiveOverrideProps<SwitchFieldProps>;
+    Extras?: PrimitiveOverrideProps<TextFieldProps>;
+    Category?: PrimitiveOverrideProps<TextFieldProps>;
+    ExtrasPrice?: PrimitiveOverrideProps<TextFieldProps>;
+    Quantitys?: PrimitiveOverrideProps<TextFieldProps>;
+    ProfitMargin?: PrimitiveOverrideProps<TextFieldProps>;
+    Weight?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type KidsMenuCreateFormProps = React.PropsWithChildren<{
-    overrides?: KidsMenuCreateFormOverridesProps | undefined | null;
+export declare type KitchenMenuCreateFormProps = React.PropsWithChildren<{
+    overrides?: KitchenMenuCreateFormOverridesProps | undefined | null;
 } & {
     clearOnSuccess?: boolean;
-    onSubmit?: (fields: KidsMenuCreateFormInputValues) => KidsMenuCreateFormInputValues;
-    onSuccess?: (fields: KidsMenuCreateFormInputValues) => void;
-    onError?: (fields: KidsMenuCreateFormInputValues, errorMessage: string) => void;
-    onChange?: (fields: KidsMenuCreateFormInputValues) => KidsMenuCreateFormInputValues;
-    onValidate?: KidsMenuCreateFormValidationValues;
+    onSubmit?: (fields: KitchenMenuCreateFormInputValues) => KitchenMenuCreateFormInputValues;
+    onSuccess?: (fields: KitchenMenuCreateFormInputValues) => void;
+    onError?: (fields: KitchenMenuCreateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: KitchenMenuCreateFormInputValues) => KitchenMenuCreateFormInputValues;
+    onValidate?: KitchenMenuCreateFormValidationValues;
 } & React.CSSProperties>;
-export default function KidsMenuCreateForm(props: KidsMenuCreateFormProps): React.ReactElement;
+export default function KitchenMenuCreateForm(props: KitchenMenuCreateFormProps): React.ReactElement;

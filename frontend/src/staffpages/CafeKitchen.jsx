@@ -1,8 +1,8 @@
 import {CafeOrder} from './models';
 import { DataStore } from 'aws-amplify';
 import { useState, useEffect } from 'react';
-import { format, parse } from 'date-fns';
-import { Messages } from './models';
+import { format, parse, set } from 'date-fns';
+import { Messages, PartyBooking } from './models';
 import { RocketLaunchIcon, ChevronRightIcon, CircleStackIcon, CheckCircleIcon} from '@heroicons/react/20/solid';
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -13,6 +13,7 @@ export default function CafeKitchen() {
     //get all orders for today
     const [orders, setOrders] = useState([]);
     const [currentTime, setCurrentTime] = useState(0);
+    const [snooze, setSnooze] = useState(false);
     
     const [selected, setSelected] = useState({})
     const allOrdersSelected = selected.length === orders.length;
@@ -45,6 +46,10 @@ export default function CafeKitchen() {
       tomorrow.setDate(tomorrow.getDate() + 1);
     
       const allOrders = await DataStore.query(CafeOrder);
+      
+      
+
+
       const orders = allOrders.filter(
         (order) =>
           new Date(order.CreatedDate) >= today &&
@@ -53,7 +58,13 @@ export default function CafeKitchen() {
           order.Kitchen
       );
       setOrders(orders);
+
+      if (orders.Prep === 2) {
+        setSnooze(true);
+      }
     }
+
+    
     
     
 
@@ -62,12 +73,12 @@ export default function CafeKitchen() {
         const subscription = DataStore.observe(CafeOrder).subscribe(() =>
         
             fetchTodaysOrders()
+            
+
             //play sound
 
         );
         
-        const audio = new Audio('/message.mp3');
-        audio.play();
         
         return () => subscription.unsubscribe();
     }
@@ -107,10 +118,13 @@ export default function CafeKitchen() {
       );
     }
 
-
-
-
         return (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              {snooze && (
+                <button onClick={() => setSnooze(false)} className="bg-red-500 text-white px-4 py-2 rounded-md">
+                  Snooze
+                </button>
+              )}
             <ul role="list" className="divide-y divide-gray-100">
               {orders.map((order) => (
                 <li
@@ -171,6 +185,8 @@ export default function CafeKitchen() {
                 </li>
               ))}
             </ul>
+          </div>
+        
           )
         }
 

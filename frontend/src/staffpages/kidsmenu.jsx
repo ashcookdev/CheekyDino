@@ -15,7 +15,7 @@
 import { ShoppingCartIcon, StarIcon } from '@heroicons/react/20/solid'
 import { DataStore } from 'aws-amplify'
 import { useState, useEffect } from 'react'
-import {KidsMenu} from './models'
+import {KitchenMenu} from './models'
 import {Extras} from './models'
 import OrderBasket from './orderbasket'
 import { ShoppingBagIcon } from '@heroicons/react/outline'
@@ -59,7 +59,7 @@ console.log(orders)
 
 
     const fetchKidsMenu = async () => {
-        const kidsMenu = await DataStore.query(KidsMenu)
+        const kidsMenu = await DataStore.query(KitchenMenu)
         setKidsMenu(kidsMenu)
     }
 

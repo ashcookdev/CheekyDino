@@ -378,7 +378,7 @@ function App() {
   <div className="mb-4 text-lg font-bold">Logged in as: {userEmail}</div>
   <div className="mb-4">
    <h5> Online Staff </h5>
-   <div>
+   <div className='mt-5 mb-5'>
     <Online/>
    </div>
   </div>
@@ -410,8 +410,8 @@ function App() {
         key={message.id}
         className={`p-2 rounded-lg mb-2 ${
           message.email === userEmail
-            ? "bg-green-500 text-white"
-            : "bg-green-200"
+            ? "bg-purple-500 text-white"
+            : "bg-blue-200"
         }`}
       >
         <div className="font-bold">{message.email}</div>

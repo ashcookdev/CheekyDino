@@ -14,13 +14,12 @@ import {
   Grid,
   Icon,
   ScrollView,
-  SwitchField,
   Text,
   TextField,
   useTheme,
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { Messages } from "../models";
+import { KitchenLayout } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -35,7 +34,6 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
-  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -59,7 +57,6 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -169,7 +166,12 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button size="small" variation="link" onClick={addItem}>
+          <Button
+            size="small"
+            variation="link"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
             {selectedBadgeIndex !== undefined ? "Save" : "Add"}
           </Button>
         </Flex>
@@ -178,7 +180,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function MessagesCreateForm(props) {
+export default function KitchenLayoutCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -190,47 +192,27 @@ export default function MessagesCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    content: "",
-    createdAt: "",
-    email: "",
-    group: [],
-    orderID: "",
-    sessionID: "",
-    partyID: "",
-    delivered: false,
+    Name: "",
+    Amount: "",
+    Items: [],
   };
-  const [content, setContent] = React.useState(initialValues.content);
-  const [createdAt, setCreatedAt] = React.useState(initialValues.createdAt);
-  const [email, setEmail] = React.useState(initialValues.email);
-  const [group, setGroup] = React.useState(initialValues.group);
-  const [orderID, setOrderID] = React.useState(initialValues.orderID);
-  const [sessionID, setSessionID] = React.useState(initialValues.sessionID);
-  const [partyID, setPartyID] = React.useState(initialValues.partyID);
-  const [delivered, setDelivered] = React.useState(initialValues.delivered);
+  const [Name, setName] = React.useState(initialValues.Name);
+  const [Amount, setAmount] = React.useState(initialValues.Amount);
+  const [Items, setItems] = React.useState(initialValues.Items);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setContent(initialValues.content);
-    setCreatedAt(initialValues.createdAt);
-    setEmail(initialValues.email);
-    setGroup(initialValues.group);
-    setCurrentGroupValue("");
-    setOrderID(initialValues.orderID);
-    setSessionID(initialValues.sessionID);
-    setPartyID(initialValues.partyID);
-    setDelivered(initialValues.delivered);
+    setName(initialValues.Name);
+    setAmount(initialValues.Amount);
+    setItems(initialValues.Items);
+    setCurrentItemsValue("");
     setErrors({});
   };
-  const [currentGroupValue, setCurrentGroupValue] = React.useState("");
-  const groupRef = React.createRef();
+  const [currentItemsValue, setCurrentItemsValue] = React.useState("");
+  const ItemsRef = React.createRef();
   const validations = {
-    content: [],
-    createdAt: [],
-    email: [],
-    group: [],
-    orderID: [],
-    sessionID: [],
-    partyID: [],
-    delivered: [],
+    Name: [],
+    Amount: [],
+    Items: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -258,14 +240,9 @@ export default function MessagesCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          content,
-          createdAt,
-          email,
-          group,
-          orderID,
-          sessionID,
-          partyID,
-          delivered,
+          Name,
+          Amount,
+          Items,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -295,7 +272,7 @@ export default function MessagesCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new Messages(modelFields));
+          await DataStore.save(new KitchenLayout(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -308,279 +285,109 @@ export default function MessagesCreateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "MessagesCreateForm")}
+      {...getOverrideProps(overrides, "KitchenLayoutCreateForm")}
       {...rest}
     >
       <TextField
-        label="Content"
+        label="Name"
         isRequired={false}
         isReadOnly={false}
-        value={content}
+        value={Name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              content: value,
-              createdAt,
-              email,
-              group,
-              orderID,
-              sessionID,
-              partyID,
-              delivered,
+              Name: value,
+              Amount,
+              Items,
             };
             const result = onChange(modelFields);
-            value = result?.content ?? value;
+            value = result?.Name ?? value;
           }
-          if (errors.content?.hasError) {
-            runValidationTasks("content", value);
+          if (errors.Name?.hasError) {
+            runValidationTasks("Name", value);
           }
-          setContent(value);
+          setName(value);
         }}
-        onBlur={() => runValidationTasks("content", content)}
-        errorMessage={errors.content?.errorMessage}
-        hasError={errors.content?.hasError}
-        {...getOverrideProps(overrides, "content")}
+        onBlur={() => runValidationTasks("Name", Name)}
+        errorMessage={errors.Name?.errorMessage}
+        hasError={errors.Name?.hasError}
+        {...getOverrideProps(overrides, "Name")}
       ></TextField>
       <TextField
-        label="Created at"
+        label="Amount"
         isRequired={false}
         isReadOnly={false}
-        type="time"
-        value={createdAt}
+        type="number"
+        step="any"
+        value={Amount}
         onChange={(e) => {
-          let { value } = e.target;
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
           if (onChange) {
             const modelFields = {
-              content,
-              createdAt: value,
-              email,
-              group,
-              orderID,
-              sessionID,
-              partyID,
-              delivered,
+              Name,
+              Amount: value,
+              Items,
             };
             const result = onChange(modelFields);
-            value = result?.createdAt ?? value;
+            value = result?.Amount ?? value;
           }
-          if (errors.createdAt?.hasError) {
-            runValidationTasks("createdAt", value);
+          if (errors.Amount?.hasError) {
+            runValidationTasks("Amount", value);
           }
-          setCreatedAt(value);
+          setAmount(value);
         }}
-        onBlur={() => runValidationTasks("createdAt", createdAt)}
-        errorMessage={errors.createdAt?.errorMessage}
-        hasError={errors.createdAt?.hasError}
-        {...getOverrideProps(overrides, "createdAt")}
-      ></TextField>
-      <TextField
-        label="Email"
-        isRequired={false}
-        isReadOnly={false}
-        value={email}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              content,
-              createdAt,
-              email: value,
-              group,
-              orderID,
-              sessionID,
-              partyID,
-              delivered,
-            };
-            const result = onChange(modelFields);
-            value = result?.email ?? value;
-          }
-          if (errors.email?.hasError) {
-            runValidationTasks("email", value);
-          }
-          setEmail(value);
-        }}
-        onBlur={() => runValidationTasks("email", email)}
-        errorMessage={errors.email?.errorMessage}
-        hasError={errors.email?.hasError}
-        {...getOverrideProps(overrides, "email")}
+        onBlur={() => runValidationTasks("Amount", Amount)}
+        errorMessage={errors.Amount?.errorMessage}
+        hasError={errors.Amount?.hasError}
+        {...getOverrideProps(overrides, "Amount")}
       ></TextField>
       <ArrayField
         onChange={async (items) => {
           let values = items;
           if (onChange) {
             const modelFields = {
-              content,
-              createdAt,
-              email,
-              group: values,
-              orderID,
-              sessionID,
-              partyID,
-              delivered,
+              Name,
+              Amount,
+              Items: values,
             };
             const result = onChange(modelFields);
-            values = result?.group ?? values;
+            values = result?.Items ?? values;
           }
-          setGroup(values);
-          setCurrentGroupValue("");
+          setItems(values);
+          setCurrentItemsValue("");
         }}
-        currentFieldValue={currentGroupValue}
-        label={"Group"}
-        items={group}
-        hasError={errors?.group?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks("group", currentGroupValue)
-        }
-        errorMessage={errors?.group?.errorMessage}
-        setFieldValue={setCurrentGroupValue}
-        inputFieldRef={groupRef}
+        currentFieldValue={currentItemsValue}
+        label={"Items"}
+        items={Items}
+        hasError={errors?.Items?.hasError}
+        errorMessage={errors?.Items?.errorMessage}
+        setFieldValue={setCurrentItemsValue}
+        inputFieldRef={ItemsRef}
         defaultFieldValue={""}
       >
         <TextField
-          label="Group"
+          label="Items"
           isRequired={false}
           isReadOnly={false}
-          value={currentGroupValue}
+          value={currentItemsValue}
           onChange={(e) => {
             let { value } = e.target;
-            if (errors.group?.hasError) {
-              runValidationTasks("group", value);
+            if (errors.Items?.hasError) {
+              runValidationTasks("Items", value);
             }
-            setCurrentGroupValue(value);
+            setCurrentItemsValue(value);
           }}
-          onBlur={() => runValidationTasks("group", currentGroupValue)}
-          errorMessage={errors.group?.errorMessage}
-          hasError={errors.group?.hasError}
-          ref={groupRef}
+          onBlur={() => runValidationTasks("Items", currentItemsValue)}
+          errorMessage={errors.Items?.errorMessage}
+          hasError={errors.Items?.hasError}
+          ref={ItemsRef}
           labelHidden={true}
-          {...getOverrideProps(overrides, "group")}
+          {...getOverrideProps(overrides, "Items")}
         ></TextField>
       </ArrayField>
-      <TextField
-        label="Order id"
-        isRequired={false}
-        isReadOnly={false}
-        value={orderID}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              content,
-              createdAt,
-              email,
-              group,
-              orderID: value,
-              sessionID,
-              partyID,
-              delivered,
-            };
-            const result = onChange(modelFields);
-            value = result?.orderID ?? value;
-          }
-          if (errors.orderID?.hasError) {
-            runValidationTasks("orderID", value);
-          }
-          setOrderID(value);
-        }}
-        onBlur={() => runValidationTasks("orderID", orderID)}
-        errorMessage={errors.orderID?.errorMessage}
-        hasError={errors.orderID?.hasError}
-        {...getOverrideProps(overrides, "orderID")}
-      ></TextField>
-      <TextField
-        label="Session id"
-        isRequired={false}
-        isReadOnly={false}
-        value={sessionID}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              content,
-              createdAt,
-              email,
-              group,
-              orderID,
-              sessionID: value,
-              partyID,
-              delivered,
-            };
-            const result = onChange(modelFields);
-            value = result?.sessionID ?? value;
-          }
-          if (errors.sessionID?.hasError) {
-            runValidationTasks("sessionID", value);
-          }
-          setSessionID(value);
-        }}
-        onBlur={() => runValidationTasks("sessionID", sessionID)}
-        errorMessage={errors.sessionID?.errorMessage}
-        hasError={errors.sessionID?.hasError}
-        {...getOverrideProps(overrides, "sessionID")}
-      ></TextField>
-      <TextField
-        label="Party id"
-        isRequired={false}
-        isReadOnly={false}
-        value={partyID}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              content,
-              createdAt,
-              email,
-              group,
-              orderID,
-              sessionID,
-              partyID: value,
-              delivered,
-            };
-            const result = onChange(modelFields);
-            value = result?.partyID ?? value;
-          }
-          if (errors.partyID?.hasError) {
-            runValidationTasks("partyID", value);
-          }
-          setPartyID(value);
-        }}
-        onBlur={() => runValidationTasks("partyID", partyID)}
-        errorMessage={errors.partyID?.errorMessage}
-        hasError={errors.partyID?.hasError}
-        {...getOverrideProps(overrides, "partyID")}
-      ></TextField>
-      <SwitchField
-        label="Delivered"
-        defaultChecked={false}
-        isDisabled={false}
-        isChecked={delivered}
-        onChange={(e) => {
-          let value = e.target.checked;
-          if (onChange) {
-            const modelFields = {
-              content,
-              createdAt,
-              email,
-              group,
-              orderID,
-              sessionID,
-              partyID,
-              delivered: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.delivered ?? value;
-          }
-          if (errors.delivered?.hasError) {
-            runValidationTasks("delivered", value);
-          }
-          setDelivered(value);
-        }}
-        onBlur={() => runValidationTasks("delivered", delivered)}
-        errorMessage={errors.delivered?.errorMessage}
-        hasError={errors.delivered?.hasError}
-        {...getOverrideProps(overrides, "delivered")}
-      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

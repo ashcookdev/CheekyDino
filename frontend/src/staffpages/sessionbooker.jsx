@@ -117,7 +117,7 @@ defaultValue="1"
 {childData.map((data, index) => (
 <div key={index}>
   <label htmlFor={`name-${index}`} className="block text-sm font-medium leading-6 text-gray-900">
-    Child's Name
+    Adult's Name
   </label>
   <input
     onChange={(e) => handleChildDataChange(index, 'name', e.target.value)}
