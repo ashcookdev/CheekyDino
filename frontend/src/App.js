@@ -59,6 +59,7 @@ import Settings from './staffpages/settings';
 import TillProducts from './staffpages/tillproducts';
 import StockControl from './staffpages/stockcontrol';
 import BuildAMeal from './staffpages/buildameal';
+import MealProfit from './staffpages/mealprofitmargins';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -193,6 +194,7 @@ function App() {
             <Route path="/settings" element={<Settings />} />
             <Route path= "/stockcontrol" element={<StockControl />} />
             <Route path="/buildameal" element={<BuildAMeal />} />
+            <Route path="/mealprofit" element={<MealProfit />} />
 
           </>
         )}

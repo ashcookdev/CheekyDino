@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
 import { StockControl, KitchenMenu } from './models';
 import { useNavigate } from 'react-router-dom';
+import MealProfitMargins from './mealprofitmargins';
 
 export default function Buildameal() {
 
@@ -16,6 +17,8 @@ export default function Buildameal() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [menu, setMenu] = useState([]);
   const [add, setAdd] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+
 
   const getStock = async () => {
 
@@ -51,21 +54,10 @@ export default function Buildameal() {
     setSelectedItems([...selectedItems, item]);
   }
 
-  function handleRemoveItem(index) {
-    const newItems = [...selectedItems];
-    newItems.splice(index, 1);
-    setSelectedItems(newItems);
-  }
 
-  function handleQuantityChange(index, event) {
-    const newItems = [...selectedItems];
-    newItems[index].Quantity = parseInt(event.target.value);
-    setSelectedItems(newItems);
-  }
 
   
 
-  const [confirm, setConfirm] = useState(false);
 
   function handleConfirm() {
     setConfirm(true);
@@ -74,6 +66,12 @@ export default function Buildameal() {
 
   if (add === true) {
     navigate("/buildameal")
+  }
+
+  if (confirm === true) {
+    return (
+      <MealProfitMargins selectedItems={selectedItems} mealName={mealName} />
+    )
   }
   
 
@@ -141,83 +139,7 @@ export default function Buildameal() {
 
         <div className="px-4 py-6 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">
           {/* Main content */}
-          {confirm ? (
-    <div className="relative w-full">
-<h2 className='text-center font-bold mb-5'> {mealName}</h2>        
-      {selectedItems.map((item, index) => (
-        <div
-          key={item.Name}
-          className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
-        >
-
-          <div className="flex-shrink-0"></div>
-          <div className="min-w-0 flex-1">
-              <span className="absolute inset-0" aria-hidden="true" />
-              <p className="text-md font-medium text-gray-900">
-                {item.Name}
-              </p>
-              <p className="text-sm text-gray-500 font-italic truncate">
-                {item.Supplier}
-              </p>
-              {item.Quantity === 0 ? (
-                <>
-                  <label htmlFor={`weight-${index}`} className="block text-sm font-medium leading-6 text-gray-900">
-                    Weight (g)
-                  </label>
-                  <input
-                    onChange={(event) => handleQuantityChange(index, event)}
-                    value={item.Weight}
-                    type="range"
-                    name={`weight-${index}`}
-                    id={`weight-${index}`}
-                    min="1"
-                    max="1000"
-                    step="1"
-                    className="block w-full rounded-md border-gray-300 shadow-sm py-1.5 px-3 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:ring-opacity-50 sm:text-sm"
-                  />
-                </>
-              ) : item.Weight === 0 ? (
-                <>
-                  <label htmlFor={`quantity-${index}`} className="block text-sm font-medium leading-6 text-gray-900">
-                    Quantity
-                  </label>
-                  <input
-                    onChange={(event) => handleQuantityChange(index, event)}
-                    value={item.Quantity}
-                    type="range"
-                    name={`quantity-${index}`}
-                    id={`quantity-${index}`}
-                    min="1"
-                    max="100"
-                    step="1"
-                    className="block w-full rounded-md border-gray-300 shadow-sm py-1.5 px-3 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:ring-opacity-50 sm:text-sm"
-                  />
-                </>
-              ) : null}
-              <p className="truncate text-sm text-red-500">
-                Price £{item.Price}
-              </p>
-            <div>
-              <button
-                onClick={() => handleRemoveItem(index)}
-                type="button"
-                className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none"
-              >
-                Remove
-              </button>
-              <button
-                type="button"
-                className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none"
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  ) : null}
-
+          
         <h2 className="text-lg font-medium text-gray-900 text-center mt-10">Stock Items</h2>
         <button onClick={()=> setAdd(true)} className='relative inline-flex mt-3 items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none'>Add Item</button>
 
