@@ -21,6 +21,7 @@ export declare type StockControlUpdateFormInputValues = {
     PreVAT?: number;
     Supplier?: string;
     VAT?: number;
+    CurrentStockLevel?: number;
 };
 export declare type StockControlUpdateFormValidationValues = {
     Name?: ValidationFunction<string>;
@@ -30,6 +31,7 @@ export declare type StockControlUpdateFormValidationValues = {
     PreVAT?: ValidationFunction<number>;
     Supplier?: ValidationFunction<string>;
     VAT?: ValidationFunction<number>;
+    CurrentStockLevel?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type StockControlUpdateFormOverridesProps = {
@@ -41,6 +43,7 @@ export declare type StockControlUpdateFormOverridesProps = {
     PreVAT?: PrimitiveOverrideProps<TextFieldProps>;
     Supplier?: PrimitiveOverrideProps<TextFieldProps>;
     VAT?: PrimitiveOverrideProps<TextFieldProps>;
+    CurrentStockLevel?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type StockControlUpdateFormProps = React.PropsWithChildren<{
     overrides?: StockControlUpdateFormOverridesProps | undefined | null;

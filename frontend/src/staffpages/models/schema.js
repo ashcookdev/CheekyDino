@@ -139,6 +139,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "CurrentStockLevel": {
+                    "name": "CurrentStockLevel",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -1027,13 +1034,6 @@ export const schema = {
                     "attributes": [],
                     "isArrayNullable": true
                 },
-                "Quantitys": {
-                    "name": "Quantitys",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
                 "ProfitMargin": {
                     "name": "ProfitMargin",
                     "isArray": false,
@@ -1041,8 +1041,15 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "Weight": {
-                    "name": "Weight",
+                "PriceNoVAT": {
+                    "name": "PriceNoVAT",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "InStock": {
+                    "name": "InStock",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -2998,5 +3005,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "9d33b2dada40ff80866de3a85d9cc60b"
+    "version": "a6b5234fce90d7dcf9f4cf394ba56fe1"
 };

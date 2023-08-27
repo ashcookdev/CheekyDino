@@ -15,6 +15,7 @@ type StockControl @model @auth(rules: [{allow: private}]) {
   PreVAT: Float
   Supplier: String
   VAT: Float
+  CurrentStockLevel: Int
 }
 
 type ClockIn @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -109,9 +110,9 @@ type KitchenMenu @model @auth(rules: [{allow: private}]) {
   Extras: [String]
   Category: String
   ExtrasPrice: [Float]
-  Quantitys: String
   ProfitMargin: Float
-  Weight: String
+  PriceNoVAT: Float
+  InStock: String
 }
 
 type TimeEntry @model @auth(rules: [{allow: private}, {allow: owner}]) {

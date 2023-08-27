@@ -18,6 +18,9 @@ export default function Buildameal() {
   const [menu, setMenu] = useState([]);
   const [add, setAdd] = useState(false);
   const [confirm, setConfirm] = useState(false);
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [img, setImg] = useState("");
 
 
   const getStock = async () => {
@@ -55,6 +58,20 @@ export default function Buildameal() {
   }
 
 
+function handleCategoryChange(event) {
+  setCategory(event.target.value);
+}
+
+function handleDescriptionChange(event) {
+  setDescription(event.target.value);
+}
+
+function handleImgChange(event) {
+  setImg(event.target.value);
+}
+
+
+
 
   
 
@@ -70,7 +87,7 @@ export default function Buildameal() {
 
   if (confirm === true) {
     return (
-      <MealProfitMargins selectedItems={selectedItems} mealName={mealName} />
+      <MealProfitMargins selectedItems={selectedItems} mealName={mealName} description= {description} category= {category} img= {img}/>
     )
   }
   
@@ -83,12 +100,12 @@ export default function Buildameal() {
           {/* Left column area */}
           <button
             onClick={handleButtonClick}
-            className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+            className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none items-center justify-center w-full"
           >
             Build A Meal
           </button>
           {showInput && (
-            <div>
+            <div className='mt-5'>
               <label htmlFor="name" className="block text-sm font-medium leading-6 text-center text-gray-900">
                 Name
               </label>
@@ -101,10 +118,47 @@ export default function Buildameal() {
                   placeholder="Burger and Chips"
                 />
               </div>
+              <label htmlFor="description" className="block text-sm font-medium leading-6 text-center text-gray-900">
+                Category
+              </label>
+              <div className="mt-2">
+                <input onChange={handleCategoryChange}
+                  type="text"
+                  name="category"
+                  id="category"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  placeholder="eg. Kids Meal"
+                />
+              </div>
+              <label htmlFor="description" className="block text-sm font-medium leading-6 text-center text-gray-900">
+                Description
+              </label>
+              <div className="mt-2">
+                <input onChange={handleDescriptionChange}
+                  type="text"
+                  name="description"
+                  id="description"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  placeholder="Burger and Chips"
+                />
+              </div>
+              
+              <label htmlFor="image" className="block text-sm font-medium leading-6 text-center text-gray-900">
+                Image URL
+              </label>
+              <div className="mt-2">
+                <input onChange={handleImgChange}
+                  type="text"
+                  name="image"
+                  id="image"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  placeholder="https://www.google.com/"
+                />
+              </div>
               <button onClick={() => setNext(true)}
                 type="button"
-                className="relative inline-flex mt-3 items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none"
-              >
+                className="relative mt-5 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-indigo-700 focus:outline-none items-center justify-center w-full"
+                >
                 Next
               </button>
               

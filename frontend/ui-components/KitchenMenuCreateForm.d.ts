@@ -25,9 +25,9 @@ export declare type KitchenMenuCreateFormInputValues = {
     Extras?: string[];
     Category?: string;
     ExtrasPrice?: number[];
-    Quantitys?: string;
     ProfitMargin?: number;
-    Weight?: string;
+    PriceNoVAT?: number;
+    InStock?: string;
 };
 export declare type KitchenMenuCreateFormValidationValues = {
     Name?: ValidationFunction<string>;
@@ -42,9 +42,9 @@ export declare type KitchenMenuCreateFormValidationValues = {
     Extras?: ValidationFunction<string>;
     Category?: ValidationFunction<string>;
     ExtrasPrice?: ValidationFunction<number>;
-    Quantitys?: ValidationFunction<string>;
     ProfitMargin?: ValidationFunction<number>;
-    Weight?: ValidationFunction<string>;
+    PriceNoVAT?: ValidationFunction<number>;
+    InStock?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type KitchenMenuCreateFormOverridesProps = {
@@ -61,9 +61,9 @@ export declare type KitchenMenuCreateFormOverridesProps = {
     Extras?: PrimitiveOverrideProps<TextFieldProps>;
     Category?: PrimitiveOverrideProps<TextFieldProps>;
     ExtrasPrice?: PrimitiveOverrideProps<TextFieldProps>;
-    Quantitys?: PrimitiveOverrideProps<TextFieldProps>;
     ProfitMargin?: PrimitiveOverrideProps<TextFieldProps>;
-    Weight?: PrimitiveOverrideProps<TextFieldProps>;
+    PriceNoVAT?: PrimitiveOverrideProps<TextFieldProps>;
+    InStock?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type KitchenMenuCreateFormProps = React.PropsWithChildren<{
     overrides?: KitchenMenuCreateFormOverridesProps | undefined | null;

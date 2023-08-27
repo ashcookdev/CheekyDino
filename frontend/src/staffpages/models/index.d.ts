@@ -53,6 +53,7 @@ type EagerStockControl = {
   readonly PreVAT?: number | null;
   readonly Supplier?: string | null;
   readonly VAT?: number | null;
+  readonly CurrentStockLevel?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -70,6 +71,7 @@ type LazyStockControl = {
   readonly PreVAT?: number | null;
   readonly Supplier?: string | null;
   readonly VAT?: number | null;
+  readonly CurrentStockLevel?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -380,9 +382,9 @@ type EagerKitchenMenu = {
   readonly Extras?: (string | null)[] | null;
   readonly Category?: string | null;
   readonly ExtrasPrice?: (number | null)[] | null;
-  readonly Quantitys?: string | null;
   readonly ProfitMargin?: number | null;
-  readonly Weight?: string | null;
+  readonly PriceNoVAT?: number | null;
+  readonly InStock?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -405,9 +407,9 @@ type LazyKitchenMenu = {
   readonly Extras?: (string | null)[] | null;
   readonly Category?: string | null;
   readonly ExtrasPrice?: (number | null)[] | null;
-  readonly Quantitys?: string | null;
   readonly ProfitMargin?: number | null;
-  readonly Weight?: string | null;
+  readonly PriceNoVAT?: number | null;
+  readonly InStock?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

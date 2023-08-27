@@ -1,22 +1,34 @@
-import { useEffect, useState } from 'react'
-import { CurrencyDollarIcon, TruckIcon } from '@heroicons/react/outline'
-import { ShoppingBagIcon } from '@heroicons/react/24/solid'
-import { CurrencyPoundIcon } from '@heroicons/react/24/outline'
 
-export default function Example({ selectedItems, mealName }) {
-  const [mealNamestate, setMealName] = useState('')
-  const [selectedItemsstate, setSelectedItems] = useState([])
-  const [price, setPrice] = useState(0)
-  const [itemPrices, setItemPrices] = useState([])
-  const [itemValues, setItemValues] = useState([])
-  const [sellingPrice, setSellingPrice] = useState(0)
+
+import { useEffect, useState } from 'react';
+import { CurrencyDollarIcon, TruckIcon } from '@heroicons/react/outline';
+import { ShoppingBagIcon } from '@heroicons/react/24/solid';
+import { CurrencyPoundIcon } from '@heroicons/react/24/outline';
+import { DataStore } from 'aws-amplify';
+import { KitchenMenu } from './models';
+
+export default function Example({ selectedItems, mealName, category, img, description }) {
+  const [mealNamestate, setMealName] = useState('');
+  const [selectedItemsstate, setSelectedItems] = useState([]);
+  const [price, setPrice] = useState(0);
+  const [itemPrices, setItemPrices] = useState([]);
+  const [itemValues, setItemValues] = useState([]);
+  const [sellingPrice, setSellingPrice] = useState(0);
+  const [categorystate, setCategory] = useState('');
+  const [imgstate, setImg] = useState('');
+  const [descriptionstate, setDescription] = useState('');
+    const [portions, setPortionAmount] = useState(0);
+
 
   useEffect(() => {
-    setMealName(mealName)
-    setSelectedItems(selectedItems)
-    setItemPrices(selectedItems.map(() => 0))
-    setItemValues(selectedItems.map(() => 0))
-  }, [selectedItems, mealName])
+    setMealName(mealName);
+    setSelectedItems(selectedItems);
+    setCategory(category);
+    setImg(img);
+    setDescription(description);
+    setItemPrices(selectedItems.map(() => 0));
+    setItemValues(selectedItems.map(() => 0));
+  }, [selectedItems, mealName]);
 
   const handleSliderChange = (index, value) => {
     // update the individual price for this item
@@ -25,37 +37,67 @@ export default function Example({ selectedItems, mealName }) {
         ? (value / selectedItemsstate[index].Weight) *
           selectedItemsstate[index].Price // calculate price based on weight
         : (value / selectedItemsstate[index].Quantity) *
-          selectedItemsstate[index].Price // calculate price based on quantity
+          selectedItemsstate[index].Price; // calculate price based on quantity
     setItemPrices((prevItemPrices) => {
-      const newItemPrices = [...prevItemPrices]
-      newItemPrices[index] = newPrice
-      return newItemPrices
-    })
+      const newItemPrices = [...prevItemPrices];
+      newItemPrices[index] = newPrice;
+      setPrice(newItemPrices.reduce((total, price) => total + price, 0));
+      return newItemPrices;
+    });
     // update the individual value for this item
     setItemValues((prevItemValues) => {
-      const newItemValues = [...prevItemValues]
-      newItemValues[index] = value
-      return newItemValues
-    })
-    // update the total price by summing up all individual prices
-    setPrice(itemPrices.reduce((total, price) => total + price, 0))
-  }
+      const newItemValues = [...prevItemValues];
+      newItemValues[index] = value;
+      return newItemValues;
+    });
+    // calculate the number of portions in stock
+    const portionAmount = Math.min(
+        ...selectedItemsstate.map((item, index) =>
+          item.Weight === 0 ? Infinity :item.Weight / itemValues[index] 
+        )
+      );
+      setPortionAmount(portionAmount.toFixed(2));
+      
+};
 
-    const handleSubmit = () => {
-        const data = {
-            mealName: mealNamestate,
-            sellingPrice: sellingPrice,
-            items: selectedItemsstate.map((item, index) => ({
+
+  
+  
+  const handleSubmit = async () => {
+    // calculate the profit margin
+    const profitMargin = sellingPrice - price;
+    // calculate the number of portions in stock
+
+
+   
+    // save the meal to the database
+    const meal = await DataStore.save(
+      new KitchenMenu({
+        Name: mealNamestate,
+        Price: parseFloat(sellingPrice) * 1.2,
+        PriceNoVAT: parseFloat(sellingPrice),
+        Category: categorystate,
+        imageSrc: imgstate,
+        Kitchen: true,
+        Description: descriptionstate,
+        ProfitMargin: profitMargin,
+        Ingredients: JSON.stringify(
+          selectedItemsstate.map((item, index) => ({
+            id: item.id,
             name: item.Name,
-            supplier: item.Supplier,
-            quantity: item.Quantity === 0 ? itemValues[index] : 0,
-            weight: item.Quantity === 0 ? 0 : itemValues[index],
-            price: itemPrices[index],
-            })),
-        }
-        console.log(data)
-        }
-        
+            weight: item.Quantity === 0 ? parseFloat(itemValues[index]) : 0,
+            quantity: item.Quantity === 0 ? 0 : parseFloat(itemValues[index]),
+            price: parseFloat(itemPrices[index]),
+          }))
+        ),
+      })
+    );
+    console.log(meal);
+  };
+
+  
+  
+
 
   return (
     <div className="w-full p-4">
@@ -102,6 +144,11 @@ export default function Example({ selectedItems, mealName }) {
         <p className="text-sm font-medium text-black">Price (per Portion):</p>
         <p className="text-sm font-medium text-black">£{price.toFixed(2)}</p>
       </div>
+      <div className="flex justify-between items-center mb-4">
+  <p className="text-sm font-medium text-black">Portions In Stock:</p>
+  <p className="text-sm font-medium text-black">{portions}</p>
+</div>
+
   <div className="mt-8 flow-root">
     <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -120,9 +167,9 @@ export default function Example({ selectedItems, mealName }) {
               <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-black">
                 Price
               </th>
-              <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                <span className="sr-only">Edit</span>
-              </th>
+              <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-black">
+      Portions
+    </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-300">
@@ -167,6 +214,13 @@ export default function Example({ selectedItems, mealName }) {
                 )}</td>
                 <td className="whitespace-nowrap px-3 py-4 text-sm text-black">{item.Weight}</td>
                 <td className="whitespace-nowrap px-3 py-4 text-sm text-black">£{itemPrices[index].toFixed(2)}</td>
+                <td className="whitespace-nowrap px-3 py-4 text-sm text-black">
+  {item.Quantity === 0
+    ? item.Weight === 0
+      ? 0
+      : (  item.Weight / itemValues[index]).toFixed(2)
+    : ( item.Quantity / itemValues[index]).toFixed(2)}
+</td>
 
               </tr>
             ))}
@@ -175,7 +229,7 @@ export default function Example({ selectedItems, mealName }) {
       </div>
       <button onClick={handleSubmit}
        className="w-full px-4 py-2 bg-green-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-            Confirm
+            Next
             </button>
     </div>
   </div>
@@ -190,60 +244,3 @@ export default function Example({ selectedItems, mealName }) {
 }
 
 
-{/* <ul className="flex flex-col items-center">
-        {selectedItemsstate.map((item, index) => (
-          <li key={item.Name} className="w-full mb-4">
-            <div className="flex flex-col md:flex-row justify-between items-center w-full px-4 py-2 bg-white rounded-md border border-gray-200">
-              <div>
-                <p className="font-bold text-lg">{item.Name}</p>
-                <div className="flex items-center text-sm text-gray-600">
-                  <ShoppingBagIcon className="h-4 w-4" />
-                  <p className="ml-1">{item.Supplier}</p>
-                </div>
-              </div>
-  
-              {item.Quantity === 0 ? (
-                <>
-                  <label htmlFor={`weight-slider-${index}`} className="mt-2 md:mt-0">Weight:</label>
-                  <input
-                    id={`weight-slider-${index}`}
-                    type="range"
-                    min={0}
-                    max={item.Weight}
-                    step={1}
-                    onChange={(event) =>
-                      handleSliderChange(index, event.target.value)
-                    }
-                    className="w-full mt-2 md:mt-0"
-                  />
-                  <p>Selected Weight: {itemValues[index]}g</p>
-                </>
-              ) : (
-                <>
-                  <label htmlFor={`quantity-slider-${index}`} className="mt-2 md:mt-0">Quantity:</label>
-                  <input
-                    id={`quantity-slider-${index}`}
-                    type="range"
-                    min={0}
-                    max={item.Quantity}
-                    step={1}
-                    onChange={(event) =>
-                      handleSliderChange(index, event.target.value)
-                    }
-                    className="w-full mt-2 md:mt-0"
-                  />
-                  <p>Selected Quantity: {itemValues[index]}</p>
-                </>
-              )}
-              <p>Price: £{itemPrices[index].toFixed(2)}</p>
-            </div>
-          </li>
-        ))}
-  
-        <li className="w-full mb-4">
-          <button className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-            Confirm
-          </button>
-        </li>
-      </ul>
-    </div> */}

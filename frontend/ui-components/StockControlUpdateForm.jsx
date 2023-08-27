@@ -11,9 +11,10 @@ import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { StockControl } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-export default function StockControlCreateForm(props) {
+export default function StockControlUpdateForm(props) {
   const {
-    clearOnSuccess = true,
+    id: idProp,
+    stockControl: stockControlModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -30,6 +31,7 @@ export default function StockControlCreateForm(props) {
     PreVAT: "",
     Supplier: "",
     VAT: "",
+    CurrentStockLevel: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Weight, setWeight] = React.useState(initialValues.Weight);
@@ -38,17 +40,37 @@ export default function StockControlCreateForm(props) {
   const [PreVAT, setPreVAT] = React.useState(initialValues.PreVAT);
   const [Supplier, setSupplier] = React.useState(initialValues.Supplier);
   const [VAT, setVAT] = React.useState(initialValues.VAT);
+  const [CurrentStockLevel, setCurrentStockLevel] = React.useState(
+    initialValues.CurrentStockLevel
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setName(initialValues.Name);
-    setWeight(initialValues.Weight);
-    setQuantity(initialValues.Quantity);
-    setPrice(initialValues.Price);
-    setPreVAT(initialValues.PreVAT);
-    setSupplier(initialValues.Supplier);
-    setVAT(initialValues.VAT);
+    const cleanValues = stockControlRecord
+      ? { ...initialValues, ...stockControlRecord }
+      : initialValues;
+    setName(cleanValues.Name);
+    setWeight(cleanValues.Weight);
+    setQuantity(cleanValues.Quantity);
+    setPrice(cleanValues.Price);
+    setPreVAT(cleanValues.PreVAT);
+    setSupplier(cleanValues.Supplier);
+    setVAT(cleanValues.VAT);
+    setCurrentStockLevel(cleanValues.CurrentStockLevel);
     setErrors({});
   };
+  const [stockControlRecord, setStockControlRecord] = React.useState(
+    stockControlModelProp
+  );
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp
+        ? await DataStore.query(StockControl, idProp)
+        : stockControlModelProp;
+      setStockControlRecord(record);
+    };
+    queryData();
+  }, [idProp, stockControlModelProp]);
+  React.useEffect(resetStateValues, [stockControlRecord]);
   const validations = {
     Name: [],
     Weight: [],
@@ -57,6 +79,7 @@ export default function StockControlCreateForm(props) {
     PreVAT: [],
     Supplier: [],
     VAT: [],
+    CurrentStockLevel: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -91,6 +114,7 @@ export default function StockControlCreateForm(props) {
           PreVAT,
           Supplier,
           VAT,
+          CurrentStockLevel,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -120,12 +144,13 @@ export default function StockControlCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new StockControl(modelFields));
+          await DataStore.save(
+            StockControl.copyOf(stockControlRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
-          }
-          if (clearOnSuccess) {
-            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -133,7 +158,7 @@ export default function StockControlCreateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "StockControlCreateForm")}
+      {...getOverrideProps(overrides, "StockControlUpdateForm")}
       {...rest}
     >
       <TextField
@@ -152,6 +177,7 @@ export default function StockControlCreateForm(props) {
               PreVAT,
               Supplier,
               VAT,
+              CurrentStockLevel,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -186,6 +212,7 @@ export default function StockControlCreateForm(props) {
               PreVAT,
               Supplier,
               VAT,
+              CurrentStockLevel,
             };
             const result = onChange(modelFields);
             value = result?.Weight ?? value;
@@ -220,6 +247,7 @@ export default function StockControlCreateForm(props) {
               PreVAT,
               Supplier,
               VAT,
+              CurrentStockLevel,
             };
             const result = onChange(modelFields);
             value = result?.Quantity ?? value;
@@ -254,6 +282,7 @@ export default function StockControlCreateForm(props) {
               PreVAT,
               Supplier,
               VAT,
+              CurrentStockLevel,
             };
             const result = onChange(modelFields);
             value = result?.Price ?? value;
@@ -288,6 +317,7 @@ export default function StockControlCreateForm(props) {
               PreVAT: value,
               Supplier,
               VAT,
+              CurrentStockLevel,
             };
             const result = onChange(modelFields);
             value = result?.PreVAT ?? value;
@@ -318,6 +348,7 @@ export default function StockControlCreateForm(props) {
               PreVAT,
               Supplier: value,
               VAT,
+              CurrentStockLevel,
             };
             const result = onChange(modelFields);
             value = result?.Supplier ?? value;
@@ -352,6 +383,7 @@ export default function StockControlCreateForm(props) {
               PreVAT,
               Supplier,
               VAT: value,
+              CurrentStockLevel,
             };
             const result = onChange(modelFields);
             value = result?.VAT ?? value;
@@ -366,18 +398,56 @@ export default function StockControlCreateForm(props) {
         hasError={errors.VAT?.hasError}
         {...getOverrideProps(overrides, "VAT")}
       ></TextField>
+      <TextField
+        label="Current stock level"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={CurrentStockLevel}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Weight,
+              Quantity,
+              Price,
+              PreVAT,
+              Supplier,
+              VAT,
+              CurrentStockLevel: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.CurrentStockLevel ?? value;
+          }
+          if (errors.CurrentStockLevel?.hasError) {
+            runValidationTasks("CurrentStockLevel", value);
+          }
+          setCurrentStockLevel(value);
+        }}
+        onBlur={() =>
+          runValidationTasks("CurrentStockLevel", CurrentStockLevel)
+        }
+        errorMessage={errors.CurrentStockLevel?.errorMessage}
+        hasError={errors.CurrentStockLevel?.hasError}
+        {...getOverrideProps(overrides, "CurrentStockLevel")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
       >
         <Button
-          children="Clear"
+          children="Reset"
           type="reset"
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-          {...getOverrideProps(overrides, "ClearButton")}
+          isDisabled={!(idProp || stockControlModelProp)}
+          {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
           gap="15px"
@@ -387,7 +457,10 @@ export default function StockControlCreateForm(props) {
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(idProp || stockControlModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>
