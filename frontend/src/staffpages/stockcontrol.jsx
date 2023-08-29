@@ -77,6 +77,23 @@ function handleTimeChange(event) {
 
 
 
+function  reloadItem(stock) {
+
+  const originalStock = stock.Weight > 0 ? stock.Weight : stock.Quantity;
+
+  const reload = DataStore.save(
+    StockControl.copyOf(stock, (updated) => {
+      updated.CurrentStockLevel = originalStock;
+    })
+  );
+  console.log(reload);
+  getStock();
+window.location.reload();
+
+  
+
+  
+}
 
 
   
@@ -249,6 +266,13 @@ Estimated Prep Time              </label>
 <p className="truncate text-sm text-blue-500">
  Pre VAT £{stock.PreVAT}
 </p>
+  
+<button onClick={() => reloadItem(stock)}
+  type="button"
+  className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none"
+>
+  Reload
+</button>
 
 
 

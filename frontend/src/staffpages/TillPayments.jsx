@@ -78,6 +78,7 @@ const prepTime = prep.toString();
           Kitchen: kitchen,
           HotOrderPrep: prepTime,
           KitchenMenuId: orders.map(item => item.ID),
+          TotalNoVAT: total / 1.2,
         })
       );
       

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
 import { Sessions, PartyBooking } from './models';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import MyPieChart from './piechart';
 
 async function getData(period) {
   const sessions = await DataStore.query(Sessions);
@@ -32,9 +31,9 @@ async function getData(period) {
   return Object.values(data).map((item) => ({
     ...item,
     totalSpent: item.sessionsTotalSpent + item.partyBookingsTotalSpent,
+    prevat: ((item.sessionsTotalSpent + item.partyBookingsTotalSpent) / 1.2).toFixed(2),
   }));
 }
-
 
 
 
@@ -96,15 +95,23 @@ function MyLineChart() {
             Year
           </button>
         </div>
-        <LineChart width={500} height={300} data={data}>
-          <CartesianGrid strokeDasharray="5 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
-          <Line type="monotone" dataKey="totalSpent" stroke="#8884d8" />
-        </LineChart>
-        <MyPieChart data={data} />
-
+        <div className='mt-5'>
+  <div className="w-full overflow-x-auto">
+    <LineChart
+      width={800} // Set a default width, can be adjusted based on design
+      height={300}
+      data={data}
+      margin={{ right: 20 }} // Adjust margin to prevent cutoff of labels
+    >
+      <CartesianGrid strokeDasharray="5 3" />
+      <XAxis dataKey="date" />
+      <YAxis />
+      <Tooltip />
+      <Line type="monotone" dataKey="totalSpent" stroke="#8884d8" />
+      <Line type="monotone" dataKey="prevat" stroke="#82ca9d" />
+    </LineChart>
+  </div>
+</div>
       </div>
     );
   }

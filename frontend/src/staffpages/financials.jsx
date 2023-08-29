@@ -428,53 +428,66 @@ return (
 
         <main className="py-10 lg:pl-72">
         <>
-      <table className="table-auto border border-collapse w-full text-left">
+        <div className="mt-8 flow-root">
+        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="inline-block min-w-full py-2 align-middle"></div>
+        <table className="min-w-full divide-y divide-gray-300">
         <thead>
           <tr className="bg-gray-100">
-            <th className="border px-4 py-2">Time Range</th>
-            <th className="border px-4 py-2">Cafe Orders</th>
-            <th className="border px-4 py-2">Sessions</th>
-            <th className="border px-4 py-2">Party Bookings</th>
-            <th className="border px-4 py-2">Total</th>
+            <th scope="col"
+                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8"
+>Time Range</th>
+            <th scope="col"
+                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8"
+>Cafe Orders</th>
+            <th scope="col"
+                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8"
+>Sessions</th>
+            <th scope="col"
+                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8"
+> Party Bookings</th>
+            <th scope="col"
+                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8"
+>Total</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-gray-200 bg-white">
           <tr>
-            <td className="border px-4 py-2">Past Hour</td>
-            <td className="border px-4 py-2">£{cafeOrders.hour.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
-            <td className="border px-4 py-2">£{sessions.hour.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
-            <td className="border px-4 py-2">£{partyBookings.hour.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
-            <td className="border px-4 py-2">£{(cafeOrders.hour.reduce((acc, order) => acc + order.Total, 0) +
+            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">Past Hour</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{cafeOrders.hour.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{sessions.hour.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{partyBookings.hour.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{(cafeOrders.hour.reduce((acc, order) => acc + order.Total, 0) +
               sessions.hour.reduce((acc, session) => acc + session.TotalSpent, 0) +
               partyBookings.hour.reduce((acc, booking) => acc + booking.Total, 0)).toFixed(2)}
             </td>
           </tr>
           <tr>
-            <td className="border px-4 py-2">Current Day</td>
-            <td className="border px-4 py-2">£{cafeOrders.day.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
-            <td className="border px-4 py-2">£{sessions.day.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
-            <td className="border px-4 py-2">£{partyBookings.day.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
-            <td className="border px-4 py-2">£{(cafeOrders.day.reduce((acc, order) => acc + order.Total, 0) +
+            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">Current Day</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{cafeOrders.day.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{sessions.day.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{partyBookings.day.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{(cafeOrders.day.reduce((acc, order) => acc + order.Total, 0) +
               sessions.day.reduce((acc, session) => acc + session.TotalSpent, 0) +
               partyBookings.day.reduce((acc, booking) => acc + booking.Total, 0)).toFixed(2)}
             </td>
           </tr>
           <tr>
-            <td className="border px-4 py-2">This Week</td>
-            <td className="border px-4 py-2">£{cafeOrders.week.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
-            <td className="border px-4 py-2">£{sessions.week.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
-            <td className="border px-4 py-2">£{partyBookings.week.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
-            <td className="border px-4 py-2">£{(cafeOrders.week.reduce((acc, order) => acc + order.Total, 0) +
+            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">This Week</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{cafeOrders.week.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{sessions.week.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{partyBookings.week.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{(cafeOrders.week.reduce((acc, order) => acc + order.Total, 0) +
               sessions.week.reduce((acc, session) => acc + session.TotalSpent, 0) +
               partyBookings.week.reduce((acc, booking) => acc + booking.Total, 0)).toFixed(2)}
             </td>
           </tr>
           <tr>
-            <td className="border px-4 py-2">This Month</td>
-            <td className="border px-4 py-2">£{cafeOrders.month.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
-            <td className="border px-4 py-2">£{sessions.month.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
-            <td className="border px-4 py-2">£{partyBookings.month.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
-            <td className="border px-4 py-2">£{(cafeOrders.month.reduce((acc, order) => acc + order.Total, 0) +
+            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">This Month</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{cafeOrders.month.reduce((acc, order) => acc + order.Total, 0).toFixed(2)}</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{sessions.month.reduce((acc, session) => acc + session.TotalSpent, 0).toFixed(2)}</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{partyBookings.month.reduce((acc, booking) => acc + booking.Total, 0).toFixed(2)}</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{(cafeOrders.month.reduce((acc, order) => acc + order.Total, 0) +
               sessions.month.reduce((acc, session) => acc + session.TotalSpent, 0) +
               partyBookings.month.reduce((acc, booking) => acc + booking.Total, 0)).toFixed(2)}
             </td>
@@ -482,10 +495,13 @@ return (
 
         </tbody>
       </table>
+      </div>
+      </div>
+
 
 
       <button
-        className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        className="mt-10 mb-10 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         onClick={downloadData}
       >
         Download Data
