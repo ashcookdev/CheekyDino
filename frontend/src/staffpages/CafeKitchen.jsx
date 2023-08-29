@@ -2,7 +2,7 @@ import {CafeOrder} from './models';
 import { DataStore } from 'aws-amplify';
 import { useState, useEffect } from 'react';
 import { format, parse, set } from 'date-fns';
-import { Messages, PartyBooking } from './models';
+import { Messages, PartyBooking, StockControl, KitchenMenu } from './models';
 import { RocketLaunchIcon, ChevronRightIcon, CircleStackIcon, CheckCircleIcon} from '@heroicons/react/20/solid';
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -84,19 +84,73 @@ export default function CafeKitchen() {
     }
     , []);
 
-    function HandleOrderConfirmed(order) {
-
-       const currentTime = new Date();
-  const options = { timeZone: 'Europe/London', hour12: false };
-  const awstime = currentTime.toLocaleString('en-GB', options).split(',')[1].trim();
-  const formattedTime = awstime.substring(0, 5);
-
-
+    async function HandleOrderConfirmed(order) {
+      // Calculate the current time and format it as a string
+      const currentTime = new Date();
+      const options = { timeZone: "Europe/London", hour12: false };
+      const awstime = currentTime
+        .toLocaleString("en-GB", options)
+        .split(",")[1]
+        .trim();
+      const formattedTime = awstime.substring(0, 5);
+    
+      // Loop through the hot items in the order
+      for (const hotItemName of order.HotItems) {
+        // Query the DataStore for the associated KitchenMenu item
+        const kitchenMenuItem = (await DataStore.query(KitchenMenu)).find(
+          (item) => item.Name === hotItemName
+        );
+    
+        // Check if a KitchenMenu item was found
+        if (kitchenMenuItem) {
+          // Initialize an array to store the number of portions remaining for each ingredient
+          const portionsRemaining = [];
+    
+          // Loop through the ingredients of the KitchenMenu item
+          for (const ingredient of kitchenMenuItem.Ingredients) {
+            // Calculate the required stock level for the ingredient
+            const requiredStockLevel =
+              ingredient.weight > 0 ? ingredient.weight : ingredient.quantity;
+    
+            // Query the DataStore for the associated StockControl item
+            const stockControl = await DataStore.query(
+              StockControl,
+              ingredient.id
+            );
+    
+            // Check if a StockControl item was found
+            if (stockControl) {
+              // Update the stock level of the StockControl item
+              await DataStore.save(
+                StockControl.copyOf(stockControl, (updated) => {
+                  updated.CurrentStockLevel -= requiredStockLevel;
+                })
+              );
+    
+              // Calculate the number of portions remaining for the ingredient and add it to the array
+              portionsRemaining.push(
+                Math.floor(stockControl.CurrentStockLevel / requiredStockLevel)
+              );
+            }
+          }
+    
+          // Calculate the minimum number of portions remaining among all ingredients
+          const minPortionsRemaining = Math.min(...portionsRemaining);
+    
+          // Update the stock level of the KitchenMenu item
+          await DataStore.save(
+            KitchenMenu.copyOf(kitchenMenuItem, (updated) => {
+              updated.StockLevel = minPortionsRemaining;
+            })
+          );
+        }
+      }
+    
       // Update record in DataStore
       DataStore.save(
         CafeOrder.copyOf(order, (updated) => {
           updated.Completed = true;
-          updated.Delieved= false;
+          updated.Delieved = false;
         })
       );
     
@@ -109,14 +163,12 @@ export default function CafeKitchen() {
           createdAt: awstime,
           sessionID: order.Sessionid,
           orderID: order.id,
-          group: ["Staff", "Kitchen", "Team Leader","Admin","Developer"],
-
-
-          
-          // ...
+          group: ["Staff", "Kitchen", "Team Leader", "Admin", "Developer"],
         })
       );
     }
+    
+    
 
         return (
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

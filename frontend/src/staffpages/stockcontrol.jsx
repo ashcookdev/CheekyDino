@@ -21,6 +21,7 @@ export default function Buildameal() {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [img, setImg] = useState("");
+  const [time, setTime] = useState("");
 
 
   const getStock = async () => {
@@ -70,6 +71,11 @@ function handleImgChange(event) {
   setImg(event.target.value);
 }
 
+function handleTimeChange(event) {
+  setTime(event.target.value);
+}
+
+
 
 
 
@@ -87,7 +93,7 @@ function handleImgChange(event) {
 
   if (confirm === true) {
     return (
-      <MealProfitMargins selectedItems={selectedItems} mealName={mealName} description= {description} category= {category} img= {img}/>
+      <MealProfitMargins selectedItems={selectedItems} mealName={mealName} description= {description} category= {category} img= {img} time= {time}/>
     )
   }
   
@@ -155,6 +161,17 @@ function handleImgChange(event) {
                   placeholder="https://www.google.com/"
                 />
               </div>
+              <label htmlFor="time" className="block text-sm font-medium leading-6 text-center text-gray-900">
+Estimated Prep Time              </label>
+              <div className="mt-2">
+                <input onChange={handleTimeChange}
+                  type="time"
+                  name="time"
+                  id="time"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  placeholder="https://www.google.com/"
+                />
+              </div>
               <button onClick={() => setNext(true)}
                 type="button"
                 className="relative mt-5 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-indigo-700 focus:outline-none items-center justify-center w-full"
@@ -202,8 +219,8 @@ function handleImgChange(event) {
   {stock.map((stock) => (
     <div
       key={stock.Name}
-      className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
-    >
+      className={`relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400 ${stock.Weight > 0 ? (stock.CurrentStockLevel > 500 ? 'bg-green-100' : 'bg-red-100') : (stock.Quantity > 0 ? (stock.CurrentStockLevel > 50 ? 'bg-green-100' : 'bg-red-100') : '')}`}
+      >    
       <div className="flex-shrink-0"></div>
       <div className="min-w-0 flex-1">
         <a href="#" className="focus:outline-none">
@@ -223,12 +240,16 @@ function handleImgChange(event) {
               {stock.Quantity} per Pack
             </p>
           ) : null}
+          <p className="truncate text-sm text-gray-500">
+            Stock Level: {stock.CurrentStockLevel}
+          </p>
           <p className="truncate text-sm text-red-500">
             Price £{stock.Price}
           </p>
 <p className="truncate text-sm text-blue-500">
  Pre VAT £{stock.PreVAT}
 </p>
+
 
 
 

@@ -54,6 +54,7 @@ type EagerStockControl = {
   readonly Supplier?: string | null;
   readonly VAT?: number | null;
   readonly CurrentStockLevel?: number | null;
+  readonly kitchenmenus?: (KitchenMenuStockControl | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -72,6 +73,7 @@ type LazyStockControl = {
   readonly Supplier?: string | null;
   readonly VAT?: number | null;
   readonly CurrentStockLevel?: number | null;
+  readonly kitchenmenus: AsyncCollection<KitchenMenuStockControl>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -316,54 +318,6 @@ export declare const Extras: (new (init: ModelInit<Extras>) => Extras) & {
   copyOf(source: Extras, mutator: (draft: MutableModel<Extras>) => MutableModel<Extras> | void): Extras;
 }
 
-type EagerBreakfast = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Breakfast, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly Name?: string | null;
-  readonly Price?: number | null;
-  readonly WhiteBread?: boolean | null;
-  readonly BrownBread?: boolean | null;
-  readonly Egg?: number | null;
-  readonly Fried?: boolean | null;
-  readonly Scrambled?: boolean | null;
-  readonly Sausage?: number | null;
-  readonly Bacon?: number | null;
-  readonly HashBrown?: number | null;
-  readonly Prep?: string | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-type LazyBreakfast = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Breakfast, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly Name?: string | null;
-  readonly Price?: number | null;
-  readonly WhiteBread?: boolean | null;
-  readonly BrownBread?: boolean | null;
-  readonly Egg?: number | null;
-  readonly Fried?: boolean | null;
-  readonly Scrambled?: boolean | null;
-  readonly Sausage?: number | null;
-  readonly Bacon?: number | null;
-  readonly HashBrown?: number | null;
-  readonly Prep?: string | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-export declare type Breakfast = LazyLoading extends LazyLoadingDisabled ? EagerBreakfast : LazyBreakfast
-
-export declare const Breakfast: (new (init: ModelInit<Breakfast>) => Breakfast) & {
-  copyOf(source: Breakfast, mutator: (draft: MutableModel<Breakfast>) => MutableModel<Breakfast> | void): Breakfast;
-}
-
 type EagerKitchenMenu = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<KitchenMenu, 'id'>;
@@ -384,7 +338,9 @@ type EagerKitchenMenu = {
   readonly ExtrasPrice?: (number | null)[] | null;
   readonly ProfitMargin?: number | null;
   readonly PriceNoVAT?: number | null;
-  readonly InStock?: string | null;
+  readonly InStock?: boolean | null;
+  readonly StockLevel?: number | null;
+  readonly StockControls?: (KitchenMenuStockControl | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -409,7 +365,9 @@ type LazyKitchenMenu = {
   readonly ExtrasPrice?: (number | null)[] | null;
   readonly ProfitMargin?: number | null;
   readonly PriceNoVAT?: number | null;
-  readonly InStock?: string | null;
+  readonly InStock?: boolean | null;
+  readonly StockLevel?: number | null;
+  readonly StockControls: AsyncCollection<KitchenMenuStockControl>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -702,6 +660,7 @@ type EagerCafeOrder = {
   readonly Notes?: string | null;
   readonly Kitchen?: boolean | null;
   readonly HotOrderPrep?: string | null;
+  readonly TotalNoVAT?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -726,6 +685,7 @@ type LazyCafeOrder = {
   readonly Notes?: string | null;
   readonly Kitchen?: boolean | null;
   readonly HotOrderPrep?: string | null;
+  readonly TotalNoVAT?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -934,6 +894,40 @@ export declare type PartyBooking = LazyLoading extends LazyLoadingDisabled ? Eag
 
 export declare const PartyBooking: (new (init: ModelInit<PartyBooking>) => PartyBooking) & {
   copyOf(source: PartyBooking, mutator: (draft: MutableModel<PartyBooking>) => MutableModel<PartyBooking> | void): PartyBooking;
+}
+
+type EagerKitchenMenuStockControl = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<KitchenMenuStockControl, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly stockControlId?: string | null;
+  readonly kitchenMenuId?: string | null;
+  readonly stockControl: StockControl;
+  readonly kitchenMenu: KitchenMenu;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyKitchenMenuStockControl = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<KitchenMenuStockControl, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly stockControlId?: string | null;
+  readonly kitchenMenuId?: string | null;
+  readonly stockControl: AsyncItem<StockControl>;
+  readonly kitchenMenu: AsyncItem<KitchenMenu>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type KitchenMenuStockControl = LazyLoading extends LazyLoadingDisabled ? EagerKitchenMenuStockControl : LazyKitchenMenuStockControl
+
+export declare const KitchenMenuStockControl: (new (init: ModelInit<KitchenMenuStockControl>) => KitchenMenuStockControl) & {
+  copyOf(source: KitchenMenuStockControl, mutator: (draft: MutableModel<KitchenMenuStockControl>) => MutableModel<KitchenMenuStockControl> | void): KitchenMenuStockControl;
 }
 
 type EagerTimeEntryStaff = {

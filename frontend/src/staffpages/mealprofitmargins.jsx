@@ -7,7 +7,7 @@ import { CurrencyPoundIcon } from '@heroicons/react/24/outline';
 import { DataStore } from 'aws-amplify';
 import { KitchenMenu } from './models';
 
-export default function Example({ selectedItems, mealName, category, img, description }) {
+export default function Example({ selectedItems, mealName, category, img, description, time }) {
   const [mealNamestate, setMealName] = useState('');
   const [selectedItemsstate, setSelectedItems] = useState([]);
   const [price, setPrice] = useState(0);
@@ -18,6 +18,7 @@ export default function Example({ selectedItems, mealName, category, img, descri
   const [imgstate, setImg] = useState('');
   const [descriptionstate, setDescription] = useState('');
     const [portions, setPortionAmount] = useState(0);
+    const [prep, setPrep] = useState(0);
 
 
   useEffect(() => {
@@ -26,6 +27,7 @@ export default function Example({ selectedItems, mealName, category, img, descri
     setCategory(category);
     setImg(img);
     setDescription(description);
+    setPrep(time);
     setItemPrices(selectedItems.map(() => 0));
     setItemValues(selectedItems.map(() => 0));
   }, [selectedItems, mealName]);
@@ -56,7 +58,7 @@ export default function Example({ selectedItems, mealName, category, img, descri
           item.Weight === 0 ? Infinity :item.Weight / itemValues[index] 
         )
       );
-      setPortionAmount(portionAmount.toFixed(2));
+      setPortionAmount(Math.floor(portionAmount));
       
 };
 
@@ -78,9 +80,11 @@ export default function Example({ selectedItems, mealName, category, img, descri
         PriceNoVAT: parseFloat(sellingPrice),
         Category: categorystate,
         imageSrc: imgstate,
+StockLevel: portions,
         Kitchen: true,
         Description: descriptionstate,
         ProfitMargin: profitMargin,
+        PrepTime: prep,
         Ingredients: JSON.stringify(
           selectedItemsstate.map((item, index) => ({
             id: item.id,
@@ -92,8 +96,7 @@ export default function Example({ selectedItems, mealName, category, img, descri
         ),
       })
     );
-    console.log(meal);
-  };
+window.location.reload();  };
 
   
   

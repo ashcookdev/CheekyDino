@@ -146,6 +146,22 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "kitchenmenus": {
+                    "name": "kitchenmenus",
+                    "isArray": true,
+                    "type": {
+                        "model": "KitchenMenuStockControl"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "stockControl"
+                        ]
+                    }
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -809,135 +825,6 @@ export const schema = {
                 }
             ]
         },
-        "Breakfast": {
-            "name": "Breakfast",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "Name": {
-                    "name": "Name",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "Price": {
-                    "name": "Price",
-                    "isArray": false,
-                    "type": "Float",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "WhiteBread": {
-                    "name": "WhiteBread",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "BrownBread": {
-                    "name": "BrownBread",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "Egg": {
-                    "name": "Egg",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "Fried": {
-                    "name": "Fried",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "Scrambled": {
-                    "name": "Scrambled",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "Sausage": {
-                    "name": "Sausage",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "Bacon": {
-                    "name": "Bacon",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "HashBrown": {
-                    "name": "HashBrown",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "Prep": {
-                    "name": "Prep",
-                    "isArray": false,
-                    "type": "AWSTime",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                }
-            },
-            "syncable": true,
-            "pluralName": "Breakfasts",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "auth",
-                    "properties": {
-                        "rules": [
-                            {
-                                "allow": "private",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
-        },
         "KitchenMenu": {
             "name": "KitchenMenu",
             "fields": {
@@ -1051,9 +938,32 @@ export const schema = {
                 "InStock": {
                     "name": "InStock",
                     "isArray": false,
-                    "type": "String",
+                    "type": "Boolean",
                     "isRequired": false,
                     "attributes": []
+                },
+                "StockLevel": {
+                    "name": "StockLevel",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "StockControls": {
+                    "name": "StockControls",
+                    "isArray": true,
+                    "type": {
+                        "model": "KitchenMenuStockControl"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "kitchenMenu"
+                        ]
+                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -2002,6 +1912,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "TotalNoVAT": {
+                    "name": "TotalNoVAT",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -2903,6 +2820,104 @@ export const schema = {
                 }
             ]
         },
+        "KitchenMenuStockControl": {
+            "name": "KitchenMenuStockControl",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "stockControlId": {
+                    "name": "stockControlId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "kitchenMenuId": {
+                    "name": "kitchenMenuId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "stockControl": {
+                    "name": "stockControl",
+                    "isArray": false,
+                    "type": {
+                        "model": "StockControl"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetNames": [
+                            "stockControlId"
+                        ]
+                    }
+                },
+                "kitchenMenu": {
+                    "name": "kitchenMenu",
+                    "isArray": false,
+                    "type": {
+                        "model": "KitchenMenu"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetNames": [
+                            "kitchenMenuId"
+                        ]
+                    }
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "KitchenMenuStockControls",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byStockControl",
+                        "fields": [
+                            "stockControlId"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byKitchenMenu",
+                        "fields": [
+                            "kitchenMenuId"
+                        ]
+                    }
+                }
+            ]
+        },
         "TimeEntryStaff": {
             "name": "TimeEntryStaff",
             "fields": {
@@ -3005,5 +3020,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "a6b5234fce90d7dcf9f4cf394ba56fe1"
+    "version": "95e807865644ac875dadecb8a0347682"
 };

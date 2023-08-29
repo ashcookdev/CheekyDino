@@ -77,6 +77,7 @@ const prepTime = prep.toString();
           Delieved: !kitchen,
           Kitchen: kitchen,
           HotOrderPrep: prepTime,
+          KitchenMenuId: orders.map(item => item.ID),
         })
       );
       

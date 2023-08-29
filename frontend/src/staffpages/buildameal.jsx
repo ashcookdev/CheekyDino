@@ -42,6 +42,7 @@ export default function EnterStock() {
         Quantity: newQuantity,
         PreVAT: beforeVAT,
         VAT: difference,
+        CurrentStockLevel: newQuantity === 0 ? newWeight : newQuantity,
 
 
       })

@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import Kitchen from "./KitchenHome";
 import Timeslot from "./todaysbookings";
 import Home from "./DashBoard";
+import { checkStockLevel } from "./tillstock";
+
 
 
 
@@ -104,17 +106,20 @@ useEffect(() => {
 
 
   const handleProductClick = async (product) => {
+    // Check the stock level of the product
+    const inStock = await checkStockLevel(product.id);
+    if (!inStock) {
+      alert("This item is not in stock");
+      return;
+    }
+  
     // Add the product item to the order
-    setOrder(order => [...order, product]);
-
+    setOrder((order) => [...order, product]);
+  
     // Update the total price
-    setTotal(total => total + product.Price);
+    setTotal((total) => total + product.Price);
     // add all prep times together for kitchen orders
-    
-    
-
-
-}
+  };
 
   const handleDeleteClick = async (index) => {
     // Remove the item from the order
@@ -449,25 +454,34 @@ useEffect(() => {
             )}
           </div>
           {ShowKidsMeal && (
-            <div className="mt-4 border-b-2 border-gray-200 pb-4">
-              <h3 className="font-bold text-lg mb-4">Kids Menu:</h3>
-              <div className="grid grid-cols-4 gap-4">
-                {/* Loop through the hotDrinks object and generate buttons for each drink here */}
-                {kitchenMenu.map(product => (
-                  <button
-                  key={product.id}
-                  className="w-full h-full bg-green-200 rounded-md"
-                  onClick={() => {
-                    handleProductClick(product);
-                    setShowKidsMeal(false);
-                    setShowExtras(true);
-                  }}
-                >
-                  {product.Name} (£{product.Price})
-                </button>
-                ))}
-              </div>
-            </div>)}
+  <div className="mt-4 border-b-2 border-gray-200 pb-4">
+    <h3 className="font-bold text-lg mb-4">Kids Menu:</h3>
+    <div className="grid grid-cols-4 gap-4">
+      {/* Loop through the hotDrinks object and generate buttons for each drink here */}
+      {kitchenMenu.map((product) => (
+        <button
+          key={product.id}
+          className={`w-full h-full rounded-md ${
+            product.StockLevel < 5
+              ? "bg-red-200 animate-pulse"
+              : product.StockLevel < 10
+              ? "bg-yellow-200"
+              : "bg-green-200"
+          }`}
+          onClick={() => {
+            handleProductClick(product);
+            setShowKidsMeal(false);
+            setShowExtras(true);
+          }}
+        >
+          {product.Name} (£{product.Price})
+          <p className="font-italic"> {product.StockLevel} in Stock </p>
+        </button>
+      ))}
+    </div>
+  </div>
+)}
+
             {ShowExtras && (
               <div className="mt-4 border-b-2 border-gray-200 pb-4">
                 <h3 className="font-bold text-lg mb-4">Extras:</h3>

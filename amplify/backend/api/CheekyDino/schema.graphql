@@ -16,6 +16,7 @@ type StockControl @model @auth(rules: [{allow: private}]) {
   Supplier: String
   VAT: Float
   CurrentStockLevel: Int
+  kitchenmenus: [KitchenMenu] @manyToMany(relationName: "KitchenMenuStockControl")
 }
 
 type ClockIn @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -81,21 +82,6 @@ type Extras @model @auth(rules: [{allow: private}]) {
   Kitchen: Boolean
 }
 
-type Breakfast @model @auth(rules: [{allow: private}]) {
-  id: ID!
-  Name: String
-  Price: Float
-  WhiteBread: Boolean
-  BrownBread: Boolean
-  Egg: Int
-  Fried: Boolean
-  Scrambled: Boolean
-  Sausage: Int
-  Bacon: Int
-  HashBrown: Int
-  Prep: AWSTime
-}
-
 type KitchenMenu @model @auth(rules: [{allow: private}]) {
   id: ID!
   Name: String
@@ -112,7 +98,9 @@ type KitchenMenu @model @auth(rules: [{allow: private}]) {
   ExtrasPrice: [Float]
   ProfitMargin: Float
   PriceNoVAT: Float
-  InStock: String
+  InStock: Boolean
+  StockLevel: Int
+  StockControls: [StockControl] @manyToMany(relationName: "KitchenMenuStockControl")
 }
 
 type TimeEntry @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -208,6 +196,8 @@ type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
   Notes: String
   Kitchen: Boolean
   HotOrderPrep: String
+  TotalNoVAT: Float
+  KitchenMenuId: [String]
 }
 
 type Messages @model @auth(rules: [{allow: private}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartHosts"], operations: [read, create]}, {allow: groups, groups: ["Staff"], operations: [read, create]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: owner, operations: [create, read]}]) {
