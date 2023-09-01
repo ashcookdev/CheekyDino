@@ -3,7 +3,7 @@ import { DataStore } from 'aws-amplify';
 import { StockControl, KitchenMenu } from './models';
 import { useNavigate } from 'react-router-dom';
 import MealProfitMargins from './mealprofitmargins';
-import { StockControlEdit } from './stockcontroledit';
+
 export default function Buildameal() {
 
 
@@ -25,8 +25,7 @@ export default function Buildameal() {
   const [selectedStock, setSelectedStock] = useState(null);
   const [selectedCases, setSelectedCases] = useState(1);
   const [price, setPrice] = useState(0);
-  const [menuExtra, setMenuExtra] = useState(null);
-  const [selectedExtras, setSelectedExtras] = useState([]);
+
 
   const getStock = async () => {
 
@@ -68,11 +67,9 @@ function handleDescriptionChange(event) {
   setDescription(event.target.value);
 }
 
-function AddExtras(menu) {
-  setMenuExtra(menu);
-  console.log(selectedItems);}
-
-
+function handleImgChange(event) {
+  setImg(event.target.value);
+}
 
 function handleTimeChange(event) {
   setTime(event.target.value);
@@ -96,9 +93,6 @@ function handleConfirmation(stock) {
   
   const newWeightOrQuantity = cases * (stock.Weight > 0 ? stock.Weight : stock.Quantity);
 
-  
-
-
   //passInt to convert string to number
    
     console.log(newWeightOrQuantity);
@@ -108,14 +102,6 @@ function handleConfirmation(stock) {
     const preVAT = parseFloat(newPreVAT)
     console.log(preVAT);
     console.log(newPreVAT);
-
-    StockControlEdit(stock, newWeightOrQuantity, newPrice, preVAT, cases);
-
-
-   
-
-  
-
     
 
   // update the weight or quantity of the stock item
@@ -125,40 +111,24 @@ function handleConfirmation(stock) {
   DataStore.save(
     StockControl.copyOf(selectedStock, (updated) => {
       updated.Price = newPrice;
-   updated.PreVAT = preVAT;
+      updated.PreVAT = preVAT;
 
-     updated.CurrentStockLevel = newWeightOrQuantity;
+      updated.CurrentStockLevel = newWeightOrQuantity;
       updated.Cases = cases;
       
 
-})
+    })
   );
   console.log('Price updated');
   setSelectedStock(null);
   setNext(false);
-}
-
-function handleExtrasConfirm() {
-
-  DataStore.save(
-    KitchenMenu.copyOf(menuExtra, (updated) => {
-      updated.Extras = selectedExtras;
-      updated.ExtrasPrice = selectedExtras.Price;
-    })
-
-  );
-  console.log('Extras updated');
-
-  setMenuExtra(null);
+  window.location.reload();
 }
 
 
 
 
-function handleSelectExtras(event) {
-  const selectedItem = event.target.value;
-  setSelectedExtras((prevSelectedItems) => [...prevSelectedItems, selectedItem]);
-}
+
 
 
 
@@ -192,8 +162,7 @@ function handleSelectExtras(event) {
             onClick={handleButtonClick}
             className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none items-center justify-center w-full"
           >
-            Build A Product
-          </button>
+Add Your Extras          </button>
           {showInput && (
             <div className='mt-5'>
               <label htmlFor="name" className="block text-sm font-medium leading-6 text-center text-gray-900">
@@ -208,43 +177,10 @@ function handleSelectExtras(event) {
                   placeholder="Burger and Chips"
                 />
               </div>
-              <label htmlFor="description" className="block text-sm font-medium leading-6 text-center text-gray-900">
-                Category
-              </label>
-              <div className="mt-2">
-                <input onChange={handleCategoryChange}
-                  type="text"
-                  name="category"
-                  id="category"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="eg. Kids Meal"
-                />
-              </div>
-              <label htmlFor="description" className="block text-sm font-medium leading-6 text-center text-gray-900">
-                Description
-              </label>
-              <div className="mt-2">
-                <input onChange={handleDescriptionChange}
-                  type="text"
-                  name="description"
-                  id="description"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="Burger and Chips"
-                />
-              </div>
+              
+             
               
               
-              <label htmlFor="time" className="block text-sm font-medium leading-6 text-center text-gray-900">
-Estimated Prep Time              </label>
-              <div className="mt-2">
-                <input onChange={handleTimeChange}
-                  type="time"
-                  name="time"
-                  id="time"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="https://www.google.com/"
-                />
-              </div>
               <button onClick={() => setNext(true)}
                 type="button"
                 className="relative mt-5 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-indigo-700 focus:outline-none items-center justify-center w-full"
@@ -273,11 +209,6 @@ Estimated Prep Time              </label>
 </button>
 </>
 )}
-
-
-            
-
-
 
 </div>
 
@@ -324,12 +255,12 @@ Estimated Prep Time              </label>
             Price £{stock.Price}
           </p>
 <p className="truncate text-sm text-blue-500">
- Pre VAT £{stock.PreVAT.toFixed(2)}
+ Pre VAT £{stock.PreVAT}
 </p>
   
 <button onClick={() => EditStock(stock)}
   type="button"
-  className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-green-700 focus:outline-none"
+  className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none"
 >
   Edit
 </button>
@@ -405,10 +336,7 @@ Cases      </label>
       )}
     </div>
     
-
-    
   ))}
-  
 </div>
 
 </div>
@@ -416,62 +344,35 @@ Cases      </label>
 
 <div className="shrink-0 border-t border-gray-200 px-4 py-6 sm:px-6 lg:w-96 lg:border-l lg:border-t-0 lg:pr-8 xl:pr-6">
   {/* Right column area */}
- 
+  
   <h2 className="text-lg font-medium text-gray-900 text-center">Menu Items</h2>
 <div className="px-4 py-6 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">
-<div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
-  {menu.map((menuItem) => (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+  {menu.map((stock) => (
     <div
-      key={menuItem.Name}
+      key={stock.Name}
       className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-indigo-100 px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
     >
       <div className="flex-shrink-0"></div>
       <div className="min-w-0 flex-1">
-        <span className=" inset-0" aria-hidden="true" />
-        <p className="text-sm font-medium text-gray-900">{menuItem.Name}</p>
-        <p className="truncate text-sm text-red-500">Price £{menuItem.Price}</p>
-        <button
-          onClick={() => AddExtras(menuItem)}
-          type="button"
-          className="relative inline-flex mt-3 items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none"
-        >
-          Add Extras
-        </button>
-        <div>
-          {menuExtra === menuItem && (
-            // select menu items to add to the menu
-            <div>
-              <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
-                Add Products
-              </label>
-              <select  onChange={handleSelectExtras}
-                id="extras"
-                name="extras"
+        <a href="#" className="focus:outline-none">
+          <span className="absolute inset-0" aria-hidden="true" />
+          <p className="text-sm font-medium text-gray-900">
+            {stock.Name}
+          </p>
+          
+          <p className="truncate text-sm text-red-500">
+            Price £{stock.Price}
+          </p>
 
-                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                defaultValue="extras"
-              >
-                {menu.map((menuItem) => (
-                  <option key={menuItem.Name}>{menuItem.Name}</option>
-                ))}
-              </select>
-              <div>
-               
-        {selectedExtras.map((item) => (
-          <div key={item}  className='mt-3'>
-            <li> {item} </li></div>
-        ))}
-      </div>
-      <button className="relative inline-flex mt-3 items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none"
- onClick={handleExtrasConfirm}>Confirm</button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+
+
+
+        </a>
+      </div>          </div>
   ))}
-</div>
   
+  </div>
   </div>
   </div>
   </div>

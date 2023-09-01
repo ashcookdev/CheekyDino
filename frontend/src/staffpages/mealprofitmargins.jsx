@@ -53,13 +53,17 @@ export default function Example({ selectedItems, mealName, category, img, descri
       return newItemValues;
     });
     // calculate the number of portions in stock
-    const portionAmount = Math.min(
-        ...selectedItemsstate.map((item, index) =>
-          item.Weight === 0 ? Infinity :item.Weight / itemValues[index] 
-        )
-      );
-      setPortionAmount(Math.floor(portionAmount));
-      
+    const lowestPortionAmount = Math.min(
+      ...selectedItemsstate.map((item, index) =>
+        item.Quantity === 0
+          ? item.Weight === 0
+            ? 0
+            : Math.floor(item.Weight / itemValues[index])
+          : Math.floor(item.Quantity / itemValues[index])
+      )
+    );
+  
+    setPortionAmount(lowestPortionAmount);
 };
 
 
@@ -84,7 +88,7 @@ StockLevel: portions,
         Kitchen: true,
         Description: descriptionstate,
         ProfitMargin: profitMargin,
-        PrepTime: prep,
+        Prep: prep,
         Ingredients: JSON.stringify(
           selectedItemsstate.map((item, index) => ({
             id: item.id,

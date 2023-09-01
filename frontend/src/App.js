@@ -195,7 +195,6 @@ function App() {
             <Route path= "/stockcontrol" element={<StockControl />} />
             <Route path="/buildameal" element={<BuildAMeal />} />
             <Route path="/mealprofit" element={<MealProfit />} />
-
           </>
         )}
         

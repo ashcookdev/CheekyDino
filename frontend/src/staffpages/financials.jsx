@@ -1,5 +1,5 @@
 import { DataStore } from 'aws-amplify';
-import { CafeOrder, Sessions, PartyBooking } from './models';
+import { CafeOrder, Sessions, PartyBooking, Staff } from './models';
 import React, { useState, useEffect } from 'react';
 import { formatISO } from 'date-fns';
 import GraphFinance from './graphfinance';
@@ -24,6 +24,8 @@ import {
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CogIcon } from '@heroicons/react/20/solid';
+import Stats from './stats';
+
 
 
 function classNames(...classes) {
@@ -194,8 +196,25 @@ setTotalThisMonth(totalSessionsThisMonth + totalPartyBookingsThisMonth);
           week: partyBookingsThisWeek,
           month: partyBookingsThisMonth,
         });
+
+        const allStaff = await DataStore.query(Staff);
+
+        const allStaffToday = allStaff.filter(
+          staff => new Date(staff.ShiftStart) >= today && new Date(staff.ShiftStart) <= now
+        );
+  
+        console.log(allStaffToday);
+      
+
+        
+
         
     }
+
+    // find all staff and shifts for today and get hourly rate 
+
+      
+
 
     getData();
   }, []);
@@ -427,6 +446,7 @@ return (
         </div>
 
         <main className="py-10 lg:pl-72">
+          <Stats />
         <>
         <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

@@ -9,6 +9,7 @@ import { Sessions } from './models'
 import { PartyBooking } from './models'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import Online from './online'
+import Stats from './stats'
 
 import {
   Bars3Icon,
@@ -175,15 +176,7 @@ setTotalAmount(totalAmount)    }
 
     console.log(totalAmount)
 
-    const stats = [
-        { name: 'Orders Today', value: order.length },
-        { name: 'Current Orders', value: currentorder.length, },
-        { name: 'Tables Occupied', value: occupiedTables.length },
-        { name: 'Future Bookings Today', value: futureBookings.length },
-        { name: 'Guests in Branch', value: currentGuests, },
-
-        { name: 'Total', value: "£" + totalAmount },
-    ]
+    
 
 
     const [steps, setSteps] = useState([
@@ -437,31 +430,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
 
                     {/* Stats */}
                     <div className="border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5">
-                        <p> {formattedTime} | {formattedDate} </p>
-                        <dl className="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:px-2 xl:px-0">
-                            {stats.map((stat, statIdx) => (
-                                <div
-                                    key={stat.name}
-                                    className={classNames(
-                                        statIdx % 2 === 1 ? 'sm:border-l' : statIdx === 2 ? 'lg:border-l' : '',
-                                        'flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8'
-                                    )}
-                                >
-                                    <dt className="text-sm font-medium leading-6 text-gray-500">{stat.name}</dt>
-                                    <dd
-                                        className={classNames(
-                                            stat.changeType === 'negative' ? 'text-rose-600' : 'text-gray-700',
-                                            'text-xs font-medium'
-                                        )}
-                                    >
-                                        {stat.change}
-                                    </dd>
-                                    <dd className="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">
-                                        {stat.value}
-                                    </dd>
-                                </div>
-                            ))}
-                        </dl>
+<Stats/>                            
                     </div>
 
                     <div

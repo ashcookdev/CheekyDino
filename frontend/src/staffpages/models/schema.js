@@ -162,6 +162,13 @@ export const schema = {
                         ]
                     }
                 },
+                "Cases": {
+                    "name": "Cases",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -1919,6 +1926,14 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "KitchenMenuId": {
+                    "name": "KitchenMenuId",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -3020,5 +3035,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "95e807865644ac875dadecb8a0347682"
+    "version": "ef653f22630dc1d06b44dad296097d83"
 };

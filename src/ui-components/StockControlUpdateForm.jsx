@@ -32,6 +32,7 @@ export default function StockControlUpdateForm(props) {
     Supplier: "",
     VAT: "",
     CurrentStockLevel: "",
+    Cases: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Weight, setWeight] = React.useState(initialValues.Weight);
@@ -43,6 +44,7 @@ export default function StockControlUpdateForm(props) {
   const [CurrentStockLevel, setCurrentStockLevel] = React.useState(
     initialValues.CurrentStockLevel
   );
+  const [Cases, setCases] = React.useState(initialValues.Cases);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = stockControlRecord
@@ -56,6 +58,7 @@ export default function StockControlUpdateForm(props) {
     setSupplier(cleanValues.Supplier);
     setVAT(cleanValues.VAT);
     setCurrentStockLevel(cleanValues.CurrentStockLevel);
+    setCases(cleanValues.Cases);
     setErrors({});
   };
   const [stockControlRecord, setStockControlRecord] = React.useState(
@@ -80,6 +83,7 @@ export default function StockControlUpdateForm(props) {
     Supplier: [],
     VAT: [],
     CurrentStockLevel: [],
+    Cases: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -115,6 +119,7 @@ export default function StockControlUpdateForm(props) {
           Supplier,
           VAT,
           CurrentStockLevel,
+          Cases,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -178,6 +183,7 @@ export default function StockControlUpdateForm(props) {
               Supplier,
               VAT,
               CurrentStockLevel,
+              Cases,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -213,6 +219,7 @@ export default function StockControlUpdateForm(props) {
               Supplier,
               VAT,
               CurrentStockLevel,
+              Cases,
             };
             const result = onChange(modelFields);
             value = result?.Weight ?? value;
@@ -248,6 +255,7 @@ export default function StockControlUpdateForm(props) {
               Supplier,
               VAT,
               CurrentStockLevel,
+              Cases,
             };
             const result = onChange(modelFields);
             value = result?.Quantity ?? value;
@@ -283,6 +291,7 @@ export default function StockControlUpdateForm(props) {
               Supplier,
               VAT,
               CurrentStockLevel,
+              Cases,
             };
             const result = onChange(modelFields);
             value = result?.Price ?? value;
@@ -318,6 +327,7 @@ export default function StockControlUpdateForm(props) {
               Supplier,
               VAT,
               CurrentStockLevel,
+              Cases,
             };
             const result = onChange(modelFields);
             value = result?.PreVAT ?? value;
@@ -349,6 +359,7 @@ export default function StockControlUpdateForm(props) {
               Supplier: value,
               VAT,
               CurrentStockLevel,
+              Cases,
             };
             const result = onChange(modelFields);
             value = result?.Supplier ?? value;
@@ -384,6 +395,7 @@ export default function StockControlUpdateForm(props) {
               Supplier,
               VAT: value,
               CurrentStockLevel,
+              Cases,
             };
             const result = onChange(modelFields);
             value = result?.VAT ?? value;
@@ -419,6 +431,7 @@ export default function StockControlUpdateForm(props) {
               Supplier,
               VAT,
               CurrentStockLevel: value,
+              Cases,
             };
             const result = onChange(modelFields);
             value = result?.CurrentStockLevel ?? value;
@@ -434,6 +447,42 @@ export default function StockControlUpdateForm(props) {
         errorMessage={errors.CurrentStockLevel?.errorMessage}
         hasError={errors.CurrentStockLevel?.hasError}
         {...getOverrideProps(overrides, "CurrentStockLevel")}
+      ></TextField>
+      <TextField
+        label="Cases"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={Cases}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Weight,
+              Quantity,
+              Price,
+              PreVAT,
+              Supplier,
+              VAT,
+              CurrentStockLevel,
+              Cases: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Cases ?? value;
+          }
+          if (errors.Cases?.hasError) {
+            runValidationTasks("Cases", value);
+          }
+          setCases(value);
+        }}
+        onBlur={() => runValidationTasks("Cases", Cases)}
+        errorMessage={errors.Cases?.errorMessage}
+        hasError={errors.Cases?.hasError}
+        {...getOverrideProps(overrides, "Cases")}
       ></TextField>
       <Flex
         justifyContent="space-between"

@@ -55,6 +55,7 @@ type EagerStockControl = {
   readonly VAT?: number | null;
   readonly CurrentStockLevel?: number | null;
   readonly kitchenmenus?: (KitchenMenuStockControl | null)[] | null;
+  readonly Cases?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -74,6 +75,7 @@ type LazyStockControl = {
   readonly VAT?: number | null;
   readonly CurrentStockLevel?: number | null;
   readonly kitchenmenus: AsyncCollection<KitchenMenuStockControl>;
+  readonly Cases?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -661,6 +663,7 @@ type EagerCafeOrder = {
   readonly Kitchen?: boolean | null;
   readonly HotOrderPrep?: string | null;
   readonly TotalNoVAT?: number | null;
+  readonly KitchenMenuId?: (string | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -686,6 +689,7 @@ type LazyCafeOrder = {
   readonly Kitchen?: boolean | null;
   readonly HotOrderPrep?: string | null;
   readonly TotalNoVAT?: number | null;
+  readonly KitchenMenuId?: (string | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

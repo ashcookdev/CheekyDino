@@ -17,6 +17,7 @@ import Kitchen from "./KitchenHome";
 import Timeslot from "./todaysbookings";
 import Home from "./DashBoard";
 import { checkStockLevel } from "./tillstock";
+import { motion } from 'framer-motion';
 
 
 
@@ -37,22 +38,15 @@ export default function Till() {
   const [arrival, setArrival] = useState(false);
   const [tablee, setTablee] = useState(false);
   const [session, setSession] = useState(false);
-  const [hotDrinks, setHotDrinks] = useState([]);
-  const [showHotDrinks, setShowHotDrinks] = useState(false);
   const [childName, setChildName] = useState("");
-  const [coldDrinks, setColdDrinks] = useState([]);
-  const [confectionary, setConfectionary] = useState([]);
-  const [showConfectionary, setShowConfectionary] = useState(false);
-  const [ShowKidsMeal, setShowKidsMeal] = useState(false); 
 
 const [kitchenMenu, setKitchenMenu] = useState([]);
 const [partyNow, setPartyNow] = useState(false);
 const [confirm, setConfirm] = useState(false);
 const [selectedProduct, setSelectedProduct] = useState(null);
-const [extras, setExtras] = useState([]);
-const [ShowExtras, setShowExtras] = useState(false);
 const [kitchen, setKitchen] = useState(false);
 const [home, setHome] = useState(false);
+const [selectedCategory, setSelectedCategory] = useState(null);
 
 
 
@@ -60,14 +54,6 @@ const navigate = useNavigate();
 
 console.log(order)
 
-async function getExtras() {
-  const allExtras = await DataStore.query(Extras);
-  setExtras(allExtras);
-}
-
-useEffect(() => {
-  getExtras();
-}, []);
 
 
 
@@ -83,17 +69,29 @@ useEffect(() => {
     fetchKitchenMeal();
   }, []);
 
+
+  const categories = [...new Set(kitchenMenu.map((item) => item.Category))];
+  const [selectedItem, setSelectedItem] = useState(null);
+  
+  const handleItemClick = async (item) => {
+    setSelectedItem(item);
+
+    // Pass the selected item to the handleProductClick function
+    await handleProductClick(item);
+  };
+
+
+  const filteredData = kitchenMenu.filter(
+    (item) => item.Category === selectedCategory
+  );
+
+    const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+    setSelectedItem(null);
+  };
+  
   //get all party bookings for today
-  async function fetchHotDrinks() {
-    const allHotDrinks = await DataStore.query(HotDrinks);
-    setHotDrinks(allHotDrinks);
-  }
-
-
-  useEffect(() => {
-    fetchHotDrinks();
-  }
-    , []);
+  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -105,19 +103,19 @@ useEffect(() => {
 
 
 
-  const handleProductClick = async (product) => {
+  const handleProductClick = async (item) => {
     // Check the stock level of the product
-    const inStock = await checkStockLevel(product.id);
+    const inStock = await checkStockLevel(item.id);
     if (!inStock) {
       alert("This item is not in stock");
       return;
     }
   
     // Add the product item to the order
-    setOrder((order) => [...order, product]);
+    setOrder((order) => [...order, item]);
   
     // Update the total price
-    setTotal((total) => total + product.Price);
+    setTotal((total) => total + item.Price);
     // add all prep times together for kitchen orders
   };
 
@@ -167,24 +165,10 @@ useEffect(() => {
 
 
 
-  async function fetchColdDrinks() {
-    const allColdDrinks = await DataStore.query(SoftDrinks);
-    setColdDrinks(allColdDrinks);
-  }
+  
 
-  useEffect(() => {
-    fetchColdDrinks();
-  }, []);
-
-  async function fetchConfectionary() {
-    const allConfectionary = await DataStore.query(Confectionary);
-    setConfectionary(allConfectionary);
-  }
-
-  useEffect(() => {
-    fetchConfectionary();
-  }, []);
-
+  
+  
 
   if (scanner === true) {
     return (<BarCodeScanner />);
@@ -246,7 +230,15 @@ useEffect(() => {
     }
   };
 
-  
+  const colors = [
+    'bg-red-500',
+    'bg-yellow-500',
+    'bg-green-500',
+    'bg-blue-500',
+    'bg-indigo-500',
+    'bg-purple-500',
+    'bg-pink-500',
+  ];
   
 
 
@@ -279,46 +271,57 @@ useEffect(() => {
       </button>
     ))}
   </div>
-  <button
-    className="w-16 h-16 bg-pink-500 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
-    onClick={() => setHome(true)}
-  >
-    Home
-  </button>
-  <div className="flex">
-    <button
-      className="w-16 h-16 bg-green-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
-      onClick={() => setScanner(true)}
+    <motion.button
+      className="w-16 h-16 bg-pink-500 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
+      onClick={() => setHome(true)}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
     >
-      Scan QR Code
-    </button>
-    <button
-      className="w-16 h-16 bg-blue-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
-      onClick={() => setArrival(true)}
-    >
-      Make Booking
-    </button>
-    <button
-      className="w-16 h-16 bg-red-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
-      onClick={() => setTablee(true)}
-    >
-      Tables
-    </button>
-    <button
-      className="w-16 h-16 bg-purple-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
-      onClick={() => setSession(true)}
-    >
-      Sessions
-    </button>
-    <button
-      className="w-16 h-16 bg-green-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
-      onClick={() => setKitchen(true)}
-    >
-      Kitchen
-    </button>
+      Home
+    </motion.button>
+    <div className="flex">
+      <motion.button
+        className="w-16 h-16 bg-green-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
+        onClick={() => setScanner(true)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        Scan QR Code
+      </motion.button>
+      <motion.button
+        className="w-16 h-16 bg-blue-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
+        onClick={() => setArrival(true)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        Make Booking
+      </motion.button>
+      <motion.button
+        className="w-16 h-16 bg-red-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
+        onClick={() => setTablee(true)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        Tables
+      </motion.button>
+      <motion.button
+        className="w-16 h-16 bg-purple-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
+        onClick={() => setSession(true)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        Sessions
+      </motion.button>
+      <motion.button
+        className="w-16 h-16 bg-green-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
+        onClick={() => setKitchen(true)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        Kitchen
+      </motion.button>
+    </div>
   </div>
-</div>
-
 
      
     <div className="flex justify-between">
@@ -327,185 +330,70 @@ useEffect(() => {
       <div className="mt-4 border-b-2 border-gray-200 pb-4">
         <h2 className="font-bold text-lg mb-4">Menu:</h2>
         <div className="grid grid-cols-4 gap-4">
-          <button
-            className="w-full h-full bg-red-500 rounded-md p-2"
-            onClick={() =>
-              setShowSoftDrinks(true) ||
-              setShowHotDrinks(false) ||
-              setShowHotFood(false) ||
-              setShowKidsMeal(false)||
-              setShowConfectionary(false)||
-              setShowExtras(false)
-
-            }
+      
+        {categories.map((category, index) => (
+          <motion.button
+            key={category}
+            onClick={() => handleCategoryClick(category)}
+            className={`${
+              colors[index % colors.length]
+            } text-white font-bold py-2 px-4 rounded-full shadow-md`}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
-           Soft Drinks
-          </button>
-          <button
-            className="w-full h-full bg-blue-500 rounded-md p-2"
-            onClick={() =>
-              setShowHotDrinks(true) ||
-              setShowSoftDrinks(false) ||
-              setShowHotFood(false) ||
-              setShowKidsMeal(false)||
-              setShowConfectionary(false)||
-              setShowExtras(false)
-
-            }
-          >
-          Hot Drinks
-          </button>
-          <button
-            className="w-full h-full bg-orange-500 rounded-md p-2"
-            onClick={() =>
-              setShowKidsMeal(true) ||
-              setShowHotDrinks(false) ||
-              setShowSoftDrinks(false) ||
-              setShowHotFood(false)||
-              setShowConfectionary(false)
-
-            }
-          >
-           Kitchen Food
-          </button>
-
-          <button
-            className="w-full h-full bg-green-500 rounded-md p-2"
-            onClick={() =>
-              setShowConfectionary(true) ||
-              setShowSoftDrinks(false) ||
-              setShowHotDrinks(false) ||
-              setShowHotFood(false) ||
-              setShowKidsMeal(false)||
-              setShowKidsMeal(false)||
-              setShowExtras(false)
-            }
-          >
-            Confectionary
-            
-          </button>
-          <button
-            className="w-full h-full bg-yellow-500 rounded-md p-2"
-            onClick={() =>
-              setShowHotFood(true) ||
-              setShowSoftDrinks(false) ||
-              setShowHotDrinks(false) ||
-              setShowConfectionary(false)||
-              setShowExtras(false)
-            }
-          >
-            Hot Food
-          </button>
-        </div>
+            {category}
+          </motion.button>
+        ))}
       </div>
-    
-            {showSoftDrinks && (
-              <div className="mt-4 border-b-2 border-gray-200 pb-4">
-                <h3 className="font-bold text-lg mb-4">Soft Drinks:</h3>
-                <div className="grid grid-cols-4 gap-4">
-                  {coldDrinks.map(product => (
-                    <button
-                      key={product.id}
+      {selectedCategory && (
+        <div className="mt-10">
+          {filteredData.map((item) => {
+            let stockColor;
+            if (item.StockLevel < 5) {
+              stockColor = 'bg-red-500';
+            } else if (item.StockLevel >= 5 && item.StockLevel <= 10) {
+              stockColor = 'bg-yellow-500';
+            } else {
+              stockColor = 'bg-green-500';
+            }
 
-                      className="w-full h-full bg-blue-200 rounded-md"
-                      onClick={() => handleProductClick(product, "Drink Item")}
-                    >
-                      {product.Name} £{product.Price}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-            {showHotDrinks && (
-              <div className="mt-4 border-b-2 border-gray-200 pb-4">
-                <h3 className="font-bold text-lg mb-4">Hot Drinks:</h3>
-                <div className="grid grid-cols-4 gap-4">
-                  {/* Loop through the hotDrinks object and generate buttons for each drink here */}
-                  {hotDrinks.map(product => (
-                    <button
-                      key={product.id}
-
-                      className="w-full h-full bg-green-200 rounded-md"
-                      onClick={() => handleProductClick(product, "Drink Item")}
-                    >
-                      {product.Name} (£{product.Price})
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-            {showConfectionary && (
-              <div className="mt-4 border-b-2 border-gray-200 pb-4">
-                <h3 className="font-bold text-lg mb-4">Sweets & Cakes:</h3>
-                <div className="grid grid-cols-4 gap-4">
-                  {/* Loop through the hotDrinks object and generate buttons for each drink here */}
-                  {confectionary.map(product => (
-                    <button
-                      key={product.id}
-
-                      className="w-full h-full bg-green-200 rounded-md"
-                      onClick={() => handleProductClick(product, "Drink Item")}
-                    >
-                      {product.Name} (£{product.Price})
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-          {ShowKidsMeal && (
-  <div className="mt-4 border-b-2 border-gray-200 pb-4">
-    <h3 className="font-bold text-lg mb-4">Kids Menu:</h3>
-    <div className="grid grid-cols-4 gap-4">
-      {/* Loop through the hotDrinks object and generate buttons for each drink here */}
-      {kitchenMenu.map((product) => (
-        <button
-          key={product.id}
-          className={`w-full h-full rounded-md ${
-            product.StockLevel < 5
-              ? "bg-red-200 animate-pulse"
-              : product.StockLevel < 10
-              ? "bg-yellow-200"
-              : "bg-green-200"
-          }`}
-          onClick={() => {
-            handleProductClick(product);
-            setShowKidsMeal(false);
-            setShowExtras(true);
-          }}
-        >
-          {product.Name} (£{product.Price})
-          <p className="font-italic"> {product.StockLevel} in Stock </p>
-        </button>
-      ))}
-    </div>
-  </div>
-)}
-
-            {ShowExtras && (
-              <div className="mt-4 border-b-2 border-gray-200 pb-4">
-                <h3 className="font-bold text-lg mb-4">Extras:</h3>
-                <div className="grid grid-cols-4 gap-4">
-                  {/* Loop through the hotDrinks object and generate buttons for each drink here */}
-                  {extras.map(product => (
-                    <button
-                      key={product.id}
-
-                      className="w-full h-full bg-green-200 rounded-md"
-                      onClick={() => handleProductClick(product, "Hot Items" )}
-                    >
-                      {product.Name} (£{product.Price})
-                    </button>
-                  ))}
-                </div>
-              </div>)}
-
-
-
-
-              
-            
+            return (
+              <motion.button
+                key={item.id}
+                onClick={() => handleItemClick(item)}
+                className={`text-white font-bold py-2 px-4 rounded-full shadow-md ${stockColor}`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                {item.Name} - £{item.Price.toFixed(2)} - Stock: {item.StockLevel}
+              </motion.button>
+            );
+          })}
         </div>
+      )}
+      {selectedItem && (
+        <motion.div
+          className="mt-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h3>Extras:</h3>
+          <ul>
+            {selectedItem.Extras.map((extra, index) => (
+              <li key={index}>
+                {extra} - £{selectedItem.ExtrasPrice[index].toFixed(2)}
+              </li>
+            ))}
+          </ul>
+        </motion.div>
+      )}
+            </div>
+            </div>
+            </div>
+
+
+
 
 
 
@@ -539,7 +427,6 @@ useEffect(() => {
           </div>
         </div>
       </div>
-      </div>
-
+    </div>
       );
 }

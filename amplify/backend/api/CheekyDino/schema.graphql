@@ -17,6 +17,7 @@ type StockControl @model @auth(rules: [{allow: private}]) {
   VAT: Float
   CurrentStockLevel: Int
   kitchenmenus: [KitchenMenu] @manyToMany(relationName: "KitchenMenuStockControl")
+  Cases: Int
 }
 
 type ClockIn @model @auth(rules: [{allow: private}, {allow: owner}]) {
