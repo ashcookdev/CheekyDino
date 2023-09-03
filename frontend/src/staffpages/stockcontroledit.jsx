@@ -1,5 +1,5 @@
 import { DataStore } from "aws-amplify";
-import { KitchenMenu, StockControl } from "./models";
+import { KitchenMenu } from "./models";
 
 export async function StockControlEdit(stock, newWeightOrQuantity, newPrice) {
   // Query the DataStore for all KitchenMenuItems

@@ -64,6 +64,7 @@ export default function Example() {
         ...(userGroups.includes('Developer') || userGroups.includes('Admin')
           ? [{ name: 'Till Products', href: '/settings/till-products', icon: UsersIcon, current: false },
           { name: 'Stock Control ', href: '/stockcontrol', icon: CubeIcon, current: false },
+          { name: 'Party Stock', href: '/partystock', icon: BellIcon, current: false},
 
           { name: 'Add Stock Items ', href: '/buildameal', icon: CakeIcon, current: false },
           { name: 'Billing', href: '#', icon: CreditCardIcon, current: false },]

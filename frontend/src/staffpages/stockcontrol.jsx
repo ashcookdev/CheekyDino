@@ -194,6 +194,7 @@ function handleSelectExtras(event) {
           >
             Build A Product
           </button>
+          
           {showInput && (
             <div className='mt-5'>
               <label htmlFor="name" className="block text-sm font-medium leading-6 text-center text-gray-900">
@@ -429,6 +430,7 @@ Cases      </label>
       <div className="min-w-0 flex-1">
         <span className=" inset-0" aria-hidden="true" />
         <p className="text-sm font-medium text-gray-900">{menuItem.Name}</p>
+        <p className="text-sm text-gray-500 truncate">{menuItem.Category}</p>
         <p className="truncate text-sm text-red-500">Price £{menuItem.Price}</p>
         <button
           onClick={() => AddExtras(menuItem)}

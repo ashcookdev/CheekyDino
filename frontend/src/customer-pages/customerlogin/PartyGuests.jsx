@@ -200,12 +200,12 @@ const backgroundImage = "https://media.giphy.com/media/ZdIdb8TWH8VW6fpuUt/giphy.
       name={`foodOption${i}`}
       className="border rounded w-full py-2 px-3"
     >
-      <option value="Nuggets">Nuggets</option>
-      <option value="FishFingers">Fish Fingers</option>
-      <option value="Burger">Burger</option>
-      <option value="MozzarellaSticks">Mozzarella Sticks</option>
-      <option value="Sausages">Sausages</option>
-      <option value="ChickenBurger"> Chicken Burger</option>
+      <option value="Kids Nuggets and Chips Meal">Nuggets</option>
+      <option value="Kids Fish Fingers and Chips Meal">Fish Fingers</option>
+      <option value="Kids Burger and Chips Meal">Burger</option>
+      <option value="Kids Mozzarella Sticks and Chips Meal">Mozzarella Sticks</option>
+      <option value="Kids Sausage and Chips Meal">Sausages</option>
+      <option value="Kids Chicken Burger and Chips Meal"> Chicken Burger</option>
     </select>
   )}
 </td>
