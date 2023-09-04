@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
 import { DataStore } from 'aws-amplify';
 import { StockControl } from './models';
+import { motion } from 'framer-motion';
 
 export default function StockPieChart() {
   const [stock, setStock] = useState([]);
@@ -26,10 +27,12 @@ export default function StockPieChart() {
           { name: 'Remaining', value: stockItem.CurrentStockLevel },
         ];
         return (
-          <div
+          <motion.a
+            href="/stockcontrol"
             key={stockItem.Name}
-            className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
-          >
+            className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-purple-400"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}          >
             <div className="flex-shrink-0"></div>
             <div className="min-w-0 flex-1">
               <p className="text-md font-medium text-gray-900">{stockItem.Name}</p>
@@ -43,7 +46,7 @@ export default function StockPieChart() {
               </PieChart>
               <p className="text-sm font-medium text-gray-900">Percentage Used: {percentageUsed.toFixed(2)}%</p>
             </div>
-          </div>
+          </motion.a>
         );
       })}
     </div>

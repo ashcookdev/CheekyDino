@@ -11,6 +11,8 @@ import { Dialog, Menu, Transition } from '@headlessui/react'
 import Online from './online'
 import Stats from './stats'
 import PiechartStock from './piechart'
+import CafeKitchen from './CafeKitchen'
+import DashChat from './dashchat'
 
 import {
   Bars3Icon,
@@ -428,6 +430,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
 
         <main className="py-10 lg:pl-72">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
                               
                    
 
@@ -462,6 +465,23 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                                 <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
                                     <Online/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div className="space-y-16 py-16 xl:space-y-20">
+                    <div>
+                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                            <h2 className="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
+                                 Chat
+                            </h2>
+                            
+                        </div>
+                        <div className="mt-6 overflow-hidden border-t border-gray-100">
+                            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                                <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+                                    <DashChat/>
                                 </div>
                             </div>
                         </div>
@@ -517,13 +537,25 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                             </div>
                         </div>
                     </div>
-
-                    {/* Recent client list*/}
+                    <div className="space-y-16 py-16 xl:space-y-20">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"     style={{ backgroundImage: `url(/background.gif)` }}
+>
+                        <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-base font-semibold leading-7 text-white">Cafe Kitchen</h2>
+                                <a href="/kitchen" className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                                </a>
+                            </div>
+                            <CafeKitchen />
+                        </div>
+                    </div>
+                </div>
+                    <div className="space-y-16 py-16 xl:space-y-20">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-base font-semibold leading-7 text-gray-900">Parties</h2>
-                                <a href="#" className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                                <a href="/partybookings" className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                                     View all<span className="sr-only">, clients</span>
                                 </a>
                             </div>
@@ -531,6 +563,9 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                         </div>
                     </div>
                 </div>
+                </div>
+               
+                <div className="space-y-16 py-16 xl:space-y-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
                             <div className="flex items-center justify-between">
@@ -541,6 +576,9 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                             <PiechartStock />
                         </div>
                     </div>
+                </div>
+               
+
             </main></div>
     
 

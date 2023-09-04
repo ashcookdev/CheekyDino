@@ -1,5 +1,5 @@
 import { DataStore } from 'aws-amplify';
-import { CafeOrder, Sessions, PartyBooking, Staff } from './models';
+import { CafeOrder, Sessions, PartyBooking, Staff, ClockIn, TimeEntry } from './models';
 import React, { useState, useEffect } from 'react';
 import { formatISO } from 'date-fns';
 import GraphFinance from './graphfinance';
@@ -197,22 +197,22 @@ setTotalThisMonth(totalSessionsThisMonth + totalPartyBookingsThisMonth);
           month: partyBookingsThisMonth,
         });
 
-        const allStaff = await DataStore.query(Staff);
-
-        const allStaffToday = allStaff.filter(
-          staff => new Date(staff.ShiftStart) >= today && new Date(staff.ShiftStart) <= now
-        );
-  
-        console.log(allStaffToday);
       
+  
+
+
+
+
 
         
 
         
-    }
+  
 
-    // find all staff and shifts for today and get hourly rate 
 
+
+
+}
       
 
 

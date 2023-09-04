@@ -124,8 +124,15 @@ const formattedTomorrow = format(tomorrow, 'dd/MM/yyyy');
             <p className="mr-2">To:</p>
             <p className="font-semibold">{formattedTomorrow}</p>
           </div>
+         
           
         </div>
+        <button className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+            Save
+          </button>
+          <p className="mt-3 text-sm text-gray-500">This is based upon your current Stock Levels</p>
+
+
 
   
         {Object.entries(ingredientTotals).map(([ingredientName, ingredientTotal]) => {
