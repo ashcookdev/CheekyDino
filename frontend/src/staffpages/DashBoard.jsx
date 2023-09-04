@@ -10,6 +10,7 @@ import { PartyBooking } from './models'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import Online from './online'
 import Stats from './stats'
+import PiechartStock from './piechart'
 
 import {
   Bars3Icon,
@@ -24,6 +25,7 @@ import {
 import TodaysBookings from './todaysbookings'
 import Announcements from './Announcement'
 import { ArrowLeftIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CogIcon, CurrencyPoundIcon, PencilIcon, TableCellsIcon } from '@heroicons/react/20/solid'
+import { Pie } from 'recharts'
 
 
 const secondaryNavigation = [
@@ -413,6 +415,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
           <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Dashboard</div>
+          
           <a href="#">
             <span className="sr-only">Your profile</span>
             <img
@@ -430,6 +433,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
 
                     {/* Stats */}
                     <div className="border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5">
+                      
 <Stats/>                            
                     </div>
 
@@ -527,6 +531,16 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                         </div>
                     </div>
                 </div>
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-base font-semibold leading-7 text-gray-900">Stock Levels</h2>
+                                <a href="#" className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                                </a>
+                            </div>
+                            <PiechartStock />
+                        </div>
+                    </div>
             </main></div>
     
 
