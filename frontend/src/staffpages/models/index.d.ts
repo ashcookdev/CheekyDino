@@ -56,6 +56,9 @@ type EagerStockControl = {
   readonly CurrentStockLevel?: number | null;
   readonly kitchenmenus?: (KitchenMenuStockControl | null)[] | null;
   readonly Cases?: number | null;
+  readonly ProductId?: string | null;
+  readonly NewPrice?: number | null;
+  readonly NewVAT?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -76,6 +79,9 @@ type LazyStockControl = {
   readonly CurrentStockLevel?: number | null;
   readonly kitchenmenus: AsyncCollection<KitchenMenuStockControl>;
   readonly Cases?: number | null;
+  readonly ProductId?: string | null;
+  readonly NewPrice?: number | null;
+  readonly NewVAT?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

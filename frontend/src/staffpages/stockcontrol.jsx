@@ -94,7 +94,7 @@ function handleConfirmation(stock) {
   console.log(stock.Weight)
   console.log(price)
   
-  const newWeightOrQuantity = cases * (stock.Weight > 0 ? stock.Weight : stock.Quantity);
+  const newWeightOrQuantity = cases * (stock.Weight > 0 ? stock.Weight : stock.Quantity + stock.CurrentStockLevel);
 
   
 
@@ -102,6 +102,8 @@ function handleConfirmation(stock) {
   //passInt to convert string to number
    
     console.log(newWeightOrQuantity);
+
+
 
     const newPrice = parseFloat(price)
     const newPreVAT = newPrice / 1.2
@@ -124,8 +126,8 @@ function handleConfirmation(stock) {
   // update the price of the stock item
   DataStore.save(
     StockControl.copyOf(selectedStock, (updated) => {
-      updated.Price = newPrice;
-   updated.PreVAT = preVAT;
+      updated.NewPrice = newPrice;
+   updated.NewPreVAT = preVAT;
 
      updated.CurrentStockLevel = newWeightOrQuantity;
       updated.Cases = cases;

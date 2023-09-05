@@ -32,6 +32,9 @@ export default function StockControlCreateForm(props) {
     VAT: "",
     CurrentStockLevel: "",
     Cases: "",
+    ProductId: "",
+    NewPrice: "",
+    NewVAT: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Weight, setWeight] = React.useState(initialValues.Weight);
@@ -44,6 +47,9 @@ export default function StockControlCreateForm(props) {
     initialValues.CurrentStockLevel
   );
   const [Cases, setCases] = React.useState(initialValues.Cases);
+  const [ProductId, setProductId] = React.useState(initialValues.ProductId);
+  const [NewPrice, setNewPrice] = React.useState(initialValues.NewPrice);
+  const [NewVAT, setNewVAT] = React.useState(initialValues.NewVAT);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.Name);
@@ -55,6 +61,9 @@ export default function StockControlCreateForm(props) {
     setVAT(initialValues.VAT);
     setCurrentStockLevel(initialValues.CurrentStockLevel);
     setCases(initialValues.Cases);
+    setProductId(initialValues.ProductId);
+    setNewPrice(initialValues.NewPrice);
+    setNewVAT(initialValues.NewVAT);
     setErrors({});
   };
   const validations = {
@@ -67,6 +76,9 @@ export default function StockControlCreateForm(props) {
     VAT: [],
     CurrentStockLevel: [],
     Cases: [],
+    ProductId: [],
+    NewPrice: [],
+    NewVAT: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -103,6 +115,9 @@ export default function StockControlCreateForm(props) {
           VAT,
           CurrentStockLevel,
           Cases,
+          ProductId,
+          NewPrice,
+          NewVAT,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -166,6 +181,9 @@ export default function StockControlCreateForm(props) {
               VAT,
               CurrentStockLevel,
               Cases,
+              ProductId,
+              NewPrice,
+              NewVAT,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -202,6 +220,9 @@ export default function StockControlCreateForm(props) {
               VAT,
               CurrentStockLevel,
               Cases,
+              ProductId,
+              NewPrice,
+              NewVAT,
             };
             const result = onChange(modelFields);
             value = result?.Weight ?? value;
@@ -238,6 +259,9 @@ export default function StockControlCreateForm(props) {
               VAT,
               CurrentStockLevel,
               Cases,
+              ProductId,
+              NewPrice,
+              NewVAT,
             };
             const result = onChange(modelFields);
             value = result?.Quantity ?? value;
@@ -274,6 +298,9 @@ export default function StockControlCreateForm(props) {
               VAT,
               CurrentStockLevel,
               Cases,
+              ProductId,
+              NewPrice,
+              NewVAT,
             };
             const result = onChange(modelFields);
             value = result?.Price ?? value;
@@ -310,6 +337,9 @@ export default function StockControlCreateForm(props) {
               VAT,
               CurrentStockLevel,
               Cases,
+              ProductId,
+              NewPrice,
+              NewVAT,
             };
             const result = onChange(modelFields);
             value = result?.PreVAT ?? value;
@@ -342,6 +372,9 @@ export default function StockControlCreateForm(props) {
               VAT,
               CurrentStockLevel,
               Cases,
+              ProductId,
+              NewPrice,
+              NewVAT,
             };
             const result = onChange(modelFields);
             value = result?.Supplier ?? value;
@@ -378,6 +411,9 @@ export default function StockControlCreateForm(props) {
               VAT: value,
               CurrentStockLevel,
               Cases,
+              ProductId,
+              NewPrice,
+              NewVAT,
             };
             const result = onChange(modelFields);
             value = result?.VAT ?? value;
@@ -414,6 +450,9 @@ export default function StockControlCreateForm(props) {
               VAT,
               CurrentStockLevel: value,
               Cases,
+              ProductId,
+              NewPrice,
+              NewVAT,
             };
             const result = onChange(modelFields);
             value = result?.CurrentStockLevel ?? value;
@@ -452,6 +491,9 @@ export default function StockControlCreateForm(props) {
               VAT,
               CurrentStockLevel,
               Cases: value,
+              ProductId,
+              NewPrice,
+              NewVAT,
             };
             const result = onChange(modelFields);
             value = result?.Cases ?? value;
@@ -465,6 +507,119 @@ export default function StockControlCreateForm(props) {
         errorMessage={errors.Cases?.errorMessage}
         hasError={errors.Cases?.hasError}
         {...getOverrideProps(overrides, "Cases")}
+      ></TextField>
+      <TextField
+        label="Product id"
+        isRequired={false}
+        isReadOnly={false}
+        value={ProductId}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Weight,
+              Quantity,
+              Price,
+              PreVAT,
+              Supplier,
+              VAT,
+              CurrentStockLevel,
+              Cases,
+              ProductId: value,
+              NewPrice,
+              NewVAT,
+            };
+            const result = onChange(modelFields);
+            value = result?.ProductId ?? value;
+          }
+          if (errors.ProductId?.hasError) {
+            runValidationTasks("ProductId", value);
+          }
+          setProductId(value);
+        }}
+        onBlur={() => runValidationTasks("ProductId", ProductId)}
+        errorMessage={errors.ProductId?.errorMessage}
+        hasError={errors.ProductId?.hasError}
+        {...getOverrideProps(overrides, "ProductId")}
+      ></TextField>
+      <TextField
+        label="New price"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={NewPrice}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Weight,
+              Quantity,
+              Price,
+              PreVAT,
+              Supplier,
+              VAT,
+              CurrentStockLevel,
+              Cases,
+              ProductId,
+              NewPrice: value,
+              NewVAT,
+            };
+            const result = onChange(modelFields);
+            value = result?.NewPrice ?? value;
+          }
+          if (errors.NewPrice?.hasError) {
+            runValidationTasks("NewPrice", value);
+          }
+          setNewPrice(value);
+        }}
+        onBlur={() => runValidationTasks("NewPrice", NewPrice)}
+        errorMessage={errors.NewPrice?.errorMessage}
+        hasError={errors.NewPrice?.hasError}
+        {...getOverrideProps(overrides, "NewPrice")}
+      ></TextField>
+      <TextField
+        label="New vat"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={NewVAT}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Weight,
+              Quantity,
+              Price,
+              PreVAT,
+              Supplier,
+              VAT,
+              CurrentStockLevel,
+              Cases,
+              ProductId,
+              NewPrice,
+              NewVAT: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.NewVAT ?? value;
+          }
+          if (errors.NewVAT?.hasError) {
+            runValidationTasks("NewVAT", value);
+          }
+          setNewVAT(value);
+        }}
+        onBlur={() => runValidationTasks("NewVAT", NewVAT)}
+        errorMessage={errors.NewVAT?.errorMessage}
+        hasError={errors.NewVAT?.hasError}
+        {...getOverrideProps(overrides, "NewVAT")}
       ></TextField>
       <Flex
         justifyContent="space-between"

@@ -10,17 +10,21 @@ import { PartyBooking } from './models'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import Online from './online'
 import Stats from './stats'
-import PiechartStock from './piechart'
+import PartyStock from './partystock'
 import CafeKitchen from './CafeKitchen'
 import DashChat from './dashchat'
+import Finances from './financials'
 
 import {
   Bars3Icon,
   CalendarIcon,
   ChartPieIcon,
+  ChatBubbleLeftRightIcon,
   DocumentDuplicateIcon,
   FolderIcon,
   HomeIcon,
+  MicrophoneIcon,
+  UserCircleIcon,
   UsersIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
@@ -28,6 +32,7 @@ import TodaysBookings from './todaysbookings'
 import Announcements from './Announcement'
 import { ArrowLeftIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CogIcon, CurrencyPoundIcon, PencilIcon, TableCellsIcon } from '@heroicons/react/20/solid'
 import { Pie } from 'recharts'
+import { CheckCircleIcon } from '@heroicons/react/24/solid'
 
 
 const secondaryNavigation = [
@@ -215,6 +220,50 @@ setTotalAmount(totalAmount)    }
 
 const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
     //current tables occupied & future bookings today and how many guests in branch
+
+    const [scrollPosition, setScrollPosition] = useState(0);
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchEndX, setTouchEndX] = useState(0);
+
+  useEffect(() => {
+    const handleTouchStart = (e) => {
+      setTouchStartX(e.touches[0].clientX);
+    };
+
+    const handleTouchEnd = (e) => {
+      setTouchEndX(e.changedTouches[0].clientX);
+    };
+
+    const scrollContainer = document.getElementById('scroll-container');
+    scrollContainer.addEventListener('touchstart', handleTouchStart);
+    scrollContainer.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      scrollContainer.removeEventListener('touchstart', handleTouchStart);
+      scrollContainer.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (touchStartX !== 0 && touchEndX !== 0) {
+      if (touchStartX > touchEndX + 5) {
+        handleScroll('right');
+      } else if (touchStartX < touchEndX - 5) {
+        handleScroll('left');
+      }
+    }
+  }, [touchStartX, touchEndX]);
+
+  const handleScroll = (direction) => {
+    const scrollContainer = document.getElementById('scroll-container');
+    if (direction === 'left') {
+      setScrollPosition(scrollPosition - 100);
+      scrollContainer.scrollLeft -= 100;
+    } else {
+      setScrollPosition(scrollPosition + 100);
+      scrollContainer.scrollLeft += 100;
+    }
+  };
 
     return (
         <>
@@ -416,7 +465,32 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
             <span className="sr-only">Open sidebar</span>
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
-          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Dashboard</div>
+          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">  <div className="flex items-center">
+      <div
+        id="scroll-container"
+        className="flex overflow-x-scroll hide-scroll-bar"
+        style={{ width: '80%' }}
+      >
+        <a href="#section1" className="p-2 m-2 bg-green-500 text-white rounded-full">
+          <CurrencyPoundIcon className="h-6 w-6" />
+        </a>
+        <a href="#section2" className="p-2 m-2 bg-purple-500 text-white rounded-full">
+          <MicrophoneIcon className="h-6 w-6" />
+        </a>
+        <a href="#section3" className="p-2 m-2 bg-blue-500 text-white rounded-full">
+          <CakeIcon className="h-6 w-6" />
+        </a>
+        <a href="#section4" className="p-2 m-2 bg-yellow-500 text-white rounded-full">
+          <TableCellsIcon className="h-6 w-6" />
+        </a>
+        <a href="#section5" className="p-2 m-2 bg-red-500 text-white rounded-full">
+          <ChatBubbleLeftRightIcon className="h-6 w-6" />
+        </a>
+        <a href="#section6" className="p-2 m-2 bg-orange-500 text-white rounded-full">
+          <UserCircleIcon className="h-6 w-6" />
+        </a>
+      </div>
+    </div></div>
           
           <a href="#">
             <span className="sr-only">Your profile</span>
@@ -435,7 +509,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                    
 
                     {/* Stats */}
-                    <div className="border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5">
+                    <div className="border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5" id='section1'>
                       
 <Stats/>                            
                     </div>
@@ -461,7 +535,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                             </h2>
                             
                         </div>
-                        <div className="mt-6 overflow-hidden border-t border-gray-100">
+                        <div className="mt-6 overflow-hidden border-t border-gray-100" id='section6'>
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                                 <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
                                     <Online/>
@@ -478,7 +552,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                             </h2>
                             
                         </div>
-                        <div className="mt-6 overflow-hidden border-t border-gray-100">
+                        <div className="mt-6 overflow-hidden border-t border-gray-100" id='section5'>
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                                 <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
                                     <DashChat/>
@@ -496,7 +570,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                             </h2>
                             
                         </div>
-                        <div className="mt-6 overflow-hidden border-t border-gray-100">
+                        <div className="mt-6 overflow-hidden border-t border-gray-100 " id='section2'>
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                                 <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
                                     <Announcements />
@@ -507,7 +581,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                     </div>
                 <div className="space-y-16 py-16 xl:space-y-20">
                     <div>
-                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" id='section4'>
                             <h2 className="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
                                 Todays Bookings
                             </h2>
@@ -550,7 +624,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                         </div>
                     </div>
                 </div>
-                    <div className="space-y-16 py-16 xl:space-y-20">
+                    <div className="space-y-16 py-16 xl:space-y-20" id='section3'>
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
                             <div className="flex items-center justify-between">
@@ -564,6 +638,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                     </div>
                 </div>
                 </div>
+                
                
                 <div className="space-y-16 py-16 xl:space-y-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -573,7 +648,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                                 <a href="#" className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                                 </a>
                             </div>
-                            <PiechartStock />
+                            <PartyStock />
                         </div>
                     </div>
                 </div>

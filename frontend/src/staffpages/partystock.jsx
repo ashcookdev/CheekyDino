@@ -149,7 +149,7 @@ const formattedTomorrow = format(tomorrow, 'dd/MM/yyyy');
                   <h2 className="text-lg font-semibold">{ingredientName}</h2>
                   
                   
-                  <PieChart width={400} height={400}>
+                  <PieChart width={600} height={300}>
                     <Pie dataKey="value" data={[{ name: 'Current Stock Level', value: currentStockLevel }, { name: 'Ingredient Total', value: (ingredientTotal.quantity || ingredientTotal.weight) }]} cx={200} cy={200} outerRadius={80} fill="#8884d8" label>
                       {[{ name: 'Current Stock Level', value: currentStockLevel }, { name: 'Ingredient Total', value: (ingredientTotal.quantity || ingredientTotal.weight) }].map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={['#a78bfa', '#d6bcfa'][index % 2]} />

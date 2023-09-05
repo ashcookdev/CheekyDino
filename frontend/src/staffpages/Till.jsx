@@ -246,31 +246,31 @@ console.log(order)
   return (
 
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 fixed inset-0 overflow-hidden">
-    <div className="mt-2 border-b border-gray-200 pb-2 flex items-center">
-  <label htmlFor="table" className="block font-bold text-xs mr-2">
-    Table:
-  </label>
-  <input
-    id="table"
-    type="number"
-    value={table}
-    onChange={handleTableChange}
-    className="border rounded-md p-1 mr-2"
-  />
-  {childName && <p>Child Name: {childName}</p>}
-  <div className="flex-grow justify-start flex flex-wrap">
-    {party.map((partyBooking) => (
-      <button
-        className="w-20 h-16 bg-indigo-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center animate-pulse"
-        key={partyBooking.id}
-        onClick={() =>
-          setSelectedParty(partyBooking.id) || setPartyNow(true)
-        }
-      >
-        {partyBooking.ChildName} {partyBooking.PartyTime} Party
-      </button>
-    ))}
-  </div>
+    <div className="mt-2 border-b border-gray-200 pb-2 flex flex-col sm:flex-row items-center">
+      <label htmlFor="table" className="block font-bold text-xs mr-2">
+        Table:
+      </label>
+      <input
+        id="table"
+        type="number"
+        value={table}
+        onChange={handleTableChange}
+        className="border rounded-md p-1 mr-2"
+      />
+      {childName && <p>Child Name: {childName}</p>}
+      <div className="flex-grow justify-start flex flex-wrap">
+        {party.map((partyBooking) => (
+          <button
+            className="w-full sm:w-auto h-16 bg-indigo-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center animate-pulse"
+            key={partyBooking.id}
+            onClick={() =>
+              setSelectedParty(partyBooking.id) || setPartyNow(true)
+            }
+          >
+            {partyBooking.ChildName} {partyBooking.PartyTime} Party
+          </button>
+        ))}
+      </div>
     <motion.button
       className="w-16 h-16 bg-pink-500 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
       onClick={() => setHome(true)}
@@ -324,29 +324,28 @@ console.log(order)
   </div>
 
      
-    <div className="flex justify-between">
-  <div className="w-2/3">
+  <div className="flex flex-col lg:flex-row justify-between">
+  <div className="w-full lg:w-2/3">
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div className="mt-4 border-b-2 border-gray-200 pb-4">
         <h2 className="font-bold text-lg mb-4">Menu:</h2>
-        <div className="grid grid-cols-4 gap-4">
-      
-        {categories.map((category, index) => (
-          <motion.button
-            key={category}
-            onClick={() => handleCategoryClick(category)}
-            className={`${
-              colors[index % colors.length]
-            } text-white font-bold py-2 px-4 rounded-full shadow-md`}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            {category}
-          </motion.button>
-        ))}
-      </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {categories.map((category, index) => (
+            <motion.button
+              key={category}
+              onClick={() => handleCategoryClick(category)}
+              className={`${
+                colors[index % colors.length]
+              } text-white font-bold py-2 px-4 rounded-full shadow-md`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {category}
+            </motion.button>
+          ))}
+        </div>
       {selectedCategory && (
-        <div className="mt-10">
+        <div className="mt-10 mr-5 ml-5">
           {filteredData.map((item) => {
             let stockColor;
             if (item.StockLevel < 5) {
@@ -361,7 +360,7 @@ console.log(order)
               <motion.button
                 key={item.id}
                 onClick={() => handleItemClick(item)}
-                className={`text-white font-bold py-2 px-4 rounded-full shadow-md ${stockColor}`}
+                className={`text-white font-bold py-2 px-4 rounded-full shadow-md mr-2 ${stockColor}`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -373,7 +372,7 @@ console.log(order)
       )}
       {selectedItem && (
         <motion.div
-          className="mt-10"
+          className="mt-10 mr-3 ml-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -397,7 +396,7 @@ console.log(order)
 
 
 
-        <div className="w-1/3 border-gray-400">
+        <div className="w-1/3 border-purple-400">
           <div className="mt-4 border-b-4 border-gray-200 pb-4">
             <h2 className="font-bold text-lg mb-4">Order:</h2>
             <div className="border border-gray-400 p-4">

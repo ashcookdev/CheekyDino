@@ -18,6 +18,9 @@ type StockControl @model @auth(rules: [{allow: private}]) {
   CurrentStockLevel: Int
   kitchenmenus: [KitchenMenu] @manyToMany(relationName: "KitchenMenuStockControl")
   Cases: Int
+  ProductId: String
+  NewPrice: Float
+  NewVAT: Float
 }
 
 type ClockIn @model @auth(rules: [{allow: private}, {allow: owner}]) {
