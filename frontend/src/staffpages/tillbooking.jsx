@@ -27,8 +27,10 @@ export default function SessionBook() {
 
   const [showForm, setShowForm] = useState(false);
 
-  const [childData, setChildData] = useState(Array.from({ length: children }, () => ({ name: '', age: '' })));
-  const [next, setNext] = useState(false);
+  const [childData, setChildData] = useState(
+    Array.from({ length: children }, () => ({ namechildAge: '', exactAge: '' }))
+  );
+    const [next, setNext] = useState(false);
 
   
 console.log(childData)
@@ -58,15 +60,10 @@ if (next === true) {
   const handleChildrenChange = (e) => {
     const value = e.target.value;
     setChildren(value);
-    setChildData(Array.from({ length: value }, () => ({ name: '', age: '' })));
+    setChildData(Array.from({ length: value }, () => ({ age: '' })));
   };
 
-  const handleChildDataChange = (index, key, value) => {
-    setChildData((prev) =>
-      prev.map((data, i) => (i === index ? { ...data, [key]: value } : data))
-    );
-  };
-
+  
 
   const timeslots = [
 
@@ -91,6 +88,29 @@ if (next === true) {
   
 
   const handleNowSubmit = async () => {
+
+
+    const ChildName = name;
+    const childrenAges = childData.map((data) => data.childAge === "2+" ? data.exactAge : data.childAge);
+
+
+    const calculatePrice = (childData) => {
+      let price = 0;
+      childData.forEach((data) => {
+        if (data.childAge === "Under 1 year") {
+          price += 3.0;
+        } else if (data.childAge === "1-2 years old") {
+          price += 8.0;
+        } else if (data.childAge === "2+") {
+          price += 9.0;
+        } else if (data.childAge === "sibling") {
+          price += 0;
+        }
+      });
+      return price;
+    };
+    
+  
     // get todays date
     const today = new Date();
     // format the current time 
@@ -144,8 +164,8 @@ if (next === true) {
     setAvailableTables(availableTablesForTimeslot);
     setDetails(
       {
-        Name: childData,
-        Age: age,
+        Name: ChildName,
+        Age: childrenAges,
         Email: email,
         Number: number,
         Children: children,
@@ -154,6 +174,7 @@ if (next === true) {
         TimeSlotFrom: nowString,
         TimeSlotTo: twoHoursLaterString,
         Telephone: number,
+        Total: calculatePrice(childData),
 
       }
     )
@@ -167,6 +188,18 @@ if (next === true) {
     )
   }
     
+  const handleChildAgeChange = (index, value) => {
+    setChildData((prev) =>
+      prev.map((data, i) => (i === index ? { ...data, childAge: value } : data))
+    );
+  };
+  
+  const handleExactAgeChange = (index, value) => {
+    setChildData((prev) =>
+      prev.map((data, i) => (i === index ? { ...data, exactAge: value } : data))
+    );
+  };
+  
   
 
 
@@ -179,11 +212,11 @@ if (next === true) {
             Make A Reservation
           </h2>
           <div>
-<button            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
+<button            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
  onClick = {()=> setShowForm(true)}>Book For Today</button>
 
        
-<button            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
+<button            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-orange-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
  onClick = {()=> setPartyBooking(true)}>New Party Booking</button>
 
             <button onClick={() => {setNext(true)}}            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
@@ -258,31 +291,59 @@ if (next === true) {
               className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
               defaultValue="1"
             ></input>
+          </div>
+          <div>
+            <label htmlFor="children" className="block text-sm font-medium leading-6 text-gray-900">
+Adult Name            </label>
+            <input
+              onChange={(e) => setName(e.target.value)}
+              id="name"
+              type="text"
+              name="name"
+              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              defaultValue="1"
+            ></input>
+          </div>
+          <div>
 
-            {childData.map((data, index) => (
-              <div key={index}>
-                <label htmlFor={`name-${index}`} className="block text-sm font-medium leading-6 text-gray-900">
-                  Child's Name
-                </label>
-                <input
-                  onChange={(e) => handleChildDataChange(index, 'name', e.target.value)}
-                  id={`name-${index}`}
-                  name={`name-${index}`}
-                  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                ></input>
 
-                <label htmlFor={`age-${index}`} className="block text-sm font-medium leading-6 text-gray-900">
-                  Child's Age
-                </label>
-                <input
-                  onChange={(e) => handleChildDataChange(index, 'age', e.target.value)}
-                  id={`age-${index}`}
-                  type="number"
-                  name={`age-${index}`}
-                  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                ></input>
-              </div>
-            ))}
+
+{childData.map((data, index) => (
+  <div key={index}>
+    <div>
+      <label htmlFor={`child-age-${index}`} className="block text-sm font-medium leading-6 text-gray-900">
+        Child's Age
+      </label>
+      <select
+        onChange={(e) => handleChildAgeChange(index, e.target.value)}
+        id={`child-age-${index}`}
+        name={`child-age-${index}`}
+        className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+      >
+        <option value="6 months and under">6 months and under</option>
+        <option value="Under 1 year">under 1 year</option>
+        <option value="1-2 years old">1-2 years old</option>
+        <option value="sibling">sibling</option>
+        <option value="2+">2+</option>
+      </select>
+    </div>
+
+    {data.childAge === "2+" && (
+      <div>
+        <label htmlFor={`exact-age-${index}`} className="block text-sm font-medium leading-6 text-gray-900">
+          Exact Age
+        </label>
+        <input
+          onChange={(e) => handleExactAgeChange(index, e.target.value)}
+          id={`exact-age-${index}`}
+          type="number"
+          name={`exact-age-${index}`}
+          className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+        ></input>
+      </div>
+    )}
+  </div>
+))}
           </div>
          
           <button

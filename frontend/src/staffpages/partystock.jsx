@@ -112,9 +112,9 @@ const formattedToday = format(today, 'dd/MM/yyyy');
 const formattedTomorrow = format(tomorrow, 'dd/MM/yyyy');
 
   return (
-    <div className="flex">
-      <div className="w-1/3">
-        <h1 className="text-2xl flex justify-center font-semibold mb-4">Party Stock</h1>
+    <div className="flex flex-col sm:flex-row">
+    <div className="w-full sm:w-1/3">
+      <h1 className="text-2xl flex justify-center font-semibold mb-4">Party Stock</h1>
         <div className="flex justify-between mb-4">
           <div className="flex items-center">
             <p className="mr-2">From:</p>
@@ -127,9 +127,7 @@ const formattedTomorrow = format(tomorrow, 'dd/MM/yyyy');
          
           
         </div>
-        <button className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
-            Save
-          </button>
+       
           <p className="mt-3 text-sm text-gray-500">This is based upon your current Stock Levels</p>
 
 
@@ -180,7 +178,7 @@ const formattedTomorrow = format(tomorrow, 'dd/MM/yyyy');
           return null;
         })}
       </div>
-      <div className="w-2/3">
+      <div className="w-full sm:w-2/3 p-4">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">

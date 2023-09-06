@@ -3,10 +3,11 @@ import { DataStore } from 'aws-amplify';
 import { Sessions } from './models';
 import { useNavigate } from 'react-router-dom';
 import tableData from './TableData.json';
+import { format } from 'date-fns';
 
 //
 
-export default function SessionCalender({ date, children, adults, childData, email, telephone }) {
+export default function SessionCalender({ date, children, adults, childData, email, telephone, name }) {
 
   const navigate = useNavigate();
 
@@ -15,6 +16,7 @@ export default function SessionCalender({ date, children, adults, childData, ema
   
 
   console.log(childData)
+  console.log(name)
 
   //get email from auth
 
@@ -114,9 +116,11 @@ const freeTablesPerTimeslot = timeslots.map(timeslot => {
     // Handle booking
 function handleBook(item) {
 
-  const name = childData[0].name
-  const extraNames = childData.length > 1 ? childData.slice(1).map(item => item.name) : null;
+  // Update child data
 
+
+  
+  
   
   
 
@@ -135,10 +139,9 @@ function handleBook(item) {
       LeftCenter: false,
       ExtraTables: item.recommendedTables.length > 1 ? item.recommendedTables[1] : null,      
       Prepaid: false,
-      Age: childData.map(item => item.age),
-      ExtraNames: extraNames,
+      Age: childData.map(item => item.ChildAge),
     Telephone: telephone,
-    
+    TotalSpent: childData.reduce((acc, item) => acc + parseFloat(item.TotalSpent), 0),
     })
   );
 
@@ -153,6 +156,13 @@ function handleBook(item) {
     return (
       <div>
         <p className="text-lg font-semibold leading-6 text-gray-900">{date}</p>
+        <p className="w-full text-center font-bold">Select A Table</p>
+                <p className="w-full text-center font-bold">Party Size: {adults + children} </p>
+                <p className="w-full text-center font-bold">Name: {name} </p>
+                {childData.map((item) => (
+                  <p className="w-full text-center font-bold">Total Spent:£ {item.TotalSpent.toFixed(2)} </p>
+                ))
+                }
         <ul role="list" className="divide-y divide-gray-100 mt-4">
           {freeTablesPerTimeslot.map(item => (
             <li key={item.timeslot.start} className="flex justify-between gap-x-6 py-5">

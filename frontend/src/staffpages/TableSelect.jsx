@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DataStore } from 'aws-amplify';
 import { Sessions } from './models';
 import { format, addHours } from 'date-fns';
@@ -19,8 +19,12 @@ export default function TableSelect({ availableTables, onSelect, details }) {
         
     }
 
+    
+
 
     console.log(savedDetails.Name[0].name)
+
+    console.log(savedDetails)
 
     const handleTableClick = (table) => {
 
@@ -54,9 +58,8 @@ export default function TableSelect({ availableTables, onSelect, details }) {
         const children = parseInt(savedDetails.Children)
         const adults = parseInt(savedDetails.Adults)
 
-        const name = savedDetails.Name[0].name;
-        const extraNames = savedDetails.Name.slice(1).map(item => item.name);
-        const age = savedDetails.Name.map(item => item.age);
+        const name = savedDetails.Name
+        const age = savedDetails.Age.map(item => item.age);
 
         
 
@@ -77,39 +80,30 @@ export default function TableSelect({ availableTables, onSelect, details }) {
                 LeftCenter: false,
                 TimeArrived: nowString,
                 Telephone: savedDetails.Telephone,
-                ExtraNames: extraNames,
                 Age: age,
+                TotalSpent: savedDetails.Total,
 
     
             })
-        ).then(() => {
-            console.log('Data saved successfully');
-            Analytics.record({
-                name: 'guestsInBuilding',
-                attributes: {
-                    guestName: savedDetails.name,
-                    branchId: 'Cheeky Dino Maidstone',
-                    numberofGuests: children + adults,
-                    time: nowString,
-                    date: awsDate,
-                     // replace with your branch ID
-                    // additional attributes here
-                }
-            });
+       
 
-            setTrue(true)
-        }).catch((error) => {
-            console.error('Error saving data:', error);
-        });
+        );  
+        window.location.reload();
     }
 
-    let guests = parseInt(savedDetails.Children) + parseInt(savedDetails.Adults)      
+    let guests = parseInt(savedDetails.Children) + parseInt(savedDetails.Adults)    
+    
+   
+
+
 
     return (
         <div>
             <div className="flex flex-wrap">
                 <p className="w-full text-center font-bold">Select A Table</p>
                 <p className="w-full text-center font-bold">Party Size: {guests} </p>
+                <p className="w-full text-center font-bold">Name: {savedDetails.Name} </p>
+                <p className="w-full text-center font-bold">Price: {savedDetails.Total.toFixed(2)} </p>
 
                 {availableTables.map(table => (
                     <button
