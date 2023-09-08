@@ -1,125 +1,45 @@
-import { DataStore, Predicates } from "aws-amplify";
-import { CafeOrder, Sessions } from "./models";
-import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef } from "react";
 import ReactToPrint from "react-to-print";
-import React from "react";
 
 const Receipt = React.forwardRef(({ order, total, table, childName }, ref) => (
   <div ref={ref}>
     {table && <div>Table: {table}</div>}
     {childName && <div>Child: {childName}</div>}
-    {order.map((item) => (
-      <div>
-        {item.Name} £{item.Price.toFixed(2)}
-      </div>
-    ))}
+    <div>{order}</div>
     <div>Total: £{total.toFixed(2)}</div>
   </div>
 ));
 
-
-
-export default function TillPayment({
-  order,
-  total,
-  table,
-  setOrder,
-  setTotal,
-  childName,
-}) {
+const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [amountEntered, setAmountEntered] = useState(0);
   const [isFlashing, setIsFlashing] = useState(false);
-  const [orders, setOrders] = useState([]);
-  const [prep, setPrep] = useState([]);
-  const [port, setPort] = useState(null);
-
-  console.log(orders);
-  const navigate = useNavigate();
-
+  const [total, setTotal] = useState(initialTotal);
+  const [changeGiven, setChangeGiven] = useState(0); // Change Given
 
   const receiptRef = useRef();
 
-
   const handleConfirmClick = async () => {
-    const currentTime = new Date();
-    const options = {
-      timeZone: "Europe/London",
-      hour12: false,
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      millisecond: "2-digit",
-    };
-
-
-    const awstime = currentTime.toLocaleTimeString("en-GB", options);
-
-    const sessions = await DataStore.query(Sessions, Predicates.ALL);
-    const session = sessions.find(
-      (s) => s.Table === table && s.Arrived === true && s.LeftCenter === false
-    );
-
-    if (!session) {
-      alert("Error: No customer at table");
-      return;
-    }
-
-    // Update the session with the new order and total price
-    await DataStore.save(
-      Sessions.copyOf(session, (updated) => {
-        updated.Orders += 1;
-        updated.TotalSpent += total;
-      })
-    );
-    console.log("Session updated");
-    const hotItems = orders.filter((item) => item.Kitchen).map((item) => item.Name);
-
-    // convert prep time to string
-    const prepTime = prep.toString();
-
-    const drinkItems = orders.filter((item) => !item.Kitchen).map((item) => item.Name);
-    const kitchen = hotItems.length > 0;
-
-    await DataStore.save(
-      new CafeOrder({
-        HotItems: hotItems,
-        DrinkItems: drinkItems,
-        CreatedTime: awstime,
-        CreatedDate: new Date().toISOString().split("T")[0],
-        Total: total,
-        Table: table,
-        Completed: !kitchen,
-        Sessionid: session.id,
-        Delieved: !kitchen,
-        Kitchen: kitchen,
-        HotOrderPrep: prepTime,
-        KitchenMenuId: orders.map((item) => item.ID),
-        TotalNoVAT: total / 1.2,
-      })
-    );
-
-    console.log("Order confirmed" + session.id);
+    console.log("Order confirmed");
     // Reset the order and total price
-    setOrder([]);
-    setTotal(0);
-    setPaymentMethod(null);
-    setAmountEntered(0);
-    setIsFlashing(false);
+    window.location.reload();
   };
 
   const handleCashClick = () => {
     setPaymentMethod("cash");
-    setOrders(order);
     setAmountEntered(0);
+    setChangeGiven(0); // Reset change given
   };
 
-  const newtotal = order.reduce((acc, item) => acc + item.Price, 0);
-  const change = amountEntered - total;
-
   const handleDenominationClick = (amount) => {
-    setAmountEntered(amountEntered + amount);
+    const newAmountEntered = amountEntered + amount;
+    setAmountEntered(newAmountEntered);
+
+    const newTotal = total - newAmountEntered;
+    setTotal(newTotal);
+
+    const newChangeGiven = newTotal - newAmountEntered;
+    setChangeGiven(newChangeGiven > 0 ? newChangeGiven : 0); // Change given should not be negative
   };
 
   const handleNumberClick = (number) => {
@@ -129,7 +49,7 @@ export default function TillPayment({
   const handleCardClick = () => {
     setPaymentMethod("card");
     setIsFlashing(true);
-    setOrders(order);
+    setChangeGiven(0); // Reset change given
   };
 
   const handleTillDrawer = () => {
@@ -142,22 +62,6 @@ export default function TillPayment({
         console.error(err);
       });
   };
-
-  
-  
-
-
-  useEffect(() => {
-    let totalPrepInMinutes = 0;
-    order.forEach((item) => {
-      const [hours, minutes] = item.Prep.split(":").map(Number);
-      totalPrepInMinutes += hours * 60 + minutes;
-    });
-    const totalHours = Math.floor(totalPrepInMinutes / 60);
-    const totalMinutes = totalPrepInMinutes % 60;
-    const totalPrep = `${totalHours}:${totalMinutes.toString().padStart(2, "0")}`;
-    setPrep(totalPrep);
-  }, [order]);
 
  
 
@@ -186,7 +90,7 @@ export default function TillPayment({
           order={order}
           total={total}
           table={table}
-          childName={childName}
+          childName={ChildName}
         />
       </div>
         </div>
@@ -256,19 +160,14 @@ export default function TillPayment({
       </div>
       <div>
         <ul>
-          {table && <li>Table: {table}</li>}
-          {childName && <li>Child: {childName}</li>}
-          {order.map((item, index) => (
-            <li key={index} className="mb-2">
-              {item.Name} £{item.Price.toFixed(2)}
-            </li>
-          ))}
+         <li>Table: {table}</li>
+        <li>Child: {ChildName}</li>
+        <li>Total: £{total.toFixed(2)}</li>
+        <div>Change Given: £{changeGiven.toFixed(2)}</div>
+
+         
         </ul>
-        {order.map((item, index) => (
-          <li key={index} className="mb-2">
-            {item.Prep}
-          </li>
-        ))}
+
       </div>
       <button onClick={handleConfirmClick} className="bg-green-500 text-white p-2 rounded w-full">
         Confirm
@@ -278,4 +177,6 @@ export default function TillPayment({
     </div>
   );
 }
+
+export default TillPayment;
 

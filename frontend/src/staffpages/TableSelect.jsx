@@ -5,7 +5,7 @@ import { format, addHours } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import Till from './Till';
 import { Analytics } from 'aws-amplify';
-
+import SessionTill from './SessionTill';
 
 export default function TableSelect({ availableTables, onSelect, details }) {
 
@@ -13,6 +13,7 @@ export default function TableSelect({ availableTables, onSelect, details }) {
     const [selectedTables, setSelectedTables] = useState([]);
     const [savedDetails, setDetails] = useState(details);
     const [truee, setTrue] = useState(false);
+    const [pay, setPay] = useState(false);
 
     if (truee === true) {
         return (<Till/>)
@@ -88,12 +89,15 @@ export default function TableSelect({ availableTables, onSelect, details }) {
        
 
         );  
-        window.location.reload();
-    }
+setPay(true)  }
 
     let guests = parseInt(savedDetails.Children) + parseInt(savedDetails.Adults)    
     
-   
+   if (pay === true) {
+    return (
+    <SessionTill order= {"2 Hour Session"} total = {savedDetails.Total} table= {selectedTables[0].table} ChildName ={savedDetails.Name} />)  
+    
+   }
 
 
 
@@ -126,12 +130,21 @@ export default function TableSelect({ availableTables, onSelect, details }) {
                     </button>
                 ))}
             </div>
+            
+            
             <button
                 onClick={handleConfirmClick}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
                 Confirm
             </button>
+            <div>
+
+
+
+
+                
+            </div>
         </div>
     );
                     }    
