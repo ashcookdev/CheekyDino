@@ -14,6 +14,7 @@ import PartyStock from './partystock'
 import CafeKitchen from './CafeKitchen'
 import DashChat from './dashchat'
 import Finances from './financials'
+import Tables from './tables'
 
 import {
   Bars3Icon,
@@ -545,6 +546,17 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                     </div>
                     </div>
                     <div className="space-y-16 py-16 xl:space-y-20">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-base font-semibold leading-7 text-gray-900">Tables</h2>
+                                <a href="#" className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                                </a>
+                            </div>
+<Tables/>                        </div>
+                    </div>
+                </div>
+                    <div className="space-y-16 py-16 xl:space-y-20">
                     <div>
                         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                             <h2 className="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
@@ -640,18 +652,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                 </div>
                 
                
-                <div className="space-y-16 py-16 xl:space-y-20">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                        <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
-                            <div className="flex items-center justify-between">
-                                <h2 className="text-base font-semibold leading-7 text-gray-900">Stock Levels</h2>
-                                <a href="#" className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                                </a>
-                            </div>
-                            <PartyStock />
-                        </div>
-                    </div>
-                </div>
+               
                
 
             </main></div>

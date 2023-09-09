@@ -1,14 +1,25 @@
 import React, { useState, useRef } from "react";
 import ReactToPrint from "react-to-print";
+import QRCode from "react-qr-code";
 
 const Receipt = React.forwardRef(({ order, total, table, childName }, ref) => (
-  <div ref={ref}>
+  <div ref={ref} className="p-4 border rounded">
+    <h1 className="text-2xl font-bold mb-2">Cheeky Dino</h1>
     {table && <div>Table: {table}</div>}
     {childName && <div>Child: {childName}</div>}
     <div>{order}</div>
-    <div>Total: £{total.toFixed(2)}</div>
+    <div className="border-t mt-2 pt-2">
+      Total: £{total.toFixed(2)}
+    </div>
+    <div className="mt-4 text-center">
+      <QRCode value="https://yourwebsite.com/order" size={128} />
+      <p className="text-sm mt-2">Order from your table</p>
+      <p className="text-sm">Log in using the QR code</p>
+    </div>
   </div>
 ));
+
+  
 
 const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
   const [paymentMethod, setPaymentMethod] = useState(null);
@@ -21,9 +32,23 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
 
   const handleConfirmClick = async () => {
     console.log("Order confirmed");
+  
+    // Print the receipt
+    if (receiptRef.current) {
+      const printableElement = receiptRef.current;
+      const printableContent = printableElement.innerHTML;
+      const printWindow = window.open("", "Print", "width=500,height=500");
+      printWindow.document.write(printableContent);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    }
+  
     // Reset the order and total price
     window.location.reload();
   };
+  
 
   const handleCashClick = () => {
     setPaymentMethod("cash");
@@ -34,14 +59,11 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
   const handleDenominationClick = (amount) => {
     const newAmountEntered = amountEntered + amount;
     setAmountEntered(newAmountEntered);
-
-    const newTotal = total - newAmountEntered;
-    setTotal(newTotal);
-
-    const newChangeGiven = newTotal - newAmountEntered;
+  
+    const newChangeGiven = newAmountEntered - total;
     setChangeGiven(newChangeGiven > 0 ? newChangeGiven : 0); // Change given should not be negative
   };
-
+  
   const handleNumberClick = (number) => {
     setAmountEntered((amountEntered * 10 + number) / 100);
   };

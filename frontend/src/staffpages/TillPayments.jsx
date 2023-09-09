@@ -107,6 +107,7 @@ export default function TillPayment({
     setPaymentMethod(null);
     setAmountEntered(0);
     setIsFlashing(false);
+    
   };
 
   const handleCashClick = () => {
@@ -120,6 +121,7 @@ export default function TillPayment({
 
   const handleDenominationClick = (amount) => {
     setAmountEntered(amountEntered + amount);
+    
   };
 
   const handleNumberClick = (number) => {
@@ -143,7 +145,7 @@ export default function TillPayment({
       });
   };
 
-  
+
   
 
 
