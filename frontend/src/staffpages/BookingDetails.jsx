@@ -49,6 +49,7 @@ const guests = session.Adults + session.Children;
         }
       });
       setArrival(true);
+      
     } catch (error) {
       console.error("Error saving session:", error);
     }

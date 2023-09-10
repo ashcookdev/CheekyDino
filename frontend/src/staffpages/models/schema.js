@@ -1770,6 +1770,13 @@ export const schema = {
                     "attributes": [],
                     "isArrayNullable": true
                 },
+                "StaffBooker": {
+                    "name": "StaffBooker",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -1954,6 +1961,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isArrayNullable": true
+                },
+                "ChefName": {
+                    "name": "ChefName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "StaffOrderName": {
+                    "name": "StaffOrderName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -3056,5 +3077,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "0edea38e10667447348c50c4ad210017"
+    "version": "de0c12c1649613b88b85693cb63a876f"
 };

@@ -27,6 +27,7 @@ export default function TillPayment({
   setOrder,
   setTotal,
   childName,
+  staff
 }) {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [amountEntered, setAmountEntered] = useState(0);
@@ -97,6 +98,7 @@ export default function TillPayment({
         HotOrderPrep: prepTime,
         KitchenMenuId: orders.map((item) => item.ID),
         TotalNoVAT: total / 1.2,
+        StaffOrderName: staff,
       })
     );
 
@@ -107,6 +109,7 @@ export default function TillPayment({
     setPaymentMethod(null);
     setAmountEntered(0);
     setIsFlashing(false);
+    window.location.reload();
     
   };
 

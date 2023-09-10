@@ -182,6 +182,7 @@ type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: pub
   orderid: [String]
   Age: [String]
   ExtraNames: [String]
+  StaffBooker: String
 }
 
 type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -202,6 +203,8 @@ type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
   HotOrderPrep: String
   TotalNoVAT: Float
   KitchenMenuId: [String]
+  ChefName: String
+  StaffOrderName: String
 }
 
 type Messages @model @auth(rules: [{allow: private}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartHosts"], operations: [read, create]}, {allow: groups, groups: ["Staff"], operations: [read, create]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: owner, operations: [create, read]}]) {

@@ -80,7 +80,7 @@ export default function Example({ selectedItems, mealName, category, img, descri
     const meal = await DataStore.save(
       new KitchenMenu({
         Name: mealNamestate,
-        Price: parseFloat(sellingPrice) * 1.2,
+        Price: parseFloat(sellingPrice.toFixed(2)) * 1.2,
         PriceNoVAT: parseFloat(sellingPrice),
         Category: categorystate,
         imageSrc: imgstate,

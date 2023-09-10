@@ -205,6 +205,8 @@ export default function CafeOrderCreateForm(props) {
     HotOrderPrep: "",
     TotalNoVAT: "",
     KitchenMenuId: [],
+    ChefName: "",
+    StaffOrderName: "",
   };
   const [CreatedTime, setCreatedTime] = React.useState(
     initialValues.CreatedTime
@@ -231,6 +233,10 @@ export default function CafeOrderCreateForm(props) {
   const [KitchenMenuId, setKitchenMenuId] = React.useState(
     initialValues.KitchenMenuId
   );
+  const [ChefName, setChefName] = React.useState(initialValues.ChefName);
+  const [StaffOrderName, setStaffOrderName] = React.useState(
+    initialValues.StaffOrderName
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setCreatedTime(initialValues.CreatedTime);
@@ -251,6 +257,8 @@ export default function CafeOrderCreateForm(props) {
     setTotalNoVAT(initialValues.TotalNoVAT);
     setKitchenMenuId(initialValues.KitchenMenuId);
     setCurrentKitchenMenuIdValue("");
+    setChefName(initialValues.ChefName);
+    setStaffOrderName(initialValues.StaffOrderName);
     setErrors({});
   };
   const [currentDrinkItemsValue, setCurrentDrinkItemsValue] =
@@ -277,6 +285,8 @@ export default function CafeOrderCreateForm(props) {
     HotOrderPrep: [],
     TotalNoVAT: [],
     KitchenMenuId: [],
+    ChefName: [],
+    StaffOrderName: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -319,6 +329,8 @@ export default function CafeOrderCreateForm(props) {
           HotOrderPrep,
           TotalNoVAT,
           KitchenMenuId,
+          ChefName,
+          StaffOrderName,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -389,6 +401,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep,
               TotalNoVAT,
               KitchenMenuId,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             value = result?.CreatedTime ?? value;
@@ -428,6 +442,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep,
               TotalNoVAT,
               KitchenMenuId,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             value = result?.CreatedDate ?? value;
@@ -470,6 +486,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep,
               TotalNoVAT,
               KitchenMenuId,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             value = result?.Total ?? value;
@@ -504,6 +522,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep,
               TotalNoVAT,
               KitchenMenuId,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             values = result?.DrinkItems ?? values;
@@ -565,6 +585,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep,
               TotalNoVAT,
               KitchenMenuId,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             values = result?.HotItems ?? values;
@@ -632,6 +654,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep,
               TotalNoVAT,
               KitchenMenuId,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             value = result?.Table ?? value;
@@ -670,6 +694,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep,
               TotalNoVAT,
               KitchenMenuId,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             value = result?.Completed ?? value;
@@ -708,6 +734,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep,
               TotalNoVAT,
               KitchenMenuId,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             value = result?.Delieved ?? value;
@@ -746,6 +774,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep,
               TotalNoVAT,
               KitchenMenuId,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             value = result?.Sessionid ?? value;
@@ -785,6 +815,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep,
               TotalNoVAT,
               KitchenMenuId,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             value = result?.TimeDelivered ?? value;
@@ -823,6 +855,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep,
               TotalNoVAT,
               KitchenMenuId,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             value = result?.Notes ?? value;
@@ -861,6 +895,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep,
               TotalNoVAT,
               KitchenMenuId,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             value = result?.Kitchen ?? value;
@@ -899,6 +935,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep: value,
               TotalNoVAT,
               KitchenMenuId,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             value = result?.HotOrderPrep ?? value;
@@ -941,6 +979,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep,
               TotalNoVAT: value,
               KitchenMenuId,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             value = result?.TotalNoVAT ?? value;
@@ -975,6 +1015,8 @@ export default function CafeOrderCreateForm(props) {
               HotOrderPrep,
               TotalNoVAT,
               KitchenMenuId: values,
+              ChefName,
+              StaffOrderName,
             };
             const result = onChange(modelFields);
             values = result?.KitchenMenuId ?? values;
@@ -1016,6 +1058,86 @@ export default function CafeOrderCreateForm(props) {
           {...getOverrideProps(overrides, "KitchenMenuId")}
         ></TextField>
       </ArrayField>
+      <TextField
+        label="Chef name"
+        isRequired={false}
+        isReadOnly={false}
+        value={ChefName}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              CreatedTime,
+              CreatedDate,
+              Total,
+              DrinkItems,
+              HotItems,
+              Table,
+              Completed,
+              Delieved,
+              Sessionid,
+              TimeDelivered,
+              Notes,
+              Kitchen,
+              HotOrderPrep,
+              TotalNoVAT,
+              KitchenMenuId,
+              ChefName: value,
+              StaffOrderName,
+            };
+            const result = onChange(modelFields);
+            value = result?.ChefName ?? value;
+          }
+          if (errors.ChefName?.hasError) {
+            runValidationTasks("ChefName", value);
+          }
+          setChefName(value);
+        }}
+        onBlur={() => runValidationTasks("ChefName", ChefName)}
+        errorMessage={errors.ChefName?.errorMessage}
+        hasError={errors.ChefName?.hasError}
+        {...getOverrideProps(overrides, "ChefName")}
+      ></TextField>
+      <TextField
+        label="Staff order name"
+        isRequired={false}
+        isReadOnly={false}
+        value={StaffOrderName}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              CreatedTime,
+              CreatedDate,
+              Total,
+              DrinkItems,
+              HotItems,
+              Table,
+              Completed,
+              Delieved,
+              Sessionid,
+              TimeDelivered,
+              Notes,
+              Kitchen,
+              HotOrderPrep,
+              TotalNoVAT,
+              KitchenMenuId,
+              ChefName,
+              StaffOrderName: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.StaffOrderName ?? value;
+          }
+          if (errors.StaffOrderName?.hasError) {
+            runValidationTasks("StaffOrderName", value);
+          }
+          setStaffOrderName(value);
+        }}
+        onBlur={() => runValidationTasks("StaffOrderName", StaffOrderName)}
+        errorMessage={errors.StaffOrderName?.errorMessage}
+        hasError={errors.StaffOrderName?.hasError}
+        {...getOverrideProps(overrides, "StaffOrderName")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

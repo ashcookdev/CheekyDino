@@ -34,17 +34,7 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
     console.log("Order confirmed");
   
     // Print the receipt
-    if (receiptRef.current) {
-      const printableElement = receiptRef.current;
-      const printableContent = printableElement.innerHTML;
-      const printWindow = window.open("", "Print", "width=500,height=500");
-      printWindow.document.write(printableContent);
-      printWindow.document.close();
-      printWindow.focus();
-      printWindow.print();
-      printWindow.close();
-    }
-  
+   
     // Reset the order and total price
     window.location.reload();
   };
@@ -62,8 +52,13 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
   
     const newChangeGiven = newAmountEntered - total;
     setChangeGiven(newChangeGiven > 0 ? newChangeGiven : 0); // Change given should not be negative
-  };
   
+    // Print the receipt
+    if (receiptRef.current) {
+      receiptRef.current.print();
+    }
+  };
+
   const handleNumberClick = (number) => {
     setAmountEntered((amountEntered * 10 + number) / 100);
   };

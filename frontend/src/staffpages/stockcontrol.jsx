@@ -311,6 +311,9 @@ Estimated Prep Time              </label>
           <p className="text-sm text-gray-500 font-italic truncate">
             {stock.Supplier}
           </p>
+          <p className="truncate text-sm text-blue-500">
+            ID:{stock.ProductId}
+          </p>
           {stock.Quantity === 0 ? (
             <p className="text-sm text-gray-500 truncate">
               {stock.Weight}g
@@ -326,9 +329,7 @@ Estimated Prep Time              </label>
           <p className="truncate text-sm text-red-500">
             Price £{stock.Price}
           </p>
-<p className="truncate text-sm text-blue-500">
- Pre VAT £{stock.PreVAT.toFixed(2)}
-</p>
+
   
 <button onClick={() => EditStock(stock)}
   type="button"

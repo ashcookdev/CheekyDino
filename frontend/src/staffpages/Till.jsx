@@ -18,6 +18,7 @@ import Timeslot from "./todaysbookings";
 import Home from "./DashBoard";
 import { checkStockLevel } from "./tillstock";
 import { motion } from 'framer-motion';
+import StaffTill from "./StaffTill";
 
 
 
@@ -47,6 +48,11 @@ const [selectedProduct, setSelectedProduct] = useState(null);
 const [kitchen, setKitchen] = useState(false);
 const [home, setHome] = useState(false);
 const [selectedCategory, setSelectedCategory] = useState(null);
+const [staff, setStaff] = useState(null);
+const [occupiedSessions, setOccupiedSessions] = useState([]);
+useEffect(() => {
+  fetchSessions().then(setOccupiedSessions);
+}, []);
 
 
 
@@ -197,18 +203,28 @@ console.log(order)
   if (kitchen === true) {
     return <Kitchen />
   }
-
   if (confirm === true) {
+    if (staff === null) {
+      alert('Please enter staff member');
+      window.location.reload();
+      return;
+    }
     return (
-      <TillPayments order={order} total={total} table={table} childName= {childName} setOrder={setOrder} setTotal={setTotal} />
+      <TillPayments order={order} total={total} table={table} childName= {childName} setOrder={setOrder} setTotal={setTotal} staff={staff} />
     );
   }
+  
 
   if (home === true) {
     return <Home />
   }
     
-
+  const fetchSessions = async () => {
+    const allSessions = await DataStore.query(Sessions);
+    return allSessions.filter(
+      (s) => s.Arrived === true && s.LeftCenter === false
+    );
+  };
 
   const handleTableChange = async (e) => {
     const tableNumber = parseInt(e.target.value);
@@ -230,6 +246,8 @@ console.log(order)
     }
   };
 
+
+
   const colors = [
     'bg-red-500',
     'bg-yellow-500',
@@ -240,24 +258,40 @@ console.log(order)
     'bg-pink-500',
   ];
   
+  const handleSelectedChange = (selectedStaff) => {
+    console.log('Selected staff member:', selectedStaff);
+    setStaff(selectedStaff.StaffId)
+    // You can add your own logic here to handle the change in the selected staff member
+  };
 
+
+  
 
 
   return (
 
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 fixed inset-0 overflow-hidden">
     <div className="mt-2 border-b border-gray-200 pb-2 flex flex-col sm:flex-row items-center">
-      <label htmlFor="table" className="block font-bold text-xs mr-2">
-        Table:
-      </label>
-      <input
-        id="table"
-        type="number"
-        value={table}
-        onChange={handleTableChange}
-        className="border rounded-md p-1 mr-2"
-      />
-      {childName && <p>Child Name: {childName}</p>}
+      <div className="flex justify-between"></div>
+    <StaffTill onSelectChange={handleSelectedChange} />
+
+    <label htmlFor="table" className="block font-bold text-xs mr-2 ml-3 animate-pulse">
+  Table:
+</label>
+<select
+  id="table"
+  value={table}
+  onChange={handleTableChange}
+  className="border rounded-md p-1 mr-2"
+>
+  {occupiedSessions.map((session) => (
+    <option key={session.Table} value={session.Table}>
+      Table:{session.Table} - Adult Name: {session.Name}
+    </option>
+  ))}
+</select>
+<dir></dir>
+
       <div className="flex-grow justify-start flex flex-wrap">
         {party.map((partyBooking) => (
           <button
@@ -271,6 +305,7 @@ console.log(order)
           </button>
         ))}
       </div>
+
     <motion.button
       className="w-16 h-16 bg-pink-500 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
       onClick={() => setHome(true)}
