@@ -93,8 +93,7 @@ if (next === true) {
     const ChildName = name;
     const childrenAges = childData.map((data) => data.childAge === "2+" ? data.exactAge : data.childAge);
 
-
-    const calculatePrice = (childData) => {
+    const calculatePrice = (childData, adults, children) => {
       let price = 0;
       childData.forEach((data) => {
         if (data.childAge === "Under 1 year") {
@@ -107,8 +106,13 @@ if (next === true) {
           price += 0;
         }
       });
+      // Add an extra £2.00 for every adult if there are more adults than children
+      if (adults > children) {
+        price += adults * 2.0;
+      }
       return price;
     };
+  
     
   
     // get todays date
@@ -224,10 +228,21 @@ if (next === true) {
 
             {showForm && (
             <div>
-
+          <div>
+            <label htmlFor="children" className="block text-lg font-large leading-6 text-gray-900">
+Adult Name            </label>
+            <input
+              onChange={(e) => setName(e.target.value)}
+              id="name"
+              type="text"
+              name="name"
+              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              defaultValue="Enter Customer Name"
+            ></input>
+          </div>
               <label
                 htmlFor="Email"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                className="block text-lg font-large leading-6 text-gray-900"
               >
                 Email
               </label>
@@ -245,7 +260,7 @@ if (next === true) {
 
               <label
                 htmlFor="phone"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                className="block text-large font-large leading-6 text-gray-900"
               >
                 Telephone
               </label>
@@ -292,18 +307,7 @@ if (next === true) {
               defaultValue="1"
             ></input>
           </div>
-          <div>
-            <label htmlFor="children" className="block text-sm font-medium leading-6 text-gray-900">
-Adult Name            </label>
-            <input
-              onChange={(e) => setName(e.target.value)}
-              id="name"
-              type="text"
-              name="name"
-              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              defaultValue="1"
-            ></input>
-          </div>
+
           <div>
 
 

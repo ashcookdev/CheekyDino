@@ -182,7 +182,6 @@ type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: pub
   orderid: [String]
   Age: [String]
   ExtraNames: [String]
-  StaffBooker: String
 }
 
 type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
