@@ -25,7 +25,7 @@ export default function TillStaff({onSelectChange}) {
           const filterClockIn = clockIn.filter(
             (c) =>
               c.ClockedIn === true &&
-              c.ClockedOut === false
+              c.ClockedOut === null
           );
           console.log(filterClockIn);
           setClockedInStaff(filterClockIn); // Update clockedIn state

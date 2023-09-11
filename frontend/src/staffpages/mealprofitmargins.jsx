@@ -74,33 +74,42 @@ export default function Example({ selectedItems, mealName, category, img, descri
     const profitMargin = sellingPrice - price;
     // calculate the number of portions in stock
 
+    // assuming sellingPrice is defined somewhere above
+    const formattedSellingPrice = Number(sellingPrice)
 
-   
-    // save the meal to the database
-    const meal = await DataStore.save(
-      new KitchenMenu({
-        Name: mealNamestate,
-        Price: parseFloat(sellingPrice.toFixed(2)) * 1.2,
-        PriceNoVAT: parseFloat(sellingPrice),
-        Category: categorystate,
-        imageSrc: imgstate,
-StockLevel: portions,
-        Kitchen: true,
-        Description: descriptionstate,
-        ProfitMargin: profitMargin,
-        Prep: prep,
-        Ingredients: JSON.stringify(
-          selectedItemsstate.map((item, index) => ({
-            id: item.id,
-            name: item.Name,
-            weight: item.Quantity === 0 ? parseFloat(itemValues[index]) : 0,
-            quantity: item.Quantity === 0 ? 0 : parseFloat(itemValues[index]),
-            price: parseFloat(itemPrices[index]),
-          }))
-        ),
-      })
-    );
-window.location.reload();  };
+const newSellingPrice = formattedSellingPrice * 1.2;
+
+const fixedPrice = newSellingPrice.toFixed(2);
+
+
+
+// save the meal to the database
+const meal = await DataStore.save(
+  new KitchenMenu({
+    Name: mealNamestate,
+    Price: parseFloat(fixedPrice),
+    PriceNoVAT: Number(formattedSellingPrice),
+    Category: categorystate,
+    imageSrc: imgstate,
+    StockLevel: portions,
+    Kitchen: true,
+    Description: descriptionstate,
+    ProfitMargin: profitMargin,
+    Prep: prep,
+    Ingredients: JSON.stringify(
+      selectedItemsstate.map((item, index) => ({
+        id: item.id,
+        name: item.Name,
+        weight: item.Quantity === 0 ? parseFloat(itemValues[index]) : 0,
+        quantity: item.Quantity === 0 ? 0 : parseFloat(itemValues[index]),
+        price: parseFloat(itemPrices[index]),
+      }))
+    ),
+  })
+);
+window.location.reload();
+  }
+
 
   
   

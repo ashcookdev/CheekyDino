@@ -111,7 +111,7 @@ const totalAllSessions = yesterdaySessionsTotalSpent / yesterdaySessions.length;
 
 // find out how many staff are clocked in
 
-const staffClockedIn = staff.filter(staff => staff.ClockedIn === true && staff.ClockedOut === false);
+const staffClockedIn = staff.filter(staff => staff.ClockedIn === true && staff.ClockedOut === null);
 const staffClockedInCount = staffClockedIn.length;
 
 const staffOnBreak = staff.filter(staff => staff.Break === true);

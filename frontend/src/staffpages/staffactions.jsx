@@ -1,250 +1,200 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { DataStore, Auth } from 'aws-amplify';
-import { ClockIn } from './models';
+import { ClockIn, Staff } from './models';
 import { ClockIcon, MoonIcon, SunIcon } from '@heroicons/react/20/solid';
-
+import ClockInData from './clockindata';
 
 export default function StaffActions() {
+  const [staffList, setStaffList] = useState([]);
+  const [clock, setClock] = useState(false);
 
-    const [clockedInStaff, setClockedInStaff] = useState([]);
-    const [breakTime, setBreak] = useState(false);
-    const [email, setEmail] = useState('');
-
-    useEffect(() => {
-        const fetchClockIn = async () => {
-          const mail = await Auth.currentAuthenticatedUser();
-          const userEmail = mail.attributes.email;
-          setEmail(userEmail);
-          const today = new Date();
-          // get timezone offset
-          
-          const dateOnly = today.toISOString().split('T')[0];
-          const clockIn = await DataStore.query(ClockIn);
-          const filterClockIn = clockIn.filter(
-            (c) =>
-              c.StaffId === userEmail &&
-              c.Date === dateOnly &&
-              c.ClockedIn === true &&
-              c.ClockedOut === false
-          );
-          console.log(filterClockIn);
-          setClockedInStaff(filterClockIn.length > 0); // Update clockedIn state
+  useEffect(() => {
+    const fetchStaff = async () => {
+      const staff = await DataStore.query(Staff);
+      const clockInDataAll = await DataStore.query(ClockIn);
+  
+      const staffData = await Promise.all(staff.map(async (staffMember) => {
+        const userEmail = staffMember.Email;
+        const dateTime = new Date();
+        const timezoneOffset = dateTime.getTimezoneOffset() * 60000;
+        const dateOnly = new Date(dateTime - timezoneOffset).toISOString().split('T')[0];
+  
+        const clockInData = clockInDataAll.filter(c => c.StaffId === userEmail && c.Date === dateOnly);
+  
+        return {
+          ...staffMember,
+          isClockedIn: clockInData.length > 0 && clockInData[0].ClockedIn && !clockInData[0].ClockedOut,
+          isOnBreak: clockInData.length > 0 && clockInData[0].Break,
         };
-        fetchClockIn();
-      }, []);
-      
-
-const handleClockIn = async () => {
-
-    const mail = await Auth.currentAuthenticatedUser();
-    const userEmail = mail.attributes.email;
-    // get cognito user pool name
-    const userPool = await Auth.currentUserPoolUser();
-    const userPoolName = userPool.pool.username;
-    // get cognito user pool role
-    const userPoolRole = userPool.signInUserSession.accessToken.payload[
-      'cognito:groups'
-    ][0];
-
-   
-
-    const dateTime = new Date();
-    // get timezone offset
-    const timezoneOffset = dateTime.getTimezoneOffset() * 60000;
-    const timeOnly = new Date(dateTime - timezoneOffset)
-        .toISOString()
-        .split('T')[1]
-        .split('Z')[0];
-    const dateOnly = dateTime.toISOString().split('T')[0];
-
-
-
-console.log(timeOnly);
-    // Save the ClockIn time and StaffId in the DataStore
-    await DataStore.save(
-      new ClockIn({
-        ClockIn: timeOnly,
-        ClockedIn: true,
-        StaffId: userEmail,
-        Date: dateOnly,
-        ClockedIn: true,
-        ClockedOut: false,
-        StaffRole: userPoolRole,
-        StaffName: userPoolName,
-
-        
-      })
-    );
-
-    // Update the clockedIn state
-    console.log('clocked in');
-    setClockedInStaff(true);
-  };
-
+      }));
   
-  const handleClockOut = async () => {
-
-    console.log('working');
-    const mail = await Auth.currentAuthenticatedUser();
-    const userEmail = mail.attributes.email;
-    // get cognito user pool name
-    
-
-   
-
-    const dateTime = new Date();
-    // get timezone offset
-    const timezoneOffset = dateTime.getTimezoneOffset() * 60000;
-    const timeOnly = new Date(dateTime - timezoneOffset)
-        .toISOString()
-        .split('T')[1]
-        .split('Z')[0];
-    const dateOnly = dateTime.toISOString().split('T')[0];
-
-
-
-console.log(timeOnly);
-const clockIn = await DataStore.query(ClockIn);
-const filterClockIn = clockIn.filter(
-  (c) =>
-    c.StaffId === userEmail &&
-    c.Date === dateOnly &&
-    c.ClockedIn === true &&
-    c.ClockedOut === false
-);
-
-console.log(filterClockIn);
-    // Save the ClockIn time and StaffId in the DataStore
-  
-    // Update the ClockOut time and ClockedOut status in the DataStore
-    await DataStore.save(
-      ClockIn.copyOf(filterClockIn[0], (updated) => {
-        updated.ClockOut = timeOnly;
-        updated.ClockedOut = true;
-      })
-    );
-console.log('clocked out');
-window.location.reload();
-    // Update the clockedIn state
-    setClockedInStaff(false);
-  };
-
-
-  const handleBreakStart = async () => {
-    const mail = await Auth.currentAuthenticatedUser();
-    const userEmail = mail.attributes.email;
-    const dateTime = new Date();
-    // get timezone offset
-    const timezoneOffset = dateTime.getTimezoneOffset() * 60000;
-    const timeOnly = new Date(dateTime - timezoneOffset)
-        .toISOString()
-        .split('T')[1]
-        .split('Z')[0];
-
-
-
-    const dateOnly = dateTime.toISOString().split('T')[0];
-
-    console.log(timeOnly);
-
-    const clockIn = await DataStore.query(ClockIn);
-    const filterClockIn = clockIn.filter(
-      (c) =>
-        c.StaffId === userEmail &&
-        c.Date === dateOnly &&
-        c.ClockedIn === true &&
-        c.ClockedOut === false
-    );
-  
-    // Update the BreakStart time and BreakStarted status in the DataStore
-    await DataStore.save(
-      ClockIn.copyOf(filterClockIn[0], (updated) => {
-        updated.BreakStart = timeOnly;
-        updated.Break = true;
-      })
-    );
-  
-    // Update the clockedIn state
-    console.log('break started');
-    setBreak(true);
-  };
-  
-  const handleBreakEnd = async () => {
-    const mail = await Auth.currentAuthenticatedUser();
-    const userEmail = mail.attributes.email;
-    
-    const dateTime = new Date();
-    // get timezone offset
-    const timezoneOffset = dateTime.getTimezoneOffset() * 60000;
-    const timeOnly = new Date(dateTime - timezoneOffset)
-        .toISOString()
-        .split('T')[1]
-        .split('Z')[0];
-        const dateOnly = dateTime.toISOString().split('T')[0];
-
-    const clockIn = await DataStore.query(ClockIn);
-    const filterClockIn = clockIn.filter(
-      (c) =>
-        c.StaffId === userEmail &&
-        c.Date === dateOnly &&
-        c.ClockedIn === true &&
-        c.Break === true
-    );
-    console.log(filterClockIn);
-    await DataStore.save(
-      ClockIn.copyOf(filterClockIn[0], (updated) => {
-        updated.BreakEnd = timeOnly;
-        updated.Break = false;
-      })
-    );
-    console.log('break ended');
-    setBreak(false);
-  };
-
-
-
-   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <div className="bg-white rounded-lg shadow-lg p-6 mb-5">
-        <h2 className="text-xl font-bold mb-4">Actions</h2>
-        <p className="text-gray-700 mb-2">
-            {email}
-            </p>
-        <div className="flex flex-col sm:flex-row justify-evenly py-4 sm:mr-2">
-          {clockedInStaff ? (
-            <button
-              className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md mb-2 sm:mb-0"
-              onClick={handleClockOut}
-            >
-              <ClockIcon className="h-5 w-5 mr-2" /> Clock Out
-            </button>
-          ) : (
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md mb-2 sm:mb-0"
-              onClick={handleClockIn}
-            >
-              <ClockIcon className="h-5 w-5 mr-2" /> Clock In
-            </button>
-          )}
-          {!breakTime ? (
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md"
-              onClick={handleBreakStart}
-            >
-              <SunIcon className="h-5 w-5 mr-2" /> Break
-            </button>
-          ) : (
-            <button
-              className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md"
-              onClick={handleBreakEnd}
-            >
-              <MoonIcon className="h-5 w-5 mr-2" /> Back From Break
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
-    );
+      setStaffList(staffData);
     };
+  
+    fetchStaff();
+  }, []);
+  
+
+  // Rest of your logic here...
+  const handleClockInOut = async (staff) => {
+    const userEmail = staff.Email;
+    const dateTime = new Date();
+    const timezoneOffset = dateTime.getTimezoneOffset() * 60000;
+    const timeOnly = new Date(dateTime - timezoneOffset)
+      .toISOString()
+      .split('T')[1]
+      .split('Z')[0];
+    const dateOnly = dateTime.toISOString().split('T')[0];
+  
+    const clockInDataAll = await DataStore.query(ClockIn);
+    const clockInData = clockInDataAll.filter(c => c.StaffId === userEmail && c.Date === dateOnly);
+  
+    if (clockInData.length > 0 && clockInData[0].ClockedIn && !clockInData[0].ClockedOut) {
+      // If the staff member is already clocked in but not clocked out, update the ClockOut time and ClockedOut status
+      // work out how long the shift was
+
+      const clockIn = new Date(`${dateOnly}T${clockInData[0].ClockIn}`);
+      const clockOut = new Date(`${dateOnly}T${timeOnly}`);
+
+      const shiftLength = (clockOut - clockIn) / 60000;
+
+
+      await DataStore.save(
+        ClockIn.copyOf(clockInData[0], updated => {
+          updated.ClockOut = timeOnly;
+          updated.ClockedOut = true;
+          updated.StaffHours = parseFloat(shiftLength);
+        })
+      );
+      console.log(`${staff.Name} clocked out`);
+      window.location.reload();
+    } else {
+      // If the staff member is not clocked in, save a new ClockIn entry
+      await DataStore.save(
+        new ClockIn({
+          ClockIn: timeOnly,
+          ClockedIn: true,
+          StaffId: userEmail,
+          Date: dateOnly,
+        })
+      );
+      console.log(`${staff.Name} clocked in`);
+      window.location.reload();
+    }
+  };
+  
+  const handleBreakStartEnd = async (staff) => {
+    const userEmail = staff.Email;
+    const dateTime = new Date();
+    const timezoneOffset = dateTime.getTimezoneOffset() * 60000;
+    const timeOnly = new Date(dateTime - timezoneOffset)
+      .toISOString()
+      .split('T')[1]
+      .split('Z')[0];
+    const dateOnly = dateTime.toISOString().split('T')[0];
+  
+    const clockInDataAll = await DataStore.query(ClockIn);
+    const clockInData = clockInDataAll.filter(c => c.StaffId === userEmail && c.Date === dateOnly);
+  
+    if (clockInData.length > 0 && clockInData[0].Break) {
+      // If the staff member is on break, update the BreakEnd time and Break status
+      // work out how long the break was
+      const breakStart = new Date(`${dateOnly}T${clockInData[0].BreakStart}`);
+      const breakEnd = new Date(`${dateOnly}T${timeOnly}`);
+      const breakLength = (breakEnd - breakStart) / 60000;
+
+      await DataStore.save(
+        ClockIn.copyOf(clockInData[0], updated => {
+          updated.BreakEnd = timeOnly;
+          updated.Break = false;
+          updated.StaffBreak = parseFloat(breakLength);
+        })
+      );
+      console.log(`${staff.Name} ended break`);
+      window.location.reload();
+    } else {
+      // If the staff member is not on break, update the BreakStart time and Break status
+      await DataStore.save(
+        ClockIn.copyOf(clockInData[0], updated => {
+          updated.BreakStart = timeOnly;
+          updated.Break = true;
+        })
+      );
+      console.log(`${staff.Name} started break`);
+      window.location.reload();
+    }
+  };
+  
+  if (clock === true) {
+    return (
+      <ClockInData/>
+    );
+  }
+
+  return (
+
+<div className="px-4 sm:px-6 lg:px-8">
+<div className="sm:flex sm:items-center">
+<div className="sm:flex-auto">
+  <h1 className="text-base font-semibold leading-6 text-gray-900">Staff</h1>
+  
+</div>
+<div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+  <button onClick={()=> setClock(true)}
+    type="button"
+    className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+  >
+Data  </button>
+</div>
+</div>
+<div className="mt-8 flow-root">
+<div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+  <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+    <table className="min-w-full divide-y divide-gray-300">
+      <thead>
+        <tr>
+          <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+            Name
+          </th>
+          <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+            ClockIn/Out
+          </th>
+          <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+            Break
+          </th>
+          
+          
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-gray-200">
+      {staffList.map((staff) => (
+          <tr key={staff.Name}>
+            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+              {staff.Name}
+            </td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{staff.Name}</td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> <button
+                    className={`bg-purple-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md ${staff.isClockedIn ? 'bg-red-500' : 'bg-blue-500'}`}
+                    onClick={() => handleClockInOut(staff)}
+                  >
+                    {staff.isClockedIn ? <ClockIcon className="h-5 w-5 mr-2" /> : <MoonIcon className="h-5 w-5 mr-2" />}
+                    {staff.isClockedIn ? 'Clock Out' : 'Clock In'}
+                  </button></td>
+            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> <button
+                    className={`bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md ${staff.isOnBreak ? 'bg-green-500' : 'bg-blue-500'}`}
+                    onClick={() => handleBreakStartEnd(staff)}
+                  >
+                    {staff.isOnBreak ? <MoonIcon className="h-5 w-5 mr-2" /> : <SunIcon className="h-5 w-5 mr-2" />}
+                    {staff.isOnBreak ? 'Back From Break' : 'Start Break'}
+                  </button></td>
+            
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+</div>
+  );
+}

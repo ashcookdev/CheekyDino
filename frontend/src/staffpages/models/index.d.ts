@@ -6,40 +6,6 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 
 
 
-type EagerDailyFinancials = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<DailyFinancials, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly Gross?: number | null;
-  readonly VATReturns?: number | null;
-  readonly Net?: number | null;
-  readonly Date?: string | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-type LazyDailyFinancials = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<DailyFinancials, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly Gross?: number | null;
-  readonly VATReturns?: number | null;
-  readonly Net?: number | null;
-  readonly Date?: string | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-export declare type DailyFinancials = LazyLoading extends LazyLoadingDisabled ? EagerDailyFinancials : LazyDailyFinancials
-
-export declare const DailyFinancials: (new (init: ModelInit<DailyFinancials>) => DailyFinancials) & {
-  copyOf(source: DailyFinancials, mutator: (draft: MutableModel<DailyFinancials>) => MutableModel<DailyFinancials> | void): DailyFinancials;
-}
-
 type EagerStockControl = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<StockControl, 'id'>;
@@ -112,6 +78,8 @@ type EagerClockIn = {
   readonly Break?: boolean | null;
   readonly BreakStart?: string | null;
   readonly BreakEnd?: string | null;
+  readonly StaffHours?: number | null;
+  readonly StaffBreak?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -136,6 +104,8 @@ type LazyClockIn = {
   readonly Break?: boolean | null;
   readonly BreakStart?: string | null;
   readonly BreakEnd?: string | null;
+  readonly StaffHours?: number | null;
+  readonly StaffBreak?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

@@ -13,11 +13,12 @@ export default function Online() {
   useEffect(() => {
     const fetchClockedInStaff = async () => {
       const clockInRecords = await DataStore.query(ClockIn);
+      console.log(clockInRecords)
       const clockedInToday = clockInRecords.filter(
         (c) =>
           isSameDay(new Date(c.Date), new Date()) &&
           c.ClockedIn === true &&
-          c.ClockedOut === false
+          c.ClockedOut === null
       );
       console.log(clockedInToday);
       setClockedInStaff(clockedInToday);

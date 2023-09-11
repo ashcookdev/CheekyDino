@@ -282,7 +282,7 @@ console.log(order)
   id="table"
   value={table}
   onChange={handleTableChange}
-  className="border rounded-md p-1 mr-2"
+  className="border rounded-md p-1 mr-2 bg-green-500 "
 >
   {occupiedSessions.map((session) => (
     <option key={session.Table} value={session.Table}>
@@ -290,7 +290,6 @@ console.log(order)
     </option>
   ))}
 </select>
-<dir></dir>
 
       <div className="flex-grow justify-start flex flex-wrap">
         {party.map((partyBooking) => (
