@@ -4,6 +4,10 @@ import { Sessions } from './models';
 import { useNavigate } from 'react-router-dom';
 import tableData from './TableData.json';
 import { format } from 'date-fns';
+import emailjs from '@emailjs/browser';
+import QRCode from 'qrcode';
+
+
 
 //
 
@@ -114,41 +118,58 @@ const freeTablesPerTimeslot = timeslots.map(timeslot => {
 }, []);
 
     // Handle booking
-function handleBook(item) {
-
-  // Update child data
-
-
-  
-  
-  
-  
-
-  // Save booking information to DataStore
-  DataStore.save(
-    new Sessions({
-      Name: name,
-      Date: date,
-      TimeslotFrom: item.timeslot.start,
-      TimeslotTo: item.timeslot.end,
-      Table: item.recommendedTables[0],
-      Email: email,
-      Adults: Number(adults),
-      Children: Number(children),
-      Arrived: false,
-      LeftCenter: false,
-      ExtraTables: item.recommendedTables.length > 1 ? item.recommendedTables[1] : null,      
-      Prepaid: false,
-      Age: childData.map(item => item.ChildAge),
-    Telephone: telephone,
-    TotalSpent: childData.reduce((acc, item) => acc + parseFloat(item.TotalSpent), 0),
-    })
-  );
-
-  // Redirect to /sessionbooking page
-  navigate('/till');
-  window.location.reload();
-}
+    async function handleBook(item) {
+      const createUniqueID = () => {
+        return Math.random().toString(36).substr(2, 9);
+      };
+    
+      const bookingID = createUniqueID();
+    
+      // Generate QR code data URL
+      const qrCodeDataUrl = await QRCode.toDataURL(bookingID);
+    
+      // Initialize EmailJS
+      emailjs.init('IRmucExHqH7rKSEBW');
+    
+      const templateParams = {
+        to_name: name,
+        to_email: email,
+        message: `Thank you for booking with us. Your booking details are as follows: Date: ${date} Time: ${item.timeslot.start} - ${item.timeslot.end} Table: ${item.recommendedTables[0]}. Please show this QR code to a member of staff when you arrive.`,  qrCodeDataUrl
+      };
+    
+      emailjs.send('bookingscheekydino', 'bookings', templateParams)
+        .then((response) => {
+          console.log('SUCCESS!', response.status, response.text);
+        })
+        .catch((err) => {
+          console.log('FAILED...', err);
+        });
+    
+      // Save booking information to DataStore
+      DataStore.save(
+        new Sessions({
+          id: bookingID,
+          Name: name,
+          Date: date,
+          TimeslotFrom: item.timeslot.start,
+          TimeslotTo: item.timeslot.end,
+          Table: item.recommendedTables[0],
+          Email: email,
+          Adults: Number(adults),
+          Children: Number(children),
+          Arrived: false,
+          LeftCenter: false,
+          ExtraTables: item.recommendedTables.length > 1 ? item.recommendedTables[1] : null,      
+          Prepaid: false,
+          Age: childData.map(item => item.ChildAge),
+          Telephone: telephone,
+          TotalSpent: childData.reduce((acc, item) => acc + parseFloat(item.TotalSpent), 0),
+        })
+      );
+    
+      // Redirect to /sessionbooking page
+      window.location.reload()
+    }
 
     
   // Display available timeslots with "Book" button

@@ -62,7 +62,7 @@ export default function Example() {
         { name: 'Password', href: '#', icon: FingerPrintIcon, current: false },
        
         ...(userGroups.includes('Developer') || userGroups.includes('Admin')
-          ? [{ name: 'Till Products', href: '/settings/till-products', icon: UsersIcon, current: false },
+          ? [
           { name: 'Stock Control ', href: '/stockcontrol', icon: CubeIcon, current: false },
           { name: 'Party Stock', href: '/partystock', icon: BellIcon, current: false},
 

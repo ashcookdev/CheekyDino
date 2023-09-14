@@ -1,11 +1,3 @@
-type DailyFinancials @model @auth(rules: [{allow: private}]) {
-  id: ID!
-  Gross: Float
-  VATReturns: Float
-  Net: Float
-  Date: AWSDate
-}
-
 type StockControl @model @auth(rules: [{allow: private}]) {
   id: ID!
   Name: String
@@ -79,13 +71,6 @@ type CustomerScreen @model @auth(rules: [{allow: private}, {allow: owner}]) {
   Number: Int
 }
 
-type Extras @model @auth(rules: [{allow: private}]) {
-  id: ID!
-  Name: String
-  Price: Float
-  Kitchen: Boolean
-}
-
 type KitchenMenu @model @auth(rules: [{allow: private}]) {
   id: ID!
   Name: String
@@ -135,28 +120,6 @@ type Staff @model @auth(rules: [{allow: private}, {allow: owner}]) {
   EndDate: AWSDate
   Age: String
   DOB: String
-}
-
-type Confectionary @model @auth(rules: [{allow: private}, {allow: owner}]) {
-  id: ID!
-  Name: String
-  Price: Float
-  Kitchen: Boolean
-}
-
-type SoftDrinks @model @auth(rules: [{allow: private}, {allow: owner}]) {
-  id: ID!
-  Name: String
-  Price: Float
-  Kitchen: Boolean
-}
-
-type HotDrinks @model @auth(rules: [{allow: private}, {allow: owner}]) {
-  id: ID!
-  Name: String
-  Price: Float
-  Syrup: Boolean
-  Kitchen: Boolean
 }
 
 type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: public, operations: [read]}]) {

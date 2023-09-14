@@ -56,7 +56,6 @@ import ClockIn from './staffpages/staffactions';
 import StarterForm from './staffpages/starterform';
 import StaffDetails from './staffpages/staffdetails';
 import Settings from './staffpages/settings';
-import TillProducts from './staffpages/tillproducts';
 import StockControl from './staffpages/stockcontrol';
 import BuildAMeal from './staffpages/buildameal';
 import MealProfit from './staffpages/mealprofitmargins';
@@ -250,7 +249,6 @@ function App() {
             <Route path= "/staff/staffedit" element={<StaffDetails />} />
 
             <Route path="/staff/shiftbooking" element={<Task />} />
-            <Route path= "/settings/till-products" element={<TillProducts />} />
           </>
 
             )}

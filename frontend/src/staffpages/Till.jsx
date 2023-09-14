@@ -205,7 +205,7 @@ console.log(order)
   }
   if (confirm === true) {
     if (staff === null) {
-      alert('Please enter staff member');
+
       window.location.reload();
       return;
     }
@@ -394,7 +394,7 @@ console.log(order)
               <motion.button
                 key={item.id}
                 onClick={() => handleItemClick(item)}
-                className={`text-white font-bold py-2 px-4 rounded-full shadow-md mr-2 ${stockColor}`}
+                className={`text-white font-bold py-2 px-4 rounded-full shadow-md mt-2 mr-2 ${stockColor}`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -450,12 +450,15 @@ console.log(order)
                 ))}
               </ul>
               <p>Total: £{total.toFixed(2)}</p>
-              <button
-                className="bg-purple-500 text-white p-2 rounded mt-4"
-                onClick={() => handleConfirm(order, total)}
-              >
-                Confirm
-              </button>
+              <motion.button                 onClick={() => handleConfirm(order, total)}
+
+        className="w-16 h-10 bg-purple-600 text-xs font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        Confirm
+      </motion.button>
+              
             </div>
           </div>
         </div>

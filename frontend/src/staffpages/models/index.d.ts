@@ -78,8 +78,6 @@ type EagerClockIn = {
   readonly Break?: boolean | null;
   readonly BreakStart?: string | null;
   readonly BreakEnd?: string | null;
-  readonly StaffHours?: number | null;
-  readonly StaffBreak?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -104,8 +102,6 @@ type LazyClockIn = {
   readonly Break?: boolean | null;
   readonly BreakStart?: string | null;
   readonly BreakEnd?: string | null;
-  readonly StaffHours?: number | null;
-  readonly StaffBreak?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -264,38 +260,6 @@ export declare const CustomerScreen: (new (init: ModelInit<CustomerScreen>) => C
   copyOf(source: CustomerScreen, mutator: (draft: MutableModel<CustomerScreen>) => MutableModel<CustomerScreen> | void): CustomerScreen;
 }
 
-type EagerExtras = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Extras, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly Name?: string | null;
-  readonly Price?: number | null;
-  readonly Kitchen?: boolean | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-type LazyExtras = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Extras, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly Name?: string | null;
-  readonly Price?: number | null;
-  readonly Kitchen?: boolean | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-export declare type Extras = LazyLoading extends LazyLoadingDisabled ? EagerExtras : LazyExtras
-
-export declare const Extras: (new (init: ModelInit<Extras>) => Extras) & {
-  copyOf(source: Extras, mutator: (draft: MutableModel<Extras>) => MutableModel<Extras> | void): Extras;
-}
-
 type EagerKitchenMenu = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<KitchenMenu, 'id'>;
@@ -450,104 +414,6 @@ export declare type Staff = LazyLoading extends LazyLoadingDisabled ? EagerStaff
 
 export declare const Staff: (new (init: ModelInit<Staff>) => Staff) & {
   copyOf(source: Staff, mutator: (draft: MutableModel<Staff>) => MutableModel<Staff> | void): Staff;
-}
-
-type EagerConfectionary = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Confectionary, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly Name?: string | null;
-  readonly Price?: number | null;
-  readonly Kitchen?: boolean | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-type LazyConfectionary = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Confectionary, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly Name?: string | null;
-  readonly Price?: number | null;
-  readonly Kitchen?: boolean | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-export declare type Confectionary = LazyLoading extends LazyLoadingDisabled ? EagerConfectionary : LazyConfectionary
-
-export declare const Confectionary: (new (init: ModelInit<Confectionary>) => Confectionary) & {
-  copyOf(source: Confectionary, mutator: (draft: MutableModel<Confectionary>) => MutableModel<Confectionary> | void): Confectionary;
-}
-
-type EagerSoftDrinks = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<SoftDrinks, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly Name?: string | null;
-  readonly Price?: number | null;
-  readonly Kitchen?: boolean | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-type LazySoftDrinks = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<SoftDrinks, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly Name?: string | null;
-  readonly Price?: number | null;
-  readonly Kitchen?: boolean | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-export declare type SoftDrinks = LazyLoading extends LazyLoadingDisabled ? EagerSoftDrinks : LazySoftDrinks
-
-export declare const SoftDrinks: (new (init: ModelInit<SoftDrinks>) => SoftDrinks) & {
-  copyOf(source: SoftDrinks, mutator: (draft: MutableModel<SoftDrinks>) => MutableModel<SoftDrinks> | void): SoftDrinks;
-}
-
-type EagerHotDrinks = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<HotDrinks, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly Name?: string | null;
-  readonly Price?: number | null;
-  readonly Syrup?: boolean | null;
-  readonly Kitchen?: boolean | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-type LazyHotDrinks = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<HotDrinks, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly Name?: string | null;
-  readonly Price?: number | null;
-  readonly Syrup?: boolean | null;
-  readonly Kitchen?: boolean | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-export declare type HotDrinks = LazyLoading extends LazyLoadingDisabled ? EagerHotDrinks : LazyHotDrinks
-
-export declare const HotDrinks: (new (init: ModelInit<HotDrinks>) => HotDrinks) & {
-  copyOf(source: HotDrinks, mutator: (draft: MutableModel<HotDrinks>) => MutableModel<HotDrinks> | void): HotDrinks;
 }
 
 type EagerSessions = {

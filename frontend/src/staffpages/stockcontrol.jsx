@@ -27,6 +27,7 @@ export default function Buildameal() {
   const [price, setPrice] = useState(0);
   const [menuExtra, setMenuExtra] = useState(null);
   const [selectedExtras, setSelectedExtras] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const getStock = async () => {
 
@@ -181,6 +182,7 @@ function handleSelectExtras(event) {
     )
   }
   
+  const filteredStock = stock.filter(stock => stock.Name.toLowerCase().includes(searchTerm.toLowerCase()));
 
  
 
@@ -290,10 +292,29 @@ Estimated Prep Time              </label>
           
         <h2 className="text-lg font-medium text-gray-900 text-center mt-10">Stock Items</h2>
         <button onClick={()=> setAdd(true)} className='relative inline-flex mt-3 items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none'>Add Item</button>
+        <div>
+      <label htmlFor="search" className="block text-sm font-medium leading-6 text-gray-900">
+        Quick search
+      </label>
+      <div className="relative mt-2 flex items-center">
+      <input
+  type="text"
+  name="search"
+  id="search"
+  className="block w-full rounded-md border-0 py-1.5 pr-14 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+  onChange={event => setSearchTerm(event.target.value)}
+/>
 
+        <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
+          <kbd className="inline-flex items-center rounded border border-gray-200 px-1 font-sans text-xs text-gray-400">
+            ⌘K
+          </kbd>
+        </div>
+      </div>
+    </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-3">
-  {stock.map((stock) => (
+  {filteredStock.map((stock) => (
     <div
       key={stock.Name}
       className={`relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400 ${stock.Weight > 0 ? (stock.CurrentStockLevel > 500 ? 'bg-green-100' : 'bg-red-100') : (stock.Quantity > 0 ? (stock.CurrentStockLevel > 50 ? 'bg-green-100' : 'bg-red-100') : '')}`}

@@ -63,14 +63,7 @@ console.log(orders)
         setKidsMenu(kidsMenu)
     }
 
-    const fetchExtras = async () => {
-        const extras = await DataStore.query(Extras)
-        setExtras(extras)
-    }
-
-    useEffect(() => {
-        fetchExtras()}, []) 
-
+  
     useEffect(() => {
         fetchKidsMenu()}, [])
 

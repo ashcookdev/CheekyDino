@@ -34,7 +34,6 @@ export default function TillPayment({
   const [isFlashing, setIsFlashing] = useState(false);
   const [orders, setOrders] = useState([]);
   const [prep, setPrep] = useState([]);
-  const [port, setPort] = useState(null);
 
   console.log(orders);
   const navigate = useNavigate();
@@ -137,16 +136,7 @@ export default function TillPayment({
     setOrders(order);
   };
 
-  const handleTillDrawer = () => {
-    fetch('/open-till')
-      .then((response) => response.text())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
+
 
 
   
@@ -177,9 +167,7 @@ export default function TillPayment({
           Cancel
         </button>
         <div className="mt-4">
-          <button onClick={handleTillDrawer} className="bg-gray-200 p-2 rounded w-full">
-            Open Till
-          </button>
+         
 
         <ReactToPrint
         trigger={() => <button className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5">Print</button>}
