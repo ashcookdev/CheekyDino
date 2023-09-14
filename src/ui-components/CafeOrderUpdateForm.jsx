@@ -35,7 +35,6 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
-  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -59,7 +58,6 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -169,7 +167,12 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button size="small" variation="link" onClick={addItem}>
+          <Button
+            size="small"
+            variation="link"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
             {selectedBadgeIndex !== undefined ? "Save" : "Add"}
           </Button>
         </Flex>
@@ -372,8 +375,8 @@ export default function CafeOrderUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value === "") {
-              modelFields[key] = null;
+            if (typeof value === "string" && value.trim() === "") {
+              modelFields[key] = undefined;
             }
           });
           await DataStore.save(
@@ -552,9 +555,6 @@ export default function CafeOrderUpdateForm(props) {
         label={"Drink items"}
         items={DrinkItems}
         hasError={errors?.DrinkItems?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks("DrinkItems", currentDrinkItemsValue)
-        }
         errorMessage={errors?.DrinkItems?.errorMessage}
         setFieldValue={setCurrentDrinkItemsValue}
         inputFieldRef={DrinkItemsRef}
@@ -615,9 +615,6 @@ export default function CafeOrderUpdateForm(props) {
         label={"Hot items"}
         items={HotItems}
         hasError={errors?.HotItems?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks("HotItems", currentHotItemsValue)
-        }
         errorMessage={errors?.HotItems?.errorMessage}
         setFieldValue={setCurrentHotItemsValue}
         inputFieldRef={HotItemsRef}
@@ -1045,9 +1042,6 @@ export default function CafeOrderUpdateForm(props) {
         label={"Kitchen menu id"}
         items={KitchenMenuId}
         hasError={errors?.KitchenMenuId?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks("KitchenMenuId", currentKitchenMenuIdValue)
-        }
         errorMessage={errors?.KitchenMenuId?.errorMessage}
         setFieldValue={setCurrentKitchenMenuIdValue}
         inputFieldRef={KitchenMenuIdRef}

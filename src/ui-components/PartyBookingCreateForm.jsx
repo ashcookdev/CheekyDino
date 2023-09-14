@@ -35,7 +35,6 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
-  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -59,7 +58,6 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -169,7 +167,12 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button size="small" variation="link" onClick={addItem}>
+          <Button
+            size="small"
+            variation="link"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
             {selectedBadgeIndex !== undefined ? "Save" : "Add"}
           </Button>
         </Flex>
@@ -364,8 +367,8 @@ export default function PartyBookingCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value === "") {
-              modelFields[key] = null;
+            if (typeof value === "string" && value.trim() === "") {
+              modelFields[key] = undefined;
             }
           });
           const modelFieldsToSave = {
@@ -1074,12 +1077,6 @@ export default function PartyBookingCreateForm(props) {
         label={"Party adult food choices"}
         items={PartyAdultFoodChoices}
         hasError={errors?.PartyAdultFoodChoices?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks(
-            "PartyAdultFoodChoices",
-            currentPartyAdultFoodChoicesValue
-          )
-        }
         errorMessage={errors?.PartyAdultFoodChoices?.errorMessage}
         setFieldValue={setCurrentPartyAdultFoodChoicesValue}
         inputFieldRef={PartyAdultFoodChoicesRef}

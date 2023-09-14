@@ -36,7 +36,6 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
-  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -60,7 +59,6 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -170,7 +168,12 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button size="small" variation="link" onClick={addItem}>
+          <Button
+            size="small"
+            variation="link"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
             {selectedBadgeIndex !== undefined ? "Save" : "Add"}
           </Button>
         </Flex>
@@ -344,8 +347,8 @@ export default function KitchenMenuCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value === "") {
-              modelFields[key] = null;
+            if (typeof value === "string" && value.trim() === "") {
+              modelFields[key] = undefined;
             }
           });
           await DataStore.save(new KitchenMenu(modelFields));
@@ -751,9 +754,6 @@ export default function KitchenMenuCreateForm(props) {
         label={"Extras"}
         items={Extras}
         hasError={errors?.Extras?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks("Extras", currentExtrasValue)
-        }
         errorMessage={errors?.Extras?.errorMessage}
         setFieldValue={setCurrentExtrasValue}
         inputFieldRef={ExtrasRef}
@@ -850,9 +850,6 @@ export default function KitchenMenuCreateForm(props) {
         label={"Extras price"}
         items={ExtrasPrice}
         hasError={errors?.ExtrasPrice?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks("ExtrasPrice", currentExtrasPriceValue)
-        }
         errorMessage={errors?.ExtrasPrice?.errorMessage}
         setFieldValue={setCurrentExtrasPriceValue}
         inputFieldRef={ExtrasPriceRef}

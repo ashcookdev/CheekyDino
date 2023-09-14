@@ -34,7 +34,6 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
-  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -58,7 +57,6 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -168,7 +166,12 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button size="small" variation="link" onClick={addItem}>
+          <Button
+            size="small"
+            variation="link"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
             {selectedBadgeIndex !== undefined ? "Save" : "Add"}
           </Button>
         </Flex>
@@ -319,8 +322,8 @@ export default function TimeEntryUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value === "") {
-              modelFields[key] = null;
+            if (typeof value === "string" && value.trim() === "") {
+              modelFields[key] = undefined;
             }
           });
           await DataStore.save(
@@ -430,9 +433,6 @@ export default function TimeEntryUpdateForm(props) {
         label={"Dates"}
         items={Dates}
         hasError={errors?.Dates?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks("Dates", currentDatesValue)
-        }
         errorMessage={errors?.Dates?.errorMessage}
         setFieldValue={setCurrentDatesValue}
         inputFieldRef={DatesRef}
@@ -483,9 +483,6 @@ export default function TimeEntryUpdateForm(props) {
         label={"Shift start"}
         items={ShiftStart}
         hasError={errors?.ShiftStart?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks("ShiftStart", currentShiftStartValue)
-        }
         errorMessage={errors?.ShiftStart?.errorMessage}
         setFieldValue={setCurrentShiftStartValue}
         inputFieldRef={ShiftStartRef}
@@ -537,9 +534,6 @@ export default function TimeEntryUpdateForm(props) {
         label={"Shift finish"}
         items={ShiftFinish}
         hasError={errors?.ShiftFinish?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks("ShiftFinish", currentShiftFinishValue)
-        }
         errorMessage={errors?.ShiftFinish?.errorMessage}
         setFieldValue={setCurrentShiftFinishValue}
         inputFieldRef={ShiftFinishRef}
@@ -653,9 +647,6 @@ export default function TimeEntryUpdateForm(props) {
         label={"Holiday"}
         items={Holiday}
         hasError={errors?.Holiday?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks("Holiday", currentHolidayValue)
-        }
         errorMessage={errors?.Holiday?.errorMessage}
         setFieldValue={setCurrentHolidayValue}
         inputFieldRef={HolidayRef}

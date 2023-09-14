@@ -283,6 +283,7 @@ type EagerKitchenMenu = {
   readonly InStock?: boolean | null;
   readonly StockLevel?: number | null;
   readonly StockControls?: (KitchenMenuStockControl | null)[] | null;
+  readonly CafeOrders?: (KitchenMenuCafeOrder | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -310,6 +311,7 @@ type LazyKitchenMenu = {
   readonly InStock?: boolean | null;
   readonly StockLevel?: number | null;
   readonly StockControls: AsyncCollection<KitchenMenuStockControl>;
+  readonly CafeOrders: AsyncCollection<KitchenMenuCafeOrder>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -508,6 +510,7 @@ type EagerCafeOrder = {
   readonly KitchenMenuId?: (string | null)[] | null;
   readonly ChefName?: string | null;
   readonly StaffOrderName?: string | null;
+  readonly kitchenmenus?: (KitchenMenuCafeOrder | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -536,6 +539,7 @@ type LazyCafeOrder = {
   readonly KitchenMenuId?: (string | null)[] | null;
   readonly ChefName?: string | null;
   readonly StaffOrderName?: string | null;
+  readonly kitchenmenus: AsyncCollection<KitchenMenuCafeOrder>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -778,6 +782,40 @@ export declare type KitchenMenuStockControl = LazyLoading extends LazyLoadingDis
 
 export declare const KitchenMenuStockControl: (new (init: ModelInit<KitchenMenuStockControl>) => KitchenMenuStockControl) & {
   copyOf(source: KitchenMenuStockControl, mutator: (draft: MutableModel<KitchenMenuStockControl>) => MutableModel<KitchenMenuStockControl> | void): KitchenMenuStockControl;
+}
+
+type EagerKitchenMenuCafeOrder = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<KitchenMenuCafeOrder, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly kitchenMenuId?: string | null;
+  readonly cafeOrderId?: string | null;
+  readonly kitchenMenu: KitchenMenu;
+  readonly cafeOrder: CafeOrder;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyKitchenMenuCafeOrder = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<KitchenMenuCafeOrder, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly kitchenMenuId?: string | null;
+  readonly cafeOrderId?: string | null;
+  readonly kitchenMenu: AsyncItem<KitchenMenu>;
+  readonly cafeOrder: AsyncItem<CafeOrder>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type KitchenMenuCafeOrder = LazyLoading extends LazyLoadingDisabled ? EagerKitchenMenuCafeOrder : LazyKitchenMenuCafeOrder
+
+export declare const KitchenMenuCafeOrder: (new (init: ModelInit<KitchenMenuCafeOrder>) => KitchenMenuCafeOrder) & {
+  copyOf(source: KitchenMenuCafeOrder, mutator: (draft: MutableModel<KitchenMenuCafeOrder>) => MutableModel<KitchenMenuCafeOrder> | void): KitchenMenuCafeOrder;
 }
 
 type EagerTimeEntryStaff = {

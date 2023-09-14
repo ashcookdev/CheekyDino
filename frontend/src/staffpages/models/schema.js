@@ -840,6 +840,22 @@ export const schema = {
                         ]
                     }
                 },
+                "CafeOrders": {
+                    "name": "CafeOrders",
+                    "isArray": true,
+                    "type": {
+                        "model": "KitchenMenuCafeOrder"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "kitchenMenu"
+                        ]
+                    }
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -870,6 +886,18 @@ export const schema = {
                         "rules": [
                             {
                                 "allow": "private",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            },
+                            {
+                                "provider": "userPools",
+                                "ownerField": "owner",
+                                "allow": "owner",
+                                "identityClaim": "cognito:username",
                                 "operations": [
                                     "create",
                                     "update",
@@ -1553,6 +1581,22 @@ export const schema = {
                     "type": "String",
                     "isRequired": false,
                     "attributes": []
+                },
+                "kitchenmenus": {
+                    "name": "kitchenmenus",
+                    "isArray": true,
+                    "type": {
+                        "model": "KitchenMenuCafeOrder"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "cafeOrder"
+                        ]
+                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -2553,6 +2597,104 @@ export const schema = {
                 }
             ]
         },
+        "KitchenMenuCafeOrder": {
+            "name": "KitchenMenuCafeOrder",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "kitchenMenuId": {
+                    "name": "kitchenMenuId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "cafeOrderId": {
+                    "name": "cafeOrderId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "kitchenMenu": {
+                    "name": "kitchenMenu",
+                    "isArray": false,
+                    "type": {
+                        "model": "KitchenMenu"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetNames": [
+                            "kitchenMenuId"
+                        ]
+                    }
+                },
+                "cafeOrder": {
+                    "name": "cafeOrder",
+                    "isArray": false,
+                    "type": {
+                        "model": "CafeOrder"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetNames": [
+                            "cafeOrderId"
+                        ]
+                    }
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "KitchenMenuCafeOrders",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byKitchenMenu",
+                        "fields": [
+                            "kitchenMenuId"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byCafeOrder",
+                        "fields": [
+                            "cafeOrderId"
+                        ]
+                    }
+                }
+            ]
+        },
         "TimeEntryStaff": {
             "name": "TimeEntryStaff",
             "fields": {
@@ -2654,6 +2796,6 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "codegenVersion": "3.4.4",
-    "version": "2696f3844de5372ebd9c21459c9748ab"
+    "codegenVersion": "3.4.0",
+    "version": "466ef456c75b6ceccd3b86457781d07a"
 };

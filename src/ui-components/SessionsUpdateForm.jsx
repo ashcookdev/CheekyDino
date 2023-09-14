@@ -35,7 +35,6 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
-  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -59,7 +58,6 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -169,7 +167,12 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button size="small" variation="link" onClick={addItem}>
+          <Button
+            size="small"
+            variation="link"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
             {selectedBadgeIndex !== undefined ? "Save" : "Add"}
           </Button>
         </Flex>
@@ -379,8 +382,8 @@ export default function SessionsUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value === "") {
-              modelFields[key] = null;
+            if (typeof value === "string" && value.trim() === "") {
+              modelFields[key] = undefined;
             }
           });
           await DataStore.save(
@@ -1196,9 +1199,6 @@ export default function SessionsUpdateForm(props) {
         label={"Orderid"}
         items={orderid}
         hasError={errors?.orderid?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks("orderid", currentOrderidValue)
-        }
         errorMessage={errors?.orderid?.errorMessage}
         setFieldValue={setCurrentOrderidValue}
         inputFieldRef={orderidRef}
@@ -1260,9 +1260,6 @@ export default function SessionsUpdateForm(props) {
         label={"Age"}
         items={Age}
         hasError={errors?.Age?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks("Age", currentAgeValue)
-        }
         errorMessage={errors?.Age?.errorMessage}
         setFieldValue={setCurrentAgeValue}
         inputFieldRef={AgeRef}
@@ -1324,9 +1321,6 @@ export default function SessionsUpdateForm(props) {
         label={"Extra names"}
         items={ExtraNames}
         hasError={errors?.ExtraNames?.hasError}
-        runValidationTasks={async () =>
-          await runValidationTasks("ExtraNames", currentExtraNamesValue)
-        }
         errorMessage={errors?.ExtraNames?.errorMessage}
         setFieldValue={setCurrentExtraNamesValue}
         inputFieldRef={ExtraNamesRef}
