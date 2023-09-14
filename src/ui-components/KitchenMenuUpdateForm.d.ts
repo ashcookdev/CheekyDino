@@ -23,9 +23,8 @@ export declare type KitchenMenuUpdateFormInputValues = {
     Prep?: string;
     Ingredients?: string;
     Snooze?: boolean;
-    Extras?: string[];
+    Extras?: string;
     Category?: string;
-    ExtrasPrice?: number[];
     ProfitMargin?: number;
     PriceNoVAT?: number;
     InStock?: boolean;
@@ -43,7 +42,6 @@ export declare type KitchenMenuUpdateFormValidationValues = {
     Snooze?: ValidationFunction<boolean>;
     Extras?: ValidationFunction<string>;
     Category?: ValidationFunction<string>;
-    ExtrasPrice?: ValidationFunction<number>;
     ProfitMargin?: ValidationFunction<number>;
     PriceNoVAT?: ValidationFunction<number>;
     InStock?: ValidationFunction<boolean>;
@@ -61,9 +59,8 @@ export declare type KitchenMenuUpdateFormOverridesProps = {
     Prep?: PrimitiveOverrideProps<TextFieldProps>;
     Ingredients?: PrimitiveOverrideProps<TextAreaFieldProps>;
     Snooze?: PrimitiveOverrideProps<SwitchFieldProps>;
-    Extras?: PrimitiveOverrideProps<TextFieldProps>;
+    Extras?: PrimitiveOverrideProps<TextAreaFieldProps>;
     Category?: PrimitiveOverrideProps<TextFieldProps>;
-    ExtrasPrice?: PrimitiveOverrideProps<TextFieldProps>;
     ProfitMargin?: PrimitiveOverrideProps<TextFieldProps>;
     PriceNoVAT?: PrimitiveOverrideProps<TextFieldProps>;
     InStock?: PrimitiveOverrideProps<SwitchFieldProps>;

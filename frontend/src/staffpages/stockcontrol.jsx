@@ -28,6 +28,7 @@ export default function Buildameal() {
   const [menuExtra, setMenuExtra] = useState(null);
   const [selectedExtras, setSelectedExtras] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [extraPrices, setExtraPrices] = useState({});
 
   const getStock = async () => {
 
@@ -142,18 +143,19 @@ function handleConfirmation(stock) {
 }
 
 function handleExtrasConfirm() {
-
   DataStore.save(
     KitchenMenu.copyOf(menuExtra, (updated) => {
-      updated.Extras = selectedExtras;
-      updated.ExtrasPrice = selectedExtras.Price;
+      updated.Extras = selectedExtras.map((extra) => ({
+        name: extra,
+        price: extraPrices[extra],
+      }));
     })
-
   );
-  console.log('Extras updated');
 
+  console.log('Extras updated');
   setMenuExtra(null);
 }
+
 
 
 
@@ -183,6 +185,15 @@ function handleSelectExtras(event) {
   }
   
   const filteredStock = stock.filter(stock => stock.Name.toLowerCase().includes(searchTerm.toLowerCase()));
+
+  function handlePriceChange(event, extra) {
+    setExtraPrices((prices) => ({
+      ...prices,
+      [extra]: parseFloat(event.target.value),
+    }));
+  }
+  
+  
 
  
 
@@ -482,24 +493,42 @@ Cases      </label>
                 ))}
               </select>
               <div>
+  
+
+ 
+                
                
-        {selectedExtras.map((item) => (
-          <div key={item}  className='mt-3'>
-            <li> {item} </li></div>
-        ))}
-      </div>
+              {selectedExtras.map((extra) => (
+  <div key={extra} className='mt-3'>
+    <li>{extra}</li>
+    <input
+  onChange={(event) => handlePriceChange(event, extra)}
+  value={extraPrices[extra] || ''}
+  type="number"
+  step="0.01"
+  placeholder="Enter price"
+  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+/>
+
+  </div>
+))}
+
       <button className="relative inline-flex mt-3 items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none"
  onClick={handleExtrasConfirm}>Confirm</button>
             </div>
+        
+        </div>
           )}
         </div>
       </div>
     </div>
   ))}
 </div>
+</div>
+</div>
+</div>
   
-  </div>
-  </div>
-  </div>
+  
+
   );
 }

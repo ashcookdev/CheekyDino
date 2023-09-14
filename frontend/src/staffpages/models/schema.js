@@ -775,11 +775,10 @@ export const schema = {
                 },
                 "Extras": {
                     "name": "Extras",
-                    "isArray": true,
-                    "type": "String",
+                    "isArray": false,
+                    "type": "AWSJSON",
                     "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true
+                    "attributes": []
                 },
                 "Category": {
                     "name": "Category",
@@ -787,14 +786,6 @@ export const schema = {
                     "type": "String",
                     "isRequired": false,
                     "attributes": []
-                },
-                "ExtrasPrice": {
-                    "name": "ExtrasPrice",
-                    "isArray": true,
-                    "type": "Float",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true
                 },
                 "ProfitMargin": {
                     "name": "ProfitMargin",
@@ -2797,5 +2788,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.0",
-    "version": "466ef456c75b6ceccd3b86457781d07a"
+    "version": "dfe40359dc5803e426c152eddd1e5f02"
 };

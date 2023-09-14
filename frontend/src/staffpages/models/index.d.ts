@@ -275,9 +275,8 @@ type EagerKitchenMenu = {
   readonly Prep?: string | null;
   readonly Ingredients?: string | null;
   readonly Snooze?: boolean | null;
-  readonly Extras?: (string | null)[] | null;
+  readonly Extras?: string | null;
   readonly Category?: string | null;
-  readonly ExtrasPrice?: (number | null)[] | null;
   readonly ProfitMargin?: number | null;
   readonly PriceNoVAT?: number | null;
   readonly InStock?: boolean | null;
@@ -303,9 +302,8 @@ type LazyKitchenMenu = {
   readonly Prep?: string | null;
   readonly Ingredients?: string | null;
   readonly Snooze?: boolean | null;
-  readonly Extras?: (string | null)[] | null;
+  readonly Extras?: string | null;
   readonly Category?: string | null;
-  readonly ExtrasPrice?: (number | null)[] | null;
   readonly ProfitMargin?: number | null;
   readonly PriceNoVAT?: number | null;
   readonly InStock?: boolean | null;

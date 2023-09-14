@@ -204,15 +204,17 @@ console.log(order)
     return <Kitchen />
   }
   if (confirm === true) {
+
     if (staff === null) {
 
-      window.location.reload();
-      return;
-    }
+window.location.reload();
+        }
+    
     return (
       <TillPayments order={order} total={total} table={table} childName= {childName} setOrder={setOrder} setTotal={setTotal} staff={staff} />
     );
   }
+  
   
 
   if (home === true) {
@@ -246,16 +248,26 @@ console.log(order)
     }
   };
 
+  const handleExtrasClick = async (extra) => { 
+    // Add the extra item to the order
+    // setOrder((order) => [...order, extra]);
+  
+    // // Update the total price
+    // setTotal((total) => total + extra.price);
+    console.log(extra)
+  };
+
 
 
   const colors = [
-    'bg-red-500',
-    'bg-yellow-500',
-    'bg-green-500',
+    
     'bg-blue-500',
     'bg-indigo-500',
     'bg-purple-500',
     'bg-pink-500',
+    'bg-cyan-500',
+    'bg-purple-700',
+    'bg-gray-500',
   ];
   
   const handleSelectedChange = (selectedStaff) => {
@@ -380,14 +392,14 @@ console.log(order)
         </div>
       {selectedCategory && (
         <div className="mt-10 mr-5 ml-5">
-          {filteredData.map((item) => {
+          {filteredData.map((item,index) => {
             let stockColor;
             if (item.StockLevel < 5) {
               stockColor = 'bg-red-500';
             } else if (item.StockLevel >= 5 && item.StockLevel <= 10) {
               stockColor = 'bg-yellow-500';
             } else {
-              stockColor = 'bg-green-500';
+              stockColor = colors[index % colors.length];
             }
 
             return (
@@ -404,23 +416,34 @@ console.log(order)
           })}
         </div>
       )}
-      {selectedItem && (
-        <motion.div
-          className="mt-10 mr-3 ml-3"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h3>Extras:</h3>
-          <ul>
-            {selectedItem.Extras.map((extra, index) => (
-              <li key={index}>
-                {extra} - £{selectedItem.ExtrasPrice[index].toFixed(2)}
-              </li>
-            ))}
-          </ul>
-        </motion.div>
-      )}
+    {selectedItem && selectedItem.Extras && (
+  <motion.div
+    className="mt-10 mr-3 ml-3"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.5 }}
+  >
+    <h3>Extras:</h3>
+    <ul>
+      {selectedItem.Extras.map((extra, index) => {
+        const kitchenItem = kitchenMenu.find(item => item.Name === extra.name);
+        return (
+          <motion.button
+          onClick={() => handleProductClick(kitchenItem)}
+          key={index}
+            className={`text-blue-500 font-bold py-2 px-4 rounded-full shadow-md mt-2 mr-2`}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            {extra.name} - £{extra.price.toFixed(2)} - Stock: {kitchenMenu ? kitchenItem.StockLevel : 'N/A'}
+          </motion.button>
+        );
+      })}
+    </ul>
+  </motion.div>
+)}
+
+
             </div>
             </div>
             </div>

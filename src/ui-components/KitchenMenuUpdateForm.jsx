@@ -7,181 +7,17 @@
 /* eslint-disable */
 import * as React from "react";
 import {
-  Badge,
   Button,
-  Divider,
   Flex,
   Grid,
-  Icon,
-  ScrollView,
   SwitchField,
-  Text,
   TextAreaField,
   TextField,
-  useTheme,
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { KitchenMenu } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-function ArrayField({
-  items = [],
-  onChange,
-  label,
-  inputFieldRef,
-  children,
-  hasError,
-  setFieldValue,
-  currentFieldValue,
-  defaultFieldValue,
-  lengthLimit,
-  getBadgeText,
-  errorMessage,
-}) {
-  const labelElement = <Text>{label}</Text>;
-  const {
-    tokens: {
-      components: {
-        fieldmessages: { error: errorStyles },
-      },
-    },
-  } = useTheme();
-  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
-  const [isEditing, setIsEditing] = React.useState();
-  React.useEffect(() => {
-    if (isEditing) {
-      inputFieldRef?.current?.focus();
-    }
-  }, [isEditing]);
-  const removeItem = async (removeIndex) => {
-    const newItems = items.filter((value, index) => index !== removeIndex);
-    await onChange(newItems);
-    setSelectedBadgeIndex(undefined);
-  };
-  const addItem = async () => {
-    if (
-      currentFieldValue !== undefined &&
-      currentFieldValue !== null &&
-      currentFieldValue !== "" &&
-      !hasError
-    ) {
-      const newItems = [...items];
-      if (selectedBadgeIndex !== undefined) {
-        newItems[selectedBadgeIndex] = currentFieldValue;
-        setSelectedBadgeIndex(undefined);
-      } else {
-        newItems.push(currentFieldValue);
-      }
-      await onChange(newItems);
-      setIsEditing(false);
-    }
-  };
-  const arraySection = (
-    <React.Fragment>
-      {!!items?.length && (
-        <ScrollView height="inherit" width="inherit" maxHeight={"7rem"}>
-          {items.map((value, index) => {
-            return (
-              <Badge
-                key={index}
-                style={{
-                  cursor: "pointer",
-                  alignItems: "center",
-                  marginRight: 3,
-                  marginTop: 3,
-                  backgroundColor:
-                    index === selectedBadgeIndex ? "#B8CEF9" : "",
-                }}
-                onClick={() => {
-                  setSelectedBadgeIndex(index);
-                  setFieldValue(items[index]);
-                  setIsEditing(true);
-                }}
-              >
-                {getBadgeText ? getBadgeText(value) : value.toString()}
-                <Icon
-                  style={{
-                    cursor: "pointer",
-                    paddingLeft: 3,
-                    width: 20,
-                    height: 20,
-                  }}
-                  viewBox={{ width: 20, height: 20 }}
-                  paths={[
-                    {
-                      d: "M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z",
-                      stroke: "black",
-                    },
-                  ]}
-                  ariaLabel="button"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    removeItem(index);
-                  }}
-                />
-              </Badge>
-            );
-          })}
-        </ScrollView>
-      )}
-      <Divider orientation="horizontal" marginTop={5} />
-    </React.Fragment>
-  );
-  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return (
-      <React.Fragment>
-        {labelElement}
-        {arraySection}
-      </React.Fragment>
-    );
-  }
-  return (
-    <React.Fragment>
-      {labelElement}
-      {isEditing && children}
-      {!isEditing ? (
-        <>
-          <Button
-            onClick={() => {
-              setIsEditing(true);
-            }}
-          >
-            Add item
-          </Button>
-          {errorMessage && hasError && (
-            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
-              {errorMessage}
-            </Text>
-          )}
-        </>
-      ) : (
-        <Flex justifyContent="flex-end">
-          {(currentFieldValue || isEditing) && (
-            <Button
-              children="Cancel"
-              type="button"
-              size="small"
-              onClick={() => {
-                setFieldValue(defaultFieldValue);
-                setIsEditing(false);
-                setSelectedBadgeIndex(undefined);
-              }}
-            ></Button>
-          )}
-          <Button
-            size="small"
-            variation="link"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
-            {selectedBadgeIndex !== undefined ? "Save" : "Add"}
-          </Button>
-        </Flex>
-      )}
-      {arraySection}
-    </React.Fragment>
-  );
-}
 export default function KitchenMenuUpdateForm(props) {
   const {
     id: idProp,
@@ -204,9 +40,8 @@ export default function KitchenMenuUpdateForm(props) {
     Prep: "",
     Ingredients: "",
     Snooze: false,
-    Extras: [],
+    Extras: "",
     Category: "",
-    ExtrasPrice: [],
     ProfitMargin: "",
     PriceNoVAT: "",
     InStock: false,
@@ -227,9 +62,6 @@ export default function KitchenMenuUpdateForm(props) {
   const [Snooze, setSnooze] = React.useState(initialValues.Snooze);
   const [Extras, setExtras] = React.useState(initialValues.Extras);
   const [Category, setCategory] = React.useState(initialValues.Category);
-  const [ExtrasPrice, setExtrasPrice] = React.useState(
-    initialValues.ExtrasPrice
-  );
   const [ProfitMargin, setProfitMargin] = React.useState(
     initialValues.ProfitMargin
   );
@@ -254,11 +86,12 @@ export default function KitchenMenuUpdateForm(props) {
         : JSON.stringify(cleanValues.Ingredients)
     );
     setSnooze(cleanValues.Snooze);
-    setExtras(cleanValues.Extras ?? []);
-    setCurrentExtrasValue("");
+    setExtras(
+      typeof cleanValues.Extras === "string"
+        ? cleanValues.Extras
+        : JSON.stringify(cleanValues.Extras)
+    );
     setCategory(cleanValues.Category);
-    setExtrasPrice(cleanValues.ExtrasPrice ?? []);
-    setCurrentExtrasPriceValue("");
     setProfitMargin(cleanValues.ProfitMargin);
     setPriceNoVAT(cleanValues.PriceNoVAT);
     setInStock(cleanValues.InStock);
@@ -277,11 +110,6 @@ export default function KitchenMenuUpdateForm(props) {
     queryData();
   }, [idProp, kitchenMenuModelProp]);
   React.useEffect(resetStateValues, [kitchenMenuRecord]);
-  const [currentExtrasValue, setCurrentExtrasValue] = React.useState("");
-  const ExtrasRef = React.createRef();
-  const [currentExtrasPriceValue, setCurrentExtrasPriceValue] =
-    React.useState("");
-  const ExtrasPriceRef = React.createRef();
   const validations = {
     Name: [],
     Price: [],
@@ -292,9 +120,8 @@ export default function KitchenMenuUpdateForm(props) {
     Prep: [],
     Ingredients: [{ type: "JSON" }],
     Snooze: [],
-    Extras: [],
+    Extras: [{ type: "JSON" }],
     Category: [],
-    ExtrasPrice: [],
     ProfitMargin: [],
     PriceNoVAT: [],
     InStock: [],
@@ -337,7 +164,6 @@ export default function KitchenMenuUpdateForm(props) {
           Snooze,
           Extras,
           Category,
-          ExtrasPrice,
           ProfitMargin,
           PriceNoVAT,
           InStock,
@@ -408,7 +234,6 @@ export default function KitchenMenuUpdateForm(props) {
               Snooze,
               Extras,
               Category,
-              ExtrasPrice,
               ProfitMargin,
               PriceNoVAT,
               InStock,
@@ -451,7 +276,6 @@ export default function KitchenMenuUpdateForm(props) {
               Snooze,
               Extras,
               Category,
-              ExtrasPrice,
               ProfitMargin,
               PriceNoVAT,
               InStock,
@@ -490,7 +314,6 @@ export default function KitchenMenuUpdateForm(props) {
               Snooze,
               Extras,
               Category,
-              ExtrasPrice,
               ProfitMargin,
               PriceNoVAT,
               InStock,
@@ -529,7 +352,6 @@ export default function KitchenMenuUpdateForm(props) {
               Snooze,
               Extras,
               Category,
-              ExtrasPrice,
               ProfitMargin,
               PriceNoVAT,
               InStock,
@@ -568,7 +390,6 @@ export default function KitchenMenuUpdateForm(props) {
               Snooze,
               Extras,
               Category,
-              ExtrasPrice,
               ProfitMargin,
               PriceNoVAT,
               InStock,
@@ -607,7 +428,6 @@ export default function KitchenMenuUpdateForm(props) {
               Snooze,
               Extras,
               Category,
-              ExtrasPrice,
               ProfitMargin,
               PriceNoVAT,
               InStock,
@@ -647,7 +467,6 @@ export default function KitchenMenuUpdateForm(props) {
               Snooze,
               Extras,
               Category,
-              ExtrasPrice,
               ProfitMargin,
               PriceNoVAT,
               InStock,
@@ -686,7 +505,6 @@ export default function KitchenMenuUpdateForm(props) {
               Snooze,
               Extras,
               Category,
-              ExtrasPrice,
               ProfitMargin,
               PriceNoVAT,
               InStock,
@@ -725,7 +543,6 @@ export default function KitchenMenuUpdateForm(props) {
               Snooze: value,
               Extras,
               Category,
-              ExtrasPrice,
               ProfitMargin,
               PriceNoVAT,
               InStock,
@@ -744,9 +561,13 @@ export default function KitchenMenuUpdateForm(props) {
         hasError={errors.Snooze?.hasError}
         {...getOverrideProps(overrides, "Snooze")}
       ></SwitchField>
-      <ArrayField
-        onChange={async (items) => {
-          let values = items;
+      <TextAreaField
+        label="Extras"
+        isRequired={false}
+        isReadOnly={false}
+        value={Extras}
+        onChange={(e) => {
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
               Name,
@@ -758,49 +579,26 @@ export default function KitchenMenuUpdateForm(props) {
               Prep,
               Ingredients,
               Snooze,
-              Extras: values,
+              Extras: value,
               Category,
-              ExtrasPrice,
               ProfitMargin,
               PriceNoVAT,
               InStock,
               StockLevel,
             };
             const result = onChange(modelFields);
-            values = result?.Extras ?? values;
+            value = result?.Extras ?? value;
           }
-          setExtras(values);
-          setCurrentExtrasValue("");
+          if (errors.Extras?.hasError) {
+            runValidationTasks("Extras", value);
+          }
+          setExtras(value);
         }}
-        currentFieldValue={currentExtrasValue}
-        label={"Extras"}
-        items={Extras}
-        hasError={errors?.Extras?.hasError}
-        errorMessage={errors?.Extras?.errorMessage}
-        setFieldValue={setCurrentExtrasValue}
-        inputFieldRef={ExtrasRef}
-        defaultFieldValue={""}
-      >
-        <TextField
-          label="Extras"
-          isRequired={false}
-          isReadOnly={false}
-          value={currentExtrasValue}
-          onChange={(e) => {
-            let { value } = e.target;
-            if (errors.Extras?.hasError) {
-              runValidationTasks("Extras", value);
-            }
-            setCurrentExtrasValue(value);
-          }}
-          onBlur={() => runValidationTasks("Extras", currentExtrasValue)}
-          errorMessage={errors.Extras?.errorMessage}
-          hasError={errors.Extras?.hasError}
-          ref={ExtrasRef}
-          labelHidden={true}
-          {...getOverrideProps(overrides, "Extras")}
-        ></TextField>
-      </ArrayField>
+        onBlur={() => runValidationTasks("Extras", Extras)}
+        errorMessage={errors.Extras?.errorMessage}
+        hasError={errors.Extras?.hasError}
+        {...getOverrideProps(overrides, "Extras")}
+      ></TextAreaField>
       <TextField
         label="Category"
         isRequired={false}
@@ -821,7 +619,6 @@ export default function KitchenMenuUpdateForm(props) {
               Snooze,
               Extras,
               Category: value,
-              ExtrasPrice,
               ProfitMargin,
               PriceNoVAT,
               InStock,
@@ -840,69 +637,6 @@ export default function KitchenMenuUpdateForm(props) {
         hasError={errors.Category?.hasError}
         {...getOverrideProps(overrides, "Category")}
       ></TextField>
-      <ArrayField
-        onChange={async (items) => {
-          let values = items;
-          if (onChange) {
-            const modelFields = {
-              Name,
-              Price,
-              Description,
-              Notes,
-              Kitchen,
-              imageSrc,
-              Prep,
-              Ingredients,
-              Snooze,
-              Extras,
-              Category,
-              ExtrasPrice: values,
-              ProfitMargin,
-              PriceNoVAT,
-              InStock,
-              StockLevel,
-            };
-            const result = onChange(modelFields);
-            values = result?.ExtrasPrice ?? values;
-          }
-          setExtrasPrice(values);
-          setCurrentExtrasPriceValue("");
-        }}
-        currentFieldValue={currentExtrasPriceValue}
-        label={"Extras price"}
-        items={ExtrasPrice}
-        hasError={errors?.ExtrasPrice?.hasError}
-        errorMessage={errors?.ExtrasPrice?.errorMessage}
-        setFieldValue={setCurrentExtrasPriceValue}
-        inputFieldRef={ExtrasPriceRef}
-        defaultFieldValue={""}
-      >
-        <TextField
-          label="Extras price"
-          isRequired={false}
-          isReadOnly={false}
-          type="number"
-          step="any"
-          value={currentExtrasPriceValue}
-          onChange={(e) => {
-            let value = isNaN(parseFloat(e.target.value))
-              ? e.target.value
-              : parseFloat(e.target.value);
-            if (errors.ExtrasPrice?.hasError) {
-              runValidationTasks("ExtrasPrice", value);
-            }
-            setCurrentExtrasPriceValue(value);
-          }}
-          onBlur={() =>
-            runValidationTasks("ExtrasPrice", currentExtrasPriceValue)
-          }
-          errorMessage={errors.ExtrasPrice?.errorMessage}
-          hasError={errors.ExtrasPrice?.hasError}
-          ref={ExtrasPriceRef}
-          labelHidden={true}
-          {...getOverrideProps(overrides, "ExtrasPrice")}
-        ></TextField>
-      </ArrayField>
       <TextField
         label="Profit margin"
         isRequired={false}
@@ -927,7 +661,6 @@ export default function KitchenMenuUpdateForm(props) {
               Snooze,
               Extras,
               Category,
-              ExtrasPrice,
               ProfitMargin: value,
               PriceNoVAT,
               InStock,
@@ -970,7 +703,6 @@ export default function KitchenMenuUpdateForm(props) {
               Snooze,
               Extras,
               Category,
-              ExtrasPrice,
               ProfitMargin,
               PriceNoVAT: value,
               InStock,
@@ -1009,7 +741,6 @@ export default function KitchenMenuUpdateForm(props) {
               Snooze,
               Extras,
               Category,
-              ExtrasPrice,
               ProfitMargin,
               PriceNoVAT,
               InStock: value,
@@ -1052,7 +783,6 @@ export default function KitchenMenuUpdateForm(props) {
               Snooze,
               Extras,
               Category,
-              ExtrasPrice,
               ProfitMargin,
               PriceNoVAT,
               InStock,

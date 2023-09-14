@@ -82,9 +82,8 @@ type KitchenMenu @model @auth(rules: [{allow: private}, {allow: owner}]) {
   Prep: AWSTime
   Ingredients: AWSJSON
   Snooze: Boolean
-  Extras: [String]
+  Extras: AWSJSON
   Category: String
-  ExtrasPrice: [Float]
   ProfitMargin: Float
   PriceNoVAT: Float
   InStock: Boolean
