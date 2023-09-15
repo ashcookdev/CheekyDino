@@ -65,6 +65,7 @@ export default function Example() {
           ? [
           { name: 'Stock Control ', href: '/stockcontrol', icon: CubeIcon, current: false },
           { name: 'Party Stock', href: '/partystock', icon: BellIcon, current: false},
+          {name: 'Till Products', href: '/tillproducts', icon: Bars3Icon, current: false},
 
           { name: 'Add Stock Items ', href: '/buildameal', icon: CakeIcon, current: false },
           { name: 'Billing', href: '#', icon: CreditCardIcon, current: false },]

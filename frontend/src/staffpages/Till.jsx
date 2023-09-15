@@ -19,6 +19,7 @@ import Home from "./DashBoard";
 import { checkStockLevel } from "./tillstock";
 import { motion } from 'framer-motion';
 import StaffTill from "./StaffTill";
+import { XCircleIcon } from "@heroicons/react/24/solid";
 
 
 
@@ -99,31 +100,30 @@ console.log(order)
   //get all party bookings for today
   
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
+  
 
 
 
   const handleProductClick = async (item) => {
-    // Check the stock level of the product
-    const inStock = await checkStockLevel(item.id);
-    if (!inStock) {
-      alert("This item is not in stock");
-      return;
+    // Check if the item is a non-stock product (Ingredients === null)
+    if (item.Ingredients === null) {
+      // For non-stock products, add them to the order directly
+      setOrder((order) => [...order, item]);
+      setTotal((total) => total + item.Price);
+    } else {
+      // For regular products, perform stock checking logic
+      const inStock = await checkStockLevel(item.id);
+      if (!inStock) {
+        alert("This item is not in stock");
+        return;
+      }
+      // Add the product item to the order
+      setOrder((order) => [...order, item]);
+      // Update the total price
+      setTotal((total) => total + item.Price);
     }
-  
-    // Add the product item to the order
-    setOrder((order) => [...order, item]);
-  
-    // Update the total price
-    setTotal((total) => total + item.Price);
-    // add all prep times together for kitchen orders
   };
+  
 
   const handleDeleteClick = async (index) => {
     // Remove the item from the order
@@ -248,15 +248,7 @@ window.location.reload();
     }
   };
 
-  const handleExtrasClick = async (extra) => { 
-    // Add the extra item to the order
-    // setOrder((order) => [...order, extra]);
   
-    // // Update the total price
-    // setTotal((total) => total + extra.price);
-    console.log(extra)
-  };
-
 
 
   const colors = [
@@ -423,25 +415,39 @@ window.location.reload();
     animate={{ opacity: 1 }}
     transition={{ duration: 0.5 }}
   >
-    <h3>Extras:</h3>
+    <h3 className="font-bold">Extras:</h3>
     <ul>
       {selectedItem.Extras.map((extra, index) => {
         const kitchenItem = kitchenMenu.find(item => item.Name === extra.name);
-        return (
-          <motion.button
-          onClick={() => handleProductClick(kitchenItem)}
-          key={index}
-            className={`text-blue-500 font-bold py-2 px-4 rounded-full shadow-md mt-2 mr-2`}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            {extra.name} - £{extra.price.toFixed(2)} - Stock: {kitchenMenu ? kitchenItem.StockLevel : 'N/A'}
-          </motion.button>
-        );
+
+        // Check if the kitchenItem exists and has a valid price
+        if (kitchenItem && extra.price !== undefined) {
+          // Create a modified copy of kitchenItem with the desired price
+          const modifiedKitchenItem = {
+            ...kitchenItem,
+            Price: extra.price, // Replace with the desired price
+          };
+
+          return (
+            <motion.button
+              onClick={() => handleProductClick(modifiedKitchenItem)}
+              key={index}
+              className={`text-blue-500 font-bold py-2 px-4 rounded-full shadow-md mt-2 mr-2`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {extra.name} - £{extra.price.toFixed(2)} - Stock: {kitchenItem.StockLevel ? kitchenItem.StockLevel : 'N/A'}
+            </motion.button>
+          );
+        } else {
+          // Handle the case where kitchenItem or extra.price is undefined
+          return null; // You can choose to display nothing or handle it differently
+        }
       })}
     </ul>
   </motion.div>
 )}
+
 
 
             </div>
@@ -459,23 +465,26 @@ window.location.reload();
             <div className="border border-gray-400 p-4">
               <ul>
                 {order.map((item, index) => (
-                  <li key={index} className="flex justify-between items-center mb-2">
+                  <li key={index} className="flex justify-between items-center mb-5">
                     <div>
                       {item.Name} £{item.Price.toFixed(2)}
                     </div>
-                    <button
-                      className="bg-red-500 text-white p-1 rounded"
-                      onClick={() => handleDeleteClick(index)}
-                    >
-                      -
-                    </button>
+                    <motion.button
+      className="bg-red-500 text-white p-1 rounded"
+      onClick={() => handleDeleteClick(index)}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+    >
+      <XCircleIcon className="w-5 h-5" />
+    </motion.button>
+
                   </li>
                 ))}
               </ul>
-              <p>Total: £{total.toFixed(2)}</p>
+              <p className="mt-3 mb-3">Total: £{total.toFixed(2)}</p>
               <motion.button                 onClick={() => handleConfirm(order, total)}
 
-        className="w-16 h-10 bg-purple-600 text-xs font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
+        className="w-16 h-10 mt-3 mb-3 bg-purple-600 text-xs font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >

@@ -497,21 +497,20 @@ Cases      </label>
 
  
                 
-               
               {selectedExtras.map((extra) => (
   <div key={extra} className='mt-3'>
     <li>{extra}</li>
     <input
-  onChange={(event) => handlePriceChange(event, extra)}
-  value={extraPrices[extra] || ''}
-  type="number"
-  step="0.01"
-  placeholder="Enter price"
-  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-/>
-
+      onChange={(event) => handlePriceChange(event, extra)}
+      value={extraPrices[extra] || ''}
+      type="number"
+      step="0.01"
+      placeholder="Enter price"
+      className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+    />
   </div>
 ))}
+
 
       <button className="relative inline-flex mt-3 items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none"
  onClick={handleExtrasConfirm}>Confirm</button>

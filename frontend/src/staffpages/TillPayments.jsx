@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import React from "react";
+import { motion } from "framer-motion"; // Import Framer Motion
 
 const Receipt = React.forwardRef(({ order, total, table, childName }, ref) => (
   <div ref={ref}>
@@ -17,8 +18,6 @@ const Receipt = React.forwardRef(({ order, total, table, childName }, ref) => (
     <div>Total: £{total.toFixed(2)}</div>
   </div>
 ));
-
-
 
 export default function TillPayment({
   order,
@@ -34,13 +33,13 @@ export default function TillPayment({
   const [isFlashing, setIsFlashing] = useState(false);
   const [orders, setOrders] = useState([]);
   const [prep, setPrep] = useState([]);
+  const [change, setChange] = useState(0); // Add state for change
+
 
   console.log(orders);
   const navigate = useNavigate();
 
-
   const receiptRef = useRef();
-
 
   const handleConfirmClick = async () => {
     const currentTime = new Date();
@@ -52,7 +51,6 @@ export default function TillPayment({
       second: "2-digit",
       millisecond: "2-digit",
     };
-
 
     const awstime = currentTime.toLocaleTimeString("en-GB", options);
 
@@ -74,12 +72,16 @@ export default function TillPayment({
       })
     );
     console.log("Session updated");
-    const hotItems = orders.filter((item) => item.Kitchen).map((item) => item.Name);
+    const hotItems = orders
+      .filter((item) => item.Kitchen)
+      .map((item) => item.Name);
 
     // convert prep time to string
     const prepTime = prep.toString();
 
-    const drinkItems = orders.filter((item) => !item.Kitchen).map((item) => item.Name);
+    const drinkItems = orders
+      .filter((item) => !item.Kitchen)
+      .map((item) => item.Name);
     const kitchen = hotItems.length > 0;
 
     await DataStore.save(
@@ -109,25 +111,35 @@ export default function TillPayment({
     setAmountEntered(0);
     setIsFlashing(false);
     window.location.reload();
-    
   };
 
   const handleCashClick = () => {
     setPaymentMethod("cash");
     setOrders(order);
-    setAmountEntered(0);
+    setAmountEntered("");
+    setChange(0);
   };
 
   const newtotal = order.reduce((acc, item) => acc + item.Price, 0);
-  const change = amountEntered - total;
 
   const handleDenominationClick = (amount) => {
-    setAmountEntered(amountEntered + amount);
-    
+    const updatedAmount = parseFloat(amountEntered) + amount;
+    setAmountEntered(updatedAmount.toString());
+    const newChange = updatedAmount - total;
+    setChange(newChange);
   };
 
   const handleNumberClick = (number) => {
-    setAmountEntered((amountEntered * 10 + number) / 100);
+    const updatedAmount = parseFloat(amountEntered + number.toString());
+    setAmountEntered(updatedAmount.toString());
+    const newChange = updatedAmount - total;
+    setChange(newChange);
+  };
+
+  const handleDecimalClick = () => {
+    if (!amountEntered.includes(".")) {
+      setAmountEntered(amountEntered + ".");
+    }
   };
 
   const handleCardClick = () => {
@@ -135,12 +147,6 @@ export default function TillPayment({
     setIsFlashing(true);
     setOrders(order);
   };
-
-
-
-
-  
-
 
   useEffect(() => {
     let totalPrepInMinutes = 0;
@@ -150,102 +156,146 @@ export default function TillPayment({
     });
     const totalHours = Math.floor(totalPrepInMinutes / 60);
     const totalMinutes = totalPrepInMinutes % 60;
-    const totalPrep = `${totalHours}:${totalMinutes.toString().padStart(2, "0")}`;
+    const totalPrep = `${totalHours}:${totalMinutes
+      .toString()
+      .padStart(2, "0")}`;
     setPrep(totalPrep);
   }, [order]);
 
- 
+  const buttonVariants = {
+    hover: {
+      scale: 1.1,
+      transition: {
+        duration: 0.2,
+      },
+    },
+  };
 
   return (
     <div className="grid grid-cols-3 gap-4 p-4">
       <div className="border-r border-gray-300 pr-4">
-
-        <button
+        <motion.button
+          variants={buttonVariants}
+          whileHover="hover"
           onClick={() => window.location.reload()}
           className="bg-red-500 text-white p-2 rounded w-full"
         >
           Cancel
-        </button>
+        </motion.button>
         <div className="mt-4">
-         
-
-        <ReactToPrint
-        trigger={() => <button className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5">Print</button>}
-        content={() => receiptRef.current}
-      />
-      <div style={{ display: "none" }}>
-        <Receipt
-          ref={receiptRef}
-          order={order}
-          total={total}
-          table={table}
-          childName={childName}
-        />
-      </div>
+          <ReactToPrint
+            trigger={() => (
+              <motion.button
+                variants={buttonVariants}
+                whileHover="hover"
+                className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5"
+              >
+                Print
+              </motion.button>
+            )}
+            content={() => receiptRef.current}
+          />
+          <div style={{ display: "none" }}>
+            <Receipt
+              ref={receiptRef}
+              order={order}
+              total={total}
+              table={table}
+              childName={childName}
+            />
+          </div>
         </div>
 
         <div className="flex flex-col gap-2">
-          <button
+          <motion.button
+            variants={buttonVariants}
+            whileHover="hover"
             className={`${
               paymentMethod === "cash" ? "bg-green-700" : "bg-green-500"
             } text-white p-2 rounded`}
             onClick={handleCashClick}
           >
             Cash
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            variants={buttonVariants}
+            whileHover="hover"
             className={`${
               paymentMethod === "card" ? "bg-blue-700" : "bg-blue-500"
             } text-white p-2 rounded`}
             onClick={handleCardClick}
           >
             Card
-          </button>
+          </motion.button>
         </div>
         {paymentMethod === "cash" && (
           <div className="flex flex-col gap-2 mt-4">
-            <button
-              className="bg-gray-200 p-2 rounded"
+            <motion.button
+              variants={buttonVariants}
+              whileHover="hover"
+              className="bg-purple-200 p-2 rounded"
               onClick={() => handleDenominationClick(5)}
             >
               £5
-            </button>
-            <button
-              className="bg-gray-200 p-2 rounded"
+            </motion.button>
+            <motion.button
+              variants={buttonVariants}
+              whileHover="hover"
+              className="bg-cyan-200 p-2 rounded"
               onClick={() => handleDenominationClick(10)}
             >
               £10
-            </button>
-            <button
-              className="bg-gray-200 p-2 rounded"
+            </motion.button>
+            <motion.button
+              variants={buttonVariants}
+              whileHover="hover"
+              className="bg-blue-200 p-2 rounded"
               onClick={() => handleDenominationClick(20)}
             >
               £20
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              variants={buttonVariants}
+              whileHover="hover"
               className="bg-gray-200 p-2 rounded"
               onClick={() => handleDenominationClick(50)}
             >
               £50
-            </button>
-            </div>
-            )}
+            </motion.button>
+          </div>
+        )}
       </div>
+      
       <div className="grid grid-cols-3 gap-2 border-r border-gray-300 pr-4">
+        
         {[...Array(9)].map((_, i) => (
-          <button
-            className="bg-gray-200 p-2 rounded"
+          <motion.button
+            key={i + 1}
+            variants={buttonVariants}
+            whileHover="hover"
+            className="bg-blue-200 p-2 rounded"
             onClick={() => handleNumberClick(i + 1)}
           >
             {i + 1}
-          </button>
+          </motion.button>
         ))}
-        <button
-          className="bg-gray-200 p-2 rounded"
+        <motion.button
+          variants={buttonVariants}
+          whileHover="hover"
+          className="bg-yellow-200 p-2 rounded"
           onClick={() => handleNumberClick(0)}
         >
           0
-        </button>
+        </motion.button>
+        <motion.button
+          variants={buttonVariants}
+          whileHover="hover"
+          className="bg-yellow-200 p-2 rounded"
+          onClick={handleDecimalClick}
+        >
+          .
+        </motion.button>
+       
       </div>
       <div>
         <ul>
@@ -262,13 +312,37 @@ export default function TillPayment({
             {item.Prep}
           </li>
         ))}
+        <div>
+          <div className="text-right pr-4 mt-4 text-lg font-bold">
+            Total: £{total.toFixed(2)}
+          </div>
+          <div>
+          <input
+            type="text"
+            placeholder="Enter Amount"
+            value={amountEntered}
+            onChange={(e) => {
+              const input = e.target.value.replace(/[^0-9.]/g, ""); // Allow only numeric and decimal point
+              setAmountEntered(input);
+              const newChange = parseFloat(input) - total;
+              setChange(newChange);
+            }}
+            className="bg-purple-200 p-2 rounded border border-gray-300 item-center"
+          />
+        </div>
+          <div className="text-right pr-4 mt-2 text-lg font-bold">
+            Change: £{change.toFixed(2)}
+          </div>
+        </div>
+        <motion.button
+          variants={buttonVariants}
+          whileHover="hover"
+          onClick={handleConfirmClick}
+          className="bg-green-500 text-white p-2 rounded w-full mt-4"
+        >
+          Confirm
+        </motion.button>
       </div>
-      <button onClick={handleConfirmClick} className="bg-green-500 text-white p-2 rounded w-full">
-        Confirm
-        </button>
-
-
     </div>
   );
 }
-

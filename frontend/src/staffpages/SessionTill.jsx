@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import ReactToPrint from "react-to-print";
 import QRCode from "react-qr-code";
+import { motion } from "framer-motion";
 
 const Receipt = React.forwardRef(({ order, total, table, childName }, ref) => (
   <div ref={ref} className="p-4 border rounded">
@@ -19,8 +20,6 @@ const Receipt = React.forwardRef(({ order, total, table, childName }, ref) => (
   </div>
 ));
 
-  
-
 const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [amountEntered, setAmountEntered] = useState(0);
@@ -32,13 +31,12 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
 
   const handleConfirmClick = async () => {
     console.log("Order confirmed");
-  
+
     // Print the receipt
-   
+
     // Reset the order and total price
     window.location.reload();
   };
-  
 
   const handleCashClick = () => {
     setPaymentMethod("cash");
@@ -49,10 +47,10 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
   const handleDenominationClick = (amount) => {
     const newAmountEntered = amountEntered + amount;
     setAmountEntered(newAmountEntered);
-  
+
     const newChangeGiven = newAmountEntered - total;
     setChangeGiven(newChangeGiven > 0 ? newChangeGiven : 0); // Change given should not be negative
-  
+
     // Print the receipt
     if (receiptRef.current) {
       receiptRef.current.print();
@@ -70,7 +68,7 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
   };
 
   const handleTillDrawer = () => {
-    fetch('/open-till')
+    fetch("/open-till")
       .then((response) => response.text())
       .then((data) => {
         console.log(data);
@@ -80,120 +78,155 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
       });
   };
 
- 
+  const buttonVariants = {
+    hover: {
+      scale: 1.1,
+      transition: {
+        duration: 0.2,
+      },
+    },
+  };
 
   return (
     <div className="grid grid-cols-3 gap-4 p-4">
       <div className="border-r border-gray-300 pr-4">
-
-        <button
+        <motion.button
+          variants={buttonVariants}
+          whileHover="hover"
           onClick={() => window.location.reload()}
           className="bg-red-500 text-white p-2 rounded w-full"
         >
           Cancel
-        </button>
+        </motion.button>
         <div className="mt-4">
-          <button onClick={handleTillDrawer} className="bg-gray-200 p-2 rounded w-full">
+          <motion.button
+            onClick={handleTillDrawer}
+            className="bg-gray-200 p-2 rounded w-full"
+          >
             Open Till
-          </button>
+          </motion.button>
 
-        <ReactToPrint
-        trigger={() => <button className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5">Print</button>}
-        content={() => receiptRef.current}
-      />
-      <div style={{ display: "none" }}>
-        <Receipt
-          ref={receiptRef}
-          order={order}
-          total={total}
-          table={table}
-          childName={ChildName}
-        />
-      </div>
+          <ReactToPrint
+            trigger={() => (
+              <motion.button
+                className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5"
+                variants={buttonVariants}
+                whileHover="hover"
+              >
+                Print
+              </motion.button>
+            )}
+            content={() => receiptRef.current}
+          />
+          <div style={{ display: "none" }}>
+            <Receipt
+              ref={receiptRef}
+              order={order}
+              total={total}
+              table={table}
+              childName={ChildName}
+            />
+          </div>
         </div>
 
         <div className="flex flex-col gap-2">
-          <button
+          <motion.button
             className={`${
               paymentMethod === "cash" ? "bg-green-700" : "bg-green-500"
             } text-white p-2 rounded`}
             onClick={handleCashClick}
+            variants={buttonVariants}
+            whileHover="hover"
           >
             Cash
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             className={`${
               paymentMethod === "card" ? "bg-blue-700" : "bg-blue-500"
             } text-white p-2 rounded`}
             onClick={handleCardClick}
+            variants={buttonVariants}
+            whileHover="hover"
           >
             Card
-          </button>
+          </motion.button>
         </div>
         {paymentMethod === "cash" && (
           <div className="flex flex-col gap-2 mt-4">
-            <button
+            <motion.button
               className="bg-gray-200 p-2 rounded"
               onClick={() => handleDenominationClick(5)}
+              variants={buttonVariants}
+              whileHover="hover"
             >
               £5
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               className="bg-gray-200 p-2 rounded"
               onClick={() => handleDenominationClick(10)}
+              variants={buttonVariants}
+              whileHover="hover"
             >
               £10
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               className="bg-gray-200 p-2 rounded"
               onClick={() => handleDenominationClick(20)}
+              variants={buttonVariants}
+              whileHover="hover"
             >
               £20
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               className="bg-gray-200 p-2 rounded"
               onClick={() => handleDenominationClick(50)}
+              variants={buttonVariants}
+              whileHover="hover"
             >
               £50
-            </button>
-            </div>
-            )}
+            </motion.button>
+          </div>
+        )}
       </div>
       <div className="grid grid-cols-3 gap-2 border-r border-gray-300 pr-4">
         {[...Array(9)].map((_, i) => (
-          <button
+          <motion.button
+            key={i + 1}
             className="bg-gray-200 p-2 rounded"
             onClick={() => handleNumberClick(i + 1)}
+            variants={buttonVariants}
+            whileHover="hover"
           >
             {i + 1}
-          </button>
+          </motion.button>
         ))}
-        <button
+        <motion.button
           className="bg-gray-200 p-2 rounded"
           onClick={() => handleNumberClick(0)}
+          variants={buttonVariants}
+          whileHover="hover"
         >
           0
-        </button>
+        </motion.button>
       </div>
       <div>
         <ul>
-         <li>Table: {table}</li>
-        <li>Child: {ChildName}</li>
-        <li>Total: £{total.toFixed(2)}</li>
-        <div>Change Given: £{changeGiven.toFixed(2)}</div>
-
-         
+          <li>Table: {table}</li>
+          <li>Child: {ChildName}</li>
+          <li>Total: £{total.toFixed(2)}</li>
+          <li>Change Given: £{changeGiven.toFixed(2)}</li>
         </ul>
-
+        <motion.button
+          onClick={handleConfirmClick}
+          className="bg-green-500 text-white p-2 rounded w-full"
+          variants={buttonVariants}
+          whileHover="hover"
+        >
+          Confirm
+        </motion.button>
       </div>
-      <button onClick={handleConfirmClick} className="bg-green-500 text-white p-2 rounded w-full">
-        Confirm
-        </button>
-
-
     </div>
   );
-}
+};
 
 export default TillPayment;
-

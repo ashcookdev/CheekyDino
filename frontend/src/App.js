@@ -60,6 +60,7 @@ import StockControl from './staffpages/stockcontrol';
 import BuildAMeal from './staffpages/buildameal';
 import MealProfit from './staffpages/mealprofitmargins';
 import PartyStock from './staffpages/partystock';
+import TillProducts from './staffpages/tillproducts';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -196,6 +197,7 @@ function App() {
             <Route path="/buildameal" element={<BuildAMeal />} />
             <Route path="/mealprofit" element={<MealProfit />} />
             <Route path="/partystock" element={<PartyStock />} />
+            <Route path="/tillproducts" element={<TillProducts />} />
           </>
         )}
         

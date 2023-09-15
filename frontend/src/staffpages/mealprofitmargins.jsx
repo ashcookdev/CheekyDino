@@ -52,19 +52,30 @@ export default function Example({ selectedItems, mealName, category, img, descri
       newItemValues[index] = value;
       return newItemValues;
     });
-    // calculate the number of portions in stock
-    const lowestPortionAmount = Math.min(
-      ...selectedItemsstate.map((item, index) =>
-        item.Quantity === 0
-          ? item.Weight === 0
-            ? 0
-            : Math.floor(item.Weight / itemValues[index])
-          : Math.floor(item.Quantity / itemValues[index])
-      )
-    );
   
-    setPortionAmount(lowestPortionAmount);
-};
+    // Check if there's only one item selected
+    if (selectedItemsstate.length === 1) {
+      // If there's only one item, set the max value of the slider to 1
+      const slider = document.getElementById(`quantity-slider-${index}`);
+      if (slider) {
+        slider.max = "1";
+      }
+      setPortionAmount(value); // Update the portion amount based on the slider value
+    } else {
+      // Calculate the number of portions in stock when multiple items are selected
+      const lowestPortionAmount = Math.min(
+        ...selectedItemsstate.map((item, index) =>
+          item.Quantity === 0
+            ? item.Weight === 0
+              ? 0
+              : Math.floor(item.Weight / itemValues[index])
+            : Math.floor(item.Quantity / itemValues[index])
+        )
+      );
+      setPortionAmount(lowestPortionAmount); // Update the portion amount
+    }
+  };
+  
 
 
   
@@ -75,19 +86,15 @@ export default function Example({ selectedItems, mealName, category, img, descri
     // calculate the number of portions in stock
 
     // assuming sellingPrice is defined somewhere above
-    const formattedSellingPrice = Number(sellingPrice)
-
+    const formattedSellingPrice = Number(sellingPrice);
 const newSellingPrice = formattedSellingPrice * 1.2;
-
-const fixedPrice = newSellingPrice.toFixed(2);
-
 
 
 // save the meal to the database
 const meal = await DataStore.save(
   new KitchenMenu({
     Name: mealNamestate,
-    Price: parseFloat(fixedPrice),
+    Price: newSellingPrice,
     PriceNoVAT: Number(formattedSellingPrice),
     Category: categorystate,
     imageSrc: imgstate,

@@ -20,12 +20,14 @@ export default function TillStaff({onSelectChange}) {
     const [clockedInStaff, setClockedInStaff] = useState([]);
 
     useEffect(() => {
+      const today = new Date();
         const fetchClockIn = async () => {
           const clockIn = await DataStore.query(ClockIn);
           const filterClockIn = clockIn.filter(
             (c) =>
               c.ClockedIn === true &&
               c.ClockedOut === null
+             
           );
           console.log(filterClockIn);
           setClockedInStaff(filterClockIn); // Update clockedIn state
