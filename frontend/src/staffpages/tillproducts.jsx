@@ -8,6 +8,18 @@ export default function Example() {
   const [showForm, setShowForm] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
   const [newPrice, setNewPrice] = useState('');
+  const [Name, setProductName] = useState('');
+  const [Description, setDescription] = useState('');
+  const [Kitchen, setKitchen] = useState(false);
+  const [Prep, setHandlePrep] = useState('');
+  const [Category, setCategory] = useState('');
+  const [Stock, setStock] = useState(false);
+  const [searchQuery, setSearch] = useState('');
+  
+  const filteredProducts = products.filter((product) =>
+    product.Name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
 
   useEffect(() => {
     fetchProducts();
@@ -49,17 +61,26 @@ export default function Example() {
     }
   };
 
-  const handleEdit = (product) => {
-    setEditProduct(product);
-    setNewPrice(product.Price.toString());
-  };
-
+  
+  
   const handleUpdatePrice = async () => {
+
+const awspreptime = Prep + ':00';
+
+
+
     try {
       const updatedProduct = KitchenMenu.copyOf(editProduct, (updated) => {
         updated.Price = parseFloat(newPrice);
         const updatedProfitMargin = calculateProfitMargin(updated);
         updated.ProfitMargin = isNaN(updatedProfitMargin) ? null : updatedProfitMargin;
+        updated.Name = Name;
+        updated.Description = Description;
+        updated.Kitchen = Kitchen;
+        updated.Prep = Prep;
+        updated.Category = Category;
+        updated.StockLevel = Number(Stock);
+
       });
   
       await DataStore.save(updatedProduct);
@@ -70,6 +91,12 @@ export default function Example() {
       console.error('Error updating price:', error);
     }
   };
+
+  
+  const handleEdit = (product) => {
+    setEditProduct(product);
+  }
+  
   
   
   
@@ -102,35 +129,118 @@ export default function Example() {
           </button>
         </div>
       </div>
+
       {editProduct && (
-        <div className="mt-4 p-4 border rounded-lg shadow-lg">
-          <h2 className="text-lg font-semibold">Edit {editProduct.Name}</h2>
-          <div className="mt-2">
-            <label className="block text-gray-700 font-medium">New Price:</label>
-            <input
-              type="number"
-              className="mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-500"
-              value={newPrice}
-              onChange={(e) => setNewPrice(e.target.value)}
-            />
-          </div>
-          <div className="mt-4 space-x-2">
-            <button
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:border-indigo-700"
-              onClick={handleUpdatePrice}
-            >
-              Update Price
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring focus:border-gray-400"
-              onClick={() => setEditProduct(null)}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
+  <div className="mt-4 p-4 border rounded-lg shadow-lg">
+    <h2 className="text-lg font-semibold">Edit {editProduct.Name}</h2>
+    <div className="mt-2">
+      <label className="block text-gray-700 font-medium">Name:</label>
+      <input
+        type="text"
+        className="mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-500"
+        value={Name}
+        onChange={(e) => setProductName(e.target.value)}
+      />
+    </div>
+    <div className="mt-2">
+      <label className="block text-gray-700 font-medium">Price: {editProduct.Price}</label>
+      <input
+        type="number"
+        className="mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-500"
+        value={newPrice}
+        onChange={(e) => setNewPrice(e.target.value)}
+      />
+    </div>
+    <div className="mt-2">
+      <label className="block text-gray-700 font-medium">Description: {editProduct.Description}</label>
+      <textarea
+        className="mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-500"
+        value={Description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+    </div>
+   
+    <div className="mt-2">
+      <label className="block text-gray-700 font-medium">Kitchen: {editProduct.Kitchen}</label>
+      <input
+        type="checkbox"
+        className="mt-1"
+        checked={Kitchen}
+        onChange={(e) => setKitchen(e.target.checked)}
+      />
+    </div>
+    
+    <div className="mt-2">
+      <label className="block text-gray-700 font-medium">Prep: {editProduct.Prep}</label>
+      <input
+        type="time"
+        className="mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-500"
+        value={Prep}
+        onChange={(e) => setHandlePrep(e.target.value)}
+      />
+    </div>
+{/* ... Previous code ... */}
+
+
+
+<div className="mt-2">
+  <label className="block text-gray-700 font-medium">Category:</label>
+  <input
+    type="text"
+    className="mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-500"
+    value={Category}
+    onChange={(e) => setCategory(e.target.value)}
+  />
+</div>
+
+
+<div className="mt-2">
+  <label className="block text-gray-700 font-medium">Current Stock Level: {editProduct.StockLevel}</label>
+  <input
+  type='number'
+    className="mt-1 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-indigo-500"
+    value={Stock}
+    onChange={(e) => setStock(e.target.value)}
+  />
+</div>
+
+    <div className="mt-4 space-x-2">
+      <button
+        className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:border-indigo-700"
+        onClick={handleUpdatePrice}
+      >
+        Update
+      </button>
+      <button
+        className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring focus:border-gray-400"
+        onClick={() => setEditProduct(null)}
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+)}
+
       {showForm && <NonStockProductForm onSubmit={handleAddNonStockProduct} />}
+      <div>
+      <label htmlFor="search" className="block text-sm font-medium leading-6 text-gray-900">
+        Quick search
+      </label>
+      <div className="relative mt-2 flex items-center">
+        <input onChange={(e) => setSearch(e.target.value)}
+          type="text"
+          name="search"
+          value={searchQuery}
+          id="search"
+          className="block w-full rounded-md border-0 py-1.5 pr-14 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+        />
+        <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
+          <kbd className="inline-flex items-center rounded border border-gray-200 px-1 font-sans text-xs text-gray-400">
+            ⌘K
+          </kbd>
+        </div>
+      </div>
+    </div>
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -150,6 +260,9 @@ export default function Example() {
                     Stock Level
                   </th>
                   <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+Category                  </th>
+
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                     Ingredients
                   </th>
                   <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
@@ -161,16 +274,17 @@ export default function Example() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {products.map((product) => (
+                {filteredProducts.map((product) => (
                   <tr key={product.id}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                       {product.Name}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.Price}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{product.Price}</td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-  {product.ProfitMargin !== null ? `${product.ProfitMargin.toFixed(2)}%` : ''}
+  {product.ProfitMargin !== null ? `£${product.ProfitMargin.toFixed(2)}` : ''}
 </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.StockLevel}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.Category}</td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
   {product.Ingredients ? (
     product.Ingredients.map((ingredient, index) => (
