@@ -274,7 +274,7 @@ window.location.reload();
 
   return (
 
-    <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 fixed inset-0 overflow-hidden">
+    <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
     <div className="mt-2 border-b border-gray-200 pb-2 flex flex-col sm:flex-row items-center">
       <div className="flex justify-between"></div>
     <StaffTill onSelectChange={handleSelectedChange} />

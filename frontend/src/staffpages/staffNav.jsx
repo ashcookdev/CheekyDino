@@ -10,7 +10,7 @@ import {
   ClipboardListIcon,
 } from '@heroicons/react/outline';
 import { CalendarDaysIcon, ClipboardDocumentCheckIcon, CurrencyDollarIcon, HomeIcon, PlayCircleIcon, SignalIcon } from '@heroicons/react/20/solid'
-import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/solid'
+import { ChatBubbleBottomCenterTextIcon, CogIcon } from '@heroicons/react/24/solid'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -70,38 +70,45 @@ return (
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
   <a
     href="/dashboard"
-    className="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900"
+    className="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-purple-900"
   >
     <HomeIcon className="h-5 w-5 mr-1" aria-hidden="true" />
     Home
   </a>
   <a
     href="/till"
-    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-purple-900 hover:border-gray-300 hover:text-gray-700"
   >
     <CurrencyDollarIcon className="h-5 w-5 mr-1" aria-hidden="true" />
     Till
   </a>
   <a
     href="/kitchen"
-    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-purple-900 hover:border-gray-300 hover:text-gray-700"
   >
     <SignalIcon className="h-5 w-5 mr-1" aria-hidden="true" />
     Kitchen
   </a>
   <a
     href="/chat"
-    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-purple-900 hover:border-gray-300 hover:text-gray-700"
   >
     <ChatBubbleBottomCenterTextIcon className="h-5 w-5 mr-1" aria-hidden="true" />
     Chat
   </a>
   <a
     href="/staff"
-    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-purple-900 hover:border-gray-300 hover:text-gray-700"
   >
     <CalendarDaysIcon className="h-5 w-5 mr-1" aria-hidden="true" />
     Staff
+  </a>
+  <a
+    href="/settings"
+    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-purple-900 hover:border-gray-300 hover:text-gray-700"
+  >
+    <CogIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+    Settings
   </a>
 </div>
             </div>

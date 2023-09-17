@@ -5,12 +5,15 @@ import { isToday, format, differenceInMinutes, parse } from 'date-fns';
 import TableData from './TableData.json';
 import { CafeOrder } from './models';
 import './progress.css'
+import { useNavigate } from 'react-router-dom';
 
 function OccupiedTables() {
   const [sessions, setSessions] = useState([]);
   const [selectedTable, setSelectedTable] = useState({});
   const [orders, setOrders] = useState([]);
   const [orderStatuses, setOrderStatuses] = useState({});
+
+  const Navigate = useNavigate();
 
 
   useEffect(() => {
@@ -308,6 +311,7 @@ const Delivered = async (order) => {
 >
   Move Table
 </button>
+
 
 {Object.entries(selectedTable).map(([tableNumber, availableTables]) => (
         <div key={tableNumber}>
