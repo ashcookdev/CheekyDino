@@ -6,6 +6,7 @@ import tableData from './TableData.json';
 import { format } from 'date-fns';
 import emailjs from '@emailjs/browser';
 import QRCode from 'qrcode';
+import { motion } from 'framer-motion';
 
 
 
@@ -175,39 +176,30 @@ const freeTablesPerTimeslot = timeslots.map(timeslot => {
   // Display available timeslots with "Book" button
     // Display available timeslots with "Book" button
     return (
-      <div>
+      <motion.div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <p className="text-lg font-semibold leading-6 text-gray-900">{date}</p>
-        <p className="w-full text-center font-bold">Select A Table</p>
-                <p className="w-full text-center font-bold">Party Size: {adults + children} </p>
-                <p className="w-full text-center font-bold">Name: {name} </p>
-                {childData.map((item) => (
-                  <p className="w-full text-center font-bold">Total Spent:£ {item.TotalSpent.toFixed(2)} </p>
-                ))
-                }
-        <ul role="list" className="divide-y divide-gray-100 mt-4">
+        <p className="text-center font-bold">Select A Table</p>
+        <p className="text-center font-bold">Party Size: {adults + children} </p>
+        <p className="text-center font-bold">Name: {name} </p>
+        {childData.map((item) => (
+          <p className="text-center font-bold">Total Spent:£ {item.TotalSpent.toFixed(2)} </p>
+        ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
           {freeTablesPerTimeslot.map(item => (
-            <li key={item.timeslot.start} className="flex justify-between gap-x-6 py-5">
-              <div className="flex gap-x-4">
-                <div className="min-w-0 flex-auto">
-                  <p className={`text-sm font-semibold leading-6 ${item.freeTables > 0 ? 'text-green-600' : 'text-red-600'}`}>{item.timeslot.start} - {item.timeslot.end}</p>
-                  <div className="relative mt-2">
-                    <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
-                      <div style={{ width: `${(1 - item.freeTables / tableData.length) * 100}%` }} className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${item.freeTables > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                    </div>
-                  </div>
+            <motion.div key={item.timeslot.start} className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+              <p className={`text-sm font-semibold leading-6 ${item.freeTables > 0 ? 'text-green-600' : 'text-red-600'}`}>{item.timeslot.start} - {item.timeslot.end}</p>
+              <div className="relative mt-2">
+                <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
+                  <div style={{ width: `${(1 - item.freeTables / tableData.length) * 100}%` }} className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${item.freeTables > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
                 </div>
               </div>
-              <div className="hidden sm:flex sm:flex-col sm:items-end">
-                <button onClick={() => handleBook(item)} className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Book</button>
-              </div>
-            </li>
+              <button onClick={() => handleBook(item)} className="mt-4 w-full px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-blue-600">Book</button>
+            </motion.div>
           ))}
-        </ul>
-      </div>
+        </div>
+      </motion.div>
     );
-  
-
-}
+  }
        
       
 

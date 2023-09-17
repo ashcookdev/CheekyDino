@@ -29,6 +29,7 @@ export default function Buildameal() {
   const [selectedExtras, setSelectedExtras] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [extraPrices, setExtraPrices] = useState({});
+  const [menuSearch, setMenuSearch] = useState("");
 
   const getStock = async () => {
 
@@ -192,6 +193,13 @@ function handleSelectExtras(event) {
       [extra]: parseFloat(event.target.value),
     }));
   }
+
+  function handleDelete(stock) {
+    DataStore.delete(stock);
+    console.log('Stock deleted');
+  }
+
+  const filteredMenu = menu.filter(menu => menu.Name.toLowerCase().includes(menuSearch.toLowerCase()));
   
   
 
@@ -369,6 +377,12 @@ Estimated Prep Time              </label>
 >
   Edit
 </button>
+<button onClick={() => handleDelete(stock)}
+      type="button"
+      className="relative inline-flex mr-3 ml-3 items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none"
+    >
+      Delete
+    </button>
 {selectedStock === stock && (
   <>
    <div>
@@ -454,9 +468,26 @@ Cases      </label>
   {/* Right column area */}
  
   <h2 className="text-lg font-medium text-gray-900 text-center">Menu Items</h2>
-<div className="px-4 py-6 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">
+<div className="px-4 py-6 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6 mb-5">
 <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
-  {menu.map((menuItem) => (
+
+      <div className="relative mt-2 flex items-center">
+      <input
+  type="text"
+  name="search"
+  id="search"
+  className="block w-full rounded-md mb-5 mt-5 border-0 py-1.5 pr-14 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+  onChange={event => setMenuSearch(event.target.value)}
+/>
+
+        <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
+          <kbd className="inline-flex items-center rounded border border-gray-200 px-1 font-sans text-xs text-gray-400">
+            ⌘K
+          </kbd>
+        </div>
+      </div>
+    </div>
+  {filteredMenu.map((menuItem) => (
     <div
       key={menuItem.Name}
       className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-indigo-100 px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
@@ -497,20 +528,21 @@ Cases      </label>
 
  
                 
+               
               {selectedExtras.map((extra) => (
   <div key={extra} className='mt-3'>
     <li>{extra}</li>
     <input
-      onChange={(event) => handlePriceChange(event, extra)}
-      value={extraPrices[extra] || ''}
-      type="number"
-      step="0.01"
-      placeholder="Enter price"
-      className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-    />
+  onChange={(event) => handlePriceChange(event, extra)}
+  value={extraPrices[extra] || ''}
+  type="number"
+  step="0.01"
+  placeholder="Enter price"
+  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+/>
+
   </div>
 ))}
-
 
       <button className="relative inline-flex mt-3 items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none"
  onClick={handleExtrasConfirm}>Confirm</button>
@@ -522,7 +554,6 @@ Cases      </label>
       </div>
     </div>
   ))}
-</div>
 </div>
 </div>
 </div>

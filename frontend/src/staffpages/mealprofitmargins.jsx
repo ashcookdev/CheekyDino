@@ -53,16 +53,17 @@ export default function Example({ selectedItems, mealName, category, img, descri
       return newItemValues;
     });
   
-    // Check if there's only one item selected
     if (selectedItemsstate.length === 1) {
-      // If there's only one item, set the max value of the slider to 1
-      const slider = document.getElementById(`quantity-slider-${index}`);
-      if (slider) {
-        slider.max = "1";
-      }
-      setPortionAmount(value); // Update the portion amount based on the slider value
+      // Handle the case when there's only one item in the array
+      // Calculate the portions in stock differently here
+      const item = selectedItemsstate[0];
+      const calculatedPortions = item.Quantity === 0
+        ? Math.floor(item.Weight / value)
+        : Math.floor(item.Quantity / value);
+      
+      setPortionAmount(calculatedPortions);
     } else {
-      // Calculate the number of portions in stock when multiple items are selected
+      // Calculate the number of portions in stock for multiple items
       const lowestPortionAmount = Math.min(
         ...selectedItemsstate.map((item, index) =>
           item.Quantity === 0
@@ -72,11 +73,11 @@ export default function Example({ selectedItems, mealName, category, img, descri
             : Math.floor(item.Quantity / itemValues[index])
         )
       );
-      setPortionAmount(lowestPortionAmount); // Update the portion amount
+    
+      setPortionAmount(lowestPortionAmount);
     }
   };
   
-
 
   
   
@@ -210,7 +211,7 @@ window.location.reload();
                       type="range"
                       min={0}
                       max={item.Weight}
-                      step={1}
+                      step={0}
                       onChange={(event) =>
                         handleSliderChange(index, event.target.value)
                       }
@@ -224,7 +225,7 @@ window.location.reload();
                     <input
                       id={`quantity-slider-${index}`}
                       type="range"
-                      min={0}
+                      min={1}
                       max={item.Quantity}
                       step={1}
                       onChange={(event) =>

@@ -94,6 +94,7 @@ if (next === true) {
     const childrenAges = childData.map((data) => data.childAge === "2+" ? data.exactAge : data.childAge);
 
     const calculatePrice = (childData, adults, children) => {
+
       let price = 0;
       childData.forEach((data) => {
         if (data.childAge === "Under 1 year") {
@@ -107,10 +108,15 @@ if (next === true) {
         }
       });
       // Add an extra £2.00 for every adult if there are more adults than children
-      if (adults > children) {
-        price += adults * 2.0;
-      }
-      return price;
+      console.log(adults)
+      const additionalAdults = adults - children;
+
+  if (additionalAdults > 0) {
+    // Add £2.00 for each additional adult beyond the number of children
+    price += additionalAdults * 2.0;
+  }
+
+  return price;
     };
   
     
@@ -178,7 +184,7 @@ if (next === true) {
         TimeSlotFrom: nowString,
         TimeSlotTo: twoHoursLaterString,
         Telephone: number,
-        Total: calculatePrice(childData),
+        Total: calculatePrice(childData, adults, children)
 
       }
     )

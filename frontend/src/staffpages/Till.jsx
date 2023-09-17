@@ -279,21 +279,28 @@ window.location.reload();
       <div className="flex justify-between"></div>
     <StaffTill onSelectChange={handleSelectedChange} />
 
-    <label htmlFor="table" className="block font-bold text-xs mr-2 ml-3 animate-pulse">
+    <label htmlFor="table" className="block font-bold text-xs mr-2 ml-3">
   Table:
 </label>
 <select
   id="table"
   value={table}
   onChange={handleTableChange}
-  className="border rounded-md p-1 mr-2 bg-green-500 "
+  className="border rounded-md p-1 mr-2 bg-green-200"
 >
   {occupiedSessions.map((session) => (
     <option key={session.Table} value={session.Table}>
-      Table:{session.Table} - Adult Name: {session.Name}
+      {`Table: ${session.Table} - Adult Name: ${session.Name}`}
     </option>
   ))}
+  {occupiedSessions.length === 1 && (
+    <option value={occupiedSessions[0].Table}>
+      {`Table: ${occupiedSessions[0].Table} - Adult Name: ${occupiedSessions[0].Name}`}
+    </option>
+  )}
 </select>
+
+
 
       <div className="flex-grow justify-start flex flex-wrap">
         {party.map((partyBooking) => (

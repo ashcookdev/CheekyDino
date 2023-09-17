@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Till from './Till';
 import { Analytics } from 'aws-amplify';
 import SessionTill from './SessionTill';
+import { motion } from 'framer-motion';
 
 export default function TableSelect({ availableTables, onSelect, details }) {
 
@@ -99,52 +100,57 @@ setPay(true)  }
     
    }
 
+   const colors = [
+    
+    'bg-blue-500',
+    'bg-indigo-500',
+    'bg-purple-500',
+    'bg-pink-500',
+    'bg-cyan-500',
+    'bg-purple-700',
+    'bg-gray-500',
+  ];    
 
-
-    return (
-        <div>
-            <div className="flex flex-wrap">
-                <p className="w-full text-center font-bold">Select A Table</p>
-                <p className="w-full text-center font-bold">Party Size: {guests} </p>
-                <p className="w-full text-center font-bold">Name: {savedDetails.Name} </p>
-                <p className="w-full text-center font-bold">Price: {savedDetails.Total.toFixed(2)} </p>
-
-                {availableTables.map(table => (
-                    <button
-                        key={table.table}
-                        onClick={() => handleTableClick(table)}
-                        className={`m-1 ${
-                            selectedTables.includes(table)
-                                ? 'bg-blue-500 text-white'
-                                : [40, 41, 42].includes(table.table)
-                                ? 'bg-red-500 text-white'
-                                : 'bg-white text-black border border-black'
-                        }`}
-                    >
-                        {table.table} ({table.capacity} seats)
-                        {table.table === 40  && <div>Party Room</div>}
-                        {table.table === 41  && <div>Party Room</div>}
-                        {table.table === 42  && <div>Party Room</div>}
-
-
-                    </button>
-                ))}
-            </div>
-            
-            
-            <button
-                onClick={handleConfirmClick}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+  return (
+    <div>
+      <div className="flex flex-wrap">
+        <p className="w-full text-center font-bold">Select A Table</p>
+        <p className="w-full text-center font-bold">Party Size: {guests} </p>
+        <p className="w-full text-center font-bold">Name: {savedDetails.Name} </p>
+        <p className="w-full text-center font-bold">Price: £{savedDetails.Total.toFixed(2)} </p>
+        <motion.div
+          className="flex flex-wrap mt-5"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          {availableTables.map((table) => (
+            <motion.button
+              key={table.table}
+              onClick={() => handleTableClick(table)}
+              className={`m-1 text-white ${colors[table.table % colors.length]} ${
+                selectedTables.includes(table)
+                  ? 'ring-2 ring-white'
+                  : 'ring-2 ring-transparent'
+              } rounded-full px-4 py-2`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
-                Confirm
-            </button>
-            <div>
-
-
-
-
-                
-            </div>
-        </div>
-    );
-                    }    
+              {table.table} ({table.capacity} seats)
+              {table.table >= 40 && table.table <= 42 && <div>Party Room</div>}
+            </motion.button>
+          ))}
+        </motion.div>
+      </div>
+      <motion.button
+        onClick={handleConfirmClick}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        Confirm
+      </motion.button>
+    </div>
+  );
+};
+                    
