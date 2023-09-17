@@ -656,37 +656,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                
 
             </main></div>
-            <footer>
-            <div className="fixed bottom-0 bg-white bg-opacity-50 md:block lg:block">
-
-      <div
-        id="scroll-container"
-        className="flex overflow-x-scroll hide-scroll-bar"
-        style={{ width: '80%' }}
-      >
-        <a href="#section1" className="p-2 m-2 bg-green-500 text-white rounded-full">
-          <CurrencyPoundIcon className="h-6 w-6" />
-        </a>
-        <a href="#section2" className="p-2 m-2 bg-purple-500 text-white rounded-full">
-          <MicrophoneIcon className="h-6 w-6" />
-        </a>
-        <a href="#section3" className="p-2 m-2 bg-blue-500 text-white rounded-full">
-          <CakeIcon className="h-6 w-6" />
-        </a>
-        <a href="#section4" className="p-2 m-2 bg-yellow-500 text-white rounded-full">
-          <TableCellsIcon className="h-6 w-6" />
-        </a>
-        <a href="#section5" className="p-2 m-2 bg-red-500 text-white rounded-full">
-          <ChatBubbleLeftRightIcon className="h-6 w-6" />
-        </a>
-        <a href="#section6" className="p-2 m-2 bg-orange-500 text-white rounded-full">
-          <UserCircleIcon className="h-6 w-6" />
-        </a>
-      </div>
-    </div>
-
-            </footer>
-    
+           
 
             
         </>
