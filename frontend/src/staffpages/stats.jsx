@@ -82,8 +82,11 @@ import { ArrowRightCircleIcon, CakeIcon, ClockIcon, CurrencyPoundIcon, ScaleIcon
   
     const guestsChange = addGuests - yesterdayGuests;
   
-    const todayTotalSpend = sessions.reduce((total, session) => total + (session.TotalSpent || 0), 0);
-    const yesterdayTotalSpend = yesterdaySessions.reduce((total, session) => total + (session.TotalSpent || 0), 0);
+    const today = format(new Date(), 'yyyy-MM-dd');
+
+    const todayTotalSpend = sessions
+      .filter(session => session.Date === today) // Filter sessions for the current day
+      .reduce((total, session) => total + (session.TotalSpent || 0), 0);    const yesterdayTotalSpend = yesterdaySessions.reduce((total, session) => total + (session.TotalSpent || 0), 0);
     const totalSpendChange = todayTotalSpend - yesterdayTotalSpend;
   
     const currentTime = new Date();
@@ -97,10 +100,9 @@ import { ArrowRightCircleIcon, CakeIcon, ClockIcon, CurrencyPoundIcon, ScaleIcon
     const totalSpendAllSessions = sessions.reduce((total, session) => total + (session.TotalSpent || 0), 0);
     const averageSpendPerSession = totalSpendAllSessions / sessions.length;
   
-    const today = format(new Date(), 'yyyy-MM-dd');
     const partyBookingsTodayCount = partyBookings.filter(booking => booking.PartyDate === today).length;
 
-    const currentOrders = cafeOrders.filter(order => order.Completed === false && order.Delieved === false);
+    const currentOrders = cafeOrders.filter(order => order.Completed === false && order.Delieved === false && order.Date === today);
     const currentOrdersCount = currentOrders.length;
 
     // yesterdays average spend
@@ -117,7 +119,38 @@ const staffClockedInCount = staffClockedIn.length;
 const staffOnBreak = staff.filter(staff => staff.Break === true);
 const staffOnBreakCount = staffOnBreak.length;
 
+const mostPopularDrink = cafeOrders.reduce((acc, order) => {
+  order.DrinkItems.forEach((drink) => {
+    if (acc[drink]) {
+      acc[drink] += 1;
+    } else {
+      acc[drink] = 1;
+    }
+  });
+  return acc;
+}, {});
 
+const mostPopularMeal = cafeOrders.reduce((acc, order) => {
+  order.HotItems.forEach((meal) => {
+    if (acc[meal]) {
+      acc[meal] += 1;
+    } else {
+      acc[meal] = 1;
+    }
+  });
+  return acc;
+}, {});
+
+
+  const highestGrossingTable = sessions.reduce((acc, session) => {
+    if (acc[session.Table]) {
+      acc[session.Table] += session.TotalSpent;
+    } else {
+      acc[session.Table] = session.TotalSpent;
+    }
+    return acc;
+
+  }, {});
 
 
   
@@ -189,6 +222,7 @@ const staffOnBreakCount = staffOnBreak.length;
         stat: staffClockedInCount,
         icon: UserGroupIcon,
       },
+      
        
     ];
   

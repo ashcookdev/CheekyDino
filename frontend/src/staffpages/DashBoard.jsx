@@ -77,9 +77,9 @@ export default function Dashboard() {
 
 const navigation = [
     { name: 'Till', href: '/till', icon: CurrencyPoundIcon, current: true },
-  { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
-  { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
-  { name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
+  { name: 'Chat', href: '#section5', icon: ChatBubbleBottomCenterIcon, current: false },
+  { name: 'Kitchen', href: '#section3', icon: CakeIcon , current: false },
+  { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
   { name: 'Edit', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Clock In', href: '/clockin', icon: ClockIcon, current: false },
   {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },
@@ -609,20 +609,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                     </div>
                                         
                 <div className="space-y-16 py-16 xl:space-y-20">
-                    <div>
-                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                            <h2 className="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
-                                Current Orders
-                            </h2>
-                        </div>
-                        <div className="mt-6 overflow-hidden border-t border-gray-100">
-                            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                                <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
-                                    <OrderProgress steps={steps} />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <div className="space-y-16 py-16 xl:space-y-20">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"     style={{ backgroundImage: `url(/background.gif)` }}
 >
