@@ -6,6 +6,7 @@ import ReactToPrint from "react-to-print";
 import React from "react";
 import { motion } from "framer-motion"; // Import Framer Motion
 
+
 const Receipt = React.forwardRef(({ order, total, table, childName }, ref) => (
   <div ref={ref}>
     {table && <div>Table: {table}</div>}
@@ -34,6 +35,8 @@ export default function TillPayment({
   const [orders, setOrders] = useState([]);
   const [prep, setPrep] = useState([]);
   const [change, setChange] = useState(0); // Add state for change
+  const [isChangeGiven, setIsChangeGiven] = useState(false); // Flag to track if change is given
+
 
 
   console.log(orders);
@@ -123,11 +126,12 @@ export default function TillPayment({
   const newtotal = order.reduce((acc, item) => acc + item.Price, 0);
 
   const handleDenominationClick = (amount) => {
-    const updatedAmount = parseFloat(amountEntered) + amount;
+    const updatedAmount = parseFloat(amountEntered || 0) + amount;
     setAmountEntered(updatedAmount.toString());
     const newChange = updatedAmount - total;
     setChange(newChange);
   };
+  
 
   const handleNumberClick = (number) => {
     const updatedAmount = parseFloat(amountEntered + number.toString());
@@ -146,6 +150,14 @@ export default function TillPayment({
     setPaymentMethod("card");
     setIsFlashing(true);
     setOrders(order);
+  };
+
+  const handleGiveChange = () => {
+    // Print the receipt
+    if (receiptRef.current) {
+      receiptRef.current.print();
+    }
+    setIsChangeGiven(true);
   };
 
   useEffect(() => {
@@ -173,7 +185,7 @@ export default function TillPayment({
 
   return (
     <div className="grid grid-cols-3 gap-4 p-4">
-      <div className="border-r border-gray-300 pr-4">
+      <div className="border-r border-gray-300 pr-4 mb-3 mt-3">
         <motion.button
           variants={buttonVariants}
           whileHover="hover"
@@ -182,31 +194,9 @@ export default function TillPayment({
         >
           Cancel
         </motion.button>
-        <div className="mt-4">
-          <ReactToPrint
-            trigger={() => (
-              <motion.button
-                variants={buttonVariants}
-                whileHover="hover"
-                className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5"
-              >
-                Print
-              </motion.button>
-            )}
-            content={() => receiptRef.current}
-          />
-          <div style={{ display: "none" }}>
-            <Receipt
-              ref={receiptRef}
-              order={order}
-              total={total}
-              table={table}
-              childName={childName}
-            />
-          </div>
-        </div>
+       
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-3">
           <motion.button
             variants={buttonVariants}
             whileHover="hover"
@@ -334,6 +324,30 @@ export default function TillPayment({
             Change: £{change.toFixed(2)}
           </div>
         </div>
+        <div className="mt-4">
+          <ReactToPrint
+            trigger={() => (
+              <motion.button
+                variants={buttonVariants}
+                whileHover="hover"
+                className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5"
+              >
+                Print/Give Change
+              </motion.button>
+            )}
+            content={() => receiptRef.current}
+          />
+          <div style={{ display: "none" }}>
+            <Receipt
+              ref={receiptRef}
+              order={order}
+              total={total}
+              table={table}
+              childName={childName}
+            />
+          </div>
+        </div>
+
         <motion.button
           variants={buttonVariants}
           whileHover="hover"

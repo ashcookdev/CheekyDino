@@ -3,42 +3,60 @@ import ReactToPrint from "react-to-print";
 import QRCode from "react-qr-code";
 import { motion } from "framer-motion";
 
-const Receipt = React.forwardRef(({ order, total, table, childName }, ref) => (
-  <div ref={ref} className="p-4 border rounded">
-    <h1 className="text-2xl font-bold mb-2">Cheeky Dino</h1>
-    {table && <div>Table: {table}</div>}
-    {childName && <div>Child: {childName}</div>}
-    <div>{order}</div>
+const Receipt = React.forwardRef(
+  ({ order, total, table, childName, changeGiven }, ref) => {
+    // Calculate the amount paid
+    const amountPaid = total + changeGiven;
+
+    return (
+      <div ref={ref} className="p-4 border rounded text-left">
+  <h1 className="text-2xl font-bold mb-2">Cheeky Dino</h1>
+  <div className="mt-4">
+    <img
+      src="./dino-logo.png"
+      alt="Cheeky Dino logo"
+      width="128"
+      height="128"
+    />
+    <p className="text-sm mt-2 text-color-black">Cheeky Dino</p>
+    <p className="text-sm mt-2 text-color-black mb-5">Great indoor play centre in Maidstone</p>
+    {table && <div className="text-color-black">Table: {table}</div>}
+    {childName && <div className="text-color-black"> Name: {childName}</div>}
+    <div className="text-color-black">{order}</div>
     <div className="border-t mt-2 pt-2">
-      Total: £{total.toFixed(2)}
+      <p className="text-color-black">Total: £{total.toFixed(2)}</p>
     </div>
-    <div className="mt-4 text-center">
-      {/* Add a logo and the name of the company here */}
-      <img src="https://cheekydino.co.uk/wp-content/uploads/2020/08/Cheeky-Dino-logo.png" alt="Cheeky Dino logo" width="128" height="128" />
-      <p className="text-sm mt-2">Cheeky Dino</p>
-      <p className="text-sm mt-2">Great indoor play centre in Maidstone</p>
-      <QRCode value="https://cheekydino.co.uk" size={128} />
+    <div className="border-t mt-2 pt-2 text-color-black">
+      <p className="text-color-black">Change Given: £{changeGiven.toFixed(2)}</p>
     </div>
+    <div className="border-t mt-2 pt-2">
+      <p className="text-color-black">Amount Paid: £{amountPaid.toFixed(2)}</p>
+    </div>
+    <div className="border-t mt-2 pt-2 mb-5"></div>
+    <QRCode value="https://cheekydino.co.uk" size={128} />
+    <p className="text-sm mt-2 text-color-black">https://cheekydino.co.uk</p>
+    <p className="text-sm mt-2 text-color-black">01622 755 020</p>
   </div>
-));
+</div>
+
+    );
+  }
+);
+
 
 const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [amountEntered, setAmountEntered] = useState(0);
   const [isFlashing, setIsFlashing] = useState(false);
   const [total, setTotal] = useState(initialTotal);
-  const [changeGiven, setChangeGiven] = useState(0); // Change Given
-
-  const [isChangeGiven, setIsChangeGiven] = useState(false); // Flag to track if change is given
-
+  const [changeGiven, setChangeGiven] = useState(0);
+  const [input, setInput] = useState("");
 
   const receiptRef = useRef();
 
   const handleConfirmClick = async () => {
     console.log("Order confirmed");
-
     // Print the receipt
-
     // Reset the order and total price
     window.location.reload();
   };
@@ -46,33 +64,38 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
   const handleCashClick = () => {
     setPaymentMethod("cash");
     setAmountEntered(0);
-    setChangeGiven(0); // Reset change given
+    setChangeGiven(0);
   };
 
   const handleDenominationClick = (amount) => {
-    const newAmountEntered = amountEntered + amount;
-    setAmountEntered(newAmountEntered);
+    // Calculate the new amount entered by adding the denomination
+    const updatedAmount = parseFloat(amountEntered || 0) + amount;
+    setAmountEntered(updatedAmount);
+    // Calculate the change
+    const newChange = updatedAmount - total;
+    setChangeGiven(newChange > 0 ? newChange : 0);
+  };
 
-    const newChangeGiven = newAmountEntered - total;
-    setChangeGiven(newChangeGiven > 0 ? newChangeGiven : 0); // Change given should not be negative
-
-    // Print the receipt
-    if (receiptRef.current) {
-      receiptRef.current.print();
+  const handleDecimalClick = () => {
+    if (!input.includes(".")) {
+      setInput(input + ".");
     }
   };
 
   const handleNumberClick = (number) => {
-    setAmountEntered((amountEntered * 10 + number) / 100);
+    const updatedInput = input + number.toString();
+    setInput(updatedInput);
+    const updatedAmount = parseFloat(updatedInput);
+    setAmountEntered(updatedAmount);
+    const newChange = updatedAmount - total;
+    setChangeGiven(newChange > 0 ? newChange : 0);
   };
 
   const handleCardClick = () => {
     setPaymentMethod("card");
     setIsFlashing(true);
-    setChangeGiven(0); // Reset change given
+    setChangeGiven(0);
   };
-
-  
 
   const buttonVariants = {
     hover: {
@@ -83,13 +106,12 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
     },
   };
 
-  
-  const handleGiveChange = () => {
+  const handleGiveChange = (receiptRef) => {
     // Print the receipt
     if (receiptRef.current) {
       receiptRef.current.print();
     }
-    setIsChangeGiven(true);
+    setChangeGiven(0); // Reset the change given
   };
 
   return (
@@ -103,33 +125,6 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
         >
           Cancel
         </motion.button>
-        <div className="flex flex-col gap-2 mt-4">
-
-        
-
-          <ReactToPrint
-            trigger={() => (
-              <motion.button
-                className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5"
-                variants={buttonVariants}
-                whileHover="hover"
-              >
-                Print
-              </motion.button>
-            )}
-            content={() => receiptRef.current}
-          />
-          <div style={{ display: "none" }}>
-            <Receipt
-              ref={receiptRef}
-              order={order}
-              total={total}
-              table={table}
-              childName={ChildName}
-            />
-          </div>
-        </div>
-
         <div className="flex flex-col gap-2">
           <motion.button
             className={`${
@@ -209,6 +204,14 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
         >
           0
         </motion.button>
+        <motion.button
+          variants={buttonVariants}
+          whileHover="hover"
+          className="bg-yellow-200 p-2 rounded"
+          onClick={handleDecimalClick}
+        >
+          .
+        </motion.button>
       </div>
       <div>
         <ul>
@@ -218,25 +221,43 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
           <li className="font-bold">Change Given: £{changeGiven.toFixed(2)}</li>
         </ul>
         <div>
-        {isChangeGiven ? (
-          <motion.button
-            className="bg-green-500 text-white p-2 rounded w-full mb-3 mt-3"
-            variants={buttonVariants}
-            whileHover="hover"
-          >
-            Change Given
-          </motion.button>
-        ) : (
-          <motion.button
-            onClick={handleGiveChange}
-            className="bg-blue-500 text-white p-2 rounded w-full mt-3 mb-3"
-            variants={buttonVariants}
-            whileHover="hover"
-          >
-            Give Change
-          </motion.button>
-        )}
-      </div>
+          <input
+            type="text"
+            placeholder="Enter Amount"
+            value={input}
+            onChange={(e) => {
+              const input = e.target.value.replace(/[^0-9.]/g, "");
+              setInput(input);
+              const newChange = parseFloat(input) - total;
+              setChangeGiven(newChange > 0 ? newChange : 0);
+            }}
+            className="bg-purple-200 p-2 rounded border border-gray-300 item-center"
+          />
+          <div className="flex flex-col gap-2 mt-4">
+            <ReactToPrint
+              trigger={() => (
+                <motion.button
+                  className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5"
+                  variants={buttonVariants}
+                  whileHover="hover"
+                >
+                  Print/Give Change
+                </motion.button>
+              )}
+              content={() => receiptRef.current}
+            />
+            <div style={{ display: "none" }}>
+              <Receipt
+                ref={receiptRef}
+                order={order}
+                total={total}
+                table={table}
+                childName={ChildName}
+                changeGiven={changeGiven}
+              />
+            </div>
+          </div>
+        </div>
         <motion.button
           onClick={handleConfirmClick}
           className="bg-green-500 text-white p-2 rounded w-full"
