@@ -13,9 +13,11 @@ const Receipt = React.forwardRef(({ order, total, table, childName }, ref) => (
       Total: £{total.toFixed(2)}
     </div>
     <div className="mt-4 text-center">
-      <QRCode value="https://yourwebsite.com/order" size={128} />
-      <p className="text-sm mt-2">Order from your table</p>
-      <p className="text-sm">Log in using the QR code</p>
+      {/* Add a logo and the name of the company here */}
+      <img src="https://cheekydino.co.uk/wp-content/uploads/2020/08/Cheeky-Dino-logo.png" alt="Cheeky Dino logo" width="128" height="128" />
+      <p className="text-sm mt-2">Cheeky Dino</p>
+      <p className="text-sm mt-2">Great indoor play centre in Maidstone</p>
+      <QRCode value="https://cheekydino.co.uk" size={128} />
     </div>
   </div>
 ));
@@ -26,6 +28,9 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
   const [isFlashing, setIsFlashing] = useState(false);
   const [total, setTotal] = useState(initialTotal);
   const [changeGiven, setChangeGiven] = useState(0); // Change Given
+
+  const [isChangeGiven, setIsChangeGiven] = useState(false); // Flag to track if change is given
+
 
   const receiptRef = useRef();
 
@@ -67,16 +72,7 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
     setChangeGiven(0); // Reset change given
   };
 
-  const handleTillDrawer = () => {
-    fetch("/open-till")
-      .then((response) => response.text())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
+  
 
   const buttonVariants = {
     hover: {
@@ -85,6 +81,15 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
         duration: 0.2,
       },
     },
+  };
+
+  
+  const handleGiveChange = () => {
+    // Print the receipt
+    if (receiptRef.current) {
+      receiptRef.current.print();
+    }
+    setIsChangeGiven(true);
   };
 
   return (
@@ -98,13 +103,9 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
         >
           Cancel
         </motion.button>
-        <div className="mt-4">
-          <motion.button
-            onClick={handleTillDrawer}
-            className="bg-gray-200 p-2 rounded w-full"
-          >
-            Open Till
-          </motion.button>
+        <div className="flex flex-col gap-2 mt-4">
+
+        
 
           <ReactToPrint
             trigger={() => (
@@ -154,7 +155,7 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
         {paymentMethod === "cash" && (
           <div className="flex flex-col gap-2 mt-4">
             <motion.button
-              className="bg-gray-200 p-2 rounded"
+              className="bg-cyan-200 p-2 rounded"
               onClick={() => handleDenominationClick(5)}
               variants={buttonVariants}
               whileHover="hover"
@@ -162,7 +163,7 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
               £5
             </motion.button>
             <motion.button
-              className="bg-gray-200 p-2 rounded"
+              className="bg-cyan-300 p-2 rounded"
               onClick={() => handleDenominationClick(10)}
               variants={buttonVariants}
               whileHover="hover"
@@ -170,7 +171,7 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
               £10
             </motion.button>
             <motion.button
-              className="bg-gray-200 p-2 rounded"
+              className="bg-cyan-400 p-2 rounded"
               onClick={() => handleDenominationClick(20)}
               variants={buttonVariants}
               whileHover="hover"
@@ -178,7 +179,7 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
               £20
             </motion.button>
             <motion.button
-              className="bg-gray-200 p-2 rounded"
+              className="bg-cyan-500 p-2 rounded"
               onClick={() => handleDenominationClick(50)}
               variants={buttonVariants}
               whileHover="hover"
@@ -192,7 +193,7 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
         {[...Array(9)].map((_, i) => (
           <motion.button
             key={i + 1}
-            className="bg-gray-200 p-2 rounded"
+            className="bg-purple-200 p-2 rounded"
             onClick={() => handleNumberClick(i + 1)}
             variants={buttonVariants}
             whileHover="hover"
@@ -201,7 +202,7 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
           </motion.button>
         ))}
         <motion.button
-          className="bg-gray-200 p-2 rounded"
+          className="bg-blue-200 p-2 rounded"
           onClick={() => handleNumberClick(0)}
           variants={buttonVariants}
           whileHover="hover"
@@ -211,11 +212,31 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
       </div>
       <div>
         <ul>
-          <li>Table: {table}</li>
-          <li>Child: {ChildName}</li>
-          <li>Total: £{total.toFixed(2)}</li>
-          <li>Change Given: £{changeGiven.toFixed(2)}</li>
+          <li className="font-bold">Table: {table}</li>
+          <li className="font-bold">Child: {ChildName}</li>
+          <li className="font-bold">Total: £{total.toFixed(2)}</li>
+          <li className="font-bold">Change Given: £{changeGiven.toFixed(2)}</li>
         </ul>
+        <div>
+        {isChangeGiven ? (
+          <motion.button
+            className="bg-green-500 text-white p-2 rounded w-full mb-3 mt-3"
+            variants={buttonVariants}
+            whileHover="hover"
+          >
+            Change Given
+          </motion.button>
+        ) : (
+          <motion.button
+            onClick={handleGiveChange}
+            className="bg-blue-500 text-white p-2 rounded w-full mt-3 mb-3"
+            variants={buttonVariants}
+            whileHover="hover"
+          >
+            Give Change
+          </motion.button>
+        )}
+      </div>
         <motion.button
           onClick={handleConfirmClick}
           className="bg-green-500 text-white p-2 rounded w-full"
