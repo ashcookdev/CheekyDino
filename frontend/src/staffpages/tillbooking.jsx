@@ -214,7 +214,8 @@ if (next === true) {
   };
 
   const handleSelectedChange = (value) => {
-    setStaff(value)
+    console.log(value.StaffId)
+    setStaff(value.StaffId)
   }
 
   

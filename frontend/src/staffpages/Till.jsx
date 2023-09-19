@@ -51,6 +51,11 @@ const [home, setHome] = useState(false);
 const [selectedCategory, setSelectedCategory] = useState(null);
 const [staff, setStaff] = useState(null);
 const [occupiedSessions, setOccupiedSessions] = useState([]);
+const [showCategories, setShowCategories] = useState(true);
+const [showItems, setShowItems] = useState(true);
+const [showTopBar, setShowTopBar] = useState(false);
+
+
 useEffect(() => {
   fetchSessions().then(setOccupiedSessions);
 }, []);
@@ -60,6 +65,7 @@ useEffect(() => {
 const navigate = useNavigate();
 
 console.log(order)
+
 
 
 
@@ -82,7 +88,9 @@ console.log(order)
   
   const handleItemClick = async (item) => {
     setSelectedItem(item);
-
+    setShowItems(false);
+  setShowCategories(true)
+setShowTopBar(true)
     // Pass the selected item to the handleProductClick function
     await handleProductClick(item);
   };
@@ -94,7 +102,9 @@ console.log(order)
 
     const handleCategoryClick = (category) => {
     setSelectedCategory(category);
-    setSelectedItem(null);
+    setShowCategories(false);
+  setShowItems(true);
+  setShowTopBar(true)
   };
   
   //get all party bookings for today
@@ -232,6 +242,7 @@ window.location.reload();
     const tableNumber = parseInt(e.target.value);
     setTable(tableNumber);
 
+
     // Search the local datastore for all sessions
     const allSessions = await DataStore.query(Sessions);
 
@@ -265,6 +276,7 @@ window.location.reload();
   const handleSelectedChange = (selectedStaff) => {
     console.log('Selected staff member:', selectedStaff);
     setStaff(selectedStaff.StaffId)
+
     // You can add your own logic here to handle the change in the selected staff member
   };
 
@@ -273,10 +285,10 @@ window.location.reload();
 
 
   return (
-
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+      {!showTopBar && (
     <div className="mt-2 border-b border-gray-200 pb-2 flex flex-col sm:flex-row items-center">
-      <div className="flex justify-between"></div>
+
     <StaffTill onSelectChange={handleSelectedChange} />
 
     <label htmlFor="table" className="block font-bold text-xs mr-2 ml-3">
@@ -366,7 +378,14 @@ window.location.reload();
         Kitchen
       </motion.button>
     </div>
-  </div>
+    </div>
+  )}
+
+  
+
+
+
+
 
      
   <div className="flex flex-col lg:flex-row justify-between">
@@ -374,6 +393,7 @@ window.location.reload();
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div className="mt-4 border-b-2 border-gray-200 pb-4">
         <h2 className="font-bold text-lg mb-4">Menu:</h2>
+        {showCategories && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {categories.map((category, index) => (
             <motion.button
@@ -389,7 +409,9 @@ window.location.reload();
             </motion.button>
           ))}
         </div>
-      {selectedCategory && (
+      )}
+      {showItems && (
+
         <div className="mt-10 mr-5 ml-5">
           {filteredData.map((item,index) => {
             let stockColor;
@@ -415,6 +437,7 @@ window.location.reload();
           })}
         </div>
       )}
+
     {selectedItem && selectedItem.Extras && (
   <motion.div
     className="mt-10 mr-3 ml-3"
@@ -467,10 +490,22 @@ window.location.reload();
 
 
         <div className="w-1/3 border-purple-400">
+        <div className="border border-red-400 p-4 mt-2">
+
+        <p className="font-bold">Table:{table}</p>
+              <p className="font-bold"> Name:{childName}</p>
+              <p className="font-bold"> Staff:{staff}</p>
+              </div>
           <div className="mt-4 border-b-4 border-gray-200 pb-4">
             <h2 className="font-bold text-lg mb-4">Order:</h2>
             <div className="border border-gray-400 p-4">
+              <button onClick={() => {
+              window.location.reload();
+              }}
+             className="bg-red-500 text-white p-1 rounded">Cancel</button>
+
               <ul>
+             
                 {order.map((item, index) => (
                   <li key={index} className="flex justify-between items-center mb-5">
                     <div>
@@ -488,7 +523,7 @@ window.location.reload();
                   </li>
                 ))}
               </ul>
-              <p className="mt-3 mb-3">Total: £{total.toFixed(2)}</p>
+              <p className="mt-3 mb-3 font-bold">Total: £{total.toFixed(2)}</p>
               <motion.button                 onClick={() => handleConfirm(order, total)}
 
         className="w-16 h-10 mt-3 mb-3 bg-purple-600 text-xs font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"

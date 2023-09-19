@@ -76,10 +76,11 @@ return price;
     setSubmitted(true);
   };
 
-  const handleSelectedChange = (e) => {
-    const value = e.target.value;
-    setStaff(value);
-  };
+
+  const handleSelectedChange = (value) => {
+    console.log(value.StaffId)
+    setStaff(value.StaffId)
+  }
 
   
 
@@ -233,10 +234,7 @@ Adult Name            </label>
               className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
             ></input>
           </div>
-          <div
-            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
-          >
-          </div>
+         
 <button
 type="submit"
 onClick={handleSubmit}
