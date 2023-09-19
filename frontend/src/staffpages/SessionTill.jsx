@@ -18,7 +18,6 @@ const Receipt = React.forwardRef(
       width="128"
       height="128"
     />
-    <p className="text-sm mt-2 text-color-black">Cheeky Dino</p>
     <p className="text-sm mt-2 text-color-black mb-5">Great indoor play centre in Maidstone</p>
     {table && <div className="text-color-black">Table: {table}</div>}
     {childName && <div className="text-color-black"> Name: {childName}</div>}
@@ -35,7 +34,7 @@ const Receipt = React.forwardRef(
     <div className="border-t mt-2 pt-2 mb-5"></div>
     <QRCode value="https://cheekydino.co.uk" size={128} />
     <p className="text-sm mt-2 text-color-black">https://cheekydino.co.uk</p>
-    <p className="text-sm mt-2 text-color-black">01622 755 020</p>
+    <p className="text-sm mt-2 text-color-black">01622 670055</p>
   </div>
 </div>
 

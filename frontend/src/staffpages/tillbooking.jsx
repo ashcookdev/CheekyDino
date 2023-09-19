@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
 import { DataStore } from 'aws-amplify';
-import { Sessions } from './models';
+import { Sessions, Staff } from './models';
 import TableSelect from './TableSelect';
 import { format, addHours, set } from 'date-fns';
 import tableData from './TableData.json';
 import SessionBooker from './sessionbooker';
 import StaffCalenderParty from './PartyStaffCalendar';
+import StaffTill from './StaffTill';
 
 
 
@@ -24,6 +25,7 @@ export default function SessionBook() {
   const [truee, setTrue] = useState(false)
   const [details, setDetails] = useState({})
   const [partyBooking , setPartyBooking] = useState(false)
+  const [staff, setStaff] = useState("")
 
   const [showForm, setShowForm] = useState(false);
 
@@ -184,7 +186,8 @@ if (next === true) {
         TimeSlotFrom: nowString,
         TimeSlotTo: twoHoursLaterString,
         Telephone: number,
-        Total: calculatePrice(childData, adults, children)
+        Total: calculatePrice(childData, adults, children),
+        Staff: staff
 
       }
     )
@@ -209,6 +212,11 @@ if (next === true) {
       prev.map((data, i) => (i === index ? { ...data, exactAge: value } : data))
     );
   };
+
+  const handleSelectedChange = (value) => {
+    setStaff(value)
+  }
+
   
   
 
@@ -235,6 +243,10 @@ if (next === true) {
             {showForm && (
             <div>
           <div>
+            <div className="mt-6">
+              <StaffTill onSelectChange={handleSelectedChange}/>  
+            </div>
+
             <label htmlFor="children" className="block text-lg font-large leading-6 text-gray-900">
 Adult Name            </label>
             <input

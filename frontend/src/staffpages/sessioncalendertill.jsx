@@ -12,7 +12,7 @@ import { motion } from 'framer-motion';
 
 //
 
-export default function SessionCalender({ date, children, adults, childData, email, telephone, name }) {
+export default function SessionCalender({ date, children, adults, childData, email, telephone, name, staff }) {
 
   const navigate = useNavigate();
 
@@ -165,6 +165,7 @@ const freeTablesPerTimeslot = timeslots.map(timeslot => {
           Age: childData.map(item => item.ChildAge),
           Telephone: telephone,
           TotalSpent: childData.reduce((acc, item) => acc + parseFloat(item.TotalSpent), 0),
+          Staff: staff,
         })
       );
     

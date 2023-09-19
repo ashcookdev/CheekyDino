@@ -214,6 +214,7 @@ export default function SessionsUpdateForm(props) {
     orderid: [],
     Age: [],
     ExtraNames: [],
+    Staff: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Email, setEmail] = React.useState(initialValues.Email);
@@ -241,6 +242,7 @@ export default function SessionsUpdateForm(props) {
   const [orderid, setOrderid] = React.useState(initialValues.orderid);
   const [Age, setAge] = React.useState(initialValues.Age);
   const [ExtraNames, setExtraNames] = React.useState(initialValues.ExtraNames);
+  const [Staff, setStaff] = React.useState(initialValues.Staff);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = sessionsRecord
@@ -269,6 +271,7 @@ export default function SessionsUpdateForm(props) {
     setCurrentAgeValue("");
     setExtraNames(cleanValues.ExtraNames ?? []);
     setCurrentExtraNamesValue("");
+    setStaff(cleanValues.Staff);
     setErrors({});
   };
   const [sessionsRecord, setSessionsRecord] = React.useState(sessionsModelProp);
@@ -310,6 +313,7 @@ export default function SessionsUpdateForm(props) {
     orderid: [],
     Age: [],
     ExtraNames: [],
+    Staff: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -357,6 +361,7 @@ export default function SessionsUpdateForm(props) {
           orderid,
           Age,
           ExtraNames,
+          Staff,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -432,6 +437,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -475,6 +481,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Email ?? value;
@@ -519,6 +526,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.TimeslotFrom ?? value;
@@ -563,6 +571,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.TimeslotTo ?? value;
@@ -607,6 +616,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.TimeLeft ?? value;
@@ -651,6 +661,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.TimeArrived ?? value;
@@ -695,6 +706,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Date ?? value;
@@ -742,6 +754,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Table ?? value;
@@ -789,6 +802,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Orders ?? value;
@@ -832,6 +846,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Prepaid ?? value;
@@ -879,6 +894,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.TotalSpent ?? value;
@@ -926,6 +942,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Adults ?? value;
@@ -973,6 +990,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Children ?? value;
@@ -1016,6 +1034,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Arrived ?? value;
@@ -1059,6 +1078,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.LeftCenter ?? value;
@@ -1106,6 +1126,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.ExtraTables ?? value;
@@ -1149,6 +1170,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Telephone ?? value;
@@ -1188,6 +1210,7 @@ export default function SessionsUpdateForm(props) {
               orderid: values,
               Age,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             values = result?.orderid ?? values;
@@ -1249,6 +1272,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age: values,
               ExtraNames,
+              Staff,
             };
             const result = onChange(modelFields);
             values = result?.Age ?? values;
@@ -1310,6 +1334,7 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Age,
               ExtraNames: values,
+              Staff,
             };
             const result = onChange(modelFields);
             values = result?.ExtraNames ?? values;
@@ -1348,6 +1373,50 @@ export default function SessionsUpdateForm(props) {
           {...getOverrideProps(overrides, "ExtraNames")}
         ></TextField>
       </ArrayField>
+      <TextField
+        label="Staff"
+        isRequired={false}
+        isReadOnly={false}
+        value={Staff}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Age,
+              ExtraNames,
+              Staff: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Staff ?? value;
+          }
+          if (errors.Staff?.hasError) {
+            runValidationTasks("Staff", value);
+          }
+          setStaff(value);
+        }}
+        onBlur={() => runValidationTasks("Staff", Staff)}
+        errorMessage={errors.Staff?.errorMessage}
+        hasError={errors.Staff?.hasError}
+        {...getOverrideProps(overrides, "Staff")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

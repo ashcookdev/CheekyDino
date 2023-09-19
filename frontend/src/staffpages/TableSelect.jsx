@@ -84,6 +84,7 @@ export default function TableSelect({ availableTables, onSelect, details }) {
                 Telephone: savedDetails.Telephone,
                 Age: age,
                 TotalSpent: savedDetails.Total,
+                Staff: savedDetails.Staff,
 
     
             })

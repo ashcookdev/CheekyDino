@@ -34,6 +34,7 @@ export declare type SessionsUpdateFormInputValues = {
     orderid?: string[];
     Age?: string[];
     ExtraNames?: string[];
+    Staff?: string;
 };
 export declare type SessionsUpdateFormValidationValues = {
     Name?: ValidationFunction<string>;
@@ -56,6 +57,7 @@ export declare type SessionsUpdateFormValidationValues = {
     orderid?: ValidationFunction<string>;
     Age?: ValidationFunction<string>;
     ExtraNames?: ValidationFunction<string>;
+    Staff?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type SessionsUpdateFormOverridesProps = {
@@ -80,6 +82,7 @@ export declare type SessionsUpdateFormOverridesProps = {
     orderid?: PrimitiveOverrideProps<TextFieldProps>;
     Age?: PrimitiveOverrideProps<TextFieldProps>;
     ExtraNames?: PrimitiveOverrideProps<TextFieldProps>;
+    Staff?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type SessionsUpdateFormProps = React.PropsWithChildren<{
     overrides?: SessionsUpdateFormOverridesProps | undefined | null;

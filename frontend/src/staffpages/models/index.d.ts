@@ -443,6 +443,7 @@ type EagerSessions = {
   readonly orderid?: (string | null)[] | null;
   readonly Age?: (string | null)[] | null;
   readonly ExtraNames?: (string | null)[] | null;
+  readonly Staff?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -474,6 +475,7 @@ type LazySessions = {
   readonly orderid?: (string | null)[] | null;
   readonly Age?: (string | null)[] | null;
   readonly ExtraNames?: (string | null)[] | null;
+  readonly Staff?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
