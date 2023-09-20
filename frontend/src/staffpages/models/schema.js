@@ -1366,16 +1366,8 @@ export const schema = {
                     "attributes": [],
                     "isArrayNullable": true
                 },
-                "ExtraNames": {
-                    "name": "ExtraNames",
-                    "isArray": true,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true
-                },
-                "Staff": {
-                    "name": "Staff",
+                "StaffOrder": {
+                    "name": "StaffOrder",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -1513,7 +1505,7 @@ export const schema = {
                     "name": "sessionsID",
                     "isArray": false,
                     "type": "ID",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "Sessionid": {
@@ -2795,5 +2787,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.0",
-    "version": "d3ad5ca6935c3c65ea821bfcbda44eca"
+    "version": "1d84e50728d015a626e9d0b1706b3476"
 };

@@ -144,8 +144,7 @@ type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: pub
   CafeOrders: [CafeOrder] @hasMany(indexName: "bySessions", fields: ["id"])
   orderid: [String]
   Age: [String]
-  ExtraNames: [String]
-  Staff: String
+  StaffOrder: String
 }
 
 type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -158,7 +157,7 @@ type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
   Table: Int
   Completed: Boolean
   Delieved: Boolean
-  sessionsID: ID @index(name: "bySessions")
+  sessionsID: ID! @index(name: "bySessions")
   Sessionid: String
   TimeDelivered: AWSTime
   Notes: String
@@ -234,4 +233,5 @@ type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: [
   PartyAdultFoodChoices: [String]
   Email: String
   Telephone: String
-} 
+}
+ 

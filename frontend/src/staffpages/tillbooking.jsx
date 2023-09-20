@@ -173,11 +173,14 @@ if (next === true) {
       }
       availableTablesForTimeslot = recommendedTables;
     }
+    const childAges = childData.map(data => data.childAge);
+
+
     setAvailableTables(availableTablesForTimeslot);
     setDetails(
       {
         Name: ChildName,
-        Age: childrenAges,
+        Age: childAges,
         Email: email,
         Number: number,
         Children: children,

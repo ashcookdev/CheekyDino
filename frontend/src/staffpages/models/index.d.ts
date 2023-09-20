@@ -442,8 +442,7 @@ type EagerSessions = {
   readonly CafeOrders?: (CafeOrder | null)[] | null;
   readonly orderid?: (string | null)[] | null;
   readonly Age?: (string | null)[] | null;
-  readonly ExtraNames?: (string | null)[] | null;
-  readonly Staff?: string | null;
+  readonly StaffOrder?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -474,8 +473,7 @@ type LazySessions = {
   readonly CafeOrders: AsyncCollection<CafeOrder>;
   readonly orderid?: (string | null)[] | null;
   readonly Age?: (string | null)[] | null;
-  readonly ExtraNames?: (string | null)[] | null;
-  readonly Staff?: string | null;
+  readonly StaffOrder?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -500,7 +498,7 @@ type EagerCafeOrder = {
   readonly Table?: number | null;
   readonly Completed?: boolean | null;
   readonly Delieved?: boolean | null;
-  readonly sessionsID?: string | null;
+  readonly sessionsID: string;
   readonly Sessionid?: string | null;
   readonly TimeDelivered?: string | null;
   readonly Notes?: string | null;
@@ -529,7 +527,7 @@ type LazyCafeOrder = {
   readonly Table?: number | null;
   readonly Completed?: boolean | null;
   readonly Delieved?: boolean | null;
-  readonly sessionsID?: string | null;
+  readonly sessionsID: string;
   readonly Sessionid?: string | null;
   readonly TimeDelivered?: string | null;
   readonly Notes?: string | null;

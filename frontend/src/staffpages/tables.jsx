@@ -6,12 +6,13 @@ import TableData from './TableData.json';
 import { CafeOrder } from './models';
 import './progress.css'
 import { useNavigate } from 'react-router-dom';
+import MoveTables from './movetables';
 
 function OccupiedTables() {
   const [sessions, setSessions] = useState([]);
-  const [selectedTable, setSelectedTable] = useState({});
   const [orders, setOrders] = useState([]);
   const [orderStatuses, setOrderStatuses] = useState({});
+
 
   const Navigate = useNavigate();
 
@@ -72,12 +73,16 @@ function OccupiedTables() {
     const shouldFlashGold = timeRemaining <= 10;
 
     return {
+      id: table.id,
       number: table.Table,
       name: table.Name,
       guests: table.Adults + table.Children,
       orders: table.Orders,
       totalSpent: table.TotalSpent,
-      timeslot: `${format(timeslotFromDate, 'HH:mm')} - ${format(
+      TimeslotFrom: `${format(timeslotFromDate, 'HH:mm')}`,
+      TimeSlotTo: `${format(timeslotToDate, 'HH:mm')}`,
+      timeslot: `${format(timeslotFromDate, 'HH:mm')}
+       - ${format(
         timeslotToDate,
         'HH:mm'
       )}`,
@@ -125,53 +130,9 @@ function OccupiedTables() {
 
 
 
-  async function handleMoveTable(table) {
-    console.log("handleMoveTable called with table:", table);
+  
 
-    // Get all sessions
-    const sessions = await DataStore.query(Sessions);
-
-    // Filter the sessions array to only include sessions with the same time frame as the given table
-    
-    const matchingSessions = sessions.filter(
-      (session) =>
-        session.TimeslotFrom === table.TimeslotFrom &&
-        session.TimeslotTo === table.TimeslotTo
-    );
-
-    // Get all occupied tables
-    const occupiedTables = matchingSessions.map((session) => session.Table);
-
-    // Get all available tables
-    const availableTables = TableData.filter(
-      (t) => !occupiedTables.includes(t.table)
-    );
-
-    // Show the dropdown menu for the selected table
-    setSelectedTable({ [table.number]: availableTables });
-  }
-
-  async function handleMoveTableConfirm(table, newTableNumber) {
-    // Retrieve the records with the matching id
-    const records = await DataStore.query(Sessions, table.id);
-
-    if (!records || records.length === 0) {
-      console.error("Record not found:", table.id);
-      return;
-    }
-
-    // Update the Table field for all matching records
-    for (const record of records) {
-      await DataStore.save(
-        Sessions.copyOf(record, (updated) => {
-          updated.Table = parseInt(newTableNumber);
-        })
-      );
-    }
-
-    // Hide the dropdown menu
-    setSelectedTable({});
-  }
+   
 
 
   useEffect(() => {
@@ -237,6 +198,10 @@ const Delivered = async (order) => {
 };
 
 
+  
+
+console.log(tableInfo.id)
+
 
 
 
@@ -249,6 +214,9 @@ const Delivered = async (order) => {
           Occupied Tables
         </h2>
       </div>
+  
+
+
      
     </div>
     <ul className='mt-5 mb-5'>
@@ -303,37 +271,16 @@ const Delivered = async (order) => {
     >
       Left Center
     </button>
-    <button
-  type="button"
-  onClick={() => {    console.log("Move Table button clicked with table:", table);
-  handleMoveTable(table)}}
-  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
->
-  Move Table
-</button>
+    <MoveTables id={table.id} tableNumber={table.number} guests={table.guests} timeslotFrom={table.TimeslotFrom} timeslotTo={table.TimeslotTo} />
+    
+
+   
 
 
-{Object.entries(selectedTable).map(([tableNumber, availableTables]) => (
-        <div key={tableNumber}>
-          <label htmlFor={`table-${tableNumber}`}>
-            Move table {tableNumber} to:
-          </label>
-          <select
-            id={`table-${tableNumber}`}
-            onChange={(e) =>
-              handleMoveTableConfirm(tableNumber, e.target.value)
-            }
-          >
-            <option value="">Select a table</option>
-            {availableTables.map((table) => (
-              <option key={table.table} value={table.table}>
-                {table.table}
-              </option>
-            ))}
-          </select>
-        </div>
-      ))}
-    </div>
+
+</div>
+
+
 
           </div>
   

@@ -63,6 +63,8 @@ export default function TableSelect({ availableTables, onSelect, details }) {
         const name = savedDetails.Name
         const age = savedDetails.Age.map(item => item.age);
 
+        console.log(age)  
+
         
 
     
