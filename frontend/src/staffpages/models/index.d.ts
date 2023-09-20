@@ -441,7 +441,6 @@ type EagerSessions = {
   readonly Telephone?: string | null;
   readonly CafeOrders?: (CafeOrder | null)[] | null;
   readonly orderid?: (string | null)[] | null;
-  readonly Age?: (string | null)[] | null;
   readonly StaffOrder?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -472,7 +471,6 @@ type LazySessions = {
   readonly Telephone?: string | null;
   readonly CafeOrders: AsyncCollection<CafeOrder>;
   readonly orderid?: (string | null)[] | null;
-  readonly Age?: (string | null)[] | null;
   readonly StaffOrder?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;

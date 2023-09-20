@@ -44,20 +44,26 @@ export default function MoveTables({ guests, tableNumber, timeslotFrom, timeslot
     }, [sessions, guests, timeslotFrom, timeslotTo]);
 
     const getAvailableTables = async () => {
-        const tables = tableData.filter(table => {
+        const availableTables = tableData.filter(table => {
             // Check if the table has enough capacity
             if (table.capacity < guests) {
+                console.log(`Table ${table.table} is too small`);
                 return false;
             }
             // Get all sessions for this table
             const tableSessions = sessions.filter(session => session.Table === table.table);
             // Check if any session overlaps with the current timeslot
             const overlap = tableSessions.find(session => isOverlap(session, { TimeslotFrom: timeslotFrom, TimeslotTo: timeslotTo }));
+            if (overlap) {
+                console.log(`Table ${table.table} is occupied`);
+                return false;
+            }
             // If there's no overlap, the table is available
-            return !overlap;
+            return true;
         });
-        return tables.map(table => table.table);
+        return availableTables.map(table => table.table);
     }
+    
 
     // Function to handle the form submission
     const handleSubmit = async (event) => {

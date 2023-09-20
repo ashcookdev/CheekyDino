@@ -20,6 +20,7 @@ import { checkStockLevel } from "./tillstock";
 import { motion } from 'framer-motion';
 import StaffTill from "./StaffTill";
 import { XCircleIcon } from "@heroicons/react/24/solid";
+import MakeReservation from "./makereservation";
 
 
 
@@ -192,7 +193,7 @@ setShowTopBar(true)
   }
 
   if (arrival === true) {
-    return <TillBooking />
+    return <MakeReservation />
   }
 
   if (tablee === true) {

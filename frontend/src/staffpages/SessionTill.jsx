@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import ReactToPrint from "react-to-print";
 import QRCode from "react-qr-code";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const Receipt = React.forwardRef(
   ({ order, total, table, childName, changeGiven }, ref) => {
@@ -50,15 +51,19 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
   const [total, setTotal] = useState(initialTotal);
   const [changeGiven, setChangeGiven] = useState(0);
   const [input, setInput] = useState("");
+  const [cardOptions, setCardOptions] = useState(false);
+  const [done, setDone] = useState(false);
+
+  const navigate = useNavigate();
+
+
 
   const receiptRef = useRef();
 
   const handleConfirmClick = async () => {
     console.log("Order confirmed");
-    // Print the receipt
-    // Reset the order and total price
-    window.location.reload();
-  };
+setDone(true)    // Reset the order and total price
+navigate('/till')  };
 
   const handleCashClick = () => {
     setPaymentMethod("cash");
@@ -92,6 +97,7 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
 
   const handleCardClick = () => {
     setPaymentMethod("card");
+    setCardOptions(true)
     setIsFlashing(true);
     setChangeGiven(0);
   };
@@ -112,6 +118,11 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
     }
     setChangeGiven(0); // Reset the change given
   };
+
+  if (done === true) {
+navigate('/till')      
+    
+  }
 
   return (
     <div className="grid grid-cols-3 gap-4 p-4">
@@ -146,6 +157,51 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
             Card
           </motion.button>
         </div>
+        {paymentMethod === "card" && (
+          <div className="flex flex-col gap-2 mt-4">
+            <motion.button
+              className="bg-blue-200 p-2 rounded"
+              onClick={() => handleDenominationClick(5)}
+              variants={buttonVariants}
+              whileHover="hover"
+            >
+              £5
+            </motion.button>
+            <motion.button
+              className="bg-blue-300 p-2 rounded"
+              onClick={() => handleDenominationClick(10)}
+              variants={buttonVariants}
+              whileHover="hover"
+            >
+              £10
+            </motion.button>
+            <motion.button
+              className="bg-blue-400 p-2 rounded"
+              onClick={() => handleDenominationClick(20)}
+              variants={buttonVariants}
+              whileHover="hover"  
+            >
+              £20
+            </motion.button>
+            <motion.button
+              className="bg-blue-500 p-2 rounded"
+              onClick={() => handleDenominationClick(50)}
+              variants={buttonVariants}
+              whileHover="hover"
+            >
+              £50
+            </motion.button>
+            <motion.button
+              className="bg-blue-500 p-2 rounded"
+              onClick={() => handleCardClick()}
+              variants={buttonVariants}
+              whileHover="hover"
+            >
+              Full Amount
+            </motion.button>
+          </div>
+        )}
+
         {paymentMethod === "cash" && (
           <div className="flex flex-col gap-2 mt-4">
             <motion.button

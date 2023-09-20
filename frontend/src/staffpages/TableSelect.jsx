@@ -2,19 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { DataStore } from 'aws-amplify';
 import { Sessions } from './models';
 import { format, addHours } from 'date-fns';
-import { useNavigate } from 'react-router-dom';
 import Till from './Till';
-import { Analytics } from 'aws-amplify';
 import SessionTill from './SessionTill';
 import { motion } from 'framer-motion';
 
-export default function TableSelect({ availableTables, onSelect, details }) {
+export default function TableSelect({ availableTables, onSelect, details, handleBack }) {
 
 
     const [selectedTables, setSelectedTables] = useState([]);
     const [savedDetails, setDetails] = useState(details);
     const [truee, setTrue] = useState(false);
     const [pay, setPay] = useState(false);
+    const [selectedTable, setSelectedTable] = useState(null);
 
     if (truee === true) {
         return (<Till/>)
@@ -29,6 +28,8 @@ export default function TableSelect({ availableTables, onSelect, details }) {
     console.log(savedDetails)
 
     const handleTableClick = (table) => {
+      setSelectedTable(table);
+
 
 
         
@@ -61,9 +62,8 @@ export default function TableSelect({ availableTables, onSelect, details }) {
         const adults = parseInt(savedDetails.Adults)
 
         const name = savedDetails.Name
-        const age = savedDetails.Age.map(item => item.age);
+      
 
-        console.log(age)  
 
         
 
@@ -84,7 +84,6 @@ export default function TableSelect({ availableTables, onSelect, details }) {
                 LeftCenter: false,
                 TimeArrived: nowString,
                 Telephone: savedDetails.Telephone,
-                Age: age,
                 TotalSpent: savedDetails.Total,
                 Staff: savedDetails.Staff,
 
@@ -117,10 +116,32 @@ setPay(true)  }
   return (
     <div>
       <div className="flex flex-wrap">
+        <motion.button
+          onClick={handleBack}
+          className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4 ml-4"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          Back
+        </motion.button>
+        <motion.button
+        onClick={handleConfirmClick}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        Confirm
+      </motion.button>
+      
+
         <p className="w-full text-center font-bold">Select A Table</p>
         <p className="w-full text-center font-bold">Party Size: {guests} </p>
         <p className="w-full text-center font-bold">Name: {savedDetails.Name} </p>
         <p className="w-full text-center font-bold">Price: £{savedDetails.Total.toFixed(2)} </p>
+      
+        {selectedTable && (
+      <p className='w-full text-center font-bold'>You have selected table number: {selectedTable.table}</p>
+    )}
         <motion.div
           className="flex flex-wrap mt-5"
           initial={{ opacity: 0 }}
@@ -145,14 +166,7 @@ setPay(true)  }
           ))}
         </motion.div>
       </div>
-      <motion.button
-        onClick={handleConfirmClick}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        Confirm
-      </motion.button>
+     
     </div>
   );
 };

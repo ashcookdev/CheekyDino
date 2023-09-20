@@ -211,7 +211,6 @@ export default function SessionsCreateForm(props) {
     ExtraTables: "",
     Telephone: "",
     orderid: [],
-    Age: [],
     StaffOrder: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
@@ -238,7 +237,6 @@ export default function SessionsCreateForm(props) {
   );
   const [Telephone, setTelephone] = React.useState(initialValues.Telephone);
   const [orderid, setOrderid] = React.useState(initialValues.orderid);
-  const [Age, setAge] = React.useState(initialValues.Age);
   const [StaffOrder, setStaffOrder] = React.useState(initialValues.StaffOrder);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -261,15 +259,11 @@ export default function SessionsCreateForm(props) {
     setTelephone(initialValues.Telephone);
     setOrderid(initialValues.orderid);
     setCurrentOrderidValue("");
-    setAge(initialValues.Age);
-    setCurrentAgeValue("");
     setStaffOrder(initialValues.StaffOrder);
     setErrors({});
   };
   const [currentOrderidValue, setCurrentOrderidValue] = React.useState("");
   const orderidRef = React.createRef();
-  const [currentAgeValue, setCurrentAgeValue] = React.useState("");
-  const AgeRef = React.createRef();
   const validations = {
     Name: [],
     Email: [],
@@ -289,7 +283,6 @@ export default function SessionsCreateForm(props) {
     ExtraTables: [],
     Telephone: [],
     orderid: [],
-    Age: [],
     StaffOrder: [],
   };
   const runValidationTasks = async (
@@ -336,7 +329,6 @@ export default function SessionsCreateForm(props) {
           ExtraTables,
           Telephone,
           orderid,
-          Age,
           StaffOrder,
         };
         const validationResponses = await Promise.all(
@@ -410,7 +402,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -453,7 +444,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -497,7 +487,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -541,7 +530,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -585,7 +573,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -629,7 +616,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -673,7 +659,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -720,7 +705,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -767,7 +751,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -810,7 +793,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -857,7 +839,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -904,7 +885,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -951,7 +931,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -994,7 +973,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -1037,7 +1015,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -1084,7 +1061,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables: value,
               Telephone,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -1127,7 +1103,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone: value,
               orderid,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -1166,7 +1141,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid: values,
-              Age,
               StaffOrder,
             };
             const result = onChange(modelFields);
@@ -1204,67 +1178,6 @@ export default function SessionsCreateForm(props) {
           {...getOverrideProps(overrides, "orderid")}
         ></TextField>
       </ArrayField>
-      <ArrayField
-        onChange={async (items) => {
-          let values = items;
-          if (onChange) {
-            const modelFields = {
-              Name,
-              Email,
-              TimeslotFrom,
-              TimeslotTo,
-              TimeLeft,
-              TimeArrived,
-              Date,
-              Table,
-              Orders,
-              Prepaid,
-              TotalSpent,
-              Adults,
-              Children,
-              Arrived,
-              LeftCenter,
-              ExtraTables,
-              Telephone,
-              orderid,
-              Age: values,
-              StaffOrder,
-            };
-            const result = onChange(modelFields);
-            values = result?.Age ?? values;
-          }
-          setAge(values);
-          setCurrentAgeValue("");
-        }}
-        currentFieldValue={currentAgeValue}
-        label={"Age"}
-        items={Age}
-        hasError={errors?.Age?.hasError}
-        errorMessage={errors?.Age?.errorMessage}
-        setFieldValue={setCurrentAgeValue}
-        inputFieldRef={AgeRef}
-        defaultFieldValue={""}
-      >
-        <TextField
-          label="Age"
-          isRequired={false}
-          isReadOnly={false}
-          value={currentAgeValue}
-          onChange={(e) => {
-            let { value } = e.target;
-            if (errors.Age?.hasError) {
-              runValidationTasks("Age", value);
-            }
-            setCurrentAgeValue(value);
-          }}
-          onBlur={() => runValidationTasks("Age", currentAgeValue)}
-          errorMessage={errors.Age?.errorMessage}
-          hasError={errors.Age?.hasError}
-          ref={AgeRef}
-          labelHidden={true}
-          {...getOverrideProps(overrides, "Age")}
-        ></TextField>
-      </ArrayField>
       <TextField
         label="Staff order"
         isRequired={false}
@@ -1292,7 +1205,6 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              Age,
               StaffOrder: value,
             };
             const result = onChange(modelFields);

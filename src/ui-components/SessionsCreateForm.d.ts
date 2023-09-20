@@ -31,7 +31,6 @@ export declare type SessionsCreateFormInputValues = {
     ExtraTables?: number;
     Telephone?: string;
     orderid?: string[];
-    Age?: string[];
     StaffOrder?: string;
 };
 export declare type SessionsCreateFormValidationValues = {
@@ -53,7 +52,6 @@ export declare type SessionsCreateFormValidationValues = {
     ExtraTables?: ValidationFunction<number>;
     Telephone?: ValidationFunction<string>;
     orderid?: ValidationFunction<string>;
-    Age?: ValidationFunction<string>;
     StaffOrder?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
@@ -77,7 +75,6 @@ export declare type SessionsCreateFormOverridesProps = {
     ExtraTables?: PrimitiveOverrideProps<TextFieldProps>;
     Telephone?: PrimitiveOverrideProps<TextFieldProps>;
     orderid?: PrimitiveOverrideProps<TextFieldProps>;
-    Age?: PrimitiveOverrideProps<TextFieldProps>;
     StaffOrder?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type SessionsCreateFormProps = React.PropsWithChildren<{
