@@ -26,10 +26,14 @@ export default function MakeReservation() {
       }
 
       if (next === true) {
-        return (
-          <SessionBooker />
-        )
+navigate('/booklater')         
       }
+
+
+      if (drop === true) {
+        navigate('/editbooking')
+      }
+      
 
 
 
@@ -46,11 +50,7 @@ return (
 
 <button onClick={() => {setDrop(true)}}            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
  >Add to Booking/Delete Booking</button>
- {drop && (
-   <div>
-    <EditBooking />
-    </div>
-    )}
+ 
 
        
 <button            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-orange-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"

@@ -7,13 +7,12 @@
 import * as React from "react";
 import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { Sessions } from "../models";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type SessionsUpdateFormInputValues = {
+export declare type SessionsCreateFormInputValues = {
     Name?: string;
     Email?: string;
     TimeslotFrom?: string;
@@ -32,9 +31,9 @@ export declare type SessionsUpdateFormInputValues = {
     ExtraTables?: number;
     Telephone?: string;
     orderid?: string[];
-    StaffOrder?: string;
+    Staff?: string;
 };
-export declare type SessionsUpdateFormValidationValues = {
+export declare type SessionsCreateFormValidationValues = {
     Name?: ValidationFunction<string>;
     Email?: ValidationFunction<string>;
     TimeslotFrom?: ValidationFunction<string>;
@@ -53,11 +52,11 @@ export declare type SessionsUpdateFormValidationValues = {
     ExtraTables?: ValidationFunction<number>;
     Telephone?: ValidationFunction<string>;
     orderid?: ValidationFunction<string>;
-    StaffOrder?: ValidationFunction<string>;
+    Staff?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type SessionsUpdateFormOverridesProps = {
-    SessionsUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+export declare type SessionsCreateFormOverridesProps = {
+    SessionsCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
     Name?: PrimitiveOverrideProps<TextFieldProps>;
     Email?: PrimitiveOverrideProps<TextFieldProps>;
     TimeslotFrom?: PrimitiveOverrideProps<TextFieldProps>;
@@ -76,17 +75,16 @@ export declare type SessionsUpdateFormOverridesProps = {
     ExtraTables?: PrimitiveOverrideProps<TextFieldProps>;
     Telephone?: PrimitiveOverrideProps<TextFieldProps>;
     orderid?: PrimitiveOverrideProps<TextFieldProps>;
-    StaffOrder?: PrimitiveOverrideProps<TextFieldProps>;
+    Staff?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type SessionsUpdateFormProps = React.PropsWithChildren<{
-    overrides?: SessionsUpdateFormOverridesProps | undefined | null;
+export declare type SessionsCreateFormProps = React.PropsWithChildren<{
+    overrides?: SessionsCreateFormOverridesProps | undefined | null;
 } & {
-    id?: string;
-    sessions?: Sessions;
-    onSubmit?: (fields: SessionsUpdateFormInputValues) => SessionsUpdateFormInputValues;
-    onSuccess?: (fields: SessionsUpdateFormInputValues) => void;
-    onError?: (fields: SessionsUpdateFormInputValues, errorMessage: string) => void;
-    onChange?: (fields: SessionsUpdateFormInputValues) => SessionsUpdateFormInputValues;
-    onValidate?: SessionsUpdateFormValidationValues;
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: SessionsCreateFormInputValues) => SessionsCreateFormInputValues;
+    onSuccess?: (fields: SessionsCreateFormInputValues) => void;
+    onError?: (fields: SessionsCreateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: SessionsCreateFormInputValues) => SessionsCreateFormInputValues;
+    onValidate?: SessionsCreateFormValidationValues;
 } & React.CSSProperties>;
-export default function SessionsUpdateForm(props: SessionsUpdateFormProps): React.ReactElement;
+export default function SessionsCreateForm(props: SessionsCreateFormProps): React.ReactElement;

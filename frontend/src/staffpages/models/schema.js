@@ -1358,8 +1358,8 @@ export const schema = {
                     "attributes": [],
                     "isArrayNullable": true
                 },
-                "StaffOrder": {
-                    "name": "StaffOrder",
+                "Staff": {
+                    "name": "Staff",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -2779,5 +2779,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.0",
-    "version": "ba847d0297884a6ed2ef125e11393b7a"
+    "version": "bbf9974754b71fde4954b0a4d911c690"
 };

@@ -211,7 +211,7 @@ export default function SessionsCreateForm(props) {
     ExtraTables: "",
     Telephone: "",
     orderid: [],
-    StaffOrder: "",
+    Staff: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Email, setEmail] = React.useState(initialValues.Email);
@@ -237,7 +237,7 @@ export default function SessionsCreateForm(props) {
   );
   const [Telephone, setTelephone] = React.useState(initialValues.Telephone);
   const [orderid, setOrderid] = React.useState(initialValues.orderid);
-  const [StaffOrder, setStaffOrder] = React.useState(initialValues.StaffOrder);
+  const [Staff, setStaff] = React.useState(initialValues.Staff);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.Name);
@@ -259,7 +259,7 @@ export default function SessionsCreateForm(props) {
     setTelephone(initialValues.Telephone);
     setOrderid(initialValues.orderid);
     setCurrentOrderidValue("");
-    setStaffOrder(initialValues.StaffOrder);
+    setStaff(initialValues.Staff);
     setErrors({});
   };
   const [currentOrderidValue, setCurrentOrderidValue] = React.useState("");
@@ -283,7 +283,7 @@ export default function SessionsCreateForm(props) {
     ExtraTables: [],
     Telephone: [],
     orderid: [],
-    StaffOrder: [],
+    Staff: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -329,7 +329,7 @@ export default function SessionsCreateForm(props) {
           ExtraTables,
           Telephone,
           orderid,
-          StaffOrder,
+          Staff,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -402,7 +402,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -444,7 +444,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Email ?? value;
@@ -487,7 +487,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.TimeslotFrom ?? value;
@@ -530,7 +530,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.TimeslotTo ?? value;
@@ -573,7 +573,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.TimeLeft ?? value;
@@ -616,7 +616,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.TimeArrived ?? value;
@@ -659,7 +659,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Date ?? value;
@@ -705,7 +705,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Table ?? value;
@@ -751,7 +751,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Orders ?? value;
@@ -793,7 +793,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Prepaid ?? value;
@@ -839,7 +839,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.TotalSpent ?? value;
@@ -885,7 +885,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Adults ?? value;
@@ -931,7 +931,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Children ?? value;
@@ -973,7 +973,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Arrived ?? value;
@@ -1015,7 +1015,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.LeftCenter ?? value;
@@ -1061,7 +1061,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables: value,
               Telephone,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.ExtraTables ?? value;
@@ -1103,7 +1103,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone: value,
               orderid,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             value = result?.Telephone ?? value;
@@ -1141,7 +1141,7 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid: values,
-              StaffOrder,
+              Staff,
             };
             const result = onChange(modelFields);
             values = result?.orderid ?? values;
@@ -1179,10 +1179,10 @@ export default function SessionsCreateForm(props) {
         ></TextField>
       </ArrayField>
       <TextField
-        label="Staff order"
+        label="Staff"
         isRequired={false}
         isReadOnly={false}
-        value={StaffOrder}
+        value={Staff}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -1205,20 +1205,20 @@ export default function SessionsCreateForm(props) {
               ExtraTables,
               Telephone,
               orderid,
-              StaffOrder: value,
+              Staff: value,
             };
             const result = onChange(modelFields);
-            value = result?.StaffOrder ?? value;
+            value = result?.Staff ?? value;
           }
-          if (errors.StaffOrder?.hasError) {
-            runValidationTasks("StaffOrder", value);
+          if (errors.Staff?.hasError) {
+            runValidationTasks("Staff", value);
           }
-          setStaffOrder(value);
+          setStaff(value);
         }}
-        onBlur={() => runValidationTasks("StaffOrder", StaffOrder)}
-        errorMessage={errors.StaffOrder?.errorMessage}
-        hasError={errors.StaffOrder?.hasError}
-        {...getOverrideProps(overrides, "StaffOrder")}
+        onBlur={() => runValidationTasks("Staff", Staff)}
+        errorMessage={errors.Staff?.errorMessage}
+        hasError={errors.Staff?.hasError}
+        {...getOverrideProps(overrides, "Staff")}
       ></TextField>
       <Flex
         justifyContent="space-between"

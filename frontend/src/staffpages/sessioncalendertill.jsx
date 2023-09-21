@@ -26,6 +26,9 @@ export default function SessionCalender({ date, children, adults, childData, ema
   //get email from auth
 
 
+  const [completed, setCompleted] = useState(false);
+
+
   
 console.log(childData[0].name)
 
@@ -66,48 +69,53 @@ useEffect(() => {
     console.log('Fetching availability data for date:', date);
     const bookings = await DataStore.query(Sessions, c => c.Date.eq(date));
     console.log('Query result:', bookings);
-    const guests = children + adults;
+    const guests = Number(children) + Number(adults);
 
     // Calculate free tables per timeslot
    // Calculate free tables per timeslot
-const freeTablesPerTimeslot = timeslots.map(timeslot => {
-  let freeTables = tableData.filter(table => {
-    // Exclude tables 40, 41, and 42
-    if ([40, 41, 42].includes(table.table)) {
-      return false;
-    }
-    const isBooked = bookings.some(booking => {
-      const {TimeslotFrom, TimeslotTo, Table} = booking;
-      // use timeslot to show how many tables are available
-      return (
-        TimeslotFrom < timeslot.end &&
-        TimeslotTo > timeslot.start &&
-        Table === table.table
-      );
+   const freeTablesPerTimeslot = timeslots.map(timeslot => {
+    let freeTables = tableData.filter(table => {
+      // Exclude tables 40, 41, and 42
+      if ([40, 41, 42].includes(table.table)) {
+        return false;
+      }
+      const isBooked = bookings.some(booking => {
+        const {TimeslotFrom, TimeslotTo, Table} = booking;
+        // use timeslot to show how many tables are available
+        return (
+          TimeslotFrom < timeslot.end &&
+          TimeslotTo > timeslot.start &&
+          Table === table.table
+        );
+      });
+      return !isBooked;
     });
-    return !isBooked;
+  
+    // Filter free tables by exact match of capacity
+    let exactMatchTables = freeTables.filter(table => table.capacity === guests);
+  
+    // If no exact match found, sort free tables by capacity in descending order
+    if (exactMatchTables.length === 0) {
+      freeTables.sort((a, b) => b.capacity - a.capacity);
+    } else {
+      freeTables = exactMatchTables;
+    }
+  
+    // Recommend multiple tables if needed
+    let recommendedTables = [];
+    let guestsLeft = guests;
+    for (let i = 0; i < freeTables.length && guestsLeft > 0; i++) {
+      recommendedTables.push(freeTables[i].table);
+      guestsLeft -= freeTables[i].capacity;
+    }
+  
+    return {
+      timeslot,
+      freeTables: freeTables.length,
+      recommendedTables
+    };
   });
-
-  // Sort free tables by capacity in descending order
-  freeTables.sort((a, b) => b.capacity - a.capacity);
-
-  // Recommend multiple tables if needed
-  let recommendedTables = [];
-  let guestsLeft = guests;
-  for (let i = 0; i < freeTables.length && guestsLeft > 0; i++) {
-    recommendedTables.push(freeTables[i].table);
-    guestsLeft -= freeTables[i].capacity;
-  }
-
-  return {
-    timeslot,
-    freeTables: freeTables.length,
-    recommendedTables
-  };
-});
-
-
-    setFreeTablesPerTimeslot(freeTablesPerTimeslot);
+      setFreeTablesPerTimeslot(freeTablesPerTimeslot);
 
     // Log free tables and recommended tables per timeslot
     freeTablesPerTimeslot.forEach(item => {
@@ -160,7 +168,7 @@ const freeTablesPerTimeslot = timeslots.map(timeslot => {
           Children: Number(children),
           Arrived: false,
           LeftCenter: false,
-          ExtraTables: item.recommendedTables.length > 1 ? item.recommendedTables[1] : null,      
+          ExtraTables: item.recommendedTables.length > 2 ? item.recommendedTables[1].table : null,
           Prepaid: false,
           Age: childData.map(item => item.ChildAge),
           Telephone: telephone,
@@ -170,21 +178,27 @@ const freeTablesPerTimeslot = timeslots.map(timeslot => {
       );
     
       // Redirect to /sessionbooking page
-      window.location.reload()
+setCompleted(true)    }
+
+    if (completed === true) {
+      navigate('/till')
     }
 
+    let totalSpent = 0;
+childData.forEach(item => {
+  totalSpent += item.TotalSpent;
+});
     
   // Display available timeslots with "Book" button
     // Display available timeslots with "Book" button
     return (
       <motion.div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <p className="text-lg font-semibold leading-6 text-gray-900">{date}</p>
-        <p className="text-center font-bold">Select A Table</p>
-        <p className="text-center font-bold">Party Size: {adults + children} </p>
+        <p className="text-center font-bold">Select A Timeslot</p>
+        <p className="text-center font-bold">Party Size: {Number(adults) + Number(children)} </p>
         <p className="text-center font-bold">Name: {name} </p>
-        {childData.map((item) => (
-          <p className="text-center font-bold">Total Spent:£ {item.TotalSpent.toFixed(2)} </p>
-        ))}
+          <p className="text-center font-bold">Total Spent:£ {totalSpent.toFixed(2)} </p>
+      
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
           {freeTablesPerTimeslot.map(item => (
             <motion.div key={item.timeslot.start} className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200">

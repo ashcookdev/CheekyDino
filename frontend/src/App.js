@@ -62,6 +62,8 @@ import MealProfit from './staffpages/mealprofitmargins';
 import PartyStock from './staffpages/partystock';
 import TillProducts from './staffpages/tillproducts';
 import BookNow from './staffpages/tillbooking';
+import BookLater from './staffpages/sessionbooker';
+import EditBooking from './staffpages/editbooking';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -200,6 +202,8 @@ function App() {
             <Route path="/partystock" element={<PartyStock />} />
             <Route path="/tillproducts" element={<TillProducts />} />
             <Route path="/booknow" element={<BookNow />} />
+            <Route path="/booklater" element={<BookLater />} />
+            <Route path="/editbooking" element={<EditBooking />} />
           </>
         )}
         
