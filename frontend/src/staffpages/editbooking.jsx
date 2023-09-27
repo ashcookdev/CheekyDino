@@ -17,7 +17,7 @@ export default function EditBooking() {
             const sessionsData = await DataStore.query(Sessions);
             const date = new Date();
             const awsDate = format(date, 'yyyy-MM-dd');
-            const todaysSessions = sessionsData.filter(session => session.Date === awsDate);
+            const todaysSessions = sessionsData.filter(session => session.Date === awsDate && session.Arrived === true && session.LeftCenter === false);
             setSessions(todaysSessions);
         };
         fetchSessions();

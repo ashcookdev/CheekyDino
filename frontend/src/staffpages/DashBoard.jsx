@@ -77,6 +77,7 @@ export default function Dashboard() {
 
 const navigation = [
     { name: 'Till', href: '/till', icon: CurrencyPoundIcon, current: true },
+    {name: 'Make a Booking', href: '/reservations', icon: FolderIcon, current: false },
   { name: 'Chat', href: '#section5', icon: ChatBubbleBottomCenterIcon, current: false },
   { name: 'Kitchen', href: '#section3', icon: CakeIcon , current: false },
   { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
@@ -545,7 +546,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                         </div>
                     </div>
                     </div>
-                    <div className="space-y-16 py-16 xl:space-y-20">
+                    <div className="space-y-16 py-16 xl:space-y-20" id='section4'>
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
                             <div className="flex items-center justify-between">
@@ -593,7 +594,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                     </div>
                 <div className="space-y-16 py-16 xl:space-y-20">
                     <div>
-                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" id='section4'>
+                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" >
                             <h2 className="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
                                 Todays Bookings
                             </h2>

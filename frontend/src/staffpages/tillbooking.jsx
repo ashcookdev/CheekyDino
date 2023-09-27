@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
 import { DataStore } from 'aws-amplify';
@@ -33,6 +33,9 @@ export default function SessionBook() {
   const [previousDate, setPreviousDate] = useState(date);
   const [previousAge, setPreviousAge] = useState(age);
   const [previousStaff, setPreviousStaff] = useState(staff);
+  const [sessions, setSessions] = useState([]);
+const [selectedSession, setSelectedSession] = useState(null);
+
 
 
 
@@ -215,32 +218,47 @@ console.log(childData)
     setStaff(value.StaffId)
   }
 
+
+
+  useEffect(() => {
+    const getSession = async () => {
+      const models = await DataStore.query(Sessions);
+      const filteredSessions = models.filter(session => session.Email === email);
+      setSessions(filteredSessions);
+    }
   
+    getSession();
+  }, [email]); // re-run the effect when `email` changes
   
 
+  const AutoFill = () => {
+    const session = sessions.find(session => session.id === selectedSession);
+    if (session) {
+      setName(session.Name);
+      console.log(session.Name)
+setNumber(session.Number);
+
+      setChildren(session.Children);
+      console.log(session.Children)
+      setAdults(session.Adults);
+      console.log(session.Adults)
+    }
+
+  }
+
+  
 
   // filter sessions for now or later using TimeSlotTo and TimeSlotFrom and Table 
   return (
-    <div class="flex">
-  <div class="w-1/2 border">
+    <div className="flex">
+  <div className="w-1/2 border">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div>
             <div className="mt-6">
               <StaffTill onSelectChange={handleSelectedChange}/>  
             </div>
 
-            <label htmlFor="children" className="block text-lg font-large leading-6 text-gray-900">
-Adult Name            </label>
-            <input
-              onChange={(e) => setName(e.target.value)|| setPreviousName(e.target.value)}
-              id="name"
-              type="text"
-              name="name"
-              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              defaultValue="Enter Customer Name"
-            ></input>
-          </div>
-              <label
+            <label
                 htmlFor="Email"
                 className="block text-lg font-large leading-6 text-gray-900"
               >
@@ -256,8 +274,47 @@ Adult Name            </label>
               >
 
               </input>
+            <div className='mt-3'>
+            {sessions.length > 0 && (
+  <select onChange={(e) => setSelectedSession(e.target.value)}>
+  <option disabled selected value="">Select a session</option>
+  {sessions.map((session, index) => (
+    <option key={index} value={session.id}>
+      {session.Name} - {session.Adults} Adults, {session.Children} Children - {session.Date}
+    </option>
+  ))}
+</select>
+
+)}
+  <p>Selected session: {selectedSession}</p>
+
+
+  <button
+    onClick={AutoFill}
+    className="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+  >
+    AutoFill
+  </button>
+</div>
             <div>
 
+            <label htmlFor="children" className="block text-lg font-large leading-6 text-gray-900">
+Adult Name            </label>
+            <input
+              onChange={(e) => setName(e.target.value)|| setPreviousName(e.target.value)}
+              id="name"
+              type="text"
+              name="name"
+              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              defaultValue={name}
+              ></input>
+          </div>
+            
+
+
+            </div>
+            <div>
+          
               <label
                 htmlFor="phone"
                 className="block text-large font-large leading-6 text-gray-900"
@@ -270,7 +327,7 @@ Adult Name            </label>
                 type='text'
                 name="number"
                 className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-
+value={number}
               >
 
               </input>
@@ -285,12 +342,13 @@ Adult Name            </label>
             </label>
             <input
               onChange={(e) => setAdults(e.target.value)|| setPreviousAdults(e.target.value)}
-              id="children"
+              id="adults"
               type="number"
-              name="children"
+              name="adults"
+              min={0}
               className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              defaultValue="1"
-            >
+value={adults}            >
+
             </input>
           </div>
 
@@ -303,9 +361,9 @@ Adult Name            </label>
               id="children"
               type="number"
               name="children"
+              min={0}
               className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              defaultValue="1"
-            ></input>
+value={children}            ></input>
           </div>
 
           <div>
@@ -347,7 +405,7 @@ Adult Name            </label>
           </div>
 
         </div>
-        <div class="w-1/2 border">
+        <div className="w-1/2 border">
   {truee === true && (
     <TableSelect
       availableTables={availableTables}

@@ -64,6 +64,7 @@ import TillProducts from './staffpages/tillproducts';
 import BookNow from './staffpages/tillbooking';
 import BookLater from './staffpages/sessionbooker';
 import EditBooking from './staffpages/editbooking';
+import MakeReservation from './staffpages/makereservation';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -204,6 +205,7 @@ function App() {
             <Route path="/booknow" element={<BookNow />} />
             <Route path="/booklater" element={<BookLater />} />
             <Route path="/editbooking" element={<EditBooking />} />
+            <Route path= "/reservations" element={<MakeReservation />} />
           </>
         )}
         

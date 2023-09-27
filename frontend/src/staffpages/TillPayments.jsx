@@ -133,6 +133,7 @@ export default function TillPayment({
         KitchenMenuId: orders.map((item) => item.ID),
         TotalNoVAT: total / 1.2,
         StaffOrderName: staff,
+        sessionsID: session.id,
       })
     );
 
@@ -247,6 +248,55 @@ export default function TillPayment({
           >
             Card
           </motion.button>
+          {paymentMethod === "card" && (
+             <div className="flex flex-col gap-2 mt-4">
+             <motion.button
+               variants={buttonVariants}
+               whileHover="hover"
+               className="bg-purple-200 p-2 rounded"
+               onClick={() => handleDenominationClick(5)}
+             >
+               £5
+             </motion.button>
+             <motion.button
+               variants={buttonVariants}
+               whileHover="hover"
+               className="bg-cyan-200 p-2 rounded"
+               onClick={() => handleDenominationClick(10)}
+             >
+               £10
+             </motion.button>
+             <motion.button
+               variants={buttonVariants}
+               whileHover="hover"
+               className="bg-blue-200 p-2 rounded"
+               onClick={() => handleDenominationClick(20)}
+             >
+               £20
+             </motion.button>
+             <motion.button
+               variants={buttonVariants}
+               whileHover="hover"
+               className="bg-gray-200 p-2 rounded"
+               onClick={() => handleDenominationClick(50)}
+             >
+               £50
+             </motion.button>
+             <motion.button
+              className="bg-blue-500 p-2 rounded"
+              onClick={() => handleCardClick()}
+              variants={buttonVariants}
+              whileHover="hover"
+            >
+              Full Amount
+            </motion.button>
+          </div>
+          )}
+
+
+         
+            
+
         </div>
         {paymentMethod === "cash" && (
           <div className="flex flex-col gap-2 mt-4">
@@ -378,6 +428,7 @@ export default function TillPayment({
             />
           </div>
         </div>
+        {isFlashing && 
 
         <motion.button
           variants={buttonVariants}
@@ -387,6 +438,8 @@ export default function TillPayment({
         >
           Confirm
         </motion.button>
+        }
+        
       </div>
     </div>
   );

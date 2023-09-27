@@ -491,7 +491,7 @@ window.location.reload();
 
 
         <div className="w-1/3 border-purple-400">
-        <div className="border border-red-400 p-4 mt-2">
+        <div className="border  p-4 mt-2 bg-purple-200 p-4 rounded-lg shadow-md">
 
         <p className="font-bold">Table:{table}</p>
               <p className="font-bold"> Name:{childName}</p>
@@ -499,16 +499,20 @@ window.location.reload();
               </div>
           <div className="mt-4 border-b-4 border-gray-200 pb-4">
             <h2 className="font-bold text-lg mb-4">Order:</h2>
-            <div className="border border-gray-400 p-4">
-              <button onClick={() => {
+            <div className="border bg-blue-200 p-4 rounded-lg shadow-md">
+              <motion.button
+               whileHover={{ scale: 1.1 }}
+               whileTap={{ scale: 0.9 }}
+             
+               onClick={() => {
               window.location.reload();
               }}
-             className="bg-red-500 text-white p-1 rounded">Cancel</button>
+             className="bg-red-500 text-white p-1 rounded">Cancel</motion.button>
 
               <ul>
              
                 {order.map((item, index) => (
-                  <li key={index} className="flex justify-between items-center mb-5">
+                  <li key={index} className="flex mt-3 justify-between items-center font-bold mb-5">
                     <div>
                       {item.Name} £{item.Price.toFixed(2)}
                     </div>
