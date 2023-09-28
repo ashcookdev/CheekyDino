@@ -239,6 +239,8 @@ console.log(childData)
 setNumber(session.Number);
 
       setChildren(session.Children);
+      setChildData(Array.from({ length: session.Children }, () => ({ age: '' })));
+
       console.log(session.Children)
       setAdults(session.Adults);
       console.log(session.Adults)

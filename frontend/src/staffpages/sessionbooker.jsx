@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SessionCalenderTill from './sessioncalendertill';
 import StaffTill from './StaffTill';
+import { DataStore } from 'aws-amplify';
+import { Sessions } from './models';
 
 
 
@@ -11,6 +13,8 @@ export default function SessionBook() {
   const [childData, setChildData] = useState([{ age: '' }]);
   const [name, setName] = useState('');
   const [staff, setStaff] = useState('');
+  const [selectedSession, setSelectedSession] = useState('');
+  const [sessions, setSessions] = useState([]);
 
  
   const [date, setDate] = useState('');
@@ -35,11 +39,7 @@ export default function SessionBook() {
     );
   };
   
-  const handleExactAgeChange = (index, value) => {
-    setChildData((prev) =>
-      prev.map((data, i) => (i === index ? { ...data, exactAge: value } : data))
-    );
-  };
+  
   
   const calculatePrice = (childData, adults, children) => {
 
@@ -81,7 +81,38 @@ return price;
     setStaff(value.StaffId)
   }
 
+  useEffect(() => {
+    const getSession = async () => {
+      const models = await DataStore.query(Sessions);
+      const filteredSessions = models.filter(session => session.Email === email);
+      setSessions(filteredSessions);
+    }
   
+    getSession();
+  }, [email]);
+
+
+  const AutoFill = () => {
+    const session = sessions.find(session => session.id === selectedSession);
+    if (session) {
+      setName(session.Name);
+      console.log(session.Name)
+setNumber(session.Number);
+
+      setChildren(session.Children);
+      setChildData(Array.from({ length: session.Children }, () => ({ age: '' })));
+
+
+      console.log(session.Children)
+      setAdults(session.Adults);
+      console.log(session.Adults)
+    }
+  }
+    
+
+  
+
+
 
   
 
@@ -99,19 +130,7 @@ return price;
             <div>
             <StaffTill onSelectChange={handleSelectedChange}/>  
             </div>
-
-          <label htmlFor="children" className="block text-sm font-medium leading-6 text-gray-900">
-Adult Name            </label>
-            <input
-              onChange={(e) => setName(e.target.value)}
-              id="name"
-              type="text"
-              name="name"
-              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              defaultValue="enter customer name"
-            ></input>
-          </div>
-              <label
+            <label
                 htmlFor="Email"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
@@ -127,6 +146,41 @@ Adult Name            </label>
               >
 
               </input>
+              <div className='mt-3'>
+            {sessions.length > 0 && (
+  <select onChange={(e) => setSelectedSession(e.target.value)}>
+  <option disabled selected value="">Select a session</option>
+  {sessions.map((session, index) => (
+    <option key={index} value={session.id}>
+      {session.Name} - {session.Adults} Adults, {session.Children} Children - {session.Date}
+    </option>
+  ))}
+</select>
+
+)}
+  <p>Selected session: {selectedSession}</p>
+
+
+  <button
+    onClick={AutoFill}
+    className="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+  >
+    AutoFill
+  </button>
+</div>
+          <label htmlFor="children" className="block text-sm font-medium leading-6 text-gray-900">
+Adult Name            </label>
+            <input
+              onChange={(e) => setName(e.target.value)}
+              id="name"
+              type="text"
+              name="name"
+              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              defaultValue="enter customer name"
+              value={name}
+            ></input>
+          </div>
+             
             <div>
 
               <label
@@ -140,6 +194,7 @@ Adult Name            </label>
                 id="number"
                 type='text'
                 name="number"
+                value={telephone}
                 className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
 
               >
@@ -160,7 +215,8 @@ Adult Name            </label>
               type="number"
               name="children"
               className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              defaultValue="1"
+              value={adults}
+
             >
             </input>
           </div>
@@ -175,8 +231,7 @@ Adult Name            </label>
               type="number"
               name="children"
               className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              defaultValue="1"
-            ></input>
+value={children}            ></input>
           </div>
           <div>
            

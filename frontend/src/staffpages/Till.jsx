@@ -19,8 +19,9 @@ import Home from "./DashBoard";
 import { checkStockLevel } from "./tillstock";
 import { motion } from 'framer-motion';
 import StaffTill from "./StaffTill";
-import { XCircleIcon } from "@heroicons/react/24/solid";
+import { ChatBubbleBottomCenterIcon, InboxIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import MakeReservation from "./makereservation";
+import SlideOver from "./slideover";
 
 
 
@@ -55,6 +56,7 @@ const [occupiedSessions, setOccupiedSessions] = useState([]);
 const [showCategories, setShowCategories] = useState(true);
 const [showItems, setShowItems] = useState(true);
 const [showTopBar, setShowTopBar] = useState(false);
+const [chat, setChat] = useState(false);
 
 
 useEffect(() => {
@@ -211,6 +213,10 @@ setShowTopBar(true)
 
   }
 
+  if (chat === true) {
+    return <SlideOver />
+  }
+
   if (kitchen === true) {
     return <Kitchen />
   }
@@ -287,9 +293,17 @@ window.location.reload();
 
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+
       {!showTopBar && (
     <div className="mt-2 border-b border-gray-200 pb-2 flex flex-col sm:flex-row items-center">
-
+ <motion.button
+  className="w-8 h-8 bg-purple-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center rounded-full"
+  onClick={() => setChat(true)}
+  whileHover={{ scale: 1.1 }}
+  whileTap={{ scale: 0.9 }}
+>
+  <ChatBubbleBottomCenterIcon className="h-6 w-6" />
+</motion.button>
     <StaffTill onSelectChange={handleSelectedChange} />
 
     <label htmlFor="table" className="block font-bold text-xs mr-2 ml-3">
@@ -328,6 +342,7 @@ window.location.reload();
           </button>
         ))}
       </div>
+      
 
     <motion.button
       className="w-16 h-16 bg-pink-500 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
@@ -378,6 +393,7 @@ window.location.reload();
       >
         Kitchen
       </motion.button>
+     
     </div>
     </div>
   )}
