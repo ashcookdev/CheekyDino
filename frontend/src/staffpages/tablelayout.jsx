@@ -9,6 +9,16 @@ import tableData from './TableData.json';
 function RestaurantLayout() {
   const [sessions, setSessions] = useState([]);
   const [nav, setNav] = useState(false);
+  const [hoveredTable, setHoveredTable] = useState(null);
+
+  const handleTableHover = (table) => {
+    setHoveredTable(table);
+  };
+  
+  // Add a function to handle hovering out of a table
+  const handleTableHoverOut = () => {
+    setHoveredTable(null);
+  };
   const Navigate = useNavigate();
 
   useEffect(() => {
@@ -57,17 +67,16 @@ function RestaurantLayout() {
           ${isEndingSoon ? 'bg-red-500 animate-pulse' : isAvailable ? 'bg-green-500' : 'bg-red-500'}`}
           style={{ gridColumn: tableCols, gridRow: `${tableRow} / span 1`, border: '2px solid gray-300', boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.75)' }}
           onClick={() => setNav(true)}
+          onMouseEnter={() => handleTableHover(table.table)}
+          onMouseLeave={() => handleTableHoverOut()}
         >
           <div className="table-info">
             <span className="text-white">{table.table}</span>
           </div>
           <div className="timeslot-info">
-        
-            {session && (
+            {hoveredTable === table.table && (
               <span className="text-xs text-gray-500 block mt-5 mb-2">
-                
-                {session.TimeslotFrom}-
-               {session.TimeslotTo}
+                {session ? `${session.TimeslotFrom}-${session.TimeslotTo} (${session.Name})` : 'Table available'}
               </span>
             )}
           </div>

@@ -3,6 +3,8 @@ import ReactToPrint from "react-to-print";
 import QRCode from "react-qr-code";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { DataStore } from "@aws-amplify/datastore";
+import { Sessions } from "./models";
 
 const Receipt = React.forwardRef(
   ({ order, total, table, childName, changeGiven }, ref) => {
@@ -44,6 +46,15 @@ const Receipt = React.forwardRef(
 );
 
 
+/**
+ * TillPayment component for handling payment methods and discounts.
+ * @param {Object} props - Component props.
+ * @param {Object} props.order - Order object.
+ * @param {number} props.total - Total amount to be paid.
+ * @param {string} props.table - Table number.
+ * @param {string} props.ChildName - Child name.
+ * @returns {JSX.Element} TillPayment component.
+ */
 const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [amountEntered, setAmountEntered] = useState(0);
@@ -53,17 +64,38 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
   const [input, setInput] = useState("");
   const [cardOptions, setCardOptions] = useState(false);
   const [done, setDone] = useState(false);
+  const [discount, setDiscount] = useState(0); // new state for discount percentage
 
   const navigate = useNavigate();
-
-
 
   const receiptRef = useRef();
 
   const handleConfirmClick = async () => {
     console.log("Order confirmed");
-setDone(true)    // Reset the order and total price
-navigate('/till')  };
+
+    // Query the database to update the TotalSpent field
+    const session = await DataStore.query(Sessions);
+    const filter = session.filter(
+      (session) =>
+        session.Table === table &&
+        session.Name === ChildName &&
+        session.Arrived === true &&
+        session.LeftCenter === false
+    );
+
+    // Update the TotalSpent field
+    console.log(filter);
+    const updateSession = await DataStore.save(
+      Sessions.copyOf(filter[0], (updated) => {
+        updated.TotalSpent = total;
+      })
+    );
+    console.log(updateSession);
+
+    setDone(true);
+    setTotal(0);
+    navigate("/till");
+  };
 
   const handleCashClick = () => {
     setPaymentMethod("cash");
@@ -97,9 +129,26 @@ navigate('/till')  };
 
   const handleCardClick = () => {
     setPaymentMethod("card");
-    setCardOptions(true)
+    setCardOptions(true);
     setIsFlashing(true);
     setChangeGiven(0);
+  };
+
+  const handleDiscountClick = () => {
+    // Display input field for password
+    const password = prompt("Please enter your password to apply discount:");
+    // Verify password
+    if (password === "cheekydino") {
+      // Set discount state to true
+      setDiscount(true);
+    } else {
+      alert("Incorrect password. Please try again.");
+    }
+  };
+  const handleDiscountApply = (percentage) => {
+    const discountAmount = initialTotal * (percentage / 100);
+    setTotal(initialTotal - discountAmount);
+    setDiscount(percentage);
   };
 
   const buttonVariants = {
@@ -120,13 +169,12 @@ navigate('/till')  };
   };
 
   if (done === true) {
-navigate('/till')      
-    
+    navigate('/till');
   }
 
   return (
     <div className="grid grid-cols-3 gap-4 p-4">
-      <div className="border-r border-gray-300 pr-4">
+      <div className="border-r border-gray-300 pr-4 mb-5">
         <motion.button
           variants={buttonVariants}
           whileHover="hover"
@@ -156,6 +204,49 @@ navigate('/till')
           >
             Card
           </motion.button>
+          <motion.button
+            className={`${
+              paymentMethod === "card" ? "bg-blue-700" : "bg-blue-500"
+            } text-white p-2 rounded`}
+            onClick={handleDiscountClick}
+            variants={buttonVariants}
+            whileHover="hover"
+          >
+            Apply Discount
+          </motion.button>
+            <div>
+              {discount ? (
+                <div className="flex flex-col gap-2 mt-4">
+                  <motion.button
+                    className="bg-yellow-200 p-2 rounded"
+                    onClick={() => handleDiscountApply(10)}
+                    variants={buttonVariants}
+                    whileHover="hover"
+                  >
+                    10% Discount
+                  </motion.button>
+                  <motion.button
+                    className="bg-yellow-300 p-2 rounded"
+                    onClick={() => handleDiscountApply(20)}
+                    variants={buttonVariants}
+                    whileHover="hover"
+                  >
+                    20% Discount
+                  </motion.button>
+                  <motion.button
+                    className="bg-yellow-400 p-2 rounded"
+                    onClick={() => handleDiscountApply(50)}
+                    variants={buttonVariants}
+                    whileHover="hover"
+                  >
+                    50% Discount
+                  </motion.button>
+                </div>
+              ) : (
+                <button onClick={handleDiscountClick}>Apply Discount</button>
+              )}
+            </div>
+          
         </div>
         {paymentMethod === "card" && (
           <div className="flex flex-col gap-2 mt-4">
@@ -179,7 +270,7 @@ navigate('/till')
               className="bg-blue-400 p-2 rounded"
               onClick={() => handleDenominationClick(20)}
               variants={buttonVariants}
-              whileHover="hover"  
+              whileHover="hover"
             >
               £20
             </motion.button>
@@ -273,6 +364,7 @@ navigate('/till')
           <li className="font-bold">Table: {table}</li>
           <li className="font-bold">Child: {ChildName}</li>
           <li className="font-bold">Total: £{total.toFixed(2)}</li>
+          <li className="font-bold">Discount: {discount}%</li>
           <li className="font-bold">Change Given: £{changeGiven.toFixed(2)}</li>
         </ul>
         <div>
@@ -325,5 +417,6 @@ navigate('/till')
     </div>
   );
 };
+
 
 export default TillPayment;

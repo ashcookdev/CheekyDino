@@ -35,6 +35,7 @@ import Announcements from './Announcement'
 import { ArrowLeftIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CogIcon, CurrencyPoundIcon, PencilIcon, TableCellsIcon } from '@heroicons/react/20/solid'
 import { Pie } from 'recharts'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import MasterClose from './masterclose'
 
 
 const secondaryNavigation = [
