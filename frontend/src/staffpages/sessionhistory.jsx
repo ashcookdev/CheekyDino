@@ -73,6 +73,14 @@ export default function OrderHistory() {
 const totalAmount = sessions.reduce((acc, order) => acc + order.TotalSpent, 0);
 const totalAmountMinusVAT = totalAmount * 0.8;
 
+const handleEditClick = (session) => {}
+
+
+
+
+
+
+
 
 return (
   <>
@@ -101,28 +109,80 @@ return (
     </div>
 
     <div className="flex flex-col items-start sm:flex-row sm:justify-between gap-x-6 py-5">
-      <p>Number of Sessions: {numberOfOrders}</p>
-      <p>Total Amount: £{totalAmount.toFixed(2)}</p>
-      <p>Total Amount (minus VAT): £{totalAmountMinusVAT.toFixed(2)}</p>
+      <p className='text-sm'>Number of Sessions: {numberOfOrders}</p>
+      <p className='text-sm'>Total Amount: £{totalAmount.toFixed(2)}</p>
+      <p className='text-sm text-color-blue-500'>Total Amount (minus VAT): £{totalAmountMinusVAT.toFixed(2)}</p>
     </div>
 
-    <ul role="list" className="divide-y divide-gray-100">
-      {sessions.map((session) => (
-        <li key={session.id} className="flex flex-col items-start sm:flex-row sm:justify-between gap-x-6 py-5">
-          {/* Render session details here */}
-          <p>Name: {session.Name}</p>
-          <p>Email: {session.Email}</p>
-          <p> From: {session.TimeslotFrom}</p>
-          <p> To: {session.TimeslotTo}</p>
-          <p>Date: {session.Date}</p>
-          <p>Table: {session.Table}</p>
-          <p>Total Spent: £{session.TotalSpent}</p>
-          <p>Adults: {session.Adults}</p>
-          <p>Children: {session.Children}</p>
-          <p>Telephone: {session.Telephone}</p>
-        </li>
-      ))}
-    </ul>
+    <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <table className="min-w-full divide-y divide-gray-300">
+              <thead>
+                <tr>
+                  <th
+                    scope="col"
+                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8"
+                  >
+                    Name
+                  </th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Telephone
+                  </th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Email
+                  </th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Date
+                  </th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Timeslot
+                  </th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Table
+                  </th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Total Spent
+                  </th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Adults
+                  </th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Children
+                  </th>
+                 
+                  <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
+                    <span className="sr-only">Edit</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {sessions.map((session) => (
+                  <tr key={session.Email}>
+                    
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{session.Name}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{session.Telephone}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{session.Email}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{session.Date}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{session.TimeslotFrom} to {session.TimeslotTo}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{session.Table}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{session.TotalSpent}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{session.Adults}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{session.Children}</td>
+
+
+                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
+                      <button className="text-indigo-600 hover:text-indigo-900" onClick={() => handleEditClick(session)}>
+                        More<span className="sr-only">, {session.Name}</span>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+   
     <div className="p-4 rounded-md border border-gray-300 shadow-md mt-20">
       <BarGraph />
     </div>

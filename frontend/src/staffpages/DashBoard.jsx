@@ -15,6 +15,7 @@ import CafeKitchen from './CafeKitchen'
 import DashChat from './dashchat'
 import Finances from './financials'
 import Tables from './tables'
+import TableLayout from './tablelayout'
 
 import {
   Bars3Icon,
@@ -531,6 +532,9 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                 </div>
                 <div className="space-y-16 py-16 xl:space-y-20">
                     <div>
+                        
+                <div className="space-y-16 py-16 xl:space-y-20">
+                    <div>
                         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                             <h2 className="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
                                  Online Staff 
@@ -547,6 +551,20 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                     </div>
                     </div>
                     <div className="space-y-16 py-16 xl:space-y-20" id='section4'>
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                            <h2 className="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
+Table Layout                            </h2>
+                            
+                        </div>
+                        <div className="mt-6 overflow-hidden border-t border-gray-100" id='section6'>
+                            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                                <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+                                    <TableLayout/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
                             <div className="flex items-center justify-between">

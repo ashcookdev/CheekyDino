@@ -17,7 +17,7 @@ export default function EditBooking() {
             const sessionsData = await DataStore.query(Sessions);
             const date = new Date();
             const awsDate = format(date, 'yyyy-MM-dd');
-            const todaysSessions = sessionsData.filter(session => session.Date === awsDate && session.Arrived === true && session.LeftCenter === false);
+            const todaysSessions = sessionsData.filter(session => session.Date === awsDate);
             setSessions(todaysSessions);
         };
         fetchSessions();
@@ -162,20 +162,7 @@ if (pass === true) {
                                     </select>
                                 </div>
 
-                                {data.childAge === "2+" && (
-                                    <div>
-                                        <label htmlFor={`exact-age-${index}`} className="block text-sm font-medium leading-6 text-gray-900">
-                                            Exact Age
-                                        </label>
-                                        <input
-                                            onChange={(e) => handleExactAgeChange(index, e.target.value)}
-                                            id={`exact-age-${index}`}
-                                            type="number"
-                                            name={`exact-age-${index}`}
-                                            className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                        ></input>
-                                    </div>
-                                )}
+                                
                             </div>
                         ))}
                     </div>

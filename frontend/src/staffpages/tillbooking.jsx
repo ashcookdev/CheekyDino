@@ -99,12 +99,9 @@ console.log(childData)
   
 
   const handleNowSubmit = async () => {
-
-
     const ChildName = name;
-
+  
     const calculatePrice = (childData, adults, children) => {
-
       let price = 0;
       childData.forEach((data) => {
         if (data.childAge === "Under 1 year") {
@@ -120,39 +117,37 @@ console.log(childData)
       // Add an extra £2.00 for every adult if there are more adults than children
       console.log(adults)
       const additionalAdults = adults - children;
-
-  if (additionalAdults > 0) {
-    // Add £2.00 for each additional adult beyond the number of children
-    price += additionalAdults * 2.0;
-  }
-
-  return price;
-    };
   
-    
+      if (additionalAdults > 0) {
+        // Add £2.00 for each additional adult beyond the number of children
+        price += additionalAdults * 2.0;
+      }
+  
+      return price;
+    };
   
     // get todays date
     const today = new Date();
-    // format the current time 
+    // format the current time
     const nowString = format(today, 'HH:mm');
-
+  
     const dateString = today.toISOString().split('T')[0];
-
+  
     const twoHoursLater = addHours(today, 2);
-
+  
     // format the result as a string
     const twoHoursLaterString = format(twoHoursLater, 'HH:mm');
-
+  
     console.log(twoHoursLaterString);
     console.log(nowString);
-
+  
     // get all sessions for todays date
     const bookings = await DataStore.query(Sessions, c => c.Date.eq(dateString));
     console.log(bookings);
-
+  
     // calculate total number of guests
     const guests = children + adults;
-
+  
     let availableTablesForTimeslot = tableData.filter(table => {
       // check if table is already booked
       const isBooked = bookings.some(booking => {
@@ -165,44 +160,25 @@ console.log(childData)
       });
       return !isBooked;
     });
-
-    // conditionally recommend tables based on the number of guests
-    if (guests === 2) {
-      availableTablesForTimeslot = availableTablesForTimeslot.filter(table => table.capacity === 2);
-    } else if (guests > 2 && guests < 4) {
-      availableTablesForTimeslot = availableTablesForTimeslot.filter(table => table.capacity === 4);
-      let recommendedTables = [];
-      let remainingGuests = guests;
-      availableTablesForTimeslot.sort((a, b) => b.capacity - a.capacity);
-      while (remainingGuests > 0 && availableTablesForTimeslot.length > 0) {
-        const table = availableTablesForTimeslot.shift();
-        recommendedTables.push(table);
-        remainingGuests -= table.capacity;
-      }
-      availableTablesForTimeslot = recommendedTables;
-    }
-
-
+  
     setAvailableTables(availableTablesForTimeslot);
-    setDetails(
-      {
-        Name: ChildName,
-        Email: email,
-        Number: number,
-        Children: children,
-        Adults: adults,
-        Date: date,
-        TimeSlotFrom: nowString,
-        TimeSlotTo: twoHoursLaterString,
-        Telephone: number,
-        Total: calculatePrice(childData, adults, children),
-        Staff: staff
-
-      }
-    )
-    console.log(availableTablesForTimeslot)
-    setTrue(true)
-  }
+    setDetails({
+      Name: ChildName,
+      Email: email,
+      Number: number,
+      Children: children,
+      Adults: adults,
+      Date: date,
+      TimeSlotFrom: nowString,
+      TimeSlotTo: twoHoursLaterString,
+      Telephone: number,
+      Total: calculatePrice(childData, adults, children),
+      Staff: staff
+    });
+  
+    console.log(availableTablesForTimeslot);
+    setTrue(true);
+  };
 
   
     
@@ -339,7 +315,7 @@ value={number}
 
 
           <div>
-            <label htmlFor="children" className="block text-sm font-medium leading-6 text-gray-900">
+            <label htmlFor="children" className="block text-large font-large leading-6 text-gray-900">
               Number of Adults
             </label>
             <input
@@ -355,7 +331,7 @@ value={adults}            >
           </div>
 
           <div>
-            <label htmlFor="children" className="block text-sm font-medium leading-6 text-gray-900">
+            <label htmlFor="children" className="block text-large font-large leading-6 text-gray-900">
               Number of Children
             </label>
             <input
@@ -372,11 +348,11 @@ value={children}            ></input>
 
 
 
-{childData.map((data, index) => (
+          {childData.map((data, index) => (
   <div key={index}>
     <div>
-      <label htmlFor={`child-age-${index}`} className="block text-sm font-medium leading-6 text-gray-900">
-        Child's Age
+      <label htmlFor={`child-age-${index}`} className="block text-large font-large leading-6 text-gray-900">
+        Child's Age- Do Not Select Sibling First
       </label>
       <select
         onChange={(e) => handleChildAgeChange(index, e.target.value)}
@@ -387,12 +363,10 @@ value={children}            ></input>
         <option value="6 months and under">6 months and under</option>
         <option value="Under 1 year">under 1 year</option>
         <option value="1-2 years old">1-2 years old</option>
-        <option value="sibling">sibling</option>
+        {childData.length > 1 && <option value="sibling">sibling</option>}
         <option value="2+">2+</option>
       </select>
     </div>
-
-   
   </div>
 ))}
           </div>

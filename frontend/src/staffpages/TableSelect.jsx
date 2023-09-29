@@ -5,113 +5,88 @@ import { format, addHours } from 'date-fns';
 import Till from './Till';
 import SessionTill from './SessionTill';
 import { motion } from 'framer-motion';
+import tableData from './TableData.json';
 
 export default function TableSelect({ availableTables, onSelect, details, handleBack }) {
+  const [selectedTables, setSelectedTables] = useState([]);
+  const [savedDetails, setDetails] = useState(details);
+  const [truee, setTrue] = useState(false);
+  const [pay, setPay] = useState(false);
+  const [selectedTable, setSelectedTable] = useState(null);
 
+  if (truee === true) {
+    return <Till />;
+  }
 
-    const [selectedTables, setSelectedTables] = useState([]);
-    const [savedDetails, setDetails] = useState(details);
-    const [truee, setTrue] = useState(false);
-    const [pay, setPay] = useState(false);
-    const [selectedTable, setSelectedTable] = useState(null);
+  console.log(savedDetails.Name[0].name);
+  console.log(savedDetails);
 
-    if (truee === true) {
-        return (<Till/>)
-        
+  const handleTableClick = (table) => {
+    setSelectedTable(table);
+
+    if (selectedTables.includes(table)) {
+      setSelectedTables(selectedTables.filter((t) => t !== table));
+      setDetails(details);
+    } else {
+      setSelectedTables([...selectedTables, table]);
     }
+  };
 
-    
+  const handleConfirmClick = () => {
+    onSelect(selectedTables);
 
+    //get current date
+    const date = new Date();
+    const awsDate = format(date, 'yyyy-MM-dd');
+    const nowString = format(date, 'HH:mm:ss.SSS');
 
-    console.log(savedDetails.Name[0].name)
+    const twoHoursLater = addHours(date, 2);
 
-    console.log(savedDetails)
+    // format the result as a string
+    const twoHoursLaterString = format(twoHoursLater, 'HH:mm:ss.SSS');
 
-    const handleTableClick = (table) => {
-      setSelectedTable(table);
+    console.log(twoHoursLaterString);
+    console.log(nowString);
+    console.log(savedDetails.TimeslotFrom);
 
+    const children = parseInt(savedDetails.Children);
+    const adults = parseInt(savedDetails.Adults);
 
+    const name = savedDetails.Name;
 
-        
-        if (selectedTables.includes(table)) {
-            setSelectedTables(selectedTables.filter(t => t !== table));
-            setDetails(details)
-        } else {
-            setSelectedTables([...selectedTables, table]);
-        }
-    };
+    //save to database
+    DataStore.save(
+      new Sessions({
+        Email: savedDetails.Email,
+        Number: savedDetails.Number,
+        Date: awsDate,
+        Name: name,
+        Children: children,
+        Adults: adults,
+        Table: selectedTables[0].table,
+        TimeslotFrom: savedDetails.TimeSlotFrom,
+        TimeslotTo: savedDetails.TimeSlotTo,
+        Arrived: true,
+        LeftCenter: false,
+        TimeArrived: nowString,
+        Telephone: savedDetails.Telephone,
+        TotalSpent: savedDetails.Total,
+        Staff: savedDetails.Staff,
+      })
+    );
 
+    setPay(true);
+  };
 
-    const handleConfirmClick = () => {
-        onSelect(selectedTables);
-        //get current date 
-        const date = new Date();
-        const awsDate = format(date, 'yyyy-MM-dd');
-        const nowString = format(date, 'HH:mm:ss.SSS');
-    
-        const twoHoursLater = addHours(date, 2);
-    
-        // format the result as a string
-        const twoHoursLaterString = format(twoHoursLater, 'HH:mm:ss.SSS');
-    
-        console.log(twoHoursLaterString);
-        console.log(nowString);
-        console.log(savedDetails.TimeslotFrom )
+  let guests = parseInt(savedDetails.Children) + parseInt(savedDetails.Adults);
 
-        const children = parseInt(savedDetails.Children)
-        const adults = parseInt(savedDetails.Adults)
-
-        const name = savedDetails.Name
-      
-
-
-        
-
-    
-        //save to database
-        DataStore.save(
-            new Sessions({
-                Email: savedDetails.Email,
-                Number: savedDetails.Number,
-                Date: awsDate,
-                Name: name,
-                Children: children,
-                Adults: adults,
-                Table: selectedTables[0].table,
-                TimeslotFrom: savedDetails.TimeSlotFrom,
-                TimeslotTo: savedDetails.TimeSlotTo,
-                Arrived: true,
-                LeftCenter: false,
-                TimeArrived: nowString,
-                Telephone: savedDetails.Telephone,
-                TotalSpent: savedDetails.Total,
-                Staff: savedDetails.Staff,
-
-    
-            })
-       
-
-        );  
-setPay(true)  }
-
-    let guests = parseInt(savedDetails.Children) + parseInt(savedDetails.Adults)    
-    
-   if (pay === true) {
+  if (pay === true) {
     return (
-    <SessionTill order= {"2 Hour Session"} total = {savedDetails.Total} table= {selectedTables[0].table} ChildName ={savedDetails.Name} />)  
-    
-   }
+      <SessionTill order={'2 Hour Session'} total={savedDetails.Total} table={selectedTables[0].table} ChildName={savedDetails.Name} />
+    );
+  }
 
-   const colors = [
-    
-    'bg-blue-500',
-    'bg-indigo-500',
-    'bg-purple-500',
-    'bg-pink-500',
-    'bg-cyan-500',
-    'bg-purple-700',
-    'bg-gray-500',
-  ];    
+  const colors = ['bg-blue-500', 'bg-indigo-500', 'bg-purple-500', 'bg-pink-500', 'bg-cyan-500', 'bg-purple-700', 'bg-gray-500'];
 
   return (
     <div>
@@ -125,49 +100,58 @@ setPay(true)  }
           Back
         </motion.button>
         <motion.button
-        onClick={handleConfirmClick}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        Confirm
-      </motion.button>
-      
+          onClick={handleConfirmClick}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          Confirm
+        </motion.button>
 
         <p className="w-full text-center font-bold">Select A Table</p>
         <p className="w-full text-center font-bold">Party Size: {guests} </p>
         <p className="w-full text-center font-bold">Name: {savedDetails.Name} </p>
         <p className="w-full text-center font-bold">Price: £{savedDetails.Total.toFixed(2)} </p>
-      
-        {selectedTable && (
-      <p className='w-full text-center font-bold'>You have selected table number: {selectedTable.table}</p>
-    )}
+
+        {selectedTable && <p className="w-full text-center font-bold">You have selected table number: {selectedTable.table}</p>}
         <motion.div
-          className="flex flex-wrap mt-5"
+          className="grid grid-cols-8 grid-rows-5 gap-4 p-10 border-2 border-gray-500 bg-purple-100"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          {availableTables.map((table) => (
-            <motion.button
-              key={table.table}
-              onClick={() => handleTableClick(table)}
-              className={`m-1 text-white ${colors[table.table % colors.length]} ${
-                selectedTables.includes(table)
-                  ? 'ring-2 ring-white'
-                  : 'ring-2 ring-transparent'
-              } rounded-full px-4 py-2`}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              {table.table} ({table.capacity} seats)
-              {table.table >= 40 && table.table <= 42 && <div>Party Room</div>}
-            </motion.button>
-          ))}
+          {tableData.map((table) => {
+            const isAvailable = availableTables.some((t) => t.table === table.table);
+            const isSelected = selectedTables.some((t) => t.table === table.table);
+
+            let tableRow = table.location.y + 1;
+            let tableCols = `${table.location.x + 1} / span 1`;
+
+            if (tableRow === 2 || tableRow === 4) {
+              // Reverse the order of tables in rows 2 and 4
+              const tablesInRow = tableData.filter((t) => t.location.y === tableRow - 1);
+              tablesInRow.reverse();
+              tableCols = `${tablesInRow[table.location.x].location.x + 1} / span 1`;
+            }
+
+            return (
+              <motion.button
+                key={table.table}
+                className={`p-2 ${table.shape === 'square' ? 'w-12 h-12 mt-5 mb-5' : 'w-10 h-10 rounded-full mt-5 mb-5'} ${
+                  isAvailable ? 'bg-green-500' : 'bg-red-500'
+                } ${isSelected ? 'ring-2 ring-white' : 'ring-2 ring-transparent'}`}
+                style={{ gridColumn: tableCols, gridRow: `${tableRow} / span 1` }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => handleTableClick(table)}
+              >
+                <span className="text-white">{table.table}</span>
+                <span className="text-xs text-gray-500 block mt-5 mb-2">{table.capacity} seats</span>
+              </motion.button>
+            );
+          })}
         </motion.div>
       </div>
-     
     </div>
   );
 };
-                    

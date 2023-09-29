@@ -65,6 +65,7 @@ import BookNow from './staffpages/tillbooking';
 import BookLater from './staffpages/sessionbooker';
 import EditBooking from './staffpages/editbooking';
 import MakeReservation from './staffpages/makereservation';
+import TableLayout from './staffpages/tablelayout';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -206,6 +207,7 @@ function App() {
             <Route path="/booklater" element={<BookLater />} />
             <Route path="/editbooking" element={<EditBooking />} />
             <Route path= "/reservations" element={<MakeReservation />} />
+            <Route path="/tablelayout" element={<TableLayout />} />
           </>
         )}
         

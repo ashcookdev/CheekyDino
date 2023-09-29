@@ -1,0 +1,66 @@
+import React, { useEffect, useState } from 'react';
+import { DataStore } from 'aws-amplify';
+import { Sessions } from './models';
+import { format } from 'date-fns';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import tableData from './TableData.json';
+
+function RestaurantLayout() {
+  const [sessions, setSessions] = useState([]);
+  const [nav, setNav] = useState(false);
+  const Navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchSessions = async () => {
+      const sessionsData = await DataStore.query(Sessions);
+      const date = new Date();
+      const awsDate = format(date, 'yyyy-MM-dd');
+      const todaysSessions = sessionsData.filter(session => session.Date === awsDate && session.Arrived === true && session.LeftCenter === false);
+      setSessions(todaysSessions);
+    }
+
+    fetchSessions();
+  }, []);
+
+  if (nav === true) {
+    Navigate('/Tables');
+  }
+
+  return (
+    <div className="grid grid-cols-8 grid-rows-5 gap-4 p-10">
+      {tableData.map((table) => {
+        const session = sessions.find(session => session.Table === table.table);
+        const isAvailable = !session;
+        const isEndingSoon = session && (new Date(session.TimeslotTo) - new Date()) <= 600000; // 10 minutes in milliseconds
+
+        let tableRow = table.location.y + 1;
+        let tableCols = `${table.location.x + 1} / span 1`;
+
+        if (tableRow === 2 || tableRow === 4) {
+          // Reverse the order of tables in rows 2 and 4
+          const tablesInRow = tableData.filter(t => t.location.y === tableRow - 1);
+          tablesInRow.reverse();
+          tableCols = `${tablesInRow[table.location.x].location.x + 1} / span 1`;
+        }
+
+
+        return (
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            key={table.table}
+            className={`p-2 ${table.shape === 'square' ? 'w-12 h-12 mt-5 mb-5' : 'w-10 h-10 rounded-full mt-5 mb-5'} 
+            ${isEndingSoon ? 'bg-red-500 animate-pulse' : isAvailable ? 'bg-green-500' : 'bg-red-500'}`}
+            style={{ gridColumn: tableCols, gridRow: `${tableRow} / span 1` }}
+            onClick={() => setNav(true)}
+          >
+            <span className="text-white">{table.table}</span>
+          </motion.button>
+        );
+      })}
+    </div>
+  );
+}
+
+export default RestaurantLayout;
