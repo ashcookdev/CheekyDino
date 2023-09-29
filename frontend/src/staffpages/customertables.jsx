@@ -230,8 +230,8 @@ const Delivered = async (order) => {
     {tableInfo.map((table) => (
       <li
         key={table.number}
-        className={`p-4 rounded-lg shadow-md ${table.backgroundColor} ${
-          table.shouldFlashGold ? "animate-pulse" : ""
+        className={`p-4 rounded-lg shadow-md mt-5 ${table.backgroundColor} ${
+          table.shouldFlashGold ? "animate-pulse " : ""
         }`}
       >
         <div className="flex flex-col sm:flex-row items-center">

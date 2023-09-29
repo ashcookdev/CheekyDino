@@ -149,6 +149,7 @@ function App() {
           '/finance',
           '/chat',
           '/till',
+          '/customerscreen'
         ].includes(location.pathname) ? (
         <StaffNav />
       ) : ![
@@ -158,6 +159,7 @@ function App() {
           '/finance',
           '/chat',
           '/till',
+          '/customerscreen'
         ].includes(location.pathname) ? (
         <Navbar />
       ) : null}

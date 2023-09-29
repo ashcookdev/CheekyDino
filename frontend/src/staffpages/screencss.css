@@ -1,0 +1,22 @@
+.customer-tables {
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 300px;
+    overflow: hidden;
+}
+
+.customer-tables.move-down {
+    animation: moveDown 45s forwards;
+}
+
+@keyframes moveDown {
+    from {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}

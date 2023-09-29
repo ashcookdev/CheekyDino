@@ -115,7 +115,7 @@ export default function TableSelect({ availableTables, onSelect, details, handle
 
         {selectedTable && <p className="w-full text-center font-bold">You have selected table number: {selectedTable.table}</p>}
         <motion.div
-          className="grid grid-cols-8 grid-rows-5 gap-4 p-10 border-2 border-gray-500 bg-purple-100"
+          className="grid grid-cols-8 grid-rows-5 gap-4 p-10 border-2 border-gray-500 bg-white"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -140,7 +140,7 @@ export default function TableSelect({ availableTables, onSelect, details, handle
                 className={`p-2 ${table.shape === 'square' ? 'w-12 h-12 mt-5 mb-5' : 'w-10 h-10 rounded-full mt-5 mb-5'} ${
                   isAvailable ? 'bg-green-500' : 'bg-red-500'
                 } ${isSelected ? 'ring-2 ring-white' : 'ring-2 ring-transparent'}`}
-                style={{ gridColumn: tableCols, gridRow: `${tableRow} / span 1` }}
+                style={{ gridColumn: tableCols, gridRow: `${tableRow} / span 1`, border: '2px solid gray-300', boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.75)' }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => handleTableClick(table)}
