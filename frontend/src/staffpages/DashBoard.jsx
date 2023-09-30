@@ -34,7 +34,7 @@ import TodaysBookings from './todaysbookings'
 import Announcements from './Announcement'
 import { ArrowLeftIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CogIcon, CurrencyPoundIcon, PencilIcon, TableCellsIcon } from '@heroicons/react/20/solid'
 import { Pie } from 'recharts'
-import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { CheckCircleIcon, TvIcon } from '@heroicons/react/24/solid'
 import MasterClose from './masterclose'
 
 
@@ -84,6 +84,7 @@ const navigation = [
   { name: 'Kitchen', href: '#section3', icon: CakeIcon , current: false },
   { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
   { name: 'Edit', href: '/edithome', icon: PencilIcon, current: false },
+  {name: 'Customer Screen', href: '/customerscreen', icon: TvIcon, current: false },
   {name: 'Clock In', href: '/clockin', icon: ClockIcon, current: false },
   {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },

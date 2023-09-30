@@ -12,7 +12,7 @@ export default function MasterClose() {
             // get all the sessions for today and then set everyone to LeftCenter true and if TimeLeft is null then set it to todays time in aws format
             const today = new Date().toISOString().slice(0, 10);
             const sessions = await DataStore.query(Sessions, (s) =>
-                s.date("ge", today).and(s.date("lt", new Date(today).toISOString()))
+                s.Date("ge", today).and(s.Date("lt", new Date(today).toISOString()))
             );
             await Promise.all(
                 sessions.map(async (session) => {
@@ -26,7 +26,7 @@ export default function MasterClose() {
 
             // query the datastore for all ClockIns for today and then set the ClockOut time in awstime
             const clockIns = await DataStore.query(ClockIn, (c) =>
-                c.date("ge", today).and(c.date("lt", new Date(today).toISOString()))
+                c.Date("ge", today).and(c.Date("lt", new Date(today).toISOString()))
             );
             await Promise.all(
                 clockIns.map(async (clockIn) => {
@@ -52,7 +52,7 @@ export default function MasterClose() {
                 ) : null}
                 <button
                     onClick={() => setShowPassword(!showPassword)}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mb-4"
+                    className="bg-purple-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mb-4"
                 >
                     {showPassword ? "Hide Password" : "Shut Down"}
                 </button>

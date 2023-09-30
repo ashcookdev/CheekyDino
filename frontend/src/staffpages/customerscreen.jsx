@@ -7,6 +7,7 @@ import "./screencss.css"
 import { Sessions } from './models';
 import TableLayout from './tablelayout';
 
+
 export default function Example() {
   const [message, setMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
@@ -17,6 +18,8 @@ export default function Example() {
   const [messageCount, setMessageCount] = useState(0);
   const [displayMessage, setDisplayMessage] = useState('');
   const [sessions, setSessions] = useState([]);
+  const [weatherData, setWeatherData] = useState(null);
+
 
   useEffect(() => {
     // subscribe to real-time updates on the CustomerScreen model
@@ -34,6 +37,19 @@ export default function Example() {
   
     // clean up the subscription when the component unmounts
     return () => subscription.unsubscribe();
+  }, []);
+
+  
+  useEffect(() => {
+    // fetch weather data from API
+    fetch('http://api.weatherstack.com/current?access_key=6eb9301a68dfecace2e92425638712ce&query=Maidstone, UK')
+      .then(response => response.json())
+      .then(data => {
+        setWeatherData(data.current);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }, []);
 
 
@@ -121,12 +137,34 @@ export default function Example() {
 
   return (
     <>
-<div
-        className="flex bg-fixed bg-center bg-no-repeat bg-cover"
-      >        <div className="w-1/2">
-          <div className="overflow-hidden h-full">
-          <h1 className='flex font-bold items-center'> {format(new Date(), 'HH:mm')}</h1>
+<div className="fixed top-0 left-0 w-full h-16 flex justify-between items-center px-4 bg-gradient-to-r from-orange-500 to-yellow-500">
+        <div className="text-white font-bold text-lg">
+          {format(new Date(), 'HH:mm')}
+        </div>
+        <div className="text-white font-bold text-lg">
+          Welcome to Cheeky Dino
+        </div>
+        <div className="text-white font-bold text-lg">
+          {weatherData ? (
+            <>
+              <span>{weatherData.temperature}°C</span>
+              <span className="ml-2">
+                {weatherData.weather_descriptions[0]}
+              </span>
+            </>
+          ) : (
+            <span>Loading weather data...</span>
+          )}
+        </div>
+      </div>
 
+      <div className="flex bg-fixed bg-center bg-no-repeat bg-cover pt-16">
+        <header className="flex items-center justify-between px-4 py-3 bg-white border-b-4 border-indigo-600">
+          <div className="flex items-center"></div>
+        </header>
+
+        <div className="w-1/2">
+          <div className="overflow-hidden h-full">
             <div className={`customer-tables ${shouldMoveDown ? 'move-down' : ''}`}>
               <CustomerTables />
             </div>
@@ -135,7 +173,7 @@ export default function Example() {
         {showOriginalComponent && (
           <div className="w-1/2 flex flex-col">
             <div className="flex-1">
-            {showMessage && message ? (
+              {showMessage && message ? (
                 <>
                   <h1 className="mt-24 text-4xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-6xl">
                     {message}
