@@ -507,6 +507,7 @@ type EagerCafeOrder = {
   readonly ChefName?: string | null;
   readonly StaffOrderName?: string | null;
   readonly kitchenmenus?: (KitchenMenuCafeOrder | null)[] | null;
+  readonly SessionEmail?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -536,6 +537,7 @@ type LazyCafeOrder = {
   readonly ChefName?: string | null;
   readonly StaffOrderName?: string | null;
   readonly kitchenmenus: AsyncCollection<KitchenMenuCafeOrder>;
+  readonly SessionEmail?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

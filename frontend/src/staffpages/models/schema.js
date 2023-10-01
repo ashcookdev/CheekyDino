@@ -1580,6 +1580,13 @@ export const schema = {
                         ]
                     }
                 },
+                "SessionEmail": {
+                    "name": "SessionEmail",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -2779,5 +2786,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.0",
-    "version": "bbf9974754b71fde4954b0a4d911c690"
+    "version": "52ab05dbf51b46af5ccaee8dd7598a32"
 };

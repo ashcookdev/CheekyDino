@@ -134,6 +134,7 @@ const newCafeOrder = await DataStore.save(
     Total: totalCost,
     Table: session.Table,
     Sessionid: session.id,
+    SessionEmail: session.Email,
 Kitchen: true,
 HotItems: hotItems,
 Completed: false,

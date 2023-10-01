@@ -167,6 +167,7 @@ type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
   ChefName: String
   StaffOrderName: String
   kitchenmenus: [KitchenMenu] @manyToMany(relationName: "KitchenMenuCafeOrder")
+  SessionEmail: String
 }
 
 type Messages @model @auth(rules: [{allow: private}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartHosts"], operations: [read, create]}, {allow: groups, groups: ["Staff"], operations: [read, create]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: owner, operations: [create, read]}]) {

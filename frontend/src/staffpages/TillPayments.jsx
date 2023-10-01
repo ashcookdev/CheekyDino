@@ -135,6 +135,7 @@ export default function TillPayment({
         TotalNoVAT: total / 1.2,
         StaffOrderName: staff,
         sessionsID: session.id,
+        SessionEmail: session.Email,
       })
     );
 

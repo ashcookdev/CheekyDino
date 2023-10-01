@@ -75,8 +75,10 @@ export default function Dashboard() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     const teams = [{ id: 1, name: 'Orders', href: '/orders', initial: 'O', current: false },
-    { id: 2, name: 'Sessions', href: '/sessionhistory', initial: 'T', current: false },
-    { id: 3, name: 'Parties', href: '/partyhistory', initial: 'P', current: false },]
+    { id: 2, name: 'Till History', href: '/tillhistory', initial: 'TH', current: false },
+    { id: 3, name: 'Sessions', href: '/sessionhistory', initial: 'T', current: false },
+    { id: 4, name: 'Parties', href: '/partyhistory', initial: 'P', current: false },
+  ]
 
 
 const navigation = [
