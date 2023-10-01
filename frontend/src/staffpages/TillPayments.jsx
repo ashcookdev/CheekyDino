@@ -66,6 +66,7 @@ export default function TillPayment({
   const [prep, setPrep] = useState([]);
   const [change, setChange] = useState(0); // Add state for change
   const [isChangeGiven, setIsChangeGiven] = useState(false); // Flag to track if change is given
+  const [discount, setDiscount] = useState(false);
 
 
 
@@ -153,6 +154,26 @@ export default function TillPayment({
     setAmountEntered("");
     setChange(0);
   };
+
+  const handleDiscountClick = () => {
+    // Display input field for password
+    const password = prompt("Please enter your password to apply discount:");
+    // Verify password
+    if (password === "cheekydino") {
+      // Set discount state to true
+      setDiscount(true);
+    } else {
+      alert("Incorrect password. Please try again.");
+    }
+  };
+  const handleDiscountApply = (percentage) => {
+    const discountAmount = initialTotal * (percentage / 100);
+    setTotal(initialTotal - discountAmount);
+    setDiscount(percentage);
+  };
+
+  const initialTotal = order.reduce((acc, item) => acc + item.Price, 0);
+
 
   const newtotal = order.reduce((acc, item) => acc + item.Price, 0);
 
@@ -248,6 +269,46 @@ export default function TillPayment({
           >
             Card
           </motion.button>
+          <motion.button
+            className={`${
+              paymentMethod === "card" ? "bg-blue-700" : "bg-blue-500"
+            } text-white p-2 rounded`}
+            onClick={handleDiscountClick}
+            variants={buttonVariants}
+            whileHover="hover"
+          >
+            Apply Discount
+          </motion.button>
+            <div>
+              {discount ? (
+                <div className="flex flex-col gap-2 mt-4">
+                  <motion.button
+                    className="bg-yellow-200 p-2 rounded"
+                    onClick={() => handleDiscountApply(10)}
+                    variants={buttonVariants}
+                    whileHover="hover"
+                  >
+                    10% Discount
+                  </motion.button>
+                  <motion.button
+                    className="bg-yellow-300 p-2 rounded"
+                    onClick={() => handleDiscountApply(20)}
+                    variants={buttonVariants}
+                    whileHover="hover"
+                  >
+                    20% Discount
+                  </motion.button>
+                  <motion.button
+                    className="bg-yellow-400 p-2 rounded"
+                    onClick={() => handleDiscountApply(50)}
+                    variants={buttonVariants}
+                    whileHover="hover"
+                  >
+                    50% Discount
+                  </motion.button>
+                </div>
+              ) : null}
+            </div>
           {paymentMethod === "card" && (
              <div className="flex flex-col gap-2 mt-4">
              <motion.button
@@ -292,6 +353,8 @@ export default function TillPayment({
             </motion.button>
           </div>
           )}
+
+
 
 
          

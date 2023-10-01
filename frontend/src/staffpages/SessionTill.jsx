@@ -242,9 +242,8 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
                     50% Discount
                   </motion.button>
                 </div>
-              ) : (
-                <button onClick={handleDiscountClick}>Apply Discount</button>
-              )}
+              
+              ) : null}
             </div>
           
         </div>
