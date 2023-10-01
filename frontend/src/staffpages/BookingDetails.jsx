@@ -4,6 +4,7 @@ import { Sessions } from './models';
 import { Analytics } from 'aws-amplify';
 import Till from './Till';
 import { format } from 'date-fns';
+import SessionTill from './SessionTill'
 
 export default function Arrival({ session}) {
 
@@ -11,7 +12,8 @@ export default function Arrival({ session}) {
 
   if (arrival === true) {
     return (
-      <Till />
+      <SessionTill order={'2 Hour Session'} total={session.TotalSpent} table={session.Table} ChildName={session.Name} />
+
     )
   }
 
@@ -36,18 +38,11 @@ const guests = session.Adults + session.Children;
 
         })
       );
-      Analytics.record({
-        name: 'guestsInBuilding',
-        attributes: {
-          guestName: session.ChildName,
-          branchId: 'Cheeky Dino Maidstone',
-          numberofGuests: guests, // replace with your branch ID
-          time: formattedTime,
-          date: session.Date
+     
           
           // additional attributes here
-        }
-      });
+        
+      
       setArrival(true);
       
     } catch (error) {

@@ -137,12 +137,9 @@ export default function Example() {
 
   return (
     <>
-<div className="fixed top-0 left-0 w-full h-16 flex justify-between items-center px-4 bg-gradient-to-r from-orange-500 to-yellow-500">
+      <div className="fixed top-0 left-0 w-full h-16 flex justify-between items-center px-4 bg-gradient-to-r from-orange-500 to-yellow-500">
         <div className="text-white font-bold text-lg">
           {format(new Date(), 'HH:mm')}
-        </div>
-        <div className="text-white font-bold text-lg">
-          Welcome to Cheeky Dino
         </div>
         <div className="text-white font-bold text-lg">
           {weatherData ? (
@@ -157,22 +154,23 @@ export default function Example() {
           )}
         </div>
       </div>
-
+  
       <div className="flex bg-fixed bg-center bg-no-repeat bg-cover pt-16">
         <header className="flex items-center justify-between px-4 py-3 bg-white border-b-4 border-indigo-600">
           <div className="flex items-center"></div>
         </header>
-
+  
         <div className="w-1/2">
           <div className="overflow-hidden h-full">
             <div className={`customer-tables ${shouldMoveDown ? 'move-down' : ''}`}>
+              
               <CustomerTables />
             </div>
           </div>
         </div>
         {showOriginalComponent && (
           <div className="w-1/2 flex flex-col">
-            <div className="flex-1">
+            <div className="flex-1 h-screen">
               {showMessage && message ? (
                 <>
                   <h1 className="mt-24 text-4xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-6xl">
@@ -182,7 +180,9 @@ export default function Example() {
                 </>
               ) : (
                 <>
-                  <TableLayout />
+                  <div className="h-full">
+                    <TableLayout />
+                  </div>
                 </>
               )}
             </div>
