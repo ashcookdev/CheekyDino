@@ -1,43 +1,87 @@
 import { useState } from "react";
-import { DataStore } from "aws-amplify";
+import { DataStore, Predicates } from "aws-amplify";
 import { Sessions, ClockIn } from "./models";
+import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/solid'
+import { useNavigate } from "react-router-dom";
+import { CheckBadgeIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 
 export default function MasterClose() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [completed, setCompleted] = useState(false);
+    const [move, setMove] = useState(false);
+
     const correctPassword = "myPassword"; // replace with your actual password
+
+    const Navigate = useNavigate();
 
     const handleButtonClick = async () => {
         if (password === correctPassword) {
-            // get all the sessions for today and then set everyone to LeftCenter true and if TimeLeft is null then set it to todays time in aws format
-            const today = new Date().toISOString().slice(0, 10);
-            const sessions = await DataStore.query(Sessions, (s) =>
-                s.Date("ge", today).and(s.Date("lt", new Date(today).toISOString()))
-            );
+            const now = new Date();
+            const timeString = now.toISOString().split('T')[1].slice(0, -1);
+                        const sessions = await DataStore.query(Sessions, Predicates.ALL);
             await Promise.all(
                 sessions.map(async (session) => {
-                    if (!session.TimeLeft) {
-                        session.TimeLeft = new Date().toISOString();
-                    }
-                    session.LeftCenter = true;
-                    await DataStore.save(session);
+                    const updatedSession = Sessions.copyOf(session, updated => {
+                        if (!updated.TimeLeft) {
+                            updated.TimeLeft = timeString;
+                        }
+                        updated.LeftCenter = true;
+                    });
+                    await DataStore.save(updatedSession);
                 })
             );
 
-            // query the datastore for all ClockIns for today and then set the ClockOut time in awstime
-            const clockIns = await DataStore.query(ClockIn, (c) =>
-                c.Date("ge", today).and(c.Date("lt", new Date(today).toISOString()))
-            );
+            const clockIns = await DataStore.query(ClockIn, Predicates.ALL);
             await Promise.all(
                 clockIns.map(async (clockIn) => {
-                    clockIn.ClockOut = new Date().toISOString();
-                    await DataStore.save(clockIn);
+                    const updatedClockIn = ClockIn.copyOf(clockIn, updated => {
+                        updated.ClockOut = timeString;
+                    });
+                    await DataStore.save(updatedClockIn);
                 })
             );
+setCompleted(true);
+
         } else {
             alert("Incorrect password");
         }
     };
+
+    if (move === true) {
+        window.location.reload();
+        Navigate("/dashboard")
+    }
+
+    if (completed) {
+        return (
+            <div className="rounded-md bg-green-50 p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <CheckBadgeIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
+              </div>
+              <div className="ml-3">
+                <p className="text-sm font-medium text-green-800">Successfully Shutdown, Have a Good Night, See you in the Morning!</p>
+              </div>
+              <div className="ml-auto pl-3">
+                <div className="-mx-1.5 -my-1.5">
+                  <button
+                    type="button"
+                    className="inline-flex rounded-md bg-green-50 p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-50"
+                  >
+                    <button className="bg-white rounded-lg shadow-lg p-8" onClick={() => setMove(true)}>Close</button>
+
+                    
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+    }
+
+   
+
 
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-transparent">
@@ -61,11 +105,6 @@ export default function MasterClose() {
                         onClick={handleButtonClick}
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg relative overflow-hidden"
                     >
-                        <img
-                            src="https://media.giphy.com/media/3o7aD2jBmYRvKvthUQ/giphy.gif"
-                            alt="background"
-                            className="absolute inset-0 w-full h-full object-cover"
-                        />
                         Submit
                     </button>
                 ) : null}

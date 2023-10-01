@@ -66,6 +66,7 @@ import BookLater from './staffpages/sessionbooker';
 import EditBooking from './staffpages/editbooking';
 import MakeReservation from './staffpages/makereservation';
 import TableLayout from './staffpages/tablelayout';
+import MasterClose from './staffpages/masterclose';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -210,6 +211,7 @@ function App() {
             <Route path="/editbooking" element={<EditBooking />} />
             <Route path= "/reservations" element={<MakeReservation />} />
             <Route path="/tablelayout" element={<TableLayout />} />
+            <Route path="/masterclose" element={<MasterClose />} />
           </>
         )}
         

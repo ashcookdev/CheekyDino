@@ -25,8 +25,10 @@ import {
   DocumentDuplicateIcon,
   FolderIcon,
   HomeIcon,
+  KeyIcon,
   MicrophoneIcon,
   UserCircleIcon,
+  UserPlusIcon,
   UsersIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
@@ -89,6 +91,7 @@ const navigation = [
   {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },
 {name: 'Settings', href: '/settings', icon: CogIcon, current: false },
+{name: 'Master Close', href: '/masterclose', icon: KeyIcon, current: false },  
 
 ]
 
