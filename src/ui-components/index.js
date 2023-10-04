@@ -26,6 +26,8 @@ export { default as StaffCreateForm } from "./StaffCreateForm";
 export { default as StaffUpdateForm } from "./StaffUpdateForm";
 export { default as SessionsCreateForm } from "./SessionsCreateForm";
 export { default as SessionsUpdateForm } from "./SessionsUpdateForm";
+export { default as CafeOrderCreateForm } from "./CafeOrderCreateForm";
+export { default as CafeOrderUpdateForm } from "./CafeOrderUpdateForm";
 export { default as MessagesCreateForm } from "./MessagesCreateForm";
 export { default as MessagesUpdateForm } from "./MessagesUpdateForm";
 export { default as PartyAdultFoodCreateForm } from "./PartyAdultFoodCreateForm";

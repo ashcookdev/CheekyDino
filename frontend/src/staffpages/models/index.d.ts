@@ -496,7 +496,7 @@ type EagerCafeOrder = {
   readonly Table?: number | null;
   readonly Completed?: boolean | null;
   readonly Delieved?: boolean | null;
-  readonly sessionsID: string;
+  readonly sessionsID?: string | null;
   readonly Sessionid?: string | null;
   readonly TimeDelivered?: string | null;
   readonly Notes?: string | null;
@@ -526,7 +526,7 @@ type LazyCafeOrder = {
   readonly Table?: number | null;
   readonly Completed?: boolean | null;
   readonly Delieved?: boolean | null;
-  readonly sessionsID: string;
+  readonly sessionsID?: string | null;
   readonly Sessionid?: string | null;
   readonly TimeDelivered?: string | null;
   readonly Notes?: string | null;

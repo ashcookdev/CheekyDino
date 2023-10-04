@@ -156,7 +156,7 @@ type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
   Table: Int
   Completed: Boolean
   Delieved: Boolean
-  sessionsID: ID! @index(name: "bySessions")
+  sessionsID: ID @index(name: "bySessions")
   Sessionid: String
   TimeDelivered: AWSTime
   Notes: String

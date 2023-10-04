@@ -1497,7 +1497,7 @@ export const schema = {
                     "name": "sessionsID",
                     "isArray": false,
                     "type": "ID",
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": []
                 },
                 "Sessionid": {
@@ -2786,5 +2786,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.0",
-    "version": "52ab05dbf51b46af5ccaee8dd7598a32"
+    "version": "6c7cd61b32faf20d06abdc0440786349"
 };

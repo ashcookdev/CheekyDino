@@ -28,13 +28,11 @@ import SlideOver from "./slideover";
 
 
 export default function Till() {
-  const [showSoftDrinks, setShowSoftDrinks] = useState(false);
-  const [showHotFood, setShowHotFood] = useState(false);
+
   const [order, setOrder] = useState([]);
   const [total, setTotal] = useState(0);
   const [table, setTable] = useState(1);
   const [party, setPartyBookings] = useState([]);
-  const [currentTime, setCurrentTime] = useState(0);
 
   const [selectedParty, setSelectedParty] = useState(null);
 
@@ -199,7 +197,7 @@ setShowTopBar(true)
   }
 
   if (tablee === true) {
-    navigate ('/Tables')
+    window.location.href = '/Tables';
   }
 
   if (session === true) {

@@ -19,10 +19,14 @@ function OccupiedTables() {
 
   useEffect(() => {
     async function getTodaysBookings() {
+      const today = new Date();
       const sessions = await DataStore.query(Sessions);
-      const todaysBookings = sessions.filter((session) =>
-        isToday(new Date(session.Date))
-      );
+      console.log(sessions);
+      const todaysBookings = sessions.filter((session) => {
+        const sessionDate = new Date(session.Date);
+        return sessionDate.toISOString().slice(0, 10) === today.toISOString().slice(0, 10);
+      });
+      console.log(todaysBookings);
       setSessions(todaysBookings);
     }
 
@@ -45,6 +49,8 @@ function OccupiedTables() {
   const occupiedTables = sessions.filter(
     (session) => session.Arrived === true && session.LeftCenter === false
   );
+
+  console.log('occupiedTables:', occupiedTables);
 
   // Map the occupiedTables array to create a new array with the desired information for each table
   const tableInfo = occupiedTables.map((table) => {
