@@ -68,6 +68,7 @@ import MakeReservation from './staffpages/makereservation';
 import TableLayout from './staffpages/tablelayout';
 import MasterClose from './staffpages/masterclose';
 import TillHistory from './staffpages/tillhistory';
+import Training from './training/traininghome';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -151,7 +152,8 @@ function App() {
           '/finance',
           '/chat',
           '/till',
-          '/customerscreen'
+          '/customerscreen',
+          '/training'
         ].includes(location.pathname) ? (
         <StaffNav />
       ) : ![
@@ -161,7 +163,8 @@ function App() {
           '/finance',
           '/chat',
           '/till',
-          '/customerscreen'
+          '/customerscreen',
+          '/training'
         ].includes(location.pathname) ? (
         <Navbar />
       ) : null}
@@ -214,6 +217,7 @@ function App() {
             <Route path="/tablelayout" element={<TableLayout />} />
             <Route path="/masterclose" element={<MasterClose />} />
             <Route path="/tillhistory" element={<TillHistory />} />
+            <Route path ="/training" element={<Training />} />
           </>
         )}
         

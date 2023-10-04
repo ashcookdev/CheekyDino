@@ -73,11 +73,8 @@ export default function Example({ selectedItems, mealName, category, img, descri
             : Math.floor(item.Quantity / itemValues[index])
         )
       );
-    
-      setPortionAmount(lowestPortionAmount);
-    }
-  };
-  
+
+          setPortionAmount(lowestPortionAmount * 2);}}
 
   
   

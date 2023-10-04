@@ -23,6 +23,7 @@ import {
   ChartPieIcon,
   ChatBubbleLeftRightIcon,
   DocumentDuplicateIcon,
+  DocumentIcon,
   FolderIcon,
   HomeIcon,
   KeyIcon,
@@ -34,7 +35,7 @@ import {
 } from '@heroicons/react/24/outline'
 import TodaysBookings from './todaysbookings'
 import Announcements from './Announcement'
-import { ArrowLeftIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CogIcon, CurrencyPoundIcon, PencilIcon, TableCellsIcon } from '@heroicons/react/20/solid'
+import { ArrowLeftIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CogIcon, CurrencyPoundIcon, LightBulbIcon, PencilIcon, TableCellsIcon } from '@heroicons/react/20/solid'
 import { Pie } from 'recharts'
 import { CheckCircleIcon, TvIcon } from '@heroicons/react/24/solid'
 import MasterClose from './masterclose'
@@ -87,13 +88,14 @@ const navigation = [
   { name: 'Chat', href: '#section5', icon: ChatBubbleBottomCenterIcon, current: false },
   { name: 'Kitchen', href: '#section3', icon: CakeIcon , current: false },
   { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
-  { name: 'Edit', href: '/edithome', icon: PencilIcon, current: false },
+  { name: 'Edit Landing Page', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Customer Screen', href: '/customerscreen', icon: TvIcon, current: false },
   {name: 'Clock In', href: '/clockin', icon: ClockIcon, current: false },
   {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },
 {name: 'Settings', href: '/settings', icon: CogIcon, current: false },
 {name: 'Master Close', href: '/masterclose', icon: KeyIcon, current: false },  
+  { name: 'Training', href: '/training', icon: LightBulbIcon, current: false },
 
 ]
 
@@ -339,7 +341,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                                   className={classNames(
                                     item.current
                                       ? 'bg-gray-50 text-indigo-600'
-                                      : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                                      : 'text-indigo-700 hover:text-indigo-600 hover:bg-gray-50',
                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                   )}
                                 >
@@ -366,7 +368,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                                   className={classNames(
                                     team.current
                                       ? 'bg-gray-50 text-indigo-600'
-                                      : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                                      : 'text-indigo-700 hover:text-indigo-600 hover:bg-gray-50',
                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                   )}
                                 >
@@ -374,7 +376,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                                     className={classNames(
                                       team.current
                                         ? 'text-indigo-600 border-indigo-600'
-                                        : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
+                                        : 'text-indigo-600 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
                                       'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
                                     )}
                                   >
@@ -417,13 +419,13 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                           className={classNames(
                             item.current
                               ? 'bg-gray-50 text-indigo-600'
-                              : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                              : 'text-indigo-700 hover:text-indigo-600 hover:bg-gray-50',
                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                           )}
                         >
                           <item.icon
                             className={classNames(
-                              item.current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
+                              item.current ? 'text-indigo-600' : 'text-indigo-400 group-hover:text-indigo-600',
                               'h-6 w-6 shrink-0'
                             )}
                             aria-hidden="true"
