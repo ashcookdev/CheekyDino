@@ -98,7 +98,7 @@ if (pass === true) {
     console.log(selectedSession.Table);
     console.log(tillInfo)
     return (
-        <SessionTill order= {"2 Hour Session"} total = {total} table= {tillInfo.Table} ChildName ={tillInfo.Name} />)
+        <SessionTill order= {"2 Hour Session"} total = {total} table= {tillInfo.Table} ChildName ={tillInfo.Name} route= {true} />)
 }
 
     

@@ -47,7 +47,7 @@ const Receipt = React.forwardRef(
 
 
 
-const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
+const TillPayment = ({ order, total: initialTotal, table, ChildName, route }) => {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [amountEntered, setAmountEntered] = useState(0);
   const [isFlashing, setIsFlashing] = useState(false);
@@ -79,7 +79,11 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
     console.log(filter);
     const updateSession = await DataStore.save(
       Sessions.copyOf(filter[0], (updated) => {
-        updated.TotalSpent = total;
+        if (route === true) {
+          updated.TotalSpent += total;
+        } else {
+          updated.TotalSpent = total;
+        }
       })
     );
     console.log(updateSession);
@@ -353,11 +357,17 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
       <div>
         <ul>
           <li className="font-bold">Table: {table}</li>
+          {route === true ? (
+            <li className="font-bold">Adding to Booking on Table: {table}</li>
+          ) : null}
           <li className="font-bold">Child: {ChildName}</li>
           <li className="font-bold">Total: £{total.toFixed(2)}</li>
           <li className="font-bold">Discount: {discount}%</li>
           <li className="font-bold">Change Given: £{changeGiven.toFixed(2)}</li>
+          <li className="font-bold">Amount Entered: £{amountEntered.toFixed(2)}</li>
+          
         </ul>
+
         <div>
           <input
             type="text"
