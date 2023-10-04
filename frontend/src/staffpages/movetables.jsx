@@ -21,7 +21,7 @@ const moveToNewTable = async (session, newTable) => {
 export default function MoveTables({ guests, tableNumber, timeslotFrom, timeslotTo }) {
     // get all sessions from the database
     const [sessions, setSessions] = useState([]);
-    const [newTable, setNewTable] = useState(null);
+    const [newTable, setNewTable] = useState("");
     const [showForm, setShowForm] = useState(false);
     const [availableTables, setAvailableTables] = useState([]);
 
