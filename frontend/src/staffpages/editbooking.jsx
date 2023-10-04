@@ -11,6 +11,7 @@ export default function EditBooking() {
     const [numAdults, setNumAdults] = useState(0);
     const [pass, setPass] = useState(false);
     const [total, setTotal] = useState(0);
+    const [tillInfo, setTillInfo] = useState(null);
 
     useEffect(() => {
         const fetchSessions = async () => {
@@ -87,12 +88,17 @@ export default function EditBooking() {
         } catch (error) {
             console.error('Error updating session:', error);
         }
+        setTillInfo(updatedSession)
     };
+
     
     
 if (pass === true) {
+    console.log(total);
+    console.log(selectedSession.Table);
+    console.log(tillInfo)
     return (
-        <SessionTill order= {"2 Hour Session"} total = {total} table= {selectedSession.Table} ChildName ={selectedSession.Name} />)
+        <SessionTill order= {"2 Hour Session"} total = {total} table= {tillInfo.Table} ChildName ={tillInfo.Name} />)
 }
 
     

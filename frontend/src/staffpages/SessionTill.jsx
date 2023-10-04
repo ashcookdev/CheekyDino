@@ -46,15 +46,7 @@ const Receipt = React.forwardRef(
 );
 
 
-/**
- * TillPayment component for handling payment methods and discounts.
- * @param {Object} props - Component props.
- * @param {Object} props.order - Order object.
- * @param {number} props.total - Total amount to be paid.
- * @param {string} props.table - Table number.
- * @param {string} props.ChildName - Child name.
- * @returns {JSX.Element} TillPayment component.
- */
+
 const TillPayment = ({ order, total: initialTotal, table, ChildName }) => {
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [amountEntered, setAmountEntered] = useState(0);

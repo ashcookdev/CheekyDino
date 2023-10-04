@@ -31,7 +31,7 @@ navigate('/booklater')
 
 
       if (drop === true) {
-        navigate('/editbooking')
+        window.location.href = "/editbooking";
       }
       
 
