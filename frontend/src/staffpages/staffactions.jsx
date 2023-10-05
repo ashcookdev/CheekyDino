@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore, Auth } from 'aws-amplify';
-import { ClockIn, Staff } from './models';
+import { ClockIn, Staff, Messages } from './models';
 import { ClockIcon, MoonIcon, SunIcon } from '@heroicons/react/20/solid';
 import ClockInData from './clockindata';
 
@@ -52,13 +52,12 @@ export default function StaffActions() {
     if (clockInData.length > 0 && clockInData[0].ClockedIn && !clockInData[0].ClockedOut) {
       // If the staff member is already clocked in but not clocked out, update the ClockOut time and ClockedOut status
       // work out how long the shift was
-
+  
       const clockIn = new Date(`${dateOnly}T${clockInData[0].ClockIn}`);
       const clockOut = new Date(`${dateOnly}T${timeOnly}`);
-
+  
       const shiftLength = (clockOut - clockIn) / 60000;
-
-
+  
       await DataStore.save(
         ClockIn.copyOf(clockInData[0], updated => {
           updated.ClockOut = timeOnly;
@@ -66,6 +65,15 @@ export default function StaffActions() {
           updated.StaffHours = parseFloat(shiftLength);
         })
       );
+  
+      // Add a new message to indicate that the staff member has clocked out
+      await DataStore.save(
+        new Messages({
+          content: `${staff.Name} clocked out`,
+          // Add any other necessary fields here...
+        })
+      );
+  
       console.log(`${staff.Name} clocked out`);
       window.location.reload();
     } else {
@@ -78,10 +86,19 @@ export default function StaffActions() {
           Date: dateOnly,
         })
       );
+  
+      // Add a new message to indicate that the staff member has clocked in
+      await DataStore.save(
+        new Messages({
+          content: `${staff.Name} clocked in`,
+          // Add any other necessary fields here...
+        })
+      );
+  
       console.log(`${staff.Name} clocked in`);
-      
     }
   };
+  
   
   const handleBreakStartEnd = async (staff) => {
     const userEmail = staff.Email;
@@ -102,7 +119,7 @@ export default function StaffActions() {
       const breakStart = new Date(`${dateOnly}T${clockInData[0].BreakStart}`);
       const breakEnd = new Date(`${dateOnly}T${timeOnly}`);
       const breakLength = (breakEnd - breakStart) / 60000;
-
+  
       await DataStore.save(
         ClockIn.copyOf(clockInData[0], updated => {
           updated.BreakEnd = timeOnly;
@@ -110,6 +127,15 @@ export default function StaffActions() {
           updated.StaffBreak = parseFloat(breakLength);
         })
       );
+  
+      // Add a new message to indicate that the staff member has ended their break
+      await DataStore.save(
+        new Messages({
+          content: `${staff.Name} ended break`,
+          // Add any other necessary fields here...
+        })
+      );
+  
       console.log(`${staff.Name} ended break`);
       window.location.reload();
     } else {
@@ -120,10 +146,20 @@ export default function StaffActions() {
           updated.Break = true;
         })
       );
+  
+      // Add a new message to indicate that the staff member has started their break
+      await DataStore.save(
+        new Messages({
+          content: `${staff.Name} started break`,
+          // Add any other necessary fields here...
+        })
+      );
+  
       console.log(`${staff.Name} started break`);
       window.location.reload();
     }
   };
+  
   
   if (clock === true) {
     return (

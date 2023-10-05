@@ -233,7 +233,7 @@ window.location.reload();
   
 
   if (home === true) {
-    return <Home />
+    window.location.href = '/dashboard';
   }
     
   const fetchSessions = async () => {

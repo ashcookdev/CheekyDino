@@ -52,11 +52,12 @@ export default function Kitchen() {
 
 
   const navigation = [
+    { name: 'Home', href: '/dashboard', icon: HomeIcon, current: false },
     { name: 'Till', href: '/till', icon: CurrencyPoundIcon, current: true },
     {name: 'Make a Booking', href: '/reservations', icon: FolderIcon, current: false },
-  { name: 'Chat', href: '#section5', icon: ChatBubbleBottomCenterIcon, current: false },
-  { name: 'Kitchen', href: '#section3', icon: CakeIcon , current: false },
-  { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
+  { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
+  { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
+  { name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
   { name: 'Edit Landing Page', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Customer Screen', href: '/customerscreen', icon: TvIcon, current: false },
   {name: 'Clock In', href: '/clockin', icon: ClockIcon, current: false },

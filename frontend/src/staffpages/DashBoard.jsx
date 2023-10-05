@@ -16,6 +16,7 @@ import DashChat from './dashchat'
 import Finances from './financials'
 import Tables from './tables'
 import TableLayout from './tablelayout'
+import { Messages } from './models'
 
 import {
   Bars3Icon,
@@ -35,19 +36,14 @@ import {
 } from '@heroicons/react/24/outline'
 import TodaysBookings from './todaysbookings'
 import Announcements from './Announcement'
-import { ArrowLeftIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CogIcon, CurrencyPoundIcon, LightBulbIcon, PencilIcon, TableCellsIcon } from '@heroicons/react/20/solid'
-import { Pie } from 'recharts'
-import { CheckCircleIcon, TvIcon } from '@heroicons/react/24/solid'
-import MasterClose from './masterclose'
+import { ArrowLeftIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CogIcon, CurrencyPoundIcon, LightBulbIcon, PencilIcon, TableCellsIcon, TvIcon
+
+} from '@heroicons/react/20/solid'
+import Modal from './modal'
 
 
-const secondaryNavigation = [
-    { name: 'Tables', href: '/Tables', current: true },
-    { name: 'Orders', href: '/orders', current: false },
-    { name: 'Sessions', href: '/sessionhistory', current: false },
-    { name: 'Parties', href: '/partyhistory', current: false },
-    { name: 'Finance', href: '/finance', current: false },
-]
+
+
 
 
 
@@ -59,19 +55,25 @@ export default function Dashboard() {
 
     //get all orders for today from database  
 
-    const [orders, setOrders] = useState([])
-    const [order, setOrder] = useState([])
-    const [currentTime, setCurrentTime] = useState(0);
-    const [occupiedTables, setOccupiedTables] = useState([])
-    const [currentGuests, setCurrentGuests] = useState(0)
-    const [futureBookings, setFutureBookings] = useState([])
-    const [currentorder, setCurrent] = useState([])
-    const [totalAmount, setTotalAmount] = useState(0)
+   
 
-    console.log(currentorder)
+const [currentTime, setCurrentTime] = useState(new Date());
+const [messages, setMessages] = useState([])
+const [show, setShow] = useState(false)
 
-    console.log(occupiedTables)
-    console.log(currentGuests)
+
+useEffect(() => {
+  const subscription = DataStore.observe(Messages).subscribe(msg => {
+    console.log(msg.model, msg.opType, msg.element);
+    setMessages(prevMessages => [...prevMessages, msg.element]);
+    console.log(messages)
+    setShow(true);
+    setTimeout(() => setShow(false), 30000); // hide after 30 seconds
+  });
+
+  return () => subscription.unsubscribe();
+}, []);
+
 
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -85,8 +87,8 @@ export default function Dashboard() {
   const navigation = [
     { name: 'Till', href: '/till', icon: CurrencyPoundIcon, current: true },
     {name: 'Make a Booking', href: '/reservations', icon: FolderIcon, current: false },
-  { name: 'Chat', href: '#section5', icon: ChatBubbleBottomCenterIcon, current: false },
-  { name: 'Kitchen', href: '#section3', icon: CakeIcon , current: false },
+  { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
+  { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
   { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
   { name: 'Edit Landing Page', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Customer Screen', href: '/customerscreen', icon: TvIcon, current: false },
@@ -113,123 +115,7 @@ export default function Dashboard() {
         return () => clearInterval(interval);
     }, []);
 
-    useEffect(() => {
-        async function fetchSessions() {
-            const date = new Date();
-            const dateString = date.toISOString().split('T')[0];
-            const currentTime = format(currentDate, 'h:mm:ss a');
-
-            // Fetch all sessions for the current date
-            const sessions = await DataStore.query(Sessions, c => c.Date.eq(dateString));
-
-            // Filter sessions to find those that are currently occupied
-            const occupiedTables = sessions.filter(session => session.TimeslotFrom < currentTime && session.TimeslotTo > currentTime && session.Arrived === true);
-
-            // Calculate the total number of current guests
-            const currentGuests = occupiedTables.reduce((total, session) => total + session.Adults + session.Children, 0);
-
-            // Filter sessions to find those that are booked for the future
-            const futureBookings = sessions.filter(session => session.TimeslotFrom > currentTime);
-
-            // Update state with the calculated values
-            setOccupiedTables(occupiedTables);
-            setCurrentGuests(currentGuests);
-            setFutureBookings(futureBookings);
-        }
-
-        fetchSessions();
-
-        const subscription = DataStore.observe(Sessions).subscribe(() => fetchSessions());
-        return () => subscription.unsubscribe();
-    }, []);
-
-    useEffect(() => {
-        async function fetchOrders() {
-            const orders = await DataStore.query(CafeOrder)
-            setOrders(orders)
-        }
-
-        fetchOrders()
-
-        const subscription = DataStore.observe(CafeOrder).subscribe(() => fetchOrders())
-        return () => subscription.unsubscribe()
-    }, [])
-
-    useEffect(() => {
-        async function fetchTodaysOrders() {
-            const today = new Date()
-            today.setHours(0, 0, 0, 0)
-
-            const tomorrow = new Date(today)
-            tomorrow.setDate(tomorrow.getDate() + 1)
-
-            const allOrders = await DataStore.query(CafeOrder)
-            const orders = allOrders.filter(
-                (order) =>
-                    new Date(order.CreatedDate) >= today && new Date(order.CreatedDate) < tomorrow
-            )
-            setOrder(orders)
-
-            const order = allOrders.filter(currentorder => currentorder.Completed === false && currentorder.Delieved === false )
-            setCurrent(order) 
-        }
-
-        fetchTodaysOrders()
-        getAmount(order)
-
-
-    }, [])
-
-    const getAmount = (order, currentGuests) => {
-      const date = new Date();
-      // use date to get todays total 
-      const dateString = date.toISOString().split('T')[0];
-      const currentTime = format(currentDate, 'h:mm:ss a');
-      const currentorder = order.filter(order => order.CreatedDate === dateString && order.Completed === false && order.Delivered === false)
-
-      const totalAmount = currentorder.reduce((total, order) => total + order.Total, 0)
-setTotalAmount(totalAmount)    }
-
-
-
-
-    //map through orders and get total amount
-
-    console.log(totalAmount)
-
-    
-
-
-    const [steps, setSteps] = useState([
-        { name: 'Order', status: 'complete' },
-        { name: 'Prepare', status: 'complete' },
-        { name: 'Deliver', status: 'current' },
-        { name: 'Review', status: 'upcoming' },
-    ])
-
-    useEffect(() => {
-        const subscription = DataStore.observe(CafeOrder).subscribe((msg) => {
-            // Update the steps based on the new data
-            if (msg.model === CafeOrder && msg.opType === 'UPDATE' && msg.element.Completed === false) {
-                setSteps([
-                    { name: 'Order', status: 'complete' },
-                    { name: 'Prepare', status: 'current' },
-                    { name: 'Deliver', status: 'upcoming' },
-                    { name: 'Review', status: 'upcoming' },
-                ])
-            } else {
-                setSteps([
-                    { name: 'Order', status: 'complete' },
-                    { name: 'Prepare', status: 'complete' },
-                    { name: 'Deliver', status: 'current' },
-                    { name: 'Review', status: 'upcoming' },
-                ])
-            }
-        })
-
-        return () => subscription.unsubscribe()
-    }, [])
-
+   
 const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
     //current tables occupied & future bookings today and how many guests in branch
 
@@ -517,6 +403,12 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
 
         <main className="py-10 lg:pl-72">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p className="text-2xl font-semibold text-gray-900">{formattedTime}</p>
+            <div className='fixed top-0 w-full md:w-3/4 lg:w-1/2 xl:w-1/3 2xl:w-1/4 mx-auto'>
+  <Modal show={show} setShow={setShow} message={messages[messages.length - 1]} />
+</div>
+
+
             
           
                    
@@ -551,10 +443,28 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                             </h2>
                             
                         </div>
+                        
                         <div className="mt-6 overflow-hidden border-t border-gray-100" id='section6'>
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                                 <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
                                     <Online/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div className="space-y-16 py-16 xl:space-y-20">
+                    <div>
+                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                            <h2 className="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
+                                 Chat
+                            </h2>
+                            
+                        </div>
+                        <div className="mt-6 overflow-hidden border-t border-gray-100" id='section5'>
+                            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                                <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+                                    <DashChat/>
                                 </div>
                             </div>
                         </div>
@@ -585,23 +495,7 @@ Table Layout                            </h2>
 <Tables/>                        </div>
                     </div>
                 </div>
-                    <div className="space-y-16 py-16 xl:space-y-20">
-                    <div>
-                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                            <h2 className="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
-                                 Chat
-                            </h2>
-                            
-                        </div>
-                        <div className="mt-6 overflow-hidden border-t border-gray-100" id='section5'>
-                            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                                <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
-                                    <DashChat/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
+                    
 
                 <div className="space-y-16 py-16 xl:space-y-20">
                     <div>

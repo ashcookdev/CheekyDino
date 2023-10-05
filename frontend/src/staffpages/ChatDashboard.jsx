@@ -20,14 +20,16 @@ import {
   PencilIcon,
   ArrowLeftIcon, 
   ClockIcon,
-  CogIcon
+  CogIcon,
+  TvIcon, LightBulbIcon, CakeIcon, KeyIcon 
+
+
 
 
 } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import Online from './online';
-import { TvIcon, LightBulbIcon, CakeIcon, KeyIcon } from '@heroicons/react/solid'
 
 
 const templates = ['Party Host to Front Desk', 'Party Finished Clean Upstairs', 'Table (number) Food is Ready'];
@@ -137,11 +139,12 @@ function App() {
 
 
   const navigation = [
+    { name: 'Home', href: '/dashboard', icon: HomeIcon, current: false },
     { name: 'Till', href: '/till', icon: CurrencyPoundIcon, current: true },
     {name: 'Make a Booking', href: '/reservations', icon: FolderIcon, current: false },
-  { name: 'Chat', href: '#section5', icon: ChatBubbleBottomCenterIcon, current: false },
-  { name: 'Kitchen', href: '#section3', icon: CakeIcon , current: false },
-  { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
+  { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
+  { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
+  { name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
   { name: 'Edit Landing Page', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Customer Screen', href: '/customerscreen', icon: TvIcon, current: false },
   {name: 'Clock In', href: '/clockin', icon: ClockIcon, current: false },

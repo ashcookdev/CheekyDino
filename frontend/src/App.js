@@ -96,19 +96,8 @@ function App() {
     });
   }, []);
 
-  const allowedLocations = ['/calender', '/kitchen', '/Till', '/dashboard', '/Barcode', '/Tables', '/TillBooking', '/orders', '/sessionhistory', '/partyhistory', '/finance', '/Graph', '/Tasks', '/Customerscreen','/chat']; // list of locations where the modal should appear
 
-  React.useEffect(() => {
-    const subscription = DataStore.observe(Messages).subscribe((msg) => {
-      if (allowedGroups.includes(userGroup) && allowedLocations.includes(location.pathname)) {
-        const audio = new Audio('/message.mp3');
-        audio.play();
-        setShowModal(true);
-        setModalContent(msg.element)
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [userGroup, location]);
+ 
 
 
   React.useEffect(() => {
@@ -117,11 +106,7 @@ function App() {
       .catch(() => setIsSignedIn(false));
   }, []);
 
-  React.useEffect(() => {
-    if (location.pathname !== '/chat') {
-      setShowModal(true);
-    }
-  }, [messages, location]);
+
 
   const allowedGroups = [
     'Developer',
@@ -135,7 +120,6 @@ function App() {
     'Cafe',
 
   ];
-  const mostRecentMessage = messages[messages.length - 1];
 
   return (
     <>
@@ -181,7 +165,6 @@ function App() {
           </>
         )}
       </Routes>
-      {showModal && <Modal content={modalContent} />}
 
       <Routes>
         
