@@ -18,9 +18,14 @@ export default function DashChat({ userEmail }) {
     setMessages(messages);
   }
 
-  const sortedMessages = [...messages].sort((a, b) =>
-    b.createdAt.localeCompare(a.createdAt)
-  );
+  const sortedMessages = messages.sort((a, b) => {
+    const aDate = new Date(a.createdAt);
+    const bDate = new Date(b.createdAt);
+    return aDate - bDate;
+  }
+  
+    );
+    
 
   return (
     <div className="border p-4 mb-4 h-64 overflow-y-scroll shadow-md rounded-lg">
