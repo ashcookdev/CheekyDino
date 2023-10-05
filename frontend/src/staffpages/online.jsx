@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataStore } from "@aws-amplify/datastore";
 import { ClockIn } from "./models";
-import { isSameDay } from "date-fns";
 
 
 export default function Online() {
@@ -12,17 +11,22 @@ export default function Online() {
 
   useEffect(() => {
     const fetchClockedInStaff = async () => {
+
       const clockInRecords = await DataStore.query(ClockIn);
-      console.log(clockInRecords)
+    
+      // Get today's date in 'yyyy-mm-dd' format
+      const today = new Date().toISOString().split('T')[0];
+    
       const clockedInToday = clockInRecords.filter(
         (c) =>
-          isSameDay(new Date(c.Date), new Date()) &&
+          c.Date === today &&
           c.ClockedIn === true &&
-          c.ClockedOut === null
+          c.ClockedOut === false
       );
-      console.log(clockedInToday);
+    
       setClockedInStaff(clockedInToday);
     };
+    
 
     fetchClockedInStaff();
 
@@ -82,11 +86,12 @@ export default function Online() {
                 Department: {staff.StaffRole}
               </p>
               <p className="truncate text-sm text-gray-500">
-                Arrived: {staff.ClockIn}
+                Arrived: {staff.ClockIn.split(':').slice(0, 2).join(':')}
+
               </p>
               {staff.Break && (
                 <p className="text-sm text-gray-500">
-                  Elapsed Break Time: {calculateElapsedTime(staff.BreakStart)} minutes
+                  Elapsed Break Time: {calculateElapsedTime(staff.BreakStart.split(':').slice(0,2).join(':'))}
                 </p>
               )}
             </a>

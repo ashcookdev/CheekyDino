@@ -67,8 +67,9 @@ function App() {
 
   async function fetchMessages() {
     const messagesData = await DataStore.query(Messages);
-    const sortedMessages = messagesData.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-    setMessages(sortedMessages);
+    
+
+    setMessages(messagesData);
 
   }
   
@@ -158,7 +159,6 @@ function App() {
     
 
   const groups = ['Kitchen', 'PartyHost','Staff'];
-  const sortedMessages = [...messages].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
 
 
@@ -413,7 +413,7 @@ function App() {
       shouldFlash ? "animate-pulse" : ""
     }`}
   >
-    {sortedMessages.map((message) => (
+    {messages.map((message) => (
       <div
         key={message.id}
         className={`p-2 rounded-lg mb-2 ${

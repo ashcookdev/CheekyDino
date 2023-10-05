@@ -7,6 +7,7 @@ import ClockInData from './clockindata';
 export default function StaffActions() {
   const [staffList, setStaffList] = useState([]);
   const [clock, setClock] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchStaff = async () => {
@@ -37,6 +38,9 @@ export default function StaffActions() {
 
   // Rest of your logic here...
   const handleClockInOut = async (staff) => {
+    setIsLoading(true); // Start loading
+    setTimeout(() => setIsLoading(false), 5000); // End loading after 20 seconds
+
     const userEmail = staff.Email;
     const dateTime = new Date();
     const timezoneOffset = dateTime.getTimezoneOffset() * 60000;
@@ -62,6 +66,7 @@ export default function StaffActions() {
         ClockIn.copyOf(clockInData[0], updated => {
           updated.ClockOut = timeOnly;
           updated.ClockedOut = true;
+          updated.ClockedIn = false;
           updated.StaffHours = parseFloat(shiftLength);
         })
       );
@@ -82,6 +87,7 @@ export default function StaffActions() {
         new ClockIn({
           ClockIn: timeOnly,
           ClockedIn: true,
+          ClockOut: false,
           StaffId: userEmail,
           Date: dateOnly,
         })
@@ -101,6 +107,8 @@ export default function StaffActions() {
   
   
   const handleBreakStartEnd = async (staff) => {
+    setIsLoading(true); // Start loading
+    setTimeout(() => setIsLoading(false), 5000); // End loading after 20 seconds
     const userEmail = staff.Email;
     const dateTime = new Date();
     const timezoneOffset = dateTime.getTimezoneOffset() * 60000;
@@ -124,6 +132,7 @@ export default function StaffActions() {
         ClockIn.copyOf(clockInData[0], updated => {
           updated.BreakEnd = timeOnly;
           updated.Break = false;
+          
           updated.StaffBreak = parseFloat(breakLength);
         })
       );
@@ -184,6 +193,18 @@ Data  </button>
 </div>
 </div>
 <div className="mt-8 flow-root">
+{isLoading ? (
+         <div className="flex items-center space-x-2">
+        <img
+          src="/versa.gif"
+          alt=""
+          className="w-12 h-12 object-cover rounded-full animate-spin" // Adjust the size with w-12 and h-12, add animate-spin for spinning animation
+        />
+        <p>Loading</p>
+      </div>
+    
+      ) : (
+
 <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
   <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
     <table className="min-w-full divide-y divide-gray-300">
@@ -203,6 +224,7 @@ Data  </button>
         </tr>
       </thead>
       <tbody className="divide-y divide-gray-200">
+        
       {staffList.map((staff) => (
           <tr key={staff.Name}>
             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
@@ -230,6 +252,7 @@ Data  </button>
     </table>
   </div>
 </div>
+)}
 </div>
 </div>
   );
