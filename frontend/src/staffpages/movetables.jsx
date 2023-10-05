@@ -1,99 +1,136 @@
-import { DataStore } from "aws-amplify";
-import React, { useEffect, useState } from "react";
-import { Sessions } from "./models";
+import React, { useEffect, useState } from 'react';
+import { DataStore } from 'aws-amplify';
+import { Sessions } from './models';
+import { format } from 'date-fns';
+import { motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 import tableData from './TableData.json';
-
-// Function to check if two timeslots overlap
-const isOverlap = (slot1, slot2) => {
-    return slot1.TimeslotFrom < slot2.TimeslotTo && slot1.TimeslotTo > slot2.TimeslotFrom;
-}
-
-// Function to move a session to a new table
-// Function to move a session to a new table
-const moveToNewTable = async (session, newTable) => {
-    const updatedSession = Sessions.copyOf(session, updated => {
-        updated.Table = Number(newTable);
-    });
-    await DataStore.save(updatedSession);
-}
+import { useNavigate } from 'react-router-dom';
 
 
-export default function MoveTables({ guests, tableNumber, timeslotFrom, timeslotTo }) {
-    // get all sessions from the database
-    const [sessions, setSessions] = useState([]);
-    const [newTable, setNewTable] = useState("");
-    const [showForm, setShowForm] = useState(false);
-    const [availableTables, setAvailableTables] = useState([]);
+function MoveTables() {
+  const [sessions, setSessions] = useState([]);
+  const [nav, setNav] = useState(false);
+  const [hoveredTable, setHoveredTable] = useState(null);
 
-    useEffect(() => {
-        const getSession = async () => {
-            const models = await DataStore.query(Sessions);
-            setSessions(models);
-        }
 
-        getSession();
-    }, []);
 
-    useEffect(() => {
-        const fetchAvailableTables = async () => {
-            const tables = await getAvailableTables();
-            setAvailableTables(tables);
-        }
+  const handleTableHover = (table) => {
+    setHoveredTable(table);
+  };
 
-        fetchAvailableTables();
-    }, [sessions, guests, timeslotFrom, timeslotTo]);
+  const handleTableHoverOut = () => {
+    setHoveredTable(null);
+  };
 
-    const getAvailableTables = async () => {
-        const availableTables = tableData.filter(table => {
-            // Check if the table has enough capacity
-            if (table.capacity < guests) {
-                console.log(`Table ${table.table} is too small`);
-                return false;
-            }
-            // Get all sessions for this table
-            const tableSessions = sessions.filter(session => session.Table === table.table);
-            // Check if any session overlaps with the current timeslot
-            const overlap = tableSessions.find(session => isOverlap(session, { TimeslotFrom: timeslotFrom, TimeslotTo: timeslotTo }));
-            if (overlap) {
-                console.log(`Table ${table.table} is occupied`);
-                return false;
-            }
-            // If there's no overlap, the table is available
-            return true;
-        });
-        return availableTables.map(table => table.table);
-    }
     
 
-    // Function to handle the form submission
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        if (tableNumber && newTable) {
-            const session = sessions.find(session => session.Table === tableNumber);
-            await moveToNewTable(session, newTable);
+  const state = useLocation();
+const locationState = state.state.moveTable;
+
+  console.log(locationState);
+
+  useEffect(() => {
+    const fetchSessions = async () => {
+      const sessionsData = await DataStore.query(Sessions);
+      const date = new Date();
+      const awsDate = format(date, 'yyyy-MM-dd');
+      const futureSessions = sessionsData.filter(session => session.Date > awsDate && session.Arrived === true && session.LeftCenter === false);
+      const currentSessions = sessionsData.filter(session => session.Date === awsDate && session.Arrived === true && session.LeftCenter === false);
+      setSessions([...futureSessions, ...currentSessions]);
+    };
+
+    fetchSessions();
+  }, []);
+
+
+  const navigate = useNavigate();
+
+  const handleTableClick = async (table) => {
+    // Fetch the session with the given id from locationState
+    const sessionToUpdate = await DataStore.query(Sessions, locationState.id);
+
+    // Check if the session exists
+    if (sessionToUpdate) {
+      // Update the session's table number in the DataStore
+      await DataStore.save(
+        Sessions.copyOf(sessionToUpdate, updated => {
+          updated.Table = table;
+        })
+      );
+
+      // Navigate back to /Tables
+      navigate('/Tables');
+    } else {
+      console.error('Session not found');
+    }
+  };
+  
+
+  return (
+      <div className='flex'>
+        <div className='w-1/2 flex flex-col items-center justify-center bg-gray-100'>
+          <h3 className='text-2xl font-bold mb-5'>Details</h3>
+          <p> Name: {locationState.name}</p>
+          <p> Table: {locationState.number}</p>
+          <p> TimeSlot: {locationState.TimeslotFrom} to {locationState.TimeSlotTo}</p>
+          <p>Arrived: {locationState.timeArrived}</p>
+        </div>
+    
+        <div className='w-1/2'>
+    <div className="grid grid-cols-8 grid-rows-5 gap-4 p-10 border border-color-black" style={{ boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.75)' }}>
+      {tableData.map((table) => {
+        const session = sessions.find(session => session.Table === table.table);
+        const isAvailable = !session;
+        const isEndingSoon = session && (new Date(session.TimeslotTo) - new Date()) <= 600000; // 10 minutes in milliseconds
+        const isFutureSession = session && session.Date > format(new Date(), 'yyyy-MM-dd');
+
+        let tableRow = table.location.y + 1;
+        let tableCols = `${table.location.x + 1} / span 1`;
+
+        if (tableRow === 2 || tableRow === 4) {
+          const tablesInRow = tableData.filter(t => t.location.y === tableRow - 1);
+          tablesInRow.reverse();
+          tableCols = `${tablesInRow[table.location.x].location.x + 1} / span 1`;
         }
 
-        window.location.reload();
-    }
+        const sessionName = session ? session.Name : '';
+        const sessionTimeslot = session ? session.TimeslotFrom : '';
+        const sessionTimeslotTo = session ? session.TimeslotTo : '';
+        const sessionEmail = session ? session.Email : '';
 
-    return (
-        <div>
-            <button       className="inline-flex items-center gap-x-2 rounded-md bg-purple-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
- onClick={() => setShowForm(true)}>Move to new table</button>
-            {showForm && (
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        Select new table:
-                        <select value={newTable} onChange={e => setNewTable(e.target.value)}>
-                            {availableTables.map(table => (
-                                <option key={table} value={table}>{table}</option>
-                            ))}
-                        </select>
-                    </label>
-                    <button       className="inline-flex items-center gap-x-2 rounded-md bg-green-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
- type="submit">Confirm</button>
-                </form>
-            )}
-        </div>
-    );
+        return (
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            key={table.table}
+            className={`p-2 ${table.shape === 'square' ? 'w-12 h-12 mt-5 mb-5' : 'w-10 h-10 rounded-full mt-5 mb-5'} 
+            ${isEndingSoon ? 'bg-red-500 animate-pulse' : isAvailable ? (isFutureSession ? 'bg-blue-500' : 'bg-green-500') : 'bg-red-500'}`}
+            style={{ gridColumn: tableCols, gridRow: `${tableRow} / span 1`, border: '2px solid gray-300', boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.75)' }}
+            onClick={() => handleTableClick(table.table)}
+            onMouseEnter={() => handleTableHover(table.table)}
+            onMouseLeave={() => handleTableHoverOut()}
+          >
+            <div className="table-info">
+              <span className="text-white">{table.table}</span>
+            </div>
+            <div className="timeslot-info">
+              {hoveredTable === table.table && (
+                <div className="flex flex-col items-end">
+                  <span className="text-xs text-gray-500 block mt-5 mb-2">{sessionName}</span>
+                  <span className="text-xs text-gray-500 block mt-1 mb-2">{sessionTimeslot} - {sessionTimeslotTo}</span>
+                  <span className="text-xs text-gray-500 block mt-1 mb-2">{sessionEmail}</span>
+                </div>
+              )}
+            </div>
+          </motion.button>
+        );
+      })}
+    </div>
+  </div>
+  </div>
+
+  );
 }
+
+export default MoveTables;

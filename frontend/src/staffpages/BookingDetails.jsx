@@ -5,17 +5,27 @@ import { Analytics } from 'aws-amplify';
 import Till from './Till';
 import { format } from 'date-fns';
 import SessionTill from './SessionTill'
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Arrival({ session}) {
 
   const [arrival, setArrival] = useState(false);
+  const [sessions, setSession] = useState(null);
+
+  const navigate = useNavigate();
 
   if (arrival === true) {
-    return (
-      <SessionTill order={'2 Hour Session'} total={session.TotalSpent} table={session.Table} ChildName={session.Name} />
-
-    )
+    navigate('/prebooktill', { 
+      state: { 
+        order: '2 Hour Session', 
+        total: sessions.TotalSpent, 
+        table: sessions.Table, 
+        ChildName: sessions.Name 
+      } 
+    });
   }
+  
 
 
 
@@ -42,7 +52,8 @@ const guests = session.Adults + session.Children;
           
           // additional attributes here
         
-      
+          setSession(session)
+
       setArrival(true);
       
     } catch (error) {
@@ -91,8 +102,8 @@ const guests = session.Adults + session.Children;
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{session.Table}</dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-900">Paid</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{session.Paid}</dd>
+            <dt className="text-sm font-medium text-gray-900">Total To Pay Now</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">£{session.TotalSpent}</dd>
           </div>
         </dl>
       </div>

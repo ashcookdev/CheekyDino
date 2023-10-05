@@ -69,6 +69,8 @@ import TableLayout from './staffpages/tablelayout';
 import MasterClose from './staffpages/masterclose';
 import TillHistory from './staffpages/tillhistory';
 import Training from './training/traininghome';
+import PreBookTill from './staffpages/PrebookTill';
+import MoveTables from './staffpages/movetables';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -218,6 +220,8 @@ function App() {
             <Route path="/masterclose" element={<MasterClose />} />
             <Route path="/tillhistory" element={<TillHistory />} />
             <Route path ="/training" element={<Training />} />
+            <Route path="/prebooktill" element={<PreBookTill />} />
+            <Route path="/movetable" element={<MoveTables />} />
           </>
         )}
         

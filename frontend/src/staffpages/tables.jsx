@@ -12,9 +12,19 @@ function OccupiedTables() {
   const [sessions, setSessions] = useState([]);
   const [orders, setOrders] = useState([]);
   const [orderStatuses, setOrderStatuses] = useState({});
+  const [moveTable, setMoveTable] = useState([]);
+  const [moveState, setMoveState] = useState(false);
 
 
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (moveState) {
+      const state = { moveTable };
+      navigate('/movetable', { state });
+    }
+  }, [moveState, moveTable, navigate]);
+  console.log('moveTable:', moveTable);
 
 
   useEffect(() => {
@@ -130,9 +140,7 @@ function OccupiedTables() {
   
   
   
-  
-  
-  
+
 
 
 
@@ -277,8 +285,14 @@ console.log(tableInfo.id)
     >
       Left Center
     </button>
-    <MoveTables id={table.id} tableNumber={table.number} guests={table.guests} timeslotFrom={table.TimeslotFrom} timeslotTo={table.TimeslotTo} />
-    
+<button
+      type="button"
+      onClick={() => setMoveTable(table)|| setMoveState(true)}
+      className='inline-flex items-center gap-x-2 rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+    >
+      Move Table
+    </button>
+
 
    
 
