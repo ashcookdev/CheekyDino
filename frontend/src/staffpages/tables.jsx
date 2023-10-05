@@ -109,10 +109,6 @@ function OccupiedTables() {
     };
   });
 
-  const timeString = format(new Date(), 'HH:mm:ss.SSS');
-  const ChildName = table.ChildName;
-  const table = table.number;
-
 
   async function handleLeftCenter(event, table) {
     event.preventDefault();
@@ -142,20 +138,7 @@ function OccupiedTables() {
     // Save a new message in the Messages model
     await DataStore.save(
       new Messages({
-        content: `${table.number} Left Center please clean table`,
-      createdAt: timeString,
-      email: 'Front Desk',
-      group: ['Developer',
-      'Staff',
-      'PartyHosts',
-      'Admin',
-      'SuperUser',
-      'TeamLeader',
-      'Kitchen',
-      'FrontDesk',
-      'Cafe',],
-      orderID: null,
-      sessionID: table.id,
+        content: `Table ${table.number} has left the center, please clean the table.`,
         
       })
     );
