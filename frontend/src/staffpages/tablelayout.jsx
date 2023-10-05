@@ -26,7 +26,10 @@ function RestaurantLayout() {
       const sessionsData = await DataStore.query(Sessions);
       const date = new Date();
       const awsDate = format(date, 'yyyy-MM-dd');
-      const todaysSessions = sessionsData.filter(session => session.Date === awsDate && session.Arrived === true && session.LeftCenter === false);
+      console.log(awsDate);
+
+      const todaysSessions = sessionsData.filter(session => session.Arrived === true && session.LeftCenter === false);
+      console.log(todaysSessions);
       setSessions(todaysSessions);
     }
 

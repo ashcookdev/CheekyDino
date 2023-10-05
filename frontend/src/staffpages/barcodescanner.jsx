@@ -10,20 +10,18 @@ export default function Qrscanner() {
   const [searchValue, setSearchValue] = useState('');
 
   let timeoutId = null;
-
   const getDetails = async () => {
     setIsLoading(true);
     const today = new Date().toISOString().slice(0, 10);
-
+  
     try {
       const sessions = await DataStore.query(Sessions);
       let result;
       if (searchType === 'email') {
-        result = sessions.filter(s => s.Email === searchValue && s.Date === today);
+        result = sessions.filter(s => s.Email.toLowerCase() === searchValue.toLowerCase() && s.Date === today);
       } else if (searchType === 'name') {
-        result = sessions.filter(s => s.Name === searchValue && s.Date === today);
-      } else if (searchType === 'id') {
-        result = sessions.filter(s => s.id === searchValue && s.Date === today);
+        result = sessions.filter(s => s.Name.toLowerCase() === searchValue.toLowerCase() && s.Date === today);
+     
       } else {
         console.log("Invalid search type:", searchType);
         alert("Invalid search type:", searchType);
@@ -39,6 +37,7 @@ export default function Qrscanner() {
     }
     setIsLoading(false);
   }
+  
 
   const handleScan = (e) => {
     // Clear any previous timeouts

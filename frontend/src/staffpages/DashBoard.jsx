@@ -82,7 +82,7 @@ export default function Dashboard() {
   ]
 
 
-const navigation = [
+  const navigation = [
     { name: 'Till', href: '/till', icon: CurrencyPoundIcon, current: true },
     {name: 'Make a Booking', href: '/reservations', icon: FolderIcon, current: false },
   { name: 'Chat', href: '#section5', icon: ChatBubbleBottomCenterIcon, current: false },
@@ -341,6 +341,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                                   className={classNames(
                                     item.current
                                       ? 'bg-gray-50 text-indigo-600'
+                                    
                                       : 'text-indigo-700 hover:text-indigo-600 hover:bg-gray-50',
                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                   )}

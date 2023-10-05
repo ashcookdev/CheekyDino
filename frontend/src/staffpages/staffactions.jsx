@@ -79,7 +79,7 @@ export default function StaffActions() {
         })
       );
       console.log(`${staff.Name} clocked in`);
-      window.location.reload();
+      
     }
   };
   

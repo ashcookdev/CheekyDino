@@ -4,7 +4,7 @@ import QRCode from "react-qr-code";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { DataStore } from "@aws-amplify/datastore";
-import { Sessions } from "./models";
+import { Sessions, Messages } from "./models";
 import { useLocation } from "react-router-dom";
 
 const Receipt = React.forwardRef(
@@ -82,6 +82,8 @@ const Prebooktill = () => {
 
   const handleConfirmClick = async () => {
     console.log("Order confirmed");
+    const now = new Date();
+const timeString = now.toISOString().split('T')[1];
 
     // Query the database to update the TotalSpent field
     const session = await DataStore.query(Sessions);
@@ -103,6 +105,29 @@ const Prebooktill = () => {
       })
     );
     console.log(updateSession);
+
+    const message = new Messages({
+      content: `A New Customer called ${ChildName} has Arrived sitting at table ${table}`,
+      createdAt: timeString,
+      email: 'Front Desk',
+      group: ['Developer',
+      'Staff',
+      'PartyHosts',
+      'Admin',
+      'SuperUser',
+      'TeamLeader',
+      'Kitchen',
+      'FrontDesk',
+      'Cafe',],
+
+      orderID: null,
+      sessionID: filter.id,
+      
+    });
+  
+    // Save the message to the database
+    const savedMessage = await DataStore.save(message);
+    console.log(savedMessage);
 
     setDone(true);
     setTotal(0);
