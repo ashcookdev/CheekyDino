@@ -91,7 +91,7 @@ const timeString = now.toISOString().split('T')[1];
     console.log(updateSession);
 
     const message = new Messages({
-      content: `A New Customer called ${ChildName} has Arrived sitting at table ${table} at ${timeString}`,
+      content: `A New Customer called ${ChildName} has Arrived sitting at table ${table} at ${timeString.split(':').slice(0, 2).join(':')}`,
       createdAt: timeString,
       email: 'Front Desk',
       group: ['Developer',

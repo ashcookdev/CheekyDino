@@ -40,6 +40,7 @@ export default function MasterClose() {
                 clockIns.map(async (clockIn) => {
                     const updatedClockIn = ClockIn.copyOf(clockIn, updated => {
                         updated.ClockOut = timeString;
+                        updated.ClockedOut = true;
                     });
                     await DataStore.save(updatedClockIn);
                 })
