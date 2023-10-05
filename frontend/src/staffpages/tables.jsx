@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { DataStore, Predicates } from 'aws-amplify';
 import { Sessions } from './models';
 import { isToday, format, differenceInMinutes, parse } from 'date-fns';
-import TableData from './TableData.json';
 import { CafeOrder } from './models';
 import './progress.css'
 import { useNavigate } from 'react-router-dom';
-import MoveTables from './movetables';
+import { Messages } from './models'; // Import the Messages model
+
 
 function OccupiedTables() {
   const [sessions, setSessions] = useState([]);
@@ -109,6 +109,11 @@ function OccupiedTables() {
     };
   });
 
+  const timeString = format(new Date(), 'HH:mm:ss.SSS');
+  const ChildName = table.ChildName;
+  const table = table.number;
+
+
   async function handleLeftCenter(event, table) {
     event.preventDefault();
   
@@ -133,8 +138,31 @@ function OccupiedTables() {
         updated.TimeLeft = format(new Date(), 'HH:mm:ss.SSS');
       })
     );
+  
+    // Save a new message in the Messages model
+    await DataStore.save(
+      new Messages({
+        content: ` ${ChildName} has left the center sitting at table ${table}, please clean the table`,
+      createdAt: timeString,
+      email: 'Front Desk',
+      group: ['Developer',
+      'Staff',
+      'PartyHosts',
+      'Admin',
+      'SuperUser',
+      'TeamLeader',
+      'Kitchen',
+      'FrontDesk',
+      'Cafe',],
+      orderID: null,
+      sessionID: table.id,
+        
+      })
+    );
+  
     window.location.reload();
   }
+  
   
   
   
