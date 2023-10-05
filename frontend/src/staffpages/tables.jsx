@@ -142,7 +142,7 @@ function OccupiedTables() {
     // Save a new message in the Messages model
     await DataStore.save(
       new Messages({
-        content: ` ${ChildName} has left the center sitting at table ${table}, please clean the table`,
+        content: `${table.number} Left Center please clean table`,
       createdAt: timeString,
       email: 'Front Desk',
       group: ['Developer',
