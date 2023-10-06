@@ -4,11 +4,27 @@ import { ClockIn, Staff, Messages } from './models';
 import { ClockIcon, MoonIcon, SunIcon } from '@heroicons/react/20/solid';
 import ClockInData from './clockindata';
 import { set } from 'date-fns';
+import Modal from './modal';
 
 export default function StaffActions() {
   const [staffList, setStaffList] = useState([]);
   const [clock, setClock] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const subscription = DataStore.observe(Messages).subscribe(msg => {
+      console.log(msg.model, msg.opType, msg.element);
+      setMessages(prevMessages => [...prevMessages, msg.element]);
+      console.log(messages)
+      setShow(true);
+      setTimeout(() => setShow(false), 30000); // hide after 30 seconds
+    });
+  
+    return () => subscription.unsubscribe();
+  }, []);
+
 
   useEffect(() => {
     const fetchStaff = async () => {
@@ -185,6 +201,10 @@ export default function StaffActions() {
   <h1 className="text-base font-semibold leading-6 text-gray-900">Staff</h1>
   
 </div>
+<div className='fixed top-0 w-full md:w-3/4 lg:w-1/2 xl:w-1/3 2xl:w-1/4 mx-auto'>
+  <Modal show={show} setShow={setShow} message={messages[messages.length - 1]} />
+</div>
+
 <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
   <button onClick={()=> setClock(true)}
     type="button"

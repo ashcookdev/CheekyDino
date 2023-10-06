@@ -172,6 +172,7 @@ export default function CafeKitchen() {
 
         return (
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <p className='text-white'>Number of Orders: {orders.length}</p>
               {snooze && (
                 <button onClick={() => setSnooze(false)} className="bg-red-500 text-white px-4 py-2 rounded-md">
                   Snooze

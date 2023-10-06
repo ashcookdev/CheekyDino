@@ -27,6 +27,10 @@ import {
 } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { DataStore } from "aws-amplify";
+import { Messages } from "./models";
+import { useEffect } from "react";
+import Modal from "./modal";  // import the modal component
 
 
 function classNames(...classes) {
@@ -35,6 +39,20 @@ function classNames(...classes) {
 
 export default function Kitchen() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const subscription = DataStore.observe(Messages).subscribe(msg => {
+      console.log(msg.model, msg.opType, msg.element);
+      setMessages(prevMessages => [...prevMessages, msg.element]);
+      console.log(messages)
+      setShow(true);
+      setTimeout(() => setShow(false), 30000); // hide after 30 seconds
+    });
+  
+    return () => subscription.unsubscribe();
+  }, []);
 
   const now = new Date();
 
@@ -293,9 +311,13 @@ export default function Kitchen() {
         {time} | {date}
       </p>
       <div className="mt-4"></div>
+      <div className='fixed top-0 w-full md:w-3/4 lg:w-1/2 xl:w-1/3 2xl:w-1/4 mx-auto'>
+  <Modal show={show} setShow={setShow} message={messages[messages.length - 1]} />
+</div>
     </div>
 
     <div className="flex flex-col md:flex-row">
+    
       <div className="w-full md:w-1/2 mb-4 md:mb-0">
         <h2 className="text-lg font-medium text-white">Orders</h2>
         <CafeKitchen />
