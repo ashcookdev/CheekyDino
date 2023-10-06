@@ -1,4 +1,4 @@
-import { DataStore } from "aws-amplify";
+import { DataStore, Predicates } from "aws-amplify";
 import {CustomerScreen} from './models';
 
 import { Fragment, useState } from 'react'
@@ -43,6 +43,13 @@ export default function Announcement() {
         setComment('');
         navigate('/customerscreen')
       };
+
+      const DeleteAnnouncement = async (event) => {
+        event.preventDefault()
+        await DataStore.delete(CustomerScreen, Predicates.ALL);
+        setComment('');
+        window.location.reload();
+      }
 
   return (
     <div className="flex items-start space-x-4">
@@ -105,6 +112,13 @@ export default function Announcement() {
               >
                 Post
               </button>
+              <button onClick={DeleteAnnouncement}
+                type="button"
+                className="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+              >
+                Delete
+              </button>
+
 
             </div>
           </div>

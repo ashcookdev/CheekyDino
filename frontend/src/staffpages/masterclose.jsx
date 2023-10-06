@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { DataStore, Predicates } from "aws-amplify";
-import { Sessions, ClockIn, Messages } from "./models";
+import { Sessions, ClockIn, Messages, CustomerScreen } from "./models";
 import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/solid'
 import { useNavigate } from "react-router-dom";
 import { CheckBadgeIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
@@ -33,6 +33,8 @@ export default function MasterClose() {
             );
 
             await DataStore.delete(Messages, Predicates.ALL);
+            const announcements = await DataStore.delete(CustomerScreen, Predicates.ALL);
+
 
 
             const clockIns = await DataStore.query(ClockIn, Predicates.ALL);
@@ -44,6 +46,8 @@ export default function MasterClose() {
                     });
                     await DataStore.save(updatedClockIn);
                 })
+
+
                 
             );
 setCompleted(true);

@@ -139,6 +139,10 @@ function OccupiedTables() {
     await DataStore.save(
       new Messages({
         content: `Table ${table.number} has left the center, please clean the table.`,
+        createdAt: format(new Date(), 'HH:mm:ss.SSS'),
+        group: ['Staff', 'Team Leader', 'Admin', 'Developer'],
+        email: 'Front Desk',
+        sessionID: record.id,
         
       })
     );

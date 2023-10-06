@@ -4,6 +4,7 @@ import { ClockIn, Staff, Messages } from './models';
 import { ClockIcon, MoonIcon, SunIcon } from '@heroicons/react/20/solid';
 import ClockInData from './clockindata';
 import { set } from 'date-fns';
+import { format } from 'date-fns';
 import Modal from './modal';
 
 export default function StaffActions() {
@@ -92,6 +93,10 @@ export default function StaffActions() {
       await DataStore.save(
         new Messages({
           content: `${staff.Name} clocked out`,
+          email: staff.Email,
+          createdAt: format(new Date(), 'HH:mm:ss.SSS'),
+          group: ['Staff', 'Team Leader', 'Admin', 'Developer']
+          
           // Add any other necessary fields here...
         })
       );
@@ -114,6 +119,10 @@ export default function StaffActions() {
       await DataStore.save(
         new Messages({
           content: `${staff.Name} clocked in`,
+          email: staff.Email,
+          createdAt: format(new Date(), 'HH:mm:ss.SSS'),
+          group: ['Staff', 'Team Leader', 'Admin', 'Developer']
+
           // Add any other necessary fields here...
         })
       );
@@ -158,6 +167,9 @@ export default function StaffActions() {
       await DataStore.save(
         new Messages({
           content: `${staff.Name} ended break`,
+          email: staff.Email,
+          createdAt: format(new Date(), 'HH:mm:ss.SSS'),
+          group: ['Staff', 'Team Leader', 'Admin', 'Developer']
           // Add any other necessary fields here...
         })
       );
@@ -177,6 +189,9 @@ export default function StaffActions() {
       await DataStore.save(
         new Messages({
           content: `${staff.Name} started break`,
+          email: staff.Email,
+          createdAt: format(new Date(), 'HH:mm:ss.SSS'),
+          group: ['Staff', 'Team Leader', 'Admin', 'Developer']
           // Add any other necessary fields here...
         })
       );
