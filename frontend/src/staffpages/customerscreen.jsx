@@ -19,6 +19,13 @@ export default function Example() {
   const [displayMessage, setDisplayMessage] = useState('');
   const [sessions, setSessions] = useState([]);
   const [weatherData, setWeatherData] = useState(null);
+  const [dash, setDash] = useState(false);
+
+  if (dash === true) {
+    window.location.href = '/dashboard';
+  }
+    
+  
 
 
   useEffect(() => {
@@ -141,6 +148,7 @@ export default function Example() {
         <div className="text-white font-bold text-lg">
           {format(new Date(), 'HH:mm')}
         </div>
+        
         <div className="text-white font-bold text-lg">
           {weatherData ? (
             <>
@@ -153,6 +161,8 @@ export default function Example() {
             <span>Loading weather data...</span>
           )}
         </div>
+        <button onClick={() => setDash(true)}>Close</button>
+
       </div>
   
       <div className="flex bg-fixed bg-center bg-no-repeat bg-cover pt-16">
