@@ -2,16 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
 import { Sessions, PartyBooking } from './models';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { format } from 'date-fns';
 
 async function getData(period) {
   const sessions = await DataStore.query(Sessions);
   const partyBookings = await DataStore.query(PartyBooking);
-  const data = [...sessions, ...partyBookings].reduce((acc, item) => {
+  let data = [...sessions, ...partyBookings].reduce((acc, item) => {
     let date = item.Date || item.PartyDate;
+    let timeslotFrom = item.TimeslotFrom;
+    let timeslotTo = item.TimeslotTo;
+    let partyTime = item.PartyTime;
+
     if (!date) {
       return acc;
     }
-    if (period === 'week') {
+    if (period === 'day') {
+      const dateStr = format(new Date(date), 'yyyy-MM-dd');
+      if (timeslotFrom && timeslotTo) {
+        timeslotFrom = format(new Date(`${dateStr}T${timeslotFrom}:00`), 'HH');
+        timeslotTo = format(new Date(`${dateStr}T${timeslotTo}:00`), 'HH');
+      }
+      if (partyTime) {
+        partyTime = format(new Date(`${dateStr}T${partyTime}:00`), 'HH');
+      }
+      date = `${format(new Date(date), 'dd.MM.yyyy')} ${timeslotFrom}-${timeslotTo || partyTime}`;
+    } else if (period === 'week') {
       date = getWeek(date);
     } else if (period === 'month') {
       date = getMonth(date);
@@ -28,13 +43,18 @@ async function getData(period) {
     }
     return acc;
   }, {});
-  return Object.values(data).map((item) => ({
+
+  // Convert groupedData object to an array
+  data = Object.values(data);
+
+  // Sort data by date
+  data.sort((a, b) => new Date(a.date.split(' ')[0]) - new Date(b.date.split(' ')[0]));
+
+  return data.map((item) => ({
     ...item,
     totalSpent: item.sessionsTotalSpent + item.partyBookingsTotalSpent,
-    prevat: ((item.sessionsTotalSpent + item.partyBookingsTotalSpent) / 1.2).toFixed(2),
   }));
 }
-
 
 
 function getWeek(date) {
@@ -54,9 +74,6 @@ function getYear(date) {
   const d = new Date(date);
   return `${d.getFullYear()}`;
 }
-
-
-
 
 function MyLineChart() {
   const [data, setData] = useState([]);
@@ -96,22 +113,23 @@ function MyLineChart() {
           </button>
         </div>
         <div className='mt-5'>
-  <div className="w-full overflow-x-auto">
-    <LineChart
-      width={800} // Set a default width, can be adjusted based on design
-      height={300}
-      data={data}
-      margin={{ right: 20 }} // Adjust margin to prevent cutoff of labels
-    >
-      <CartesianGrid strokeDasharray="5 3" />
-      <XAxis dataKey="date" />
-      <YAxis />
-      <Tooltip />
-      <Line type="monotone" dataKey="totalSpent" stroke="#8884d8" />
-      <Line type="monotone" dataKey="prevat" stroke="#82ca9d" />
-    </LineChart>
-  </div>
-</div>
+          <div className="w-full overflow-x-auto">
+            <LineChart
+              width={800} // Set a default width, can be adjusted based on design
+              height={300}
+              data={data}
+              margin={{ right: 20 }} // Adjust margin to prevent cutoff of labels
+            >
+              <CartesianGrid strokeDasharray="5 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="sessionsTotalSpent" stroke="#ff0000" /> {/* Sessions in red */}
+              <Line type="monotone" dataKey="partyBookingsTotalSpent" stroke="#0000ff" /> {/* PartyBookings in blue */}
+              <Line type="monotone" dataKey="totalSpent" stroke="#008000" /> {/* Total in green */}
+            </LineChart>
+          </div>
+        </div>
       </div>
     );
   }

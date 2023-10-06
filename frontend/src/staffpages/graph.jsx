@@ -31,10 +31,16 @@ function App() {
       }, {});
 
       // Convert groupedData object to an array
-      const combinedData = Object.values(groupedData);
+// Convert groupedData object to an array
+let combinedData = Object.values(groupedData);
+
+// Sort combinedData by date
+combinedData = combinedData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+// Set the data state variable to the sorted combinedData array
+setData(combinedData);
 
       // Set the data state variable to the combinedData array
-      setData(combinedData);
       console.log(combinedData);
     }
 

@@ -3,6 +3,7 @@ import { DataStore, Auth } from 'aws-amplify';
 import { ClockIn, Staff, Messages } from './models';
 import { ClockIcon, MoonIcon, SunIcon } from '@heroicons/react/20/solid';
 import ClockInData from './clockindata';
+import { set } from 'date-fns';
 
 export default function StaffActions() {
   const [staffList, setStaffList] = useState([]);
@@ -39,7 +40,7 @@ export default function StaffActions() {
   // Rest of your logic here...
   const handleClockInOut = async (staff) => {
     setIsLoading(true); // Start loading
-    setTimeout(() => setIsLoading(false), 5000); // End loading after 20 seconds
+    setTimeout(() => setIsLoading(false), 3000); // End loading after 20 seconds
 
     const userEmail = staff.Email;
     const dateTime = new Date();
@@ -87,7 +88,7 @@ export default function StaffActions() {
         new ClockIn({
           ClockIn: timeOnly,
           ClockedIn: true,
-          ClockOut: false,
+          ClockedOut: false,
           StaffId: userEmail,
           Date: dateOnly,
         })
