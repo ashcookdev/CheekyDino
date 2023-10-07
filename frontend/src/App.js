@@ -139,7 +139,7 @@ function App() {
           '/chat',
           '/till',
           '/customerscreen',
-          '/training'
+          '/training/'
         ].includes(location.pathname) ? (
         <StaffNav />
       ) : ![
@@ -150,7 +150,7 @@ function App() {
           '/chat',
           '/till',
           '/customerscreen',
-          '/training'
+          '/training/'
         ].includes(location.pathname) ? (
         <Navbar />
       ) : null}

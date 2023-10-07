@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { DataStore, Predicates } from "aws-amplify";
 import { Sessions, ClockIn, Messages, CustomerScreen } from "./models";
-import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/solid'
 import { useNavigate } from "react-router-dom";
 import { CheckBadgeIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
+import { Storage } from "aws-amplify";
 
 export default function MasterClose() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [completed, setCompleted] = useState(false);
     const [move, setMove] = useState(false);
+    
 
     const correctPassword = "myPassword"; // replace with your actual password
 
@@ -33,7 +34,7 @@ export default function MasterClose() {
             );
 
             await DataStore.delete(Messages, Predicates.ALL);
-            const announcements = await DataStore.delete(CustomerScreen, Predicates.ALL);
+           await DataStore.delete(CustomerScreen, Predicates.ALL);
 
 
 
@@ -47,9 +48,30 @@ export default function MasterClose() {
                     await DataStore.save(updatedClockIn);
                 })
 
-
+               
+                
                 
             );
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+const saveSessions = await DataStore.query(Sessions)
+const filterSessions = saveSessions.filter(
+    (session) => session.Date === today.toISOString().split('T')[0] )
+
+
+
+    const data = JSON.stringify(filterSessions);
+    console.log(data)
+    Storage.put('MachineLearning/data.json', data, {
+        contentType: 'application/json'
+    })
+    .then (result => console.log(result))
+    .catch(err => console.log(err));
+
+
+
+
+
 setCompleted(true);
 
         } else {
@@ -61,6 +83,8 @@ setCompleted(true);
         window.location.reload();
         Navigate("/dashboard")
     }
+
+    
 
     if (completed) {
         return (
@@ -74,11 +98,11 @@ setCompleted(true);
               </div>
               <div className="ml-auto pl-3">
                 <div className="-mx-1.5 -my-1.5">
-                  <button
+                  <button onClick={() => setMove(true)}
                     type="button"
                     className="inline-flex rounded-md bg-green-50 p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-50"
                   >
-                    <button className="bg-white rounded-lg shadow-lg p-8" onClick={() => setMove(true)}>Close</button>
+                    Close
 
                     
                   </button>
