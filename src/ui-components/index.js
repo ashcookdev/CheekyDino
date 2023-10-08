@@ -6,6 +6,8 @@
 
 export { default as studioTheme } from "./studioTheme";
 export { default as PartyBookingCreateForm } from "./PartyBookingCreateForm";
+export { default as PreBookingCreateForm } from "./PreBookingCreateForm";
+export { default as PreBookingUpdateForm } from "./PreBookingUpdateForm";
 export { default as StockControlCreateForm } from "./StockControlCreateForm";
 export { default as StockControlUpdateForm } from "./StockControlUpdateForm";
 export { default as ClockInCreateForm } from "./ClockInCreateForm";

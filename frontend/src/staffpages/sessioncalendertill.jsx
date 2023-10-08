@@ -64,68 +64,62 @@ console.log(childData[0].name)
 
     
 
-useEffect(() => {
-  const FetchAvailability = async () => {
-    console.log('Fetching availability data for date:', date);
-    const bookings = await DataStore.query(Sessions, c => c.Date.eq(date));
-    console.log('Query result:', bookings);
-    const guests = Number(children) + Number(adults);
-
-    // Calculate free tables per timeslot
-   // Calculate free tables per timeslot
-   const freeTablesPerTimeslot = timeslots.map(timeslot => {
-    let freeTables = tableData.filter(table => {
-      // Exclude tables 40, 41, and 42
-      if ([40, 41, 42].includes(table.table)) {
-        return false;
-      }
-      const isBooked = bookings.some(booking => {
-        const {TimeslotFrom, TimeslotTo, Table} = booking;
-        // use timeslot to show how many tables are available
-        return (
-          TimeslotFrom < timeslot.end &&
-          TimeslotTo > timeslot.start &&
-          Table === table.table
-        );
-      });
-      return !isBooked;
-    });
-  
-    // Filter free tables by exact match of capacity
-    let exactMatchTables = freeTables.filter(table => table.capacity === guests);
-  
-    // If no exact match found, sort free tables by capacity in descending order
-    if (exactMatchTables.length === 0) {
-      freeTables.sort((a, b) => b.capacity - a.capacity);
-    } else {
-      freeTables = exactMatchTables;
-    }
-  
-    // Recommend multiple tables if needed
-    let recommendedTables = [];
-    let guestsLeft = guests;
-    for (let i = 0; i < freeTables.length && guestsLeft > 0; i++) {
-      recommendedTables.push(freeTables[i].table);
-      guestsLeft -= freeTables[i].capacity;
-    }
-  
-    return {
-      timeslot,
-      freeTables: freeTables.length,
-      recommendedTables
-    };
-  });
-      setFreeTablesPerTimeslot(freeTablesPerTimeslot);
-
-    // Log free tables and recommended tables per timeslot
-    freeTablesPerTimeslot.forEach(item => {
-      console.log(`Timeslot: ${item.timeslot.start} - ${item.timeslot.end}, Free Tables: ${item.freeTables}, Recommended Tables: ${item.recommendedTables}`);
-    });
-  };
-
-  FetchAvailability();
-}, []);
-
+    useEffect(() => {
+      const fetchAvailability = async () => {
+        console.log('Fetching availability data for date:', date);
+        const allBookings = await DataStore.query(Sessions);
+        const bookingsForDate = allBookings.filter(booking => booking.Date === date);
+    
+        console.log('Query result:', bookingsForDate);
+        const totalGuests = Number(children) + Number(adults);
+    
+        const freeTablesPerTimeslot = timeslots.map(timeslot => {
+          let freeTables = tableData.filter(table => {
+            if ([40, 41, 42].includes(table.table)) {
+              return false;
+            }
+            const isTableBooked = bookingsForDate.some(booking => {
+              return (
+                booking.TimeslotFrom < timeslot.end &&
+                booking.TimeslotTo > timeslot.start &&
+                booking.Table === table.table
+              );
+            });
+            return !isTableBooked;
+          });
+    
+          let tablesMatchingCapacity = freeTables.filter(table => table.capacity === totalGuests);
+      
+          if (tablesMatchingCapacity.length === 0) {
+            freeTables.sort((a, b) => b.capacity - a.capacity);
+          } else {
+            freeTables = tablesMatchingCapacity;
+          }
+      
+          let recommendedTables = [];
+          let remainingGuests = totalGuests;
+          for (let i = 0; i < freeTables.length && remainingGuests > 0; i++) {
+            recommendedTables.push(freeTables[i].table);
+            remainingGuests -= freeTables[i].capacity;
+          }
+      
+          return {
+            timeslot,
+            freeTables: freeTables.length,
+            recommendedTables
+          };
+        });
+    
+        setFreeTablesPerTimeslot(freeTablesPerTimeslot);
+    
+        freeTablesPerTimeslot.forEach(item => {
+          console.log(`Timeslot: ${item.timeslot.start} - ${item.timeslot.end}, Free Tables: ${item.freeTables}, Recommended Tables: ${item.recommendedTables}`);
+        });
+      };
+    
+      fetchAvailability();
+    }, []);
+    
     // Handle booking
     async function handleBook(item) {
       const createUniqueID = () => {
@@ -204,6 +198,10 @@ childData.forEach(item => {
             <motion.div key={item.timeslot.start} className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
               <p className={`text-sm font-semibold leading-6 ${item.freeTables > 0 ? 'text-green-600' : 'text-red-600'}`}>{item.timeslot.start} - {item.timeslot.end}</p>
               <div className="relative mt-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold leading-6 text-gray-900">Free Tables</p>
+                  <p className="text-sm font-semibold leading-6 text-gray-900">{item.freeTables}</p>
+                </div>
                 <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
                   <div style={{ width: `${(1 - item.freeTables / tableData.length) * 100}%` }} className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${item.freeTables > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
                 </div>

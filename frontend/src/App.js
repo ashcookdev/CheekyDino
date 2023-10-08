@@ -71,6 +71,8 @@ import TillHistory from './staffpages/tillhistory';
 import Training from './training/traininghome';
 import PreBookTill from './staffpages/PrebookTill';
 import MoveTables from './staffpages/movetables';
+import CustomerScreenFront from './staffpages/prebook/customerscreenfront';
+import PreBook from './staffpages/prebook/prebookhome';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -139,7 +141,9 @@ function App() {
           '/chat',
           '/till',
           '/customerscreen',
-          '/training/'
+          '/training/',
+          '/customerscreenfront',
+          '/customerprebooking'
         ].includes(location.pathname) ? (
         <StaffNav />
       ) : ![
@@ -150,7 +154,9 @@ function App() {
           '/chat',
           '/till',
           '/customerscreen',
-          '/training/'
+          '/training/',
+          '/customerscreenfront',
+          '/customerprebooking'
         ].includes(location.pathname) ? (
         <Navbar />
       ) : null}
@@ -205,6 +211,7 @@ function App() {
             <Route path ="/training" element={<Training />} />
             <Route path="/prebooktill" element={<PreBookTill />} />
             <Route path="/movetable" element={<MoveTables />} />
+            <Route path='/customerscreenfront' element={<CustomerScreenFront />} />
           </>
         )}
         
@@ -244,6 +251,11 @@ function App() {
           path="/session"
           element={<SessionBook />}
         />
+        <Route
+          path="/customerprebooking"
+          element={<PreBook />}
+        />
+
         <Route
           path="/" 
           element={

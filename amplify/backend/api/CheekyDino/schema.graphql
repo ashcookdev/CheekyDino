@@ -1,3 +1,13 @@
+type PreBooking @model @auth(rules: [{allow: private}, {allow: public}, {allow: owner}]) {
+  id: ID!
+  Name: String
+  Email: String
+  Date: String
+  Adults: String
+  Children: String
+  Booked: Boolean
+}
+
 type StockControl @model @auth(rules: [{allow: private}]) {
   id: ID!
   Name: String

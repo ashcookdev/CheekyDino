@@ -11,7 +11,7 @@ export default function SessionBook() {
   const [adults, setAdults] = useState(1);
   const [submitted, setSubmitted] = useState(false);
   const [childData, setChildData] = useState([{ age: '' }]);
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [staff, setStaff] = useState('');
   const [selectedSession, setSelectedSession] = useState('');
   const [sessions, setSessions] = useState([]);
@@ -42,7 +42,6 @@ export default function SessionBook() {
   
   
   const calculatePrice = (childData, adults, children) => {
-
     let price = 0;
     childData.forEach((data) => {
       if (data.childAge === "Under 1 year") {
@@ -59,21 +58,19 @@ export default function SessionBook() {
     console.log(adults)
     const additionalAdults = adults - children;
 
-if (additionalAdults > 0) {
-  // Add £2.00 for each additional adult beyond the number of children
-  price += additionalAdults * 2.0;
-}
+    if (additionalAdults > 0) {
+      // Add £2.00 for each additional adult beyond the number of children
+      price += additionalAdults * 2.0;
+    }
 
-return price;
+    return price;
   };
-  
 
-
-  const handleSubmit = () => {
-    const totalPrice = calculatePrice(childData, adults, children);
-    setChildData((prev) => prev.map((data) => ({ ...data, TotalSpent: totalPrice })));
-    setSubmitted(true);
-  };
+const handleSubmit = () => {
+  const totalPrice = calculatePrice(childData, parseInt(adults), parseInt(children));
+  setChildData((prev) => prev.map((data) => ({ ...data, TotalSpent: totalPrice })));
+  setSubmitted(true);
+};
 
 
   const handleSelectedChange = (value) => {
@@ -117,8 +114,8 @@ setNumber(session.Number);
   
 
   return (
-        <div class="flex">
-    <div class="w-1/2 border">
+        <div className="flex">
+    <div className="w-1/2 border">
     <div className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0">
@@ -148,14 +145,15 @@ setNumber(session.Number);
               </input>
               <div className='mt-3'>
             {sessions.length > 0 && (
-  <select onChange={(e) => setSelectedSession(e.target.value)}>
-  <option disabled selected value="">Select a session</option>
+  <select value={selectedSession} onChange={(e) => setSelectedSession(e.target.value)}>
+  <option disabled value="">Select a session</option>
   {sessions.map((session, index) => (
     <option key={index} value={session.id}>
       {session.Name} - {session.Adults} Adults, {session.Children} Children - {session.Date}
     </option>
   ))}
 </select>
+
 
 )}
   <p>Selected session: {selectedSession}</p>
@@ -176,7 +174,6 @@ Adult Name            </label>
               type="text"
               name="name"
               className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              defaultValue="enter customer name"
               value={name}
             ></input>
           </div>
@@ -206,14 +203,14 @@ Adult Name            </label>
 
 
           <div>
-            <label htmlFor="children" className="block text-sm font-medium leading-6 text-gray-900">
+            <label htmlFor="adults" className="block text-sm font-medium leading-6 text-gray-900">
               Number of Adults
             </label>
             <input
               onChange={(e) => setAdults(e.target.value)}
-              id="children"
+              id="adults"
               type="number"
-              name="children"
+              name="adults"
               className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
               value={adults}
 
@@ -297,7 +294,7 @@ Book
    
 
     </div>
-    <div class="w-1/2 border">
+    <div className="w-1/2 border">
   {submitted && (
     <SessionCalenderTill children={children} staff={staff} adults={adults} date={date} childData={childData} email={email} telephone={telephone} name={name} />
   )}
