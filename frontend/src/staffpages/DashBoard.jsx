@@ -92,6 +92,9 @@ useEffect(() => {
   { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
   { name: 'Edit Landing Page', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Customer Screen', href: '/customerscreen', icon: TvIcon, current: false },
+  {name: 'Front Customer Screen', href: '/customerscreenfront', icon: TvIcon, current: false },
+
+  
   {name: 'Clock In', href: '/clockin', icon: ClockIcon, current: false },
   {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },

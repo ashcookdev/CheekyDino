@@ -11,7 +11,7 @@ export default function SessionBook() {
   const [adults, setAdults] = useState(1);
   const [submitted, setSubmitted] = useState(false);
   const [childData, setChildData] = useState([{ age: '' }]);
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const [staff, setStaff] = useState('');
   const [selectedSession, setSelectedSession] = useState('');
   const [sessions, setSessions] = useState([]);

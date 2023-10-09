@@ -47,18 +47,6 @@ export default function Example() {
   }, []);
 
   
-  useEffect(() => {
-    // fetch weather data from API
-    fetch('http://api.weatherstack.com/current?access_key=6eb9301a68dfecace2e92425638712ce&query=Maidstone, UK')
-      .then(response => response.json())
-      .then(data => {
-        setWeatherData(data.current);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
-
 
 
     // clean up the subscription when the component unmounts
@@ -149,18 +137,7 @@ export default function Example() {
           {format(new Date(), 'HH:mm')}
         </div>
         
-        <div className="text-white font-bold text-lg">
-          {weatherData ? (
-            <>
-              <span>{weatherData.temperature}°C</span>
-              <span className="ml-2">
-                {weatherData.weather_descriptions[0]}
-              </span>
-            </>
-          ) : (
-            <span>Loading weather data...</span>
-          )}
-        </div>
+       
         <button onClick={() => setDash(true)}>Close</button>
 
       </div>
