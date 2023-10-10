@@ -66,6 +66,7 @@ const Prebooktill = () => {
     const table = state.table;
     const ChildName = state.ChildName;
     const initialTotal = state.total;
+    const id = state.id;
 
     const [total, setTotal] = useState(state ? state.total : 0);
 
@@ -89,19 +90,13 @@ const Prebooktill = () => {
 const timeString = now.toISOString().split('T')[1];
 
     // Query the database to update the TotalSpent field
-    const session = await DataStore.query(Sessions);
-    const filter = session.filter(
-      (session) =>
-        session.Table === table &&
-        session.Name === ChildName &&
-        session.Arrived === true &&
-        session.LeftCenter === false
-    );
+    const session = await DataStore.query(Sessions, id);
+    
 
     // Update the TotalSpent field
-    console.log(filter);
+    console.log(session);
     const updateSession = await DataStore.save(
-      Sessions.copyOf(filter[0], (updated) => {
+      Sessions.copyOf(session, (updated) => {
        
           updated.TotalSpent = total;
     
@@ -124,7 +119,7 @@ const timeString = now.toISOString().split('T')[1];
       'Cafe',],
 
       orderID: null,
-      sessionID: filter.id,
+      sessionID: session.id,
       
     });
   

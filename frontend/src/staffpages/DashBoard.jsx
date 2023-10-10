@@ -86,7 +86,8 @@ useEffect(() => {
 
   const navigation = [
     { name: 'Till', href: '/till', icon: CurrencyPoundIcon, current: true },
-    {name: 'Make a Booking', href: '/reservations', icon: FolderIcon, current: false },
+    {name: 'Make a Booking', href: '/reservations', icon: PencilIcon, current: false },
+    {name: 'Pre-Bookings', href: '/Barcode', icon: CalendarIcon, current: false },
   { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
   { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
   { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { DataStore } from 'aws-amplify';
 import { Sessions } from './models';
-import { format } from 'date-fns';
+import { format, addHours } from 'date-fns';
 import { motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import tableData from './TableData.json';
 import { useNavigate } from 'react-router-dom';
+import { id } from 'date-fns/locale';
 
 
 function MoveTables() {
@@ -26,7 +27,7 @@ function MoveTables() {
     
 
   const state = useLocation();
-const locationState = state.state.moveTable;
+const locationState = state.state.state;
 
   console.log(locationState);
 
@@ -49,6 +50,12 @@ const locationState = state.state.moveTable;
   const handleTableClick = async (table) => {
     // Fetch the session with the given id from locationState
     const sessionToUpdate = await DataStore.query(Sessions, locationState.id);
+    const currentTime = new Date();
+  const formattedTime = format(currentTime, 'HH:mm');
+  const arrivalTime = format(currentTime, 'HH:mm:ss.SSS')  
+  const twoHoursLater = addHours(currentTime, 2);
+  const formattedTwoHoursLater = format(twoHoursLater, 'HH:mm');
+
 
     // Check if the session exists
     if (sessionToUpdate) {
@@ -56,12 +63,25 @@ const locationState = state.state.moveTable;
       await DataStore.save(
         Sessions.copyOf(sessionToUpdate, updated => {
           updated.Table = table;
+          updated.Arrived = true;
+            updated.TimeslotFrom = formattedTime;
+            updated.TimeslotTo = formattedTwoHoursLater;
+            updated.TimeArrived = arrivalTime;
+            updated.LeftCenter = false;
+
         })
       );
 
       // Navigate back to /Tables
-      navigate('/Tables');
-    } else {
+      navigate('/prebooktill2', { 
+        state: { 
+          order: '2 Hour Session', 
+          total: locationState.TotalSpent, 
+          table: locationState.Table, 
+          ChildName: locationState.Name,
+          id: locationState.id,
+        } 
+      });    } else {
       console.error('Session not found');
     }
   };
@@ -71,11 +91,10 @@ const locationState = state.state.moveTable;
       <div className='flex'>
         <div className='w-1/2 flex flex-col items-center justify-center bg-gray-100'>
           <h3 className='text-2xl font-bold mb-5'>Details</h3>
-          <p> Name: {locationState.name}</p>
-          <p> Table: {locationState.number}</p>
-          <p> Guests: {locationState.guests}</p>
-          <p> TimeSlot: {locationState.TimeslotFrom} to {locationState.TimeSlotTo}</p>
-          <p>Arrived: {locationState.timeArrived}</p>
+          <p> Name: {locationState.Name}</p>
+          <p> Table: {locationState.Table}</p>
+          <p> TimeSlot: {locationState.TimeslotFrom} to {locationState.TimeslotTo}</p>
+          <p> Guests: {Number(locationState.Children) + Number(locationState.Adults) }</p>
         </div>
     
         <div className='w-1/2'>
@@ -118,9 +137,9 @@ const locationState = state.state.moveTable;
             <div className="timeslot-info">
               {hoveredTable === table.table && (
                 <div className="flex flex-col items-end">
-                  <span className="text-xs text-gray-500 block mt-5 mb-2">{sessionName}</span>
-                  <span className="text-xs text-gray-500 block mt-1 mb-2">{sessionTimeslot} - {sessionTimeslotTo}</span>
-                  <span className="text-xs text-gray-500 block mt-1 mb-2">{sessionEmail}</span>
+                  <span className="text-xs text-gray-500 block mt-5 mb-2">Capacity: {table.capacity}</span>
+                  <span className="text-xs text-gray-500 block mb-2">TimeSlot: {sessionTimeslot} to {sessionTimeslotTo}</span>
+              
                 </div>
               )}
             </div>

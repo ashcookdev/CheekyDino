@@ -3,15 +3,18 @@ import { DataStore } from '@aws-amplify/datastore';
 import { Sessions } from './models';
 import { Analytics } from 'aws-amplify';
 import Till from './Till';
-import { format } from 'date-fns';
+import { format, addHours } from 'date-fns';
 import SessionTill from './SessionTill'
 import { useNavigate } from 'react-router-dom';
+import Modal2 from './modal2';
 
 
 export default function Arrival({ session}) {
 
   const [arrival, setArrival] = useState(false);
   const [sessions, setSession] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
 
   const navigate = useNavigate();
 
@@ -34,32 +37,59 @@ const guests = session.Adults + session.Children;
 
 
 
-  const confirmArrival = async () => {
-    const currentTime = new Date();
-    const options = { timeZone: 'Europe/London', hour12: false };
-    const awstime = currentTime.toLocaleString('en-GB', options).split(',')[1].trim();
-    const formattedTime = format(currentTime, 'HH:mm:ss.SSS'); 
+const confirmArrival = async () => {
+  const currentTime = new Date();
+  const formattedTime = format(currentTime, 'HH:mm');
+  const arrivalTime = format(currentTime, 'HH:mm:ss.SSS')  
+  const twoHoursLater = addHours(currentTime, 2);
+  const formattedTwoHoursLater = format(twoHoursLater, 'HH:mm');
+
+  // Fetch all sessions from DataStore
+  const allSessions = await DataStore.query(Sessions);
+  
+  // Filter sessions that have the same table and overlap with current session's timeslot
+  const conflictingSessions = allSessions.filter(s => 
+    s.Table === session.Table && 
+    s.TimeslotFrom < formattedTwoHoursLater && 
+    s.TimeslotTo > formattedTime &&
+    s.id !== session.id
+  );
+  
+  // If there are other conflicting sessions
+  if (conflictingSessions.length > 0) {
+    setShowModal(true);
+    // Code to send text goes here
+  } else {
     try {
       await DataStore.save(
         Sessions.copyOf(session, updated => {
           updated.Arrived = true;
-          updated.TimeArrived = formattedTime;
+          updated.TimeArrived = arrivalTime;
           updated.LeftCenter = false;
-
+          updated.TimeslotFrom = formattedTime;
+          updated.TimeslotTo = formattedTwoHoursLater;
         })
       );
-     
-          
-          // additional attributes here
-        
-          setSession(session)
 
       setArrival(true);
+      setSession(session);
       
     } catch (error) {
       console.error("Error saving session:", error);
     }
   }
+}
+
+// ...
+
+if (showModal) {
+  return (
+    <Modal2 session ={session}>
+    
+    </Modal2>
+  );
+}
+
 
       
 
@@ -68,8 +98,7 @@ const guests = session.Adults + session.Children;
   return (
     <div className="overflow-hidden bg-white shadow sm:rounded-lg">
       <div className="px-4 py-6 sm:px-6">
-        <h3 className="text-base font-semibold leading-7 text-gray-900">Applicant Information</h3>
-        <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Personal details and application.</p>
+        <h3 className="text-base font-semibold leading-7 text-gray-900">Session Details</h3>
       </div>
       <div className="border-t border-gray-100">
         <dl className="divide-y divide-gray-100">
