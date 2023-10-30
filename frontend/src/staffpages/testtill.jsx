@@ -39,12 +39,12 @@ export default function TestTill() {
             adults: 1,
             children: 2,
             bookingID: "1234567890",
-            total: "£10.00",
+            total: "10.00",
             variable: "booklater",
         };
     
         try {
-            const response = await fetch('https://ebaedr0fmd.execute-api.eu-west-2.amazonaws.com/send', {
+            const response = await fetch('https://ebaedr0fmd.execute-api.eu-west-2.amazonaws.com/production/send', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -63,13 +63,6 @@ export default function TestTill() {
         }
     };
     
-
-       
-    
-
-    
-
-
 
     return <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
 <div className="flex flex-col">
