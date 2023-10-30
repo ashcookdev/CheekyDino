@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import emailjs from '@emailjs/browser';
 import QRCode from 'qrcode';
 import { motion } from 'framer-motion';
+import axios from 'axios';
 
 
 
@@ -127,26 +128,37 @@ console.log(childData[0].name)
       };
     
       const bookingID = createUniqueID();
+
+      const emailData = {
+        email: email,
+        name: name,
+        date: date,
+        timeslot: `${item.timeslot.start} - ${item.timeslot.end}`,
+        table: item.recommendedTables[0],
+        telephone: telephone,
+        adults: adults,
+        children: children,
+        bookingID: bookingID,
+        totalSpent: childData.reduce((acc, item) => acc + parseFloat(item.TotalSpent), 0),
+      
+      }
+
+      fetch('http://localhost:3001/sendEmail', {
+        method : 'POST',
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailData),
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('There was an error!', error));
+
+
+
     
-      // Generate QR code data URL
-      const qrCodeDataUrl = await QRCode.toDataURL(bookingID);
-    
-      // Initialize EmailJS
-      emailjs.init('IRmucExHqH7rKSEBW');
-    
-      const templateParams = {
-        to_name: name,
-        to_email: email,
-        message: `Thank you for booking with us. Your booking details are as follows: Date: ${date} Time: ${item.timeslot.start} - ${item.timeslot.end} Table: ${item.recommendedTables[0]}. Please show this QR code to a member of staff when you arrive.`,  qrCodeDataUrl
-      };
-    
-      emailjs.send('bookingscheekydino', 'bookings', templateParams)
-        .then((response) => {
-          console.log('SUCCESS!', response.status, response.text);
-        })
-        .catch((err) => {
-          console.log('FAILED...', err);
-        });
+     
     
       // Save booking information to DataStore
       DataStore.save(

@@ -75,6 +75,7 @@ import CustomerScreenFront from './staffpages/prebook/customerscreenfront';
 import PreBook from './staffpages/prebook/prebookhome';
 import MoveTables2 from './staffpages/movetables2';
 import PreBookTill2 from './staffpages/PrebookTill2';
+import TestTill from './staffpages/testtill';
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -216,6 +217,7 @@ function App() {
             <Route path='/customerscreenfront' element={<CustomerScreenFront />} />
             <Route path = '/movetables2'element={<MoveTables2 />} />
             <Route path='/prebooktill2' element={<PreBookTill2 />} />
+            <Route path= '/testtill' element={<TestTill />} />
           </>
         )}
         

@@ -81,13 +81,14 @@ export default function KitchenMenuUpdateForm(props) {
     setImageSrc(cleanValues.imageSrc);
     setPrep(cleanValues.Prep);
     setIngredients(
-      typeof cleanValues.Ingredients === "string"
+      typeof cleanValues.Ingredients === "string" ||
+        cleanValues.Ingredients === null
         ? cleanValues.Ingredients
         : JSON.stringify(cleanValues.Ingredients)
     );
     setSnooze(cleanValues.Snooze);
     setExtras(
-      typeof cleanValues.Extras === "string"
+      typeof cleanValues.Extras === "string" || cleanValues.Extras === null
         ? cleanValues.Extras
         : JSON.stringify(cleanValues.Extras)
     );
@@ -193,8 +194,8 @@ export default function KitchenMenuUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value.trim() === "") {
-              modelFields[key] = undefined;
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(

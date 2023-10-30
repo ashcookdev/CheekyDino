@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
-import { Amplify } from 'aws-amplify';
+import { Amplify, API } from 'aws-amplify';
 import awsExports from './aws-exports';
 import '@aws-amplify/ui-react/styles.css';
 import '@fontsource/inter/variable.css';
 Amplify.configure(awsExports);
+API.configure(awsExports);
 
 
 

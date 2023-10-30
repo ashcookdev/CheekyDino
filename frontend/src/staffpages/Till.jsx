@@ -22,6 +22,7 @@ import StaffTill from "./StaffTill";
 import { ChatBubbleBottomCenterIcon, InboxIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import MakeReservation from "./makereservation";
 import SlideOver from "./slideover";
+import axios from "axios";
 
 
 
@@ -55,6 +56,7 @@ const [showCategories, setShowCategories] = useState(true);
 const [showItems, setShowItems] = useState(true);
 const [showTopBar, setShowTopBar] = useState(false);
 const [chat, setChat] = useState(false);
+const [drawer, SetDrawer] = useState(false);
 
 
 useEffect(() => {
@@ -67,6 +69,17 @@ const navigate = useNavigate();
 
 console.log(order)
 
+
+if (drawer === true) {
+  const article = { title: 'React POST Request Example' };
+  axios.post('http://localhost:5252/open-drawer', article, {
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  })
+  .then(response => this.setState({ articleId: response.data.id }))
+  .catch(error => console.error('There was an error!', error));
+}
 
 
 
@@ -390,6 +403,14 @@ window.location.reload();
         whileTap={{ scale: 0.9 }}
       >
         Kitchen
+      </motion.button>
+      <motion.button
+        className="w-16 h-16 bg-yellow-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
+        onClick={() => SetDrawer(true)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        Open Drawer
       </motion.button>
      
     </div>

@@ -6,6 +6,11 @@ import Till from './Till';
 import SessionTill from './SessionTill';
 import { motion } from 'framer-motion';
 import tableData from './TableData.json';
+import { API } from 'aws-amplify';
+
+
+
+
 
 export default function TableSelect({ availableTables, onSelect, details, handleBack }) {
   const [selectedTables, setSelectedTables] = useState([]);
@@ -32,50 +37,88 @@ export default function TableSelect({ availableTables, onSelect, details, handle
     }
   };
 
-  const handleConfirmClick = () => {
-    onSelect(selectedTables);
+  const handleConfirmClick = async () => {
+    try {
+      onSelect(selectedTables);
 
-    //get current date
-    const date = new Date();
-    const awsDate = format(date, 'yyyy-MM-dd');
-    const nowString = format(date, 'HH:mm:ss.SSS');
+      //get current date
+      const date = new Date();
+      const awsDate = format(date, 'yyyy-MM-dd');
+      const nowString = format(date, 'HH:mm:ss.SSS');
 
-    const twoHoursLater = addHours(date, 2);
+      const twoHoursLater = addHours(date, 2);
 
-    // format the result as a string
-    const twoHoursLaterString = format(twoHoursLater, 'HH:mm:ss.SSS');
+      // format the result as a string
+      const twoHoursLaterString = format(twoHoursLater, 'HH:mm:ss.SSS');
 
-    console.log(twoHoursLaterString);
-    console.log(nowString);
-    console.log(savedDetails.TimeslotFrom);
+      console.log(twoHoursLaterString);
+      console.log(nowString);
+      console.log(savedDetails.TimeslotFrom);
 
-    const children = parseInt(savedDetails.Children);
-    const adults = parseInt(savedDetails.Adults);
+      const children = parseInt(savedDetails.Children);
+      const adults = parseInt(savedDetails.Adults);
 
-    const name = savedDetails.Name;
+      // turn twohourslater into a string and remove :ss.SSS
 
-    //save to database
-    DataStore.save(
-      new Sessions({
-        Email: savedDetails.Email,
-        Number: savedDetails.Number,
-        Date: awsDate,
-        Name: name,
-        Children: children,
-        Adults: adults,
-        Table: selectedTables[0].table,
-        TimeslotFrom: savedDetails.TimeSlotFrom,
-        TimeslotTo: savedDetails.TimeSlotTo,
-        Arrived: true,
-        LeftCenter: false,
-        TimeArrived: nowString,
-        Telephone: savedDetails.Telephone,
-        TotalSpent: savedDetails.Total,
-        Staff: savedDetails.Staff,
-      })
-    );
+      const emailTime = format(date, 'HH:mm');
+      const emailTime2 = format(twoHoursLater, 'HH:mm');
 
-    setPay(true);
+      const name = savedDetails.Name;
+
+      const emailData = {
+        email: savedDetails.Email,
+        name: savedDetails.Name,
+        date: awsDate,
+        timeslot: emailTime2 + ' - ' + emailTime,
+        table: selectedTables[0].table,
+        telephone: savedDetails.Telephone,
+        adults: adults,
+        children: children,
+        total : savedDetails.Total,
+        subject: "Your Booking Confirmation",
+        variable: "booklater",
+      }
+
+      const response = await fetch('https://ebaedr0fmd.execute-api.eu-west-2.amazonaws.com/send', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        console.error('There was an error!', response.status);
+      }
+
+      //save to database
+      DataStore.save(
+        new Sessions({
+          Email: savedDetails.Email,
+          Number: savedDetails.Number,
+          Date: awsDate,
+          Name: savedDetails.Name,
+          Children: children,
+          Adults: adults,
+          Table: selectedTables[0].table,
+          TimeslotFrom: savedDetails.TimeSlotFrom,
+          TimeslotTo: savedDetails.TimeSlotTo,
+          Arrived: true,
+          LeftCenter: false,
+          TimeArrived: nowString,
+          Telephone: savedDetails.Telephone,
+          TotalSpent: savedDetails.Total,
+          Staff: savedDetails.Staff,
+        })
+      );
+
+      setPay(true);
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
   };
 
   let guests = parseInt(savedDetails.Children) + parseInt(savedDetails.Adults);

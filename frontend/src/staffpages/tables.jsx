@@ -112,6 +112,11 @@ function OccupiedTables() {
 
   async function handleLeftCenter(event, table) {
     event.preventDefault();
+
+
+
+    
+
   
     // Retrieve all records
     const records = await DataStore.query(Sessions, Predicates.ALL);
@@ -126,6 +131,14 @@ function OccupiedTables() {
       console.error('Record not found:', table.number);
       return;
     }
+
+    //find all cafe orders
+    const allCafeOrders = await DataStore.query(CafeOrder);
+    const sessionCafeOrders = allCafeOrders.filter(
+      (c) => c.Sessionid === record.id
+    );
+    console.log(sessionCafeOrders);
+
   
     // Update the LeftCenter field for the matching record
     await DataStore.save(
@@ -146,6 +159,35 @@ function OccupiedTables() {
         
       })
     );
+
+    const emailData = {
+      email: record.Email,
+      name: record.Name,
+      date: record.Date,
+      timeslot: `${record.TimeslotFrom} - ${record.TimeslotTo}`,
+      table: record.Table,
+      telephone: record.Telephone,
+      adults: record.Adults,
+      children: record.Children,
+      bookingID: record.id,
+      total: record.TotalSpent,
+hotItems: sessionCafeOrders.map((item) => item.HotItems),
+drinks: sessionCafeOrders.map((item) => item.DrinkItems),
+orders: sessionCafeOrders.map((item) => item.length),
+
+  }
+
+  fetch('http://localhost:3001/exit', {
+      method : 'POST',
+      headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(emailData),
+  })
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('There was an error!', error));
   
     window.location.reload();
   }
