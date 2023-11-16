@@ -6,7 +6,6 @@ import Till from './Till';
 import SessionTill from './SessionTill';
 import { motion } from 'framer-motion';
 import tableData from './TableData.json';
-import { API } from 'aws-amplify';
 
 
 
@@ -65,34 +64,7 @@ export default function TableSelect({ availableTables, onSelect, details, handle
 
       const name = savedDetails.Name;
 
-      const emailData = {
-        email: savedDetails.Email,
-        name: savedDetails.Name,
-        date: awsDate,
-        timeslot: emailTime2 + ' - ' + emailTime,
-        table: selectedTables[0].table,
-        telephone: savedDetails.Telephone,
-        adults: adults,
-        children: children,
-        total : savedDetails.Total,
-        subject: "Your Booking Confirmation",
-        variable: "booklater",
-      }
 
-      const response = await fetch('https://ebaedr0fmd.execute-api.eu-west-2.amazonaws.com/send', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(emailData),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-      } else {
-        console.error('There was an error!', response.status);
-      }
 
       //save to database
       DataStore.save(

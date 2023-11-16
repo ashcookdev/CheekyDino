@@ -40,7 +40,7 @@ import Graph from './staffpages/graph';
 import Task from './staffpages/Task';
 import CustomerScreen from './staffpages/customerscreen';
 import SessionCalendar from './staffpages/sessionCalender';
-import KidsMenu from './staffpages/kidsmenu'
+import KidsMenu from './staffpages/menu'
 import SessionToday from './staffpages/todaysbookings';
 import EditHome from './staffpages/edithome';
 import Shifts from './staffpages/shifts';

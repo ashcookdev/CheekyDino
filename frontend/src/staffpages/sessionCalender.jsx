@@ -19,6 +19,9 @@ export default function SessionCalender({ date, children, adults, childData, ema
   const [freeTablesPerTimeslot, setFreeTablesPerTimeslot] = useState([]);
 
   
+  let dateObj = new Date(date);
+
+  let formattedDate = `${dateObj.getDate()}.${dateObj.getMonth() + 1}.${dateObj.getFullYear()}`;
 
   console.log(childData)
   console.log(name)
@@ -127,26 +130,30 @@ console.log(childData[0].name)
       };
     
       const bookingID = createUniqueID();
-    
-      // Generate QR code data URL
-      const qrCodeDataUrl = await QRCode.toDataURL(bookingID);
-    
-      // Initialize EmailJS
-      emailjs.init('IRmucExHqH7rKSEBW');
-    
-      const templateParams = {
-        to_name: name,
-        to_email: email,
-        message: `Thank you for booking with us. Your booking details are as follows: Date: ${date} Time: ${item.timeslot.start} - ${item.timeslot.end} Table: ${item.recommendedTables[0]}. Please show this QR code to a member of staff when you arrive.`,  qrCodeDataUrl
-      };
-    
-      emailjs.send('bookingscheekydino', 'bookings', templateParams)
-        .then((response) => {
-          console.log('SUCCESS!', response.status, response.text);
-        })
-        .catch((err) => {
-          console.log('FAILED...', err);
-        });
+
+      const emailData = {
+        email: email,
+        name: name,
+        date: date,
+        timeslot: `${item.timeslot.start} - ${item.timeslot.end}`,
+        table: item.recommendedTables[0],
+        telephone: telephone,
+        adults: adults,
+        children: children,
+        bookingID: bookingID,
+        totalSpent: childData[0].TotalSpent.toFixed(2),
+        childData: childData,
+      
+      }
+
+      const response = await fetch('https://ebaedr0fmd.execute-api.eu-west-2.amazonaws.com/send', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailData),
+    });
+
     
       // Save booking information to DataStore
       DataStore.save(
@@ -187,7 +194,7 @@ childData.forEach(item => {
     // Display available timeslots with "Book" button
     return (
       <motion.div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <p className="text-lg font-semibold leading-6 text-gray-900">{date}</p>
+        <p className="text-lg font-semibold leading-6 text-gray-900 component-title">{formattedDate}</p>
         <p className="text-center font-bold component-title">Select A Timeslot</p>
         <p className="text-center font-bold component-title mt-2">Party Size: {Number(adults) + Number(children)} </p>
         <p className="text-center font-bold component-title mt-2">Name: {name} </p>

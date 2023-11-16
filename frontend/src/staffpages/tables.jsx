@@ -139,6 +139,8 @@ function OccupiedTables() {
     );
     console.log(sessionCafeOrders);
 
+    
+
   
     // Update the LeftCenter field for the matching record
     await DataStore.save(
@@ -177,7 +179,7 @@ orders: sessionCafeOrders.map((item) => item.length),
 
   }
 
-  fetch('http://localhost:3001/exit', {
+  fetch('https://qx2adew2ha.execute-api.eu-west-2.amazonaws.com/LeftCenter', {
       method : 'POST',
       headers: {
           'Access-Control-Allow-Origin': '*',

@@ -1,13 +1,3 @@
-type PreBooking @model @auth(rules: [{allow: private}, {allow: public}, {allow: owner}]) {
-  id: ID!
-  Name: String
-  Email: String
-  Date: String
-  Adults: String
-  Children: String
-  Booked: Boolean
-}
-
 type StockControl @model @auth(rules: [{allow: private}]) {
   id: ID!
   Name: String
@@ -154,6 +144,7 @@ type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: pub
   CafeOrders: [CafeOrder] @hasMany(indexName: "bySessions", fields: ["id"])
   orderid: [String]
   Staff: String
+  CustomerbookingID: String
 }
 
 type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -243,5 +234,4 @@ type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: [
   PartyAdultFoodChoices: [String]
   Email: String
   Telephone: String
-}
- 
+} 

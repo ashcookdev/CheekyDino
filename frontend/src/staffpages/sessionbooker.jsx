@@ -4,8 +4,6 @@ import StaffTill from './StaffTill';
 import { DataStore } from 'aws-amplify';
 import { Sessions } from './models';
 
-
-
 export default function SessionBook() {
   const [children, setChildren] = useState(1);
   const [adults, setAdults] = useState(1);
@@ -15,96 +13,73 @@ export default function SessionBook() {
   const [staff, setStaff] = useState('');
   const [selectedSession, setSelectedSession] = useState('');
   const [sessions, setSessions] = useState([]);
-
- 
   const [date, setDate] = useState('');
   const [email, setEmail] = useState('');
-  const [telephone, setNumber] = useState('');  
-
-  console.log(children, adults, date)
+  const [telephone, setNumber] = useState('');
+  const [price, setPrice] = useState(0);
 
   const handleChildrenChange = (e) => {
     const value = e.target.value;
     setChildren(value);
-    setChildData(Array.from({ length: value }, () => ({ name: '', age: '' })));
+    setChildData(Array.from({ length: value }, () => ({ age: '' })));
   };
-
-  
-
-
 
   const handleChildAgeChange = (index, value) => {
     setChildData((prev) =>
-      prev.map((data, i) => (i === index ? { ...data, childAge: value } : data))
+      prev.map((data, i) => (i === index ? { ...data, age: value } : data))
     );
   };
-  
-  
-  
+
+  const handleSubmit = () => {
+    const totalPrice = calculatePrice(childData, parseInt(adults), parseInt(children));
+    setChildData((prev) => prev.map((data) => ({ ...data, TotalSpent: totalPrice })));
+    setSubmitted(true);
+  };
+
   const calculatePrice = (childData, adults, children) => {
     let price = 0;
     childData.forEach((data) => {
-      if (data.childAge === "Under 1 year") {
+      if (data.age === 'under 1 year') {
         price += 3.0;
-      } else if (data.childAge === "1-2 years old") {
+      } else if (data.age === '1-2 years old') {
         price += 8.0;
-      } else if (data.childAge === "2+") {
+      } else if (data.age === '2+') {
         price += 9.0;
-      } else if (data.childAge === "sibling") {
+      } else if (data.age === 'sibling') {
         price += 0;
       }
     });
-    // Add an extra £2.00 for every adult if there are more adults than children
-    console.log(adults)
     const additionalAdults = adults - children;
-
     if (additionalAdults > 0) {
-      // Add £2.00 for each additional adult beyond the number of children
       price += additionalAdults * 2.0;
     }
-
     return price;
+    setPrice(price);
   };
 
-const handleSubmit = () => {
-  const totalPrice = calculatePrice(childData, parseInt(adults), parseInt(children));
-  setChildData((prev) => prev.map((data) => ({ ...data, TotalSpent: totalPrice })));
-  setSubmitted(true);
-};
-
-
   const handleSelectedChange = (value) => {
-    console.log(value.StaffId)
-    setStaff(value.StaffId)
-  }
+    setStaff(value.StaffId);
+  };
 
   useEffect(() => {
     const getSession = async () => {
       const models = await DataStore.query(Sessions);
-      const filteredSessions = models.filter(session => session.Email === email);
+      const filteredSessions = models.filter((session) => session.Email === email);
       setSessions(filteredSessions);
-    }
-  
+    };
     getSession();
   }, [email]);
 
-
   const AutoFill = () => {
-    const session = sessions.find(session => session.id === selectedSession);
+    const session = sessions.find((session) => session.id === selectedSession);
     if (session) {
       setName(session.Name);
-      console.log(session.Name)
-setNumber(session.Number);
-
+      setNumber(session.Number);
       setChildren(session.Children);
       setChildData(Array.from({ length: session.Children }, () => ({ age: '' })));
-
-
-      console.log(session.Children)
       setAdults(session.Adults);
-      console.log(session.Adults)
     }
-  }
+  };
     
 
   
@@ -209,8 +184,8 @@ Adult Name            </label>
             <input
               onChange={(e) => setAdults(e.target.value)}
               id="adults"
-              type="number"
               name="adults"
+              type="number"
               className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
               value={adults}
 
@@ -225,8 +200,8 @@ Adult Name            </label>
             <input
               onChange={handleChildrenChange}
               id="children"
-              type="number"
               name="children"
+              type="number"
               className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
 value={children}            ></input>
           </div>
@@ -296,7 +271,7 @@ Book
     </div>
     <div className="w-1/2 border">
   {submitted && (
-    <SessionCalenderTill children={children} staff={staff} adults={adults} date={date} childData={childData} email={email} telephone={telephone} name={name} />
+    <SessionCalenderTill children={children} staff={staff} adults={adults} date={date} childData={childData} email={email} telephone={telephone} name={name} price={price} />
   )}
 </div>
     </div>

@@ -15,13 +15,6 @@ const awsmobile = {
     "aws_appsync_region": "eu-west-2",
     "aws_appsync_authenticationType": "AMAZON_COGNITO_USER_POOLS",
     "aws_appsync_apiKey": "da2-zgrqcp2wxvbslcfxt2mgkfag4q",
-    "aws_cloud_logic_custom": [
-        {
-            "name": "emails",
-            "endpoint": "https://kj5eyl5ttj.execute-api.eu-west-2.amazonaws.com/staging",
-            "region": "eu-west-2"
-        }
-    ],
     "aws_cognito_identity_pool_id": "eu-west-2:a0a1acfa-3131-4c17-9ac7-6b025e5f4c65",
     "aws_cognito_region": "eu-west-2",
     "aws_user_pools_id": "eu-west-2_ztC67IqIM",

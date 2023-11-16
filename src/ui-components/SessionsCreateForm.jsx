@@ -19,9 +19,8 @@ import {
   TextField,
   useTheme,
 } from "@aws-amplify/ui-react";
-import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Sessions } from "../models";
-import { fetchByPath, validateField } from "./utils";
+import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
   items = [],
@@ -209,6 +208,7 @@ export default function SessionsCreateForm(props) {
     Telephone: "",
     orderid: [],
     Staff: "",
+    CustomerbookingID: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Email, setEmail] = React.useState(initialValues.Email);
@@ -235,6 +235,9 @@ export default function SessionsCreateForm(props) {
   const [Telephone, setTelephone] = React.useState(initialValues.Telephone);
   const [orderid, setOrderid] = React.useState(initialValues.orderid);
   const [Staff, setStaff] = React.useState(initialValues.Staff);
+  const [CustomerbookingID, setCustomerbookingID] = React.useState(
+    initialValues.CustomerbookingID
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.Name);
@@ -257,6 +260,7 @@ export default function SessionsCreateForm(props) {
     setOrderid(initialValues.orderid);
     setCurrentOrderidValue("");
     setStaff(initialValues.Staff);
+    setCustomerbookingID(initialValues.CustomerbookingID);
     setErrors({});
   };
   const [currentOrderidValue, setCurrentOrderidValue] = React.useState("");
@@ -281,6 +285,7 @@ export default function SessionsCreateForm(props) {
     Telephone: [],
     orderid: [],
     Staff: [],
+    CustomerbookingID: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -327,6 +332,7 @@ export default function SessionsCreateForm(props) {
           Telephone,
           orderid,
           Staff,
+          CustomerbookingID,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -400,6 +406,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -442,6 +449,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.Email ?? value;
@@ -485,6 +493,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.TimeslotFrom ?? value;
@@ -528,6 +537,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.TimeslotTo ?? value;
@@ -571,6 +581,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.TimeLeft ?? value;
@@ -614,6 +625,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.TimeArrived ?? value;
@@ -657,6 +669,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.Date ?? value;
@@ -703,6 +716,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.Table ?? value;
@@ -749,6 +763,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.Orders ?? value;
@@ -791,6 +806,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.Prepaid ?? value;
@@ -837,6 +853,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.TotalSpent ?? value;
@@ -883,6 +900,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.Adults ?? value;
@@ -929,6 +947,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.Children ?? value;
@@ -971,6 +990,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.Arrived ?? value;
@@ -1013,6 +1033,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.LeftCenter ?? value;
@@ -1059,6 +1080,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.ExtraTables ?? value;
@@ -1101,6 +1123,7 @@ export default function SessionsCreateForm(props) {
               Telephone: value,
               orderid,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.Telephone ?? value;
@@ -1139,6 +1162,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid: values,
               Staff,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             values = result?.orderid ?? values;
@@ -1206,6 +1230,7 @@ export default function SessionsCreateForm(props) {
               Telephone,
               orderid,
               Staff: value,
+              CustomerbookingID,
             };
             const result = onChange(modelFields);
             value = result?.Staff ?? value;
@@ -1219,6 +1244,51 @@ export default function SessionsCreateForm(props) {
         errorMessage={errors.Staff?.errorMessage}
         hasError={errors.Staff?.hasError}
         {...getOverrideProps(overrides, "Staff")}
+      ></TextField>
+      <TextField
+        label="Customerbooking id"
+        isRequired={false}
+        isReadOnly={false}
+        value={CustomerbookingID}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Staff,
+              CustomerbookingID: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.CustomerbookingID ?? value;
+          }
+          if (errors.CustomerbookingID?.hasError) {
+            runValidationTasks("CustomerbookingID", value);
+          }
+          setCustomerbookingID(value);
+        }}
+        onBlur={() =>
+          runValidationTasks("CustomerbookingID", CustomerbookingID)
+        }
+        errorMessage={errors.CustomerbookingID?.errorMessage}
+        hasError={errors.CustomerbookingID?.hasError}
+        {...getOverrideProps(overrides, "CustomerbookingID")}
       ></TextField>
       <Flex
         justifyContent="space-between"

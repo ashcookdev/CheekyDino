@@ -71,14 +71,16 @@ console.log(order)
 
 
 if (drawer === true) {
-  const article = { title: 'React POST Request Example' };
-  axios.post('http://localhost:5252/open-drawer', article, {
-      headers: {
-          'Content-Type': 'application/json'
-      }
-  })
-  .then(response => this.setState({ articleId: response.data.id }))
-  .catch(error => console.error('There was an error!', error));
+  // const article = { title: 'React POST Request Example' };
+  // axios.post('http://localhost:5252/open-drawer', article, {
+  //     headers: {
+  //         'Content-Type': 'application/json'
+  //     }
+  // })
+  // .then(response => this.setState({ articleId: response.data.id }))
+  // .catch(error => console.error('There was an error!', error));
+
+  window.location.href = '/testtill';
 }
 
 

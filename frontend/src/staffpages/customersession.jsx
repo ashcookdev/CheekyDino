@@ -21,7 +21,8 @@ export default function SessionBook() {
  
   const [date, setDate] = useState('');
   const [email, setEmail] = useState('');
-  const [telephone, setNumber] = useState('');  
+  const [telephone, setNumber] = useState(''); 
+  
 
   console.log(children, adults, date)
 
@@ -80,6 +81,9 @@ const handleSubmit = () => {
   const totalPrice = calculatePrice(childData, parseInt(adults), parseInt(children));
   setChildData((prev) => prev.map((data) => ({ ...data, TotalSpent: totalPrice })));
   setSubmitted(true);
+
+
+
 };
 
 
@@ -124,8 +128,8 @@ setNumber(session.Number);
   
 
   return (
-        <div className="flex">
-    <div className="w-1/2 border">
+    <div className="flex flex-col md:flex-row">
+    <div className="md:w-1/2 border">
     <div className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0">
@@ -287,8 +291,8 @@ Book
    
 
     </div>
-    <div className="w-1/2 border">
-    {submitted && (
+    <div className="md:w-1/2 border">
+    {submitted &&  (
      <SessionCalender children={children} adults={adults} date= {date} childData = {childData} telephone= {telephone} 
       email= {email} name= {name}/>
     )

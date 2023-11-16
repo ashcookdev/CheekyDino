@@ -6,8 +6,17 @@
 
 import * as React from "react";
 import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
-import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { Sessions } from "../models";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -33,6 +42,7 @@ export declare type SessionsUpdateFormInputValues = {
     Telephone?: string;
     orderid?: string[];
     Staff?: string;
+    CustomerbookingID?: string;
 };
 export declare type SessionsUpdateFormValidationValues = {
     Name?: ValidationFunction<string>;
@@ -54,6 +64,7 @@ export declare type SessionsUpdateFormValidationValues = {
     Telephone?: ValidationFunction<string>;
     orderid?: ValidationFunction<string>;
     Staff?: ValidationFunction<string>;
+    CustomerbookingID?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type SessionsUpdateFormOverridesProps = {
@@ -77,6 +88,7 @@ export declare type SessionsUpdateFormOverridesProps = {
     Telephone?: PrimitiveOverrideProps<TextFieldProps>;
     orderid?: PrimitiveOverrideProps<TextFieldProps>;
     Staff?: PrimitiveOverrideProps<TextFieldProps>;
+    CustomerbookingID?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type SessionsUpdateFormProps = React.PropsWithChildren<{
     overrides?: SessionsUpdateFormOverridesProps | undefined | null;

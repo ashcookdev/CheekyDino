@@ -6,44 +6,6 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 
 
 
-type EagerPreBooking = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<PreBooking, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly Name?: string | null;
-  readonly Email?: string | null;
-  readonly Date?: string | null;
-  readonly Adults?: string | null;
-  readonly Children?: string | null;
-  readonly Booked?: boolean | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-type LazyPreBooking = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<PreBooking, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly Name?: string | null;
-  readonly Email?: string | null;
-  readonly Date?: string | null;
-  readonly Adults?: string | null;
-  readonly Children?: string | null;
-  readonly Booked?: boolean | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-export declare type PreBooking = LazyLoading extends LazyLoadingDisabled ? EagerPreBooking : LazyPreBooking
-
-export declare const PreBooking: (new (init: ModelInit<PreBooking>) => PreBooking) & {
-  copyOf(source: PreBooking, mutator: (draft: MutableModel<PreBooking>) => MutableModel<PreBooking> | void): PreBooking;
-}
-
 type EagerStockControl = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<StockControl, 'id'>;
@@ -480,6 +442,7 @@ type EagerSessions = {
   readonly CafeOrders?: (CafeOrder | null)[] | null;
   readonly orderid?: (string | null)[] | null;
   readonly Staff?: string | null;
+  readonly CustomerbookingID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -510,6 +473,7 @@ type LazySessions = {
   readonly CafeOrders: AsyncCollection<CafeOrder>;
   readonly orderid?: (string | null)[] | null;
   readonly Staff?: string | null;
+  readonly CustomerbookingID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

@@ -1,51 +1,12 @@
-import React, { useState, useRef } from "react";
-import ReactToPrint from "react-to-print";
-import QRCode from "react-qr-code";
+import React, { useState, useEffect } from "react";
+
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { DataStore } from "@aws-amplify/datastore";
 import { Sessions, Messages } from "./models";
 
-const Receipt = React.forwardRef(
-  ({ order, total, table, childName, changeGiven }, ref) => {
-    // Calculate the amount paid
-    const amountPaid = total + changeGiven;
-
-    return (
-      <div ref={ref} className="p-4 border rounded text-left">
-  <h1 className="text-2xl font-bold mb-2">Cheeky Dino</h1>
-  <div className="mt-4">
-    <img
-      src="./dino-logo.png"
-      alt="Cheeky Dino logo"
-      width="128"
-      height="128"
-    />
-    <p className="text-sm mt-2 text-color-black mb-5">Great indoor play centre in Maidstone</p>
-    {table && <div className="text-color-black">Table: {table}</div>}
-    {childName && <div className="text-color-black"> Name: {childName}</div>}
-    <div className="text-color-black">{order}</div>
-    <div className="border-t mt-2 pt-2">
-      <p className="text-color-black">Total: £{total.toFixed(2)}</p>
-    </div>
-    <div className="border-t mt-2 pt-2 text-color-black">
-      <p className="text-color-black">Change Given: £{changeGiven.toFixed(2)}</p>
-    </div>
-    <div className="border-t mt-2 pt-2">
-      <p className="text-color-black">Amount Paid: £{amountPaid.toFixed(2)}</p>
-    </div>
-    <div className="border-t mt-2 pt-2 mb-5"></div>
-    <QRCode value="https://cheekydino.co.uk" size={128} />
-    <p className="text-sm mt-2 text-color-black">https://cheekydino.co.uk</p>
-    <p className="text-sm mt-2 text-color-black">01622 670055</p>
-  </div>
-</div>
-
-    );
-  }
-);
-
-
+const isElectron = window && window.process && window.process.type;
+const ipcRenderer = isElectron ? window.require('electron').ipcRenderer : null;
 
 const TillPayment = ({ order, total: initialTotal, table, ChildName, route }) => {
   const [paymentMethod, setPaymentMethod] = useState(null);
@@ -58,9 +19,22 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName, route }) =>
   const [done, setDone] = useState(false);
   const [discount, setDiscount] = useState(0); // new state for discount percentage
 
+  useEffect(() => {
+    // Check if ipcRenderer is available before using it
+    if (ipcRenderer) {
+      ipcRenderer.send('some-electron-event', { data: 'your-data' });
+
+      ipcRenderer.on('electron-response', (event, responseData) => {
+        console.log('Received response from Electron:', responseData);
+      });
+    }
+  }, []); // Empty dependency array ensures the effect runs once after the initial render
+
+
+
+
   const navigate = useNavigate();
 
-  const receiptRef = useRef();
 
   const handleConfirmClick = async () => {
     console.log("Order confirmed");
@@ -130,7 +104,15 @@ const timeString = now.toISOString().split('T')[1];
     // Calculate the change
     const newChange = updatedAmount - total;
     setChangeGiven(newChange > 0 ? newChange : 0);
+  
+    // Open the till drawer using ipcRenderer
+    if (ipcRenderer) {
+      ipcRenderer.send('open-drawer', { amount });
+    } else {
+      console.error('ipcRenderer is not available.');
+    }
   };
+  
 
   const handleDecimalClick = () => {
     if (!input.includes(".")) {
@@ -145,6 +127,11 @@ const timeString = now.toISOString().split('T')[1];
     setAmountEntered(updatedAmount);
     const newChange = updatedAmount - total;
     setChangeGiven(newChange > 0 ? newChange : 0);
+    if (ipcRenderer) {
+      ipcRenderer.send('open-drawer', { total });
+    } else {
+      console.error('ipcRenderer is not available.');
+    }
   };
 
   const handleCardClick = () => {
@@ -187,6 +174,8 @@ const timeString = now.toISOString().split('T')[1];
     }
     setChangeGiven(0); // Reset the change given
   };
+
+  
 
   if (done === true) {
     navigate('/till');
@@ -393,41 +382,65 @@ const timeString = now.toISOString().split('T')[1];
         </ul>
 
         <div>
-          <input
-            type="text"
-            placeholder="Enter Amount"
-            value={input}
-            onChange={(e) => {
-              const input = e.target.value.replace(/[^0-9.]/g, "");
-              setInput(input);
-              const newChange = parseFloat(input) - total;
-              setChangeGiven(newChange > 0 ? newChange : 0);
-            }}
-            className="bg-purple-200 p-2 rounded border border-gray-300 item-center"
-          />
+  <input
+    type="text"
+    placeholder="Enter Amount"
+    value={input}
+    onChange={(e) => {
+      const input = e.target.value.replace(/[^0-9.]/g, "");
+      setInput(input);
+      const newChange = parseFloat(input) - total;
+      setChangeGiven(newChange > 0 ? newChange : 0);
+    }}
+    className="bg-purple-200 p-2 rounded border border-gray-300 item-center"
+  />
+  <div className="flex flex-col gap-2 mt-4">
+  {isElectron && (
           <div className="flex flex-col gap-2 mt-4">
-            <ReactToPrint
-              trigger={() => (
-                <motion.button
-                  className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5"
-                  variants={buttonVariants}
-                  whileHover="hover"
-                >
-                  Print/Give Change
-                </motion.button>
-              )}
-              content={() => receiptRef.current}
-            />
-            <div style={{ display: "none" }}>
-              <Receipt
-                ref={receiptRef}
-                order={order}
-                total={total}
-                table={table}
-                childName={ChildName}
-                changeGiven={changeGiven}
-              />
-            </div>
+            <motion.button
+              onClick={() => {
+                const data = {
+                  product: '2 Hour Play Session',
+                  name: ChildName,
+                  method: paymentMethod,
+                  table: table,
+                  change: changeGiven.toFixed(2),
+                  price: total.toFixed(2),
+                };
+              
+                ipcRenderer.send('print-open', { data });
+              }}
+              className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5"
+              variants={buttonVariants}
+              whileHover="hover"
+            >
+              Print/Give Change
+            </motion.button>
+            <motion.button
+              onClick={() => {
+
+                const data = {
+                  product: '2 Hour Play Session',
+                  name: ChildName,
+                  method: paymentMethod,
+                  table: table,
+                  change: changeGiven.toFixed(2),
+                  price: total.toFixed(2),
+                };
+              
+
+
+
+                ipcRenderer.send('print-receipt', { data });
+              }}
+              className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5"
+              variants={buttonVariants}
+              whileHover="hover"
+            >
+              Print
+            </motion.button>
+          </div>
+        )}
           </div>
         </div>
         <motion.button

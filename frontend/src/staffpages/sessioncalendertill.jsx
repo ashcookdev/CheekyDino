@@ -18,10 +18,11 @@ export default function SessionCalender({ date, children, adults, childData, ema
   const navigate = useNavigate();
 
   const [freeTablesPerTimeslot, setFreeTablesPerTimeslot] = useState([]);
+  const [price, setPrice] = useState(0);
 
   
 
-  console.log(childData)
+    console.log(childData[0].TotalSpent.toFixed(2))
   console.log(name)
 
   //get email from auth
@@ -31,7 +32,6 @@ export default function SessionCalender({ date, children, adults, childData, ema
 
 
   
-console.log(childData[0].name)
 
 
   const timeslots = [
@@ -112,6 +112,7 @@ console.log(childData[0].name)
         });
     
         setFreeTablesPerTimeslot(freeTablesPerTimeslot);
+        setPrice(childData[0].TotalSpent.toFixed(2))
     
         freeTablesPerTimeslot.forEach(item => {
           console.log(`Timeslot: ${item.timeslot.start} - ${item.timeslot.end}, Free Tables: ${item.freeTables}, Recommended Tables: ${item.recommendedTables}`);
@@ -119,7 +120,7 @@ console.log(childData[0].name)
       };
     
       fetchAvailability();
-    }, []);
+    }, [childData, date, children, adults]);
     
     // Handle booking
     async function handleBook(item) {
@@ -139,26 +140,20 @@ console.log(childData[0].name)
         adults: adults,
         children: children,
         bookingID: bookingID,
-        totalSpent: childData.reduce((acc, item) => acc + parseFloat(item.TotalSpent), 0),
+        totalSpent: childData[0].TotalSpent.toFixed(2),
+        childData: childData,
       
       }
 
-      fetch('http://localhost:3001/sendEmail', {
-        method : 'POST',
+      const response = await fetch('https://ebaedr0fmd.execute-api.eu-west-2.amazonaws.com/send', {
+        method: 'POST',
         headers: {
-            'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(emailData),
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('There was an error!', error));
+    });
 
-
-
-    
-     
+   
     
       // Save booking information to DataStore
       DataStore.save(
@@ -178,13 +173,25 @@ console.log(childData[0].name)
           Prepaid: false,
           Age: childData.map(item => item.ChildAge),
           Telephone: telephone,
-          TotalSpent: childData.reduce((acc, item) => acc + parseFloat(item.TotalSpent), 0),
+          TotalSpent:Number(childData[0].TotalSpent.toFixed(2)),
+          CustomerbookingID: bookingID,
           Staff: staff,
         })
       );
     
       // Redirect to /sessionbooking page
-setCompleted(true)    }
+
+if (response.ok) {
+  const data = await response.json();
+  console.log(data);
+  setCompleted(true)    
+
+} else {
+  console.error('There was an error!', response.status);
+}
+}
+
+
 
     if (completed === true) {
       navigate('/till')
@@ -203,7 +210,7 @@ childData.forEach(item => {
         <p className="text-center font-bold">Select A Timeslot</p>
         <p className="text-center font-bold">Party Size: {Number(adults) + Number(children)} </p>
         <p className="text-center font-bold">Name: {name} </p>
-          <p className="text-center font-bold">Total Spent:£ {totalSpent.toFixed(2)} </p>
+        <p className="text-center font-bold">Total Spent: £{childData[0].TotalSpent.toFixed(2)}</p>
       
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
           {freeTablesPerTimeslot.map(item => (
