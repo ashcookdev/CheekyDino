@@ -11,14 +11,14 @@ const App = () => {
 
       // Test data to print
       const data = {
-        product: 'Test Product',
+        product: 'test product',
         method: 'Cash',
-        change: "£10",
-        price: "£100",
+        change: 0,
+        price: "£10",
       };
 
       // Send 'print-receipt' event to Electron.js backend
-      ipcRenderer.send('open-drawer', data);
+      ipcRenderer.send('print-receipt', data);
     } else {
       // If not in Electron, render a 404 message or handle as needed
       console.log('Not running in Electron. Render a 404 message or handle as needed.');

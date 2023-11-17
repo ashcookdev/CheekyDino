@@ -54,8 +54,10 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "build": "electron-builder"
+    "build-react": "react-scripts build",
+    "build-electron": "electron-builder"
   },
+  
   "build": {
     "appId": "com.example.cheekydino",
     "win": {
