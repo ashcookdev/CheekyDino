@@ -43,6 +43,39 @@ app.post('/print', (req, res) => {
   });
 });
 
+app.post('/cafe', (req, res) => {
+
+  const body = req.body;
+  
+  console.log(body);
+
+  // Create a new network device and printer
+  const device = new escpos.Network('192.168.1.222', 9100);
+  const options = { encoding: 'GB18030' /* default */ };
+  const printer = new escpos.Printer(device, options);
+
+  device.open(function(error) {
+    if (error) {
+      console.error('Error opening device:', error);
+      res.status(500).json({ error: 'Error opening device' });
+      return;
+    }
+
+    try {
+      printReceiptAndOpenDrawer(body, printer);
+      res.status(200).json({ message: 'Printed successfully and drawer opened' });
+    } catch (error) {
+      console.error('Error printing receipt:', error);
+      res.status(500).json({ error: 'Error printing receipt' });
+    } finally {
+      device.close();
+    }
+  }
+)});
+
+
+  
+
 
 
 
@@ -62,7 +95,6 @@ async function printReceiptAndOpenDrawer(body, printer) {
   .size(1, 1)
   .text('Item\t\tPrice\tQty\tTotal')
   .text('--------------------------------')
-  // Add each item in the receipt here
   .text(`Product: ${body.data.product}`)
 .text(`Name: ${body.data.name}`)
   .text(`Table: ${body.data.table}`)
@@ -71,7 +103,7 @@ async function printReceiptAndOpenDrawer(body, printer) {
   .align('rt')
   .style('b')
   .size(2, 2)
-  .text(`Change: ${body.data.change}`)
+  // .text(`Change: ${body.data.change}`)
   .text('--------------------------------')
   .align('ct')
   .style('normal')

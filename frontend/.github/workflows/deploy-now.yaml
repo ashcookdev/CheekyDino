@@ -1,0 +1,27 @@
+name: Deploy Now
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build React
+        run: npm run build-react
+      - name: Deploy
+        uses: ionos-cloud/deploy-now-action@v1
+        with:
+          access-key: ${{ secrets.IONOS_ACCESS_KEY }}
+          secret-key: ${{ secrets.IONOS_SECRET_KEY }}
+          region: 'us-east-1'
+          source-directory: 'build'
+
