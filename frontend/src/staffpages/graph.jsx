@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
 import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 import { format } from 'date-fns';
-import { Sessions } from './models';
+import { Sessions } from '../models';
 
 function App() {
   const [data, setData] = useState([]);

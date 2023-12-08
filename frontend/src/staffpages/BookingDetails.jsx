@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { DataStore } from '@aws-amplify/datastore';
-import { Sessions } from './models';
+import { Sessions } from '../models';
 import { Analytics } from 'aws-amplify';
 import Till from './Till';
 import { format, addHours } from 'date-fns';

@@ -15,7 +15,7 @@ import {
 } from "@aws-amplify/ui-react";
 import { Staff } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { DataStore } from "aws-amplify";
+import { DataStore } from "aws-amplify/datastore";
 export default function StaffUpdateForm(props) {
   const {
     id: idProp,

@@ -4,8 +4,9 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Auth } from 'aws-amplify';
 import { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { Sessions } from '../../staffpages/models';
+import { Sessions } from '../../models';
 import '../customerfont.css'
+import { Link } from 'react-router-dom'
 
 
 
@@ -93,17 +94,17 @@ export default function CustomerNav() {
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current ? 'bg-white text-orange-500 component-title' : 'text-orange-500 component-title hover:bg-orange-500 hover:text-white',
-                          'rounded-md px-3 py-2 text-sm font-medium'
-                        )}
-                        aria-current={item.current ? 'page' : undefined}
-                      >
-                        {item.name}
-                      </a>
+                       <Link
+                       key={item.name}
+                       to={item.href}
+                       className={classNames(
+                         item.current ? 'bg-white text-orange-500 component-title' : 'text-orange-500 component-title hover:bg-orange-500 hover:text-white',
+                         'rounded-md px-3 py-2 text-sm font-medium'
+                       )}
+                       aria-current={item.current ? 'page' : undefined}
+                     >
+                       {item.name}
+                     </Link>
                     ))}
                   </div>
                 </div>

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { DataStore, Predicates } from "aws-amplify";
 import { format, parse, set } from "date-fns";
-import { PartyBooking } from './models';
-import { PartyGuests } from './models';
+import { PartyBooking } from '../models';
+import { PartyGuests } from '../models';
 import BarCodeScanner from "./barcodescanner";
 import TillBooking from "./tillbooking";
-import { Sessions } from "./models";
+import { Sessions } from "../models";
 import Tables from "./tables";
 import { Analytics } from 'aws-amplify';
 import TillSession from "./tillsession";
-import { HotDrinks, SoftDrinks, Confectionary, KitchenMenu, Extras } from "./models";
+import { HotDrinks, SoftDrinks, Confectionary, KitchenMenu, Extras } from "../models";
 import TillParty from "./TillParty";
 import TillPayments from "./TillPayments";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +23,15 @@ import { ChatBubbleBottomCenterIcon, InboxIcon, XCircleIcon } from "@heroicons/r
 import MakeReservation from "./makereservation";
 import SlideOver from "./slideover";
 import axios from "axios";
+import {Link} from 'react-router-dom';
+import { PhoneIcon } from "@heroicons/react/20/solid";
+import AudioChat from "./audiochat";
+import ControlPanel from "./ControlPanel";
+
+
+
+const isElectron = window && window.process && window.process.type;
+const ipcRenderer = isElectron ? window.require('electron').ipcRenderer : null;
 
 
 
@@ -57,6 +66,7 @@ const [showItems, setShowItems] = useState(true);
 const [showTopBar, setShowTopBar] = useState(false);
 const [chat, setChat] = useState(false);
 const [drawer, SetDrawer] = useState(false);
+const [phone, setPhone] = useState(false);
 
 
 useEffect(() => {
@@ -70,20 +80,10 @@ const navigate = useNavigate();
 console.log(order)
 
 
-if (drawer === true) {
-  // const article = { title: 'React POST Request Example' };
-  // axios.post('http://localhost:5252/open-drawer', article, {
-  //     headers: {
-  //         'Content-Type': 'application/json'
-  //     }
-  // })
-  // .then(response => this.setState({ articleId: response.data.id }))
-  // .catch(error => console.error('There was an error!', error));
-
-  window.location.href = '/testtill';
+if (phone === true) {
+  navigate('/audio')
+  
 }
-
-
 
 
 
@@ -212,7 +212,7 @@ setShowTopBar(true)
   }
 
   if (tablee === true) {
-    window.location.href = '/Tables';
+    navigate ('/Tables');
   }
 
   if (session === true) {
@@ -248,7 +248,7 @@ window.location.reload();
   
 
   if (home === true) {
-    window.location.href = '/dashboard';
+    navigate('/dashboard');
   }
     
   const fetchSessions = async () => {
@@ -316,6 +316,14 @@ window.location.reload();
   whileTap={{ scale: 0.9 }}
 >
   <ChatBubbleBottomCenterIcon className="h-6 w-6" />
+</motion.button>
+<motion.button
+  className="w-8 h-8 bg-green-600 ml-2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center rounded-full"
+  onClick={() => setPhone(true)}
+  whileHover={{ scale: 1.1 }}
+  whileTap={{ scale: 0.9 }}
+>
+  <PhoneIcon className="h-6 w-6" />
 </motion.button>
     <StaffTill onSelectChange={handleSelectedChange} />
 
@@ -407,15 +415,22 @@ window.location.reload();
         Kitchen
       </motion.button>
       <motion.button
-        className="w-16 h-16 bg-yellow-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
-        onClick={() => SetDrawer(true)}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        Open Drawer
-      </motion.button>
-     
-    </div>
+  className="w-16 h-16 bg-yellow-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
+  onClick={() => SetDrawer(true)}
+  whileHover={{ scale: 1.1 }}
+  whileTap={{ scale: 0.9 }}
+>
+  Controls
+</motion.button>
+
+
+
+{drawer && (
+ <ControlPanel />
+)}
+</div>
+
+
     </div>
   )}
 

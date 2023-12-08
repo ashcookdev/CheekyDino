@@ -1,5 +1,5 @@
 import { DataStore } from 'aws-amplify';
-import { Sessions } from './models';
+import { Sessions } from '../models';
 import React, { useState, useEffect } from 'react';
 import BarGraph from './graph';
 import { set } from 'date-fns';

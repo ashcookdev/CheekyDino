@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore, Predicates } from 'aws-amplify';
-import { KitchenMenu } from './models';
+import { KitchenMenu } from '../models';
 
 export default function Menu() {
   const [categories, setCategories] = useState([]);

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DataStore } from 'aws-amplify';
-import { Staff, TimeEntry, ClockIn } from './models';
+import { Staff, TimeEntry, ClockIn } from '../models';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
 import { Auth } from 'aws-amplify';
 import Holiday from './holiday';

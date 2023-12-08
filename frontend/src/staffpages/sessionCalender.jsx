@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { Sessions } from './models';
+import { Sessions } from '../models';
 import { useNavigate } from 'react-router-dom';
 import tableData from './TableData.json';
 import { format } from 'date-fns';

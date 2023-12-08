@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { PartyBooking } from './models';
+import { PartyBooking } from '../models';
 import { eachDayOfInterval, subMonths, addMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import PartyBook from './PartyBook';

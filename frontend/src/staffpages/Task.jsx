@@ -6,7 +6,7 @@ import {
   eachDayOfInterval,
   format,
 } from 'date-fns';
-import { Staff, TimeEntry, Holiday } from '../staffpages/models';
+import { Staff, TimeEntry, Holiday } from '../models';
 import { useNavigate } from 'react-router-dom';
 import NewStaff from './staffdetails';
 

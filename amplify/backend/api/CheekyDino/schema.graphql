@@ -1,3 +1,8 @@
+type Gates @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  content: Int
+}
+
 type StockControl @model @auth(rules: [{allow: private}]) {
   id: ID!
   Name: String
@@ -234,4 +239,5 @@ type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: [
   PartyAdultFoodChoices: [String]
   Email: String
   Telephone: String
-} 
+}
+ 

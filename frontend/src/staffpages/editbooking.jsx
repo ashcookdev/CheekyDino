@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { Sessions } from './models';
+import { Sessions } from '../models';
 import { format } from 'date-fns';
 import SessionTill from './SessionTill';
 

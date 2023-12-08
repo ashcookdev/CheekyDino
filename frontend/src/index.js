@@ -1,26 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { AppRoutes } from './renderer';
 import './index.css';
 import App from './App';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, HashRouter } from 'react-router-dom';
 import { Amplify } from 'aws-amplify';
 import awsExports from './aws-exports';
 import '@aws-amplify/ui-react/styles.css';
 import '@fontsource/inter/variable.css';
+
 Amplify.configure(awsExports);
 
-
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <BrowserRouter>
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-  </BrowserRouter>
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-
+// Check if the app is running in Electron
+if (window && window.process && window.process.type) {
+  ReactDOM
+    .createRoot(document.querySelector('#app'))
+    .render(
+      <React.StrictMode>
+        <HashRouter>
+        <AppRoutes />
+        </HashRouter>
+      </React.StrictMode>
+    );
+} else {
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(
+    <React.StrictMode>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </React.StrictMode>
+  );
+}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore } from '@aws-amplify/datastore';
-import { Staff } from './models';
+import { Staff } from '../models';
 import NewStaff from './starterform';
 
 export default function StaffTable () {

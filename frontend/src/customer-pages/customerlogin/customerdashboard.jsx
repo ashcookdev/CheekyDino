@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import {DataStore} from '@aws-amplify/datastore';
-import { PartyBooking, Sessions } from '../../staffpages/models';
+import { PartyBooking, Sessions } from '../../models';
 import PartyGuests  from './PartyGuests'
 import { CheckIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom';

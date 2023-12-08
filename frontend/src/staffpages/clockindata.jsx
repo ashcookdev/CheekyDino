@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DataStore } from '@aws-amplify/datastore';
-import { ClockIn } from './models';
+import { ClockIn } from '../models';
 import { CSVLink } from 'react-csv';
 
 function ClockInTable() {

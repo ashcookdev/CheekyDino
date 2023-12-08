@@ -1,5 +1,5 @@
 import { DataStore } from 'aws-amplify';
-import { PartyBooking } from './models';
+import { PartyBooking } from '../models';
 import React, { useState, useEffect } from 'react';
 import PartyBookingForm from './partybookingform';
 import NewPartyBookingForm from './PartyStaffCalendar';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { KitchenMenu } from './models';
+import { KitchenMenu } from '../models';
 import NonStockProductForm from './nonstockproductform';
 
 export default function Example() {

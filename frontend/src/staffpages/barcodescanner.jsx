@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { DataStore } from '@aws-amplify/datastore';
-import { Sessions } from './models';
+import { Sessions } from '../models';
 import OrderDetails from './BookingDetails';
+import { useNavigate } from 'react-router-dom';
 
 export default function Qrscanner() {
   const [isLoading, setIsLoading] = useState(false);
   const [session, setSession] = useState(null);
+
+  const navigate = useNavigate();
 
   let timeoutId = null;
 
@@ -46,7 +49,7 @@ export default function Qrscanner() {
         <button 
           type="button"
           className="inline-flex mb-5 items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none mr-5"
-          onClick={() => { window.location.assign("/dashboard"); }}
+          onClick={() => {navigate("/till") }}
         >
           Back
         </button>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { PartyBooking, PartyGuests, KitchenMenu, StockControl } from "./models";
+import { PartyBooking, PartyGuests, KitchenMenu, StockControl } from "../models";
 import { DataStore } from "aws-amplify";
 import { startOfDay, addDays, format } from 'date-fns';
 import { PieChart, Pie, Cell } from 'recharts';

@@ -7,7 +7,7 @@ import {
   } from '@heroicons/react/20/solid';
   import { useEffect, useState } from 'react';
   import { DataStore } from 'aws-amplify';
-  import { Sessions, PartyBooking, StockControl, CafeOrder, ClockIn } from './models';
+  import { Sessions, PartyBooking, StockControl, CafeOrder, ClockIn } from '../models';
   import { format } from 'date-fns';
 import { ArrowRightCircleIcon, CakeIcon, ClockIcon, CurrencyPoundIcon, ScaleIcon, ShoppingBagIcon, TableCellsIcon, UserGroupIcon } from '@heroicons/react/24/outline';
 

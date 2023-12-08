@@ -1,10 +1,10 @@
 import { PaperClipIcon } from '@heroicons/react/20/solid'
 import { useEffect, useState } from 'react'
 import { DataStore, Predicates } from '@aws-amplify/datastore';
-import { PartyBooking } from '../../staffpages/models';
+import { PartyBooking } from '../../models';
 import { Auth } from 'aws-amplify';
 import { useNavigate } from 'react-router-dom';
-import { PartyGuests } from '../../staffpages/models';
+import { PartyGuests } from '../../models';
 import '../customerfont.css'
 import AdultFoodOptions from './AdultFoodOptions';
 

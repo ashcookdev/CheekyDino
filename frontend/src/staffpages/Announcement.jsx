@@ -1,5 +1,5 @@
 import { DataStore, Predicates } from "aws-amplify";
-import {CustomerScreen} from './models';
+import {CustomerScreen} from '../models';
 
 import { Fragment, useState } from 'react'
 import {

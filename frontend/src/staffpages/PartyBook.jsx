@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { DataStore } from 'aws-amplify';
-import { PartyBooking, Sessions } from './models';
+import { PartyBooking, Sessions } from '../models';
 import { useNavigate } from 'react-router-dom';
 import { format, addHours, parse } from 'date-fns';
 import { Auth } from 'aws-amplify';

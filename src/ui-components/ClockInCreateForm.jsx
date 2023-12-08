@@ -15,7 +15,7 @@ import {
 } from "@aws-amplify/ui-react";
 import { ClockIn as ClockIn0 } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { DataStore } from "aws-amplify";
+import { DataStore } from "aws-amplify/datastore";
 export default function ClockInCreateForm(props) {
   const {
     clearOnSuccess = true,

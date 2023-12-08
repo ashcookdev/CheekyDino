@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { DataStore, Predicates } from 'aws-amplify';
-import { Sessions } from './models';
+import { Sessions } from '../models';
 import { isToday, format, differenceInMinutes, parse } from 'date-fns';
-import { CafeOrder } from './models';
+import { CafeOrder } from '../models';
 import './progress.css'
 import { useNavigate } from 'react-router-dom';
-import { Messages } from './models'; // Import the Messages model
+import { Messages } from '../models'; // Import the Messages model
+
+
+
 
 
 function OccupiedTables() {
@@ -15,6 +18,11 @@ function OccupiedTables() {
   const [moveTable, setMoveTable] = useState([]);
   const [moveState, setMoveState] = useState(false);
 
+  let ipcRenderer = null;
+  if (window.require) {
+    ipcRenderer = window.require('electron').ipcRenderer;
+  }
+  
 
   const navigate = useNavigate();
 
@@ -112,7 +120,7 @@ function OccupiedTables() {
 
   async function handleLeftCenter(event, table) {
     event.preventDefault();
-
+ipcRenderer.send("exit");
 
 
     

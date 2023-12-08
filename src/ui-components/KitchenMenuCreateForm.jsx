@@ -16,7 +16,7 @@ import {
 } from "@aws-amplify/ui-react";
 import { KitchenMenu } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { DataStore } from "aws-amplify";
+import { DataStore } from "aws-amplify/datastore";
 export default function KitchenMenuCreateForm(props) {
   const {
     clearOnSuccess = true,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { Sessions } from './models';
+import { Sessions } from '../models';
 import { Auth } from 'aws-amplify';
 import QRCode from 'react-qr-code';
 import { useNavigate } from 'react-router-dom';

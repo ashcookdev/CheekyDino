@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore, Auth } from 'aws-amplify';
-import { ClockIn, Staff, Messages } from './models';
+import { ClockIn, Staff, Messages } from '../models';
 import { ClockIcon, MoonIcon, SunIcon } from '@heroicons/react/20/solid';
 import ClockInData from './clockindata';
 import { set } from 'date-fns';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore, Predicates } from 'aws-amplify';
-import { KitchenMenu, CafeOrder, Sessions } from './models';
+import { KitchenMenu, CafeOrder, Sessions } from '../models';
 import CustomerProgress from './customerorderprogress';
 import { Auth } from 'aws-amplify';
 const { format } = require('date-fns');

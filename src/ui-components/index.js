@@ -10,6 +10,8 @@ export { default as ClockInCreateForm } from "./ClockInCreateForm";
 export { default as ClockInUpdateForm } from "./ClockInUpdateForm";
 export { default as CustomerScreenCreateForm } from "./CustomerScreenCreateForm";
 export { default as CustomerScreenUpdateForm } from "./CustomerScreenUpdateForm";
+export { default as GatesCreateForm } from "./GatesCreateForm";
+export { default as GatesUpdateForm } from "./GatesUpdateForm";
 export { default as HolidayCreateForm } from "./HolidayCreateForm";
 export { default as HolidayUpdateForm } from "./HolidayUpdateForm";
 export { default as HomePageCreateForm } from "./HomePageCreateForm";

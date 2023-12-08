@@ -1,5 +1,5 @@
 import { DataStore } from 'aws-amplify';
-import { CafeOrder, KitchenMenu } from './models';
+import { CafeOrder, KitchenMenu } from '../models';
 import { format, subHours, startOfDay, startOfWeek, startOfMonth } from 'date-fns';
 import React, { useState, useEffect } from 'react';
 

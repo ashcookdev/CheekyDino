@@ -1,7 +1,7 @@
 import CustomerEdit from './customeredit.jsx';
 import CustomerEvent from './customerevent.jsx';
 import TrexModel from './trexmodel.jsx';
-import './customerfont.css'
+import './customerfont.css';
 
 
 const collections = [

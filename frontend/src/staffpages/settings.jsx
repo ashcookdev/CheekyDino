@@ -10,10 +10,11 @@ import {
   UsersIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import {Staff} from "./models"
+import {Staff} from "../models"
 import { DataStore, Predicates } from 'aws-amplify'
 import { useEffect } from 'react'
 import { Auth } from 'aws-amplify'
+import { Link } from 'react-router-dom'
 
 
 
@@ -84,8 +85,8 @@ export default function Example() {
             <ul role="list" className="flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col">
               {secondaryNavigation.map((item) => (
                 <li key={item.name}>
-                  <a
-                    href={item.href}
+                  <Link
+                    to={item.href}
                     className={classNames(
                       item.current
                         ? 'bg-gray-50 text-indigo-600'
@@ -101,7 +102,7 @@ export default function Example() {
                       aria-hidden="true"
                     />
                     {item.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

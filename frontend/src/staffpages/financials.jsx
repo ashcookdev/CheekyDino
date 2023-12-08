@@ -1,5 +1,5 @@
 import { DataStore } from 'aws-amplify';
-import { CafeOrder, Sessions, PartyBooking, Staff, ClockIn, TimeEntry } from './models';
+import { CafeOrder, Sessions, PartyBooking, Staff, ClockIn, TimeEntry } from '../models';
 import React, { useState, useEffect } from 'react';
 import { formatISO } from 'date-fns';
 import GraphFinance from './graphfinance';
@@ -30,6 +30,7 @@ import {
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import Stats from './stats';
+import { Link } from 'react-router-dom'
 
 
 
@@ -306,8 +307,7 @@ return (
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                <a
-                                  href={item.href}
+                                <Link to={item.href}
                                   className={classNames(
                                     item.current
                                       ? 'bg-gray-50 text-indigo-600'
@@ -323,7 +323,7 @@ return (
                                     aria-hidden="true"
                                   />
                                   {item.name}
-                                </a>
+                                </Link>
                               </li>
                             ))}
                           </ul>
@@ -333,8 +333,7 @@ return (
                           <ul role="list" className="-mx-2 mt-2 space-y-1">
                             {teams.map((team) => (
                               <li key={team.name}>
-                                <a
-                                  href={team.href}
+                                <Link to={team.href}
                                   className={classNames(
                                     team.current
                                       ? 'bg-gray-50 text-indigo-600'
@@ -353,7 +352,7 @@ return (
                                     {team.initial}
                                   </span>
                                   <span className="truncate">{team.name}</span>
-                                </a>
+                                </Link>
                               </li>
                             ))}
                           </ul>
@@ -381,8 +380,7 @@ return (
                   <ul role="list" className="-mx-2 space-y-1">
                     {navigation.map((item) => (
                       <li key={item.name}>
-                        <a
-                          href={item.href}
+                        <Link to={item.href}
                           className={classNames(
                             item.current
                               ? 'bg-gray-50 text-indigo-600'
@@ -398,7 +396,7 @@ return (
                             aria-hidden="true"
                           />
                           {item.name}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -408,8 +406,8 @@ return (
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
                     {teams.map((team) => (
                       <li key={team.name}>
-                        <a
-                          href={team.href}
+                        <Link
+                          to={team.href}
                           className={classNames(
                             team.current
                               ? 'bg-gray-50 text-indigo-600'
@@ -428,7 +426,7 @@ return (
                             {team.initial}
                           </span>
                           <span className="truncate">{team.name}</span>
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>

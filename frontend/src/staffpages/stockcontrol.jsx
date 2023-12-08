@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { StockControl, KitchenMenu } from './models';
+import { StockControl, KitchenMenu } from '../models';
 import { useNavigate } from 'react-router-dom';
 import MealProfitMargins from './mealprofitmargins';
 import { StockControlEdit } from './stockcontroledit';

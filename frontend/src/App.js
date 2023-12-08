@@ -3,8 +3,8 @@ import Navbar from './Navbar';
 import Trex from '../src/customer-pages/party/Trex';
 import Character from '../src/customer-pages/party/Character';
 import Packages from './customer-pages/party/partyPackages';
-import Login from './Login/Login';
-import Register from './Login/Register';
+import Login from './customer-pages/Login/Login';
+import Register from './customer-pages/Login/Register';
 import Chat from './staffpages/ChatDashboard';
 import Calender from './staffpages/Calender';
 import { withAuthenticator } from '@aws-amplify/ui-react';
@@ -13,7 +13,7 @@ import React from 'react';
 import StaffNav from './staffpages/staffNav';
 import { DataStore } from 'aws-amplify';
 import PartyGuests from './customer-pages/customerlogin/PartyGuests';
-import { Messages } from '../src/staffpages/models';
+import { Messages } from './models';
 import Modal from './staffpages/modal';
 import { useLocation } from 'react-router-dom';
 import TRexCalendar from './customer-pages/party/T-rexCalender';
@@ -76,6 +76,13 @@ import PreBook from './staffpages/prebook/prebookhome';
 import MoveTables2 from './staffpages/movetables2';
 import PreBookTill2 from './staffpages/PrebookTill2';
 import TestTill from './staffpages/testtill';
+import Audio from './staffpages/audiochat';
+import ControlPanel from './staffpages/ControlPanel';
+
+
+
+
+
 
 const AuthenticatedCalender = withAuthenticator(Calender);
 const AuthenticatedChat = withAuthenticator(Chat);
@@ -92,6 +99,11 @@ function App() {
   const [isSignedIn, setIsSignedIn] = React.useState(false);
   const [modalContent, setModalContent] = React.useState('');
 
+
+
+  
+  
+
   const location = useLocation();
 
   React.useEffect(() => {
@@ -103,8 +115,6 @@ function App() {
 
 
  
-
-
   React.useEffect(() => {
     Auth.currentAuthenticatedUser()
       .then(() => setIsSignedIn(true))
@@ -126,8 +136,11 @@ function App() {
 
   ];
 
+
+
   return (
     <>
+    
       {isSignedIn &&
         !allowedGroups.includes(userGroup) &&
         !['/dashboard', '/kitchen', '/Tables', '/finance', '/chat'].includes(
@@ -138,7 +151,6 @@ function App() {
         allowedGroups.includes(userGroup) &&
         ![
           '/dashboard',
-          '/kitchen',
           '/Tables',
           '/finance',
           '/chat',
@@ -218,6 +230,8 @@ function App() {
             <Route path = '/movetables2'element={<MoveTables2 />} />
             <Route path='/prebooktill2' element={<PreBookTill2 />} />
             <Route path= '/testtill' element={<TestTill />} />
+            <Route path= '/audio' element={<Audio />} />
+            <Route path= '/controlpanel' element={<ControlPanel />} />
           </>
         )}
         
@@ -286,3 +300,6 @@ function App() {
 }
 
 export default App;
+
+//import { Router, Route } from 'electron-router-dom';
+

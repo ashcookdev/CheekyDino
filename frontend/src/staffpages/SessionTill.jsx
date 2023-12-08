@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { DataStore } from "@aws-amplify/datastore";
-import { Sessions, Messages } from "./models";
+import { Sessions, Messages } from "../models";
 
 const isElectron = window && window.process && window.process.type;
 const ipcRenderer = isElectron ? window.require('electron').ipcRenderer : null;
@@ -38,6 +38,7 @@ const TillPayment = ({ order, total: initialTotal, table, ChildName, route }) =>
 
   const handleConfirmClick = async () => {
     console.log("Order confirmed");
+    ipcRenderer.send("entrance");
     const now = new Date();
 const timeString = now.toISOString().split('T')[1];
 
@@ -395,7 +396,6 @@ const timeString = now.toISOString().split('T')[1];
     className="bg-purple-200 p-2 rounded border border-gray-300 item-center"
   />
   <div className="flex flex-col gap-2 mt-4">
-  {isElectron && (
           <div className="flex flex-col gap-2 mt-4">
             <motion.button
               onClick={() => {
@@ -408,7 +408,7 @@ const timeString = now.toISOString().split('T')[1];
                   price: total.toFixed(2),
                 };
               
-                ipcRenderer.send('print-open', { data });
+                ipcRenderer.send('print-receipt', { data });
               }}
               className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5"
               variants={buttonVariants}
@@ -440,7 +440,6 @@ const timeString = now.toISOString().split('T')[1];
               Print
             </motion.button>
           </div>
-        )}
           </div>
         </div>
         <motion.button

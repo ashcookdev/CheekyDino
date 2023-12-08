@@ -1,5 +1,5 @@
 import { DataStore } from "aws-amplify";
-import { KitchenMenu, StockControl } from "./models";
+import { KitchenMenu, StockControl } from "../models";
 
 export async function checkStockLevel(kitchenMenuItemId) {
   // Get the KitchenMenu item by ID

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { PartyGuests, PartyBooking, Messages } from './models';
+import { PartyGuests, PartyBooking, Messages } from '../models';
 import { useNavigate } from 'react-router-dom';
 
 const TillParty = ({ selectedParty }) => {

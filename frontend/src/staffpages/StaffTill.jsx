@@ -1,5 +1,5 @@
 import { DataStore } from "aws-amplify";
-import { ClockIn } from "./models";
+import { ClockIn } from "../models";
 import { useEffect, useState, Fragment } from "react";
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckBadgeIcon, ChevronDoubleDownIcon } from "@heroicons/react/24/solid";

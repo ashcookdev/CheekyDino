@@ -1,5 +1,5 @@
 import { DataStore } from "aws-amplify";
-import { Sessions } from "./models";
+import { Sessions } from "../models";
 import { useEffect, useState } from "react";
 import Till from "./Till";
 

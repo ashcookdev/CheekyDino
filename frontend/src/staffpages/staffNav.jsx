@@ -11,6 +11,7 @@ import {
 } from '@heroicons/react/outline';
 import { CalendarDaysIcon, ClipboardDocumentCheckIcon, CurrencyDollarIcon, HomeIcon, PlayCircleIcon, SignalIcon } from '@heroicons/react/20/solid'
 import { ChatBubbleBottomCenterTextIcon, CogIcon } from '@heroicons/react/24/solid'
+import { Link } from 'react-router-dom'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -68,48 +69,48 @@ return (
                 />
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-  <a
-    href="/dashboard"
+  <Link
+    to="/dashboard"
     className="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-purple-900"
   >
     <HomeIcon className="h-5 w-5 mr-1" aria-hidden="true" />
     Home
-  </a>
-  <a
-    href="/till"
+  </Link>
+  <Link
+    to="/till"
     className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-purple-900 hover:border-gray-300 hover:text-gray-700"
   >
     <CurrencyDollarIcon className="h-5 w-5 mr-1" aria-hidden="true" />
     Till
-  </a>
-  <a
-    href="/kitchen"
+  </Link>
+  <Link
+    to="/kitchen"
     className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-purple-900 hover:border-gray-300 hover:text-gray-700"
   >
     <SignalIcon className="h-5 w-5 mr-1" aria-hidden="true" />
     Kitchen
-  </a>
-  <a
-    href="/chat"
+  </Link>
+  <Link
+    to="/chat"
     className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-purple-900 hover:border-gray-300 hover:text-gray-700"
   >
     <ChatBubbleBottomCenterTextIcon className="h-5 w-5 mr-1" aria-hidden="true" />
     Chat
-  </a>
-  <a
-    href="/staff"
+  </Link>
+  <Link
+    to="/staff"
     className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-purple-900 hover:border-gray-300 hover:text-gray-700"
   >
     <CalendarDaysIcon className="h-5 w-5 mr-1" aria-hidden="true" />
     Staff
-  </a>
-  <a
-    href="/settings"
+  </Link>
+  <Link
+    to="/settings"
     className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-purple-900 hover:border-gray-300 hover:text-gray-700"
   >
     <CogIcon className="h-5 w-5 mr-1" aria-hidden="true" />
     Settings
-  </a>
+  </Link>
 </div>
             </div>
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -162,47 +163,44 @@ return (
         </div>
 
         <Disclosure.Panel className="sm:hidden">
-          <div className="space-y-1 pb-4 pt-2">
-            {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
-            <Disclosure.Button
-              as="a"
-              href="/dashboard"
-              className="flex items-center block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
-              > <HomeIcon className="h-5 w-5 mr-1" aria-hidden="true" />
-              Home
-            </Disclosure.Button>
-            <Disclosure.Button
-              as="a"
-              href="/till"
-              className="flex items-center block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
-              >
-              <CurrencyDollarIcon className="h-5 w-5 mr-1" aria-hidden="true" />
-              Till
-            </Disclosure.Button>
-            <Disclosure.Button
-              as="a"
-              href="/Kitchen"
-              className="flex items-center block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
-              > <SignalIcon className="h-5 w-5 mr-1" aria-hidden="true" />
-              Kitchen
-            </Disclosure.Button>
-            <Disclosure.Button
-              as="a"
-              href="/chat"
-              className="flex items-center block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
-              > <ChatBubbleBottomCenterTextIcon className="h-5 w-5 mr-1" aria-hidden="true" />
-              Chat
-            </Disclosure.Button>
-            <Disclosure.Button
-              as="a"
-              href="/staff"
-              className="flex items-center block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
-              >
-              <CalendarDaysIcon className="h-5 w-5 mr-1" aria-hidden="true" />
-              Staff
-            </Disclosure.Button>
-          </div>
-        </Disclosure.Panel>
+  <div className="space-y-1 pb-4 pt-2">
+    <Link
+      to="/dashboard"
+      className="flex items-center block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
+    >
+      <HomeIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+      Home
+    </Link>
+    <Link
+      to="/till"
+      className="flex items-center block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
+    >
+      <CurrencyDollarIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+      Till
+    </Link>
+    <Link
+      to="/Kitchen"
+      className="flex items-center block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
+    >
+      <SignalIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+      Kitchen
+    </Link>
+    <Link
+      to="/chat"
+      className="flex items-center block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
+    >
+      <ChatBubbleBottomCenterTextIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+      Chat
+    </Link>
+    <Link
+      to="/staff"
+      className="flex items-center block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
+    >
+      <CalendarDaysIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+      Staff
+    </Link>
+  </div>
+</Disclosure.Panel>
       </>
     )}
   </Disclosure>

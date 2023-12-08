@@ -1,12 +1,12 @@
 import { Fragment, useState } from 'react'
 import { DataStore } from 'aws-amplify'
-import { CafeOrder } from './models'
+import { CafeOrder } from '../models'
 import { useEffect } from 'react'
 import OrderProgress from './orderprogress'
 import PartyProgress from './partyProgress'
 import { format, set } from 'date-fns'
-import { Sessions } from './models'
-import { PartyBooking } from './models'
+import { Sessions } from '../models'
+import { PartyBooking } from '../models'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import Online from './online'
 import Stats from './stats'
@@ -16,7 +16,7 @@ import DashChat from './dashchat'
 import Finances from './financials'
 import Tables from './tables'
 import TableLayout from './tablelayout'
-import { Messages } from './models'
+import { Messages } from '../models'
 
 import {
   Bars3Icon,
@@ -36,10 +36,12 @@ import {
 } from '@heroicons/react/24/outline'
 import TodaysBookings from './todaysbookings'
 import Announcements from './Announcement'
-import { ArrowLeftIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CogIcon, CurrencyPoundIcon, LightBulbIcon, PencilIcon, TableCellsIcon, TvIcon
+import { ArrowLeftIcon, BoltIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CogIcon, CurrencyPoundIcon, LightBulbIcon, PencilIcon, PhoneIcon, TableCellsIcon, TvIcon
 
 } from '@heroicons/react/20/solid'
 import Modal from './modal'
+import { Link } from 'react-router-dom'
+
 
 
 
@@ -55,7 +57,7 @@ export default function Dashboard() {
 
     //get all orders for today from database  
 
-   
+    
 
 const [currentTime, setCurrentTime] = useState(new Date());
 const [messages, setMessages] = useState([])
@@ -63,12 +65,15 @@ const [show, setShow] = useState(false)
 
 
 useEffect(() => {
+  const audio = new Audio('../public/sound.mp3'); // replace 'sound.mp3' with your actual file name
+
   const subscription = DataStore.observe(Messages).subscribe(msg => {
     console.log(msg.model, msg.opType, msg.element);
     setMessages(prevMessages => [...prevMessages, msg.element]);
     console.log(messages)
     setShow(true);
     setTimeout(() => setShow(false), 30000); // hide after 30 seconds
+    audio.play();
   });
 
   return () => subscription.unsubscribe();
@@ -89,6 +94,7 @@ useEffect(() => {
     {name: 'Make a Booking', href: '/reservations', icon: PencilIcon, current: false },
     {name: 'Pre-Bookings', href: '/Barcode', icon: CalendarIcon, current: false },
   { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
+  { name: 'Control Panel', href: '/controlpanel', icon: BoltIcon, current: false },
   { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
   { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
   { name: 'Edit Landing Page', href: '/edithome', icon: PencilIcon, current: false },
@@ -226,8 +232,8 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                <a
-                                  href={item.href}
+                                <Link
+                                  to={item.href}
                                   className={classNames(
                                     item.current
                                       ? 'bg-gray-50 text-indigo-600'
@@ -244,7 +250,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                                     aria-hidden="true"
                                   />
                                   {item.name}
-                                </a>
+                                </Link>
                               </li>
                             ))}
                           </ul>
@@ -254,8 +260,8 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                           <ul role="list" className="-mx-2 mt-2 space-y-1">
                             {teams.map((team) => (
                               <li key={team.name}>
-                                <a
-                                  href={team.href}
+                                <Link
+                                  to={team.href}
                                   className={classNames(
                                     team.current
                                       ? 'bg-gray-50 text-indigo-600'
@@ -274,7 +280,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                                     {team.initial}
                                   </span>
                                   <span className="truncate">{team.name}</span>
-                                </a>
+                                </Link>
                               </li>
                             ))}
                           </ul>
@@ -305,8 +311,8 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                   <ul role="list" className="-mx-2 space-y-1">
                     {navigation.map((item) => (
                       <li key={item.name}>
-                        <a
-                          href={item.href}
+                        <Link
+                          to={item.href}
                           className={classNames(
                             item.current
                               ? 'bg-gray-50 text-indigo-600'
@@ -322,7 +328,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                             aria-hidden="true"
                           />
                           {item.name}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -332,8 +338,8 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
                     {teams.map((team) => (
                       <li key={team.name}>
-                        <a
-                          href={team.href}
+                        <Link
+                          to={team.href}
                           className={classNames(
                             team.current
                               ? 'bg-gray-50 text-indigo-600'
@@ -352,7 +358,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                             {team.initial}
                           </span>
                           <span className="truncate">{team.name}</span>
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -543,8 +549,8 @@ Table Layout                            </h2>
                         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-base font-semibold leading-7 text-white">Cafe Kitchen</h2>
-                                <a href="/kitchen" className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                                </a>
+                                <Link to = "/kitchen" className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                                </Link>
                             </div>
                             <CafeKitchen />
                         </div>
@@ -555,9 +561,9 @@ Table Layout                            </h2>
                         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-base font-semibold leading-7 text-gray-900">Parties</h2>
-                                <a href="/partybookings" className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                                <Link to = "/partybookings" className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                                     View all<span className="sr-only">, clients</span>
-                                </a>
+                                </Link>
                             </div>
                             <PartyProgress />
                         </div>

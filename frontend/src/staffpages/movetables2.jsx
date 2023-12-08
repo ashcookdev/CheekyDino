@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DataStore } from 'aws-amplify';
-import { Sessions } from './models';
+import { Sessions } from '../models';
 import { format, addHours } from 'date-fns';
 import { motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';

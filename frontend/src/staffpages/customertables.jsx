@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { Sessions } from './models';
+import { Sessions } from '../models';
 import { isToday, format, differenceInMinutes, parse } from 'date-fns';
 import TableData from './TableData.json';
-import { CafeOrder } from './models';
+import { CafeOrder } from '../models';
 import './progress.css'
 
 function OccupiedTables() {

@@ -5,7 +5,7 @@ import { addMonths, set, subMonths } from 'date-fns'
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, startOfWeek, endOfWeek } from 'date-fns'
 import { useState } from 'react'
 import { DataStore, Predicates } from 'aws-amplify'
-import { PartyBooking } from '../../staffpages/models'
+import { PartyBooking } from '../../models'
 import { useNavigate } from 'react-router-dom'// ...
 import { useLocation } from 'react-router-dom';
 import { useCallback } from 'react';

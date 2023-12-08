@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
 import { DataStore } from 'aws-amplify';
-import { Sessions, Staff } from './models';
+import { Sessions, Staff } from '../models';
 import TableSelect from './TableSelect';
 import { format, addHours, set } from 'date-fns';
 import tableData from './TableData.json';

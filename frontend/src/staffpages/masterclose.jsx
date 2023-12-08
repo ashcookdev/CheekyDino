@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { DataStore, Predicates } from "aws-amplify";
-import { Sessions, ClockIn, Messages, CustomerScreen } from "./models";
+import { Sessions, ClockIn, Messages, CustomerScreen, Gates } from "../models";
 import { useNavigate } from "react-router-dom";
 import { CheckBadgeIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Storage } from "aws-amplify";
@@ -35,6 +35,7 @@ export default function MasterClose() {
 
             await DataStore.delete(Messages, Predicates.ALL);
            await DataStore.delete(CustomerScreen, Predicates.ALL);
+           await DataStore.delete(Gates, Predicates.ALL);
 
 
 

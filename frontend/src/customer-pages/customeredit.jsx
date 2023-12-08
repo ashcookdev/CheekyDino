@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { HomePage } from '../staffpages/models';
+import { HomePage } from '../models';
 import './customerfont.css'
 
 export default function HeroSection() {

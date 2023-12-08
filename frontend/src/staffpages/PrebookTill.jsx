@@ -4,7 +4,7 @@ import QRCode from "react-qr-code";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { DataStore } from "@aws-amplify/datastore";
-import { Sessions, Messages } from "./models";
+import { Sessions, Messages } from "../models";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -56,6 +56,8 @@ const Prebooktill = () => {
 
 
   const handleConfirmClick = async () => {
+    ipcRenderer.send("entrance");
+
     console.log("Order confirmed");
     const now = new Date();
 const timeString = now.toISOString().split('T')[1];
@@ -401,7 +403,6 @@ const timeString = now.toISOString().split('T')[1];
             className="bg-purple-200 p-2 rounded border border-gray-300 item-center"
           />
           <div className="flex flex-col gap-2 mt-4">
-          {isElectron && (
           <div className="flex flex-col gap-2 mt-4">
             <motion.button
               onClick={() => {
@@ -414,7 +415,7 @@ const timeString = now.toISOString().split('T')[1];
                   price: total.toFixed(2),
                 };
               
-                ipcRenderer.send('print-open', { data });
+                ipcRenderer.send('print-receipt', { data });
               }}
               className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5"
               variants={buttonVariants}
@@ -446,7 +447,6 @@ const timeString = now.toISOString().split('T')[1];
               Print
             </motion.button>
           </div>
-        )}
           </div>
         </div>
         <motion.button

@@ -6,6 +6,34 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 
 
 
+type EagerGates = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Gates, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly content?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyGates = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Gates, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly content?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Gates = LazyLoading extends LazyLoadingDisabled ? EagerGates : LazyGates
+
+export declare const Gates: (new (init: ModelInit<Gates>) => Gates) & {
+  copyOf(source: Gates, mutator: (draft: MutableModel<Gates>) => MutableModel<Gates> | void): Gates;
+}
+
 type EagerStockControl = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<StockControl, 'id'>;

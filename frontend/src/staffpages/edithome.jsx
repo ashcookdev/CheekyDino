@@ -1,5 +1,5 @@
 import { DataStore } from 'aws-amplify';
-import { HomePage } from './models';
+import { HomePage } from '../models';
 import { useState } from 'react';
 
 export default function Example() {

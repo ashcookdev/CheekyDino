@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {StockControl} from "./models"   
+import {StockControl} from "../models"   
 import { DataStore } from 'aws-amplify'
 import { useNavigate
  } from 'react-router-dom';

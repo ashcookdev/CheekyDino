@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DataStore } from '@aws-amplify/datastore';
-import { PartyBooking } from '../../staffpages/models';
+import { PartyBooking } from '../../models';
 
-import { PartyGuests, Teddys } from '../../staffpages/models';
+import { PartyGuests, Teddys } from '../../models';
 import { CheckIcon } from '@heroicons/react/24/solid';
 import "./customer.css";
 import { set } from 'date-fns';

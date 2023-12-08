@@ -1,9 +1,10 @@
 import { DataStore } from "aws-amplify";
 import { useEffect, useState } from "react";
-import { PartyAdultFood } from "../../staffpages/models";
-import { PartyBooking } from "../../staffpages/models";
+import { PartyAdultFood } from "../../models";
+import { PartyBooking } from "../../models";
 import '../customerfont.css'
 import MyBooking from "./mybookings";
+
 
 
 export default function AdultFoodOptions({ selectedParty }) {

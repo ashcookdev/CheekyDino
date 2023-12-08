@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import { useLocation } from 'react-router-dom';
-import CustomerDashboard from '../customer-pages/customerlogin/customerdashboard';
+import CustomerDashboard from '../customerlogin/customerdashboard';
 
 function App({ signOut, user }) {
   const navigate = useNavigate();

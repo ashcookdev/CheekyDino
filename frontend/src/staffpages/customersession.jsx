@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SessionCalenderTill from './sessioncalendertill';
 import StaffTill from './StaffTill';
 import { DataStore } from 'aws-amplify';
-import { Sessions } from './models';
+import { Sessions } from '../models';
 import SessionCalender from './sessionCalender';
 import { Auth } from 'aws-amplify';
 

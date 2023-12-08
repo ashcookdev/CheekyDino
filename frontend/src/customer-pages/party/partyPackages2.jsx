@@ -19,9 +19,9 @@ export default function Packages2() {
               <div className="flex items-end p-6">
                 <div>
                   <h3 className="font-semibold text-white">
-                    <a href="/football">
+                    <Link to="/football">
                       <span className="absolute inset-0" />
-Football Party                   </a>
+Football Party                   </Link>
                   </h3>
                   <p aria-hidden="true" className="mt-1 text-sm text-white">
 Book Now                  </p>
@@ -41,9 +41,9 @@ Book Now                  </p>
               <div className="flex items-end p-6 sm:absolute sm:inset-0">
                 <div>
                   <h3 className="font-semibold text-white">
-                    <a href="/laser">
+                    <Link to="/laser">
                       <span className="absolute inset-0" />
-Laser Party               </a>
+Laser Party               </Link>
                   </h3>
                   <p aria-hidden="true" className="mt-1 text-sm text-white">
 Book Now                  </p>
@@ -63,9 +63,9 @@ Book Now                  </p>
               <div className="flex items-end p-6 sm:absolute sm:inset-0">
                 <div>
                   <h3 className="font-semibold text-white">
-                    <a href="/teddy">
+                    <Link to= "/teddy">
                       <span className="absolute inset-0" />
-Teddy Party                  </a>
+Teddy Party                  </Link>
                   </h3>
                   <p aria-hidden="true" className="mt-1 text-sm text-white">
                     Shop now

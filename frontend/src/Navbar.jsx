@@ -4,6 +4,9 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import '../src/customer-pages/customerfont.css'
+import { Link } from 'react-router-dom'
+
+
 
 
 function classNames(...classes) {
@@ -32,30 +35,30 @@ export default function Example() {
                 </div>
                 <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
                   {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-                  <a
-                    href="/sessionlogin"
+                  <Link
+                    to="/sessionlogin"
                     className="inline-flex items-center border-b-2 component-title border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900"
                   >
                     Book a Session
-                  </a>
-                  <a
-                    href="/packages"
+                  </Link>
+                  <Link
+                    to="/packages"
                     className="inline-flex items-center border-b-2 component-title border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                   >
                     Party Packages
-                  </a>
-                  <a
-                    href="/privatehire"
+                  </Link>
+                  <Link
+                    to="/privatehire"
                     className="inline-flex items-center border-b-2 border-transparent component-title px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                   >
                     Private Hire
-                  </a>
-                  <a
-                    href="/login"
+                  </Link>
+                  <Link
+                    to="/login"
                     className="inline-flex items-center border-b-2 border-transparent component-title px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                   >
                     Log In
-                  </a>
+                  </Link>
                 </div>
               </div>
              
@@ -140,42 +143,33 @@ export default function Example() {
           </div>
 
           <Disclosure.Panel className="lg:hidden">
-            <div className="space-y-1 pb-3 pt-2">
-              {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800" */}
-              <Disclosure.Button
-                as="a"
-                href="/session"
-                className="block border-l-4 component-title border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
-              >
-                Book a Session
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="/packages"
-                className="block border-l-4 border-transparent component-title py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800"
-              >
-                Party Packages
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="/packages"
-                className="block border-l-4 border-transparent component-title py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800"
-              >
-                About Us
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href="/login"
-                className="block border-l-4 border-transparent component-title py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800"
-              >
-                Log in
-              </Disclosure.Button>
-            </div>
-            
-                  
-               
-
-          </Disclosure.Panel>
+  <div className="space-y-1 pb-3 pt-2">
+    <Link
+      to="/session"
+      className="block border-l-4 component-title border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
+    >
+      Book a Session
+    </Link>
+    <Link
+      to="/packages"
+      className="block border-l-4 border-transparent component-title py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800"
+    >
+      Party Packages
+    </Link>
+    <Link
+      to="/about"
+      className="block border-l-4 border-transparent component-title py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800"
+    >
+      About Us
+    </Link>
+    <Link
+      to="/login"
+      className="block border-l-4 border-transparent component-title py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800"
+    >
+      Log in
+    </Link>
+  </div>
+</Disclosure.Panel>
         </>
       )}
     </Disclosure>

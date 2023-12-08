@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DataStore, Predicates } from "aws-amplify";
-import { CafeOrder } from "./models";
+import { CafeOrder } from "../models";
 import { format, parse } from "date-fns";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 

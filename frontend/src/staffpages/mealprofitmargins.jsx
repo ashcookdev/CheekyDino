@@ -5,7 +5,7 @@ import { CurrencyDollarIcon, TruckIcon } from '@heroicons/react/outline';
 import { ShoppingBagIcon } from '@heroicons/react/24/solid';
 import { CurrencyPoundIcon } from '@heroicons/react/24/outline';
 import { DataStore } from 'aws-amplify';
-import { KitchenMenu } from './models';
+import { KitchenMenu } from '../models';
 
 export default function Example({ selectedItems, mealName, category, img, description, time }) {
   const [mealNamestate, setMealName] = useState('');

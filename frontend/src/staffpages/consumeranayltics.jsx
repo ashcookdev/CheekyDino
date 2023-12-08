@@ -1,6 +1,7 @@
-import { Sessions, CafeOrder } from './models';
+import { Sessions, CafeOrder } from '../models';
 import { DataStore } from 'aws-amplify';
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function ConsumerAnalytics({ email }) {
     const [sessions, setSessions] = useState([]);
@@ -65,7 +66,7 @@ export default function ConsumerAnalytics({ email }) {
                 </dl>
             </div>
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                <a href="/sessionhistory">Back</a>
+                <Link to="/sessionhistory">Back</Link>
             </button>
 
         </div>

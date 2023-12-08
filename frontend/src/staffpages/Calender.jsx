@@ -5,7 +5,7 @@ import { addMonths, subMonths } from 'date-fns'
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, startOfWeek, endOfWeek } from 'date-fns'
 import { useState } from 'react'
 import { DataStore, Predicates } from 'aws-amplify'
-import { PartyBooking } from './models'
+import { PartyBooking } from '../models'
 // ...
 
 function classNames(...classes) {

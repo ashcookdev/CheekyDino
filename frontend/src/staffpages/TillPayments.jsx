@@ -1,5 +1,5 @@
 import { DataStore, Predicates } from "aws-amplify";
-import { CafeOrder, Sessions } from "./models";
+import { CafeOrder, Sessions } from "../models";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactToPrint from "react-to-print";
@@ -8,46 +8,9 @@ import { motion } from "framer-motion"; // Import Framer Motion
 import QRCode from "react-qr-code";
 
 
-const Receipt = React.forwardRef(({ order, total, table, childName, changeGiven }, ref) => {
 
-  // Calculate the amount paid
-  const amountPaid = total + changeGiven;
-
-  return (
-
-  <div ref={ref} className="p-4 border rounded text-left">
-  <h1 className="text-2xl font-bold mb-2">Cheeky Dino</h1>
-  <div className="mt-4">
-    <img
-      src="./dino-logo.png"
-      alt="Cheeky Dino logo"
-      width="128"
-      height="128"
-    />
-    <p className="text-sm mt-2 text-color-black mb-5">Great indoor play centre in Maidstone</p>
-    {table && <div className="text-color-black">Table: {table}</div>}
-    {childName && <div className="text-color-black"> Name: {childName}</div>}
-    {order.map((item) => (
-      <div>
-        {item.Name} £{item.Price.toFixed(2)}
-      </div>
-    ))}
-    <div>Total: £{total.toFixed(2)}</div>
-    <div className="border-t mt-2 pt-2 text-color-black">
-      <p className="text-color-black">Change Given: £{changeGiven.toFixed(2)}</p>
-    </div>
-    <div className="border-t mt-2 pt-2">
-      <p className="text-color-black">Amount Paid: £{amountPaid.toFixed(2)}</p>
-    </div>
-    <div className="border-t mt-2 pt-2 mb-5"></div>
-    <QRCode value="https://cheekydino.co.uk" size={128} />
-    <p className="text-sm mt-2 text-color-black">https://cheekydino.co.uk</p>
-    <p className="text-sm mt-2 text-color-black">01622 670055</p>
-  </div>
-  </div>
-  );
-});
-
+const isElectron = window && window.process && window.process.type;
+const ipcRenderer = isElectron ? window.require('electron').ipcRenderer : null;
 
 
 export default function TillPayment({
@@ -67,6 +30,20 @@ export default function TillPayment({
   const [change, setChange] = useState(0); // Add state for change
   const [isChangeGiven, setIsChangeGiven] = useState(false); // Flag to track if change is given
   const [discount, setDiscount] = useState(false);
+
+  useEffect(() => {
+    // Check if ipcRenderer is available before using it
+    if (ipcRenderer) {
+      ipcRenderer.send('some-electron-event', { data: 'your-data' });
+
+      ipcRenderer.on('electron-response', (event, responseData) => {
+        console.log('Received response from Electron:', responseData);
+      });
+    }
+  }, []); // Empty dependency array ensures the effect runs once after the initial render
+
+
+
 
 
 
@@ -183,6 +160,17 @@ export default function TillPayment({
     setAmountEntered(updatedAmount.toString());
     const newChange = updatedAmount - total;
     setChange(newChange);
+    if (ipcRenderer ) {
+      ipcRenderer.send('cafe-drawer', {orders, newtotal, amountEntered, change});
+
+      ipcRenderer.on('electron-response', (event, responseData) => {
+        console.log('Received response from Electron:', responseData);
+      });
+      
+    }
+
+
+    
   };
   
 
@@ -469,28 +457,52 @@ export default function TillPayment({
           </div>
         </div>
         <div className="mt-4">
-          <ReactToPrint
-            trigger={() => (
-              <motion.button
-                variants={buttonVariants}
-                whileHover="hover"
-                className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5"
-              >
-                Print/Give Change
-              </motion.button>
-            )}
-            content={() => receiptRef.current}
-          />
-          <div style={{ display: "none" }}>
-            <Receipt
-              ref={receiptRef}
-              order={order}
-              total={total}
-              table={table}
-              childName={childName}
-              changeGiven={change}
-            />
+        {isElectron && (
+          <div className="flex flex-col gap-2 mt-4">
+            <motion.button
+              onClick={() => {
+                const data = {
+                  product: order.map((item) => item.Name),
+                  name: childName,
+                  method: paymentMethod,
+                  table: table,
+                  change: change.toFixed(2),
+                  price: total.toFixed(2),
+                };
+              
+                ipcRenderer.send('cafe-print', { data });
+              }}
+              className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5"
+              variants={buttonVariants}
+              whileHover="hover"
+            >
+              Print/Give Change
+            </motion.button>
+            <motion.button
+              onClick={() => {
+
+                const data = {
+                  product: order.map((item) => item.Name),
+                  name: childName,
+                  method: paymentMethod,
+                  table: table,
+                  change: change.toFixed(2),
+                  price: total.toFixed(2),
+                };
+              
+
+
+
+                ipcRenderer.send('cafe-print', { data });
+              }}
+              className="bg-purple-500 text-white p-2 rounded w-full mt-5 mb-5"
+              variants={buttonVariants}
+              whileHover="hover"
+            >
+              Print
+            </motion.button>
           </div>
+        )}
         </div>
         {isFlashing && 
 

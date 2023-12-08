@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { PartyBooking, PartyGuests, Messages } from './models';
+import { PartyBooking, PartyGuests, Messages } from '../models';
 import { format } from 'date-fns';
 
 function classNames(...classes) {

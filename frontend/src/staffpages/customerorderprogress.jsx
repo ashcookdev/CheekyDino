@@ -1,7 +1,7 @@
 import { CheckIcon, CogIcon, HandThumbUpIcon, UserIcon } from '@heroicons/react/20/solid'
 import { useEffect, useState } from 'react'
 import { DataStore, Predicates } from 'aws-amplify'
-import { CafeOrder, Sessions } from './models'
+import { CafeOrder, Sessions } from '../models'
 import { useNavigate } from 'react-router-dom'
 import { Auth } from 'aws-amplify'
 import './orderprogress.css'

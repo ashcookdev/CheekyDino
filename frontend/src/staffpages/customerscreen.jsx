@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
 import { format } from 'date-fns';
 import CustomerTables from './customertables';
-import { CustomerScreen } from './models';
+import { CustomerScreen } from '../models';
 import "./screencss.css"
-import { Sessions } from './models';
+import { Sessions } from '../models';
 import TableLayout from './tablelayout';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Example() {
@@ -21,8 +22,10 @@ export default function Example() {
   const [weatherData, setWeatherData] = useState(null);
   const [dash, setDash] = useState(false);
 
+  const navigate = useNavigate();
+
   if (dash === true) {
-    window.location.href = '/dashboard';
+    navigate('/dashboard')
   }
     
   

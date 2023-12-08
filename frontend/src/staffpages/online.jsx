@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataStore } from "@aws-amplify/datastore";
-import { ClockIn } from "./models";
+import { ClockIn } from "../models";
+import { Link } from 'react-router-dom';
 
 
 export default function Online() {
@@ -77,7 +78,7 @@ export default function Online() {
             />
           </div>
           <div className="min-w-0 flex-1">
-            <a href="/chat" className="focus:outline-none">
+            <Link to = "/chat" className="focus:outline-none">
               <span className="absolute inset-0" aria-hidden="true" />
               <p className="text-sm font-medium text-gray-900">
                 {staff.StaffId}
@@ -94,7 +95,7 @@ export default function Online() {
                   Elapsed Break Time: {calculateElapsedTime(staff.BreakStart.split(':').slice(0,2).join(':'))}
                 </p>
               )}
-            </a>
+            </Link>
           </div>
         </div>
       ))}

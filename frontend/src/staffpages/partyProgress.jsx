@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { DataStore, Predicates } from "aws-amplify";
 import { format, parse, addMinutes, parseISO } from "date-fns";
 import { differenceInMinutes } from "date-fns/esm";
-import { PartyBooking } from "./models";
-import { PartyGuests } from "./models";
-import { Messages } from "./models";
+import { PartyBooking } from "../models";
+import { PartyGuests } from "../models";
+import { Messages } from "../models";
 
 
 

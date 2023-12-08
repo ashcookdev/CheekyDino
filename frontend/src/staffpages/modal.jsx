@@ -1,17 +1,19 @@
 import { Fragment, useState } from 'react'
 import { Transition } from '@headlessui/react'
 import { DataStore } from 'aws-amplify'
-import { Messages } from './models'
+import { Messages } from '../models'
 import { useEffect } from 'react'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 
 export default function ChildComponent({ show, setShow, message }) {
    
 const [reply, setReply] = useState(false)
 
+const navigate = useNavigate()
+
 if (reply === true) {
-    window.location.href = `/chat`
+    navigate('/chat')
     
 }
 

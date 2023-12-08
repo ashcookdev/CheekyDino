@@ -1,6 +1,6 @@
 import { DataStore } from "aws-amplify";
 import { useEffect, useState } from "react";
-import { Messages } from "./models";
+import { Messages } from "../models";
 
 export default function DashChat({ userEmail }) {
   const [messages, setMessages] = useState([]);
