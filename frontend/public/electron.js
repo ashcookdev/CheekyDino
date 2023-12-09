@@ -5,16 +5,21 @@ const axios = require('axios');
 const { spawn } = require('child_process');
 const net = require('net');
 const { autoUpdater } = require("electron-updater");
+const sound = require('sound-play');
 
 // Trick AWS Amplify into thinking it's running in a browser environment
 if (process.env.NODE_ENV !== 'production') {
   global.window = {};
 }
 
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')
+
+
 // Start the server
 const startServer = require('../src/backend/index.js');
 
 let mainWindow;
+let soundWindow;
 
 function createWindow(id, options = {}) {
   mainWindow = new BrowserWindow({
@@ -73,7 +78,7 @@ setInterval(async () => {
   } catch (error) {
     console.log('Health check failed:', error);
   }
-}, 5000); // Check every 5 seconds
+}, 50000); // Check every 5 seconds
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
@@ -174,9 +179,24 @@ ipcMain.on('closing', async (event, data) => {
 }
 );
 
+ipcMain.on('play-sound', () => {
+  soundWindow = new BrowserWindow({
+    show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
 
+  soundWindow.loadURL(`file://${path.join(__dirname, 'audio.html')}`); // replace with the path to your HTML file
 
+  soundWindow.webContents.on('did-finish-load', () => {
+    soundWindow.webContents.executeJavaScript('document.getElementById("audio").play()');
+  });
 
-
+  soundWindow.on('closed', () => {
+    soundWindow = null;
+  });
+});
 
 

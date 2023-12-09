@@ -9,7 +9,7 @@ import { Sessions } from "../models";
 import Tables from "./tables";
 import { Analytics } from 'aws-amplify';
 import TillSession from "./tillsession";
-import { HotDrinks, SoftDrinks, Confectionary, KitchenMenu, Extras } from "../models";
+import { Messages, KitchenMenu,  } from "../models";
 import TillParty from "./TillParty";
 import TillPayments from "./TillPayments";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +27,8 @@ import {Link} from 'react-router-dom';
 import { PhoneIcon } from "@heroicons/react/20/solid";
 import AudioChat from "./audiochat";
 import ControlPanel from "./ControlPanel";
+import Modal from "./modal";  // import the modal component
+
 
 
 
@@ -67,6 +69,9 @@ const [showTopBar, setShowTopBar] = useState(false);
 const [chat, setChat] = useState(false);
 const [drawer, SetDrawer] = useState(false);
 const [phone, setPhone] = useState(false);
+const [show, setShow] = useState(false);
+const [messages, setMessages] = useState([]);
+
 
 
 useEffect(() => {
@@ -84,6 +89,21 @@ if (phone === true) {
   navigate('/audio')
   
 }
+
+useEffect(() => {
+  const subscription = DataStore.observe(Messages).subscribe(msg => {
+    console.log(msg.model, msg.opType, msg.element);
+    setMessages(prevMessages => [...prevMessages, msg.element]);
+    console.log(messages)
+    setShow(true);
+    if (ipcRenderer) {
+      ipcRenderer.send('play-sound');
+    }
+    setTimeout(() => setShow(false), 30000); // hide after 30 seconds
+  });
+
+  return () => subscription.unsubscribe();
+}, []);
 
 
 
@@ -231,7 +251,7 @@ setShowTopBar(true)
   }
 
   if (kitchen === true) {
-    return <Kitchen />
+    navigate ('/kitchen')
   }
   if (confirm === true) {
 
@@ -306,6 +326,9 @@ window.location.reload();
 
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div className='fixed top-0 w-full mx-auto'>
+        <Modal show={show} setShow={setShow} message={messages[messages.length - 1]} />
+      </div>
 
       {!showTopBar && (
     <div className="mt-2 border-b border-gray-200 pb-2 flex flex-col sm:flex-row items-center">

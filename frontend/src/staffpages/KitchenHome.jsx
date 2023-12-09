@@ -36,30 +36,41 @@ import { Link } from "react-router-dom";
 import { PhoneIcon } from "@heroicons/react/20/solid";
 
 
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
+
+
 }
+
+
+const isElectron = window && window.process && window.process.type;
+const ipcRenderer = isElectron ? window.require('electron').ipcRenderer : null;
+
+
 
 export default function Kitchen() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [show, setShow] = useState(false);
 
-  useEffect(() => {
-    const audio = new Audio('../public/sound.mp3'); // replace with the path to your sound file
-
-    const subscription = DataStore.observe(Messages).subscribe(msg => {
-      console.log(msg.model, msg.opType, msg.element);
-      setMessages(prevMessages => [...prevMessages, msg.element]);
-      console.log(messages)
-      setShow(true);
-      audio.play();
-      setTimeout(() => setShow(false), 30000); // hide after 30 seconds
-      
-    });
   
-    return () => subscription.unsubscribe();
-  }, []);
+
+  useEffect(() => {
+  const subscription = DataStore.observe(Messages).subscribe(msg => {
+    console.log(msg.model, msg.opType, msg.element);
+    setMessages(prevMessages => [...prevMessages, msg.element]);
+    console.log(messages)
+    setShow(true);
+    if (ipcRenderer) {
+      ipcRenderer.send('play-sound');
+    }
+    setTimeout(() => setShow(false), 30000); // hide after 30 seconds
+  });
+
+  return () => subscription.unsubscribe();
+}, []);
+
 
   const now = new Date();
 
@@ -87,6 +98,9 @@ export default function Kitchen() {
     className="bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-blue-800 via-purple-700 to-sky-300 mx-auto max-w-7xl sm:px-6 lg:px-8"
   >
     <div className="text-white py-6">
+    <button className="rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" onClick={() => {ipcRenderer.send('play-sound');
+        }
+      }>Play</button>
       <h1 className="text-2xl font-medium">Kitchen</h1>
       <p className="mt-2">
         {time} | {date}

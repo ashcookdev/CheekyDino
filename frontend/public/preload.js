@@ -70,3 +70,11 @@ function closing() {
     console.log('Received reply from main process:', data);
   });
 }
+
+function playSound() {
+  ipcRenderer.send('play-sound');
+  ipcRenderer.on('play-sound-reply', (event, data) => {
+    console.log('Received reply from main process:', data);
+  });
+}
+
