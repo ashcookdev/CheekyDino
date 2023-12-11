@@ -13,6 +13,15 @@ export default function Booking() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [daysAvailability, setDaysAvailability] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
+  const [back, setBack] = useState(false);
+
+  const navigate = useNavigate();
+
+  if (back === true) {
+    navigate('/dashboard')
+  }
+
+
 
   const startDate = startOfMonth(currentDate);
   const endDate = endOfMonth(currentDate);
@@ -141,7 +150,9 @@ const handleDayClick = async (date) => {
     <PartyBook date={selectedDate} timeSlot={selectedTimeSlot} partyType={partyType} />
   ) : formSubmitted ? (
     <div className="flex flex-col items-center">
-      
+      <button onClick={() => setBack(true)} className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Back
+      </button>
 <div className="flex justify-center items-center mt-4">
   <button
     onClick={handlePrevMonthClick}

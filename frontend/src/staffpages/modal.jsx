@@ -46,7 +46,7 @@ if (reply === true) {
                   <div className="flex-shrink-0 pt-0.5">
                     <img
                       className="h-10 w-10 rounded-full"
-                      src="/dino-logo.png"
+                      src="dino-logo.png"
                       alt=""
                     />
                   </div>

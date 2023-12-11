@@ -68,7 +68,6 @@ const [showItems, setShowItems] = useState(true);
 const [showTopBar, setShowTopBar] = useState(false);
 const [chat, setChat] = useState(false);
 const [drawer, SetDrawer] = useState(false);
-const [phone, setPhone] = useState(false);
 const [show, setShow] = useState(false);
 const [messages, setMessages] = useState([]);
 
@@ -85,10 +84,7 @@ const navigate = useNavigate();
 console.log(order)
 
 
-if (phone === true) {
-  navigate('/audio')
-  
-}
+
 
 useEffect(() => {
   const subscription = DataStore.observe(Messages).subscribe(msg => {
@@ -340,14 +336,7 @@ window.location.reload();
 >
   <ChatBubbleBottomCenterIcon className="h-6 w-6" />
 </motion.button>
-<motion.button
-  className="w-8 h-8 bg-green-600 ml-2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center rounded-full"
-  onClick={() => setPhone(true)}
-  whileHover={{ scale: 1.1 }}
-  whileTap={{ scale: 0.9 }}
->
-  <PhoneIcon className="h-6 w-6" />
-</motion.button>
+
     <StaffTill onSelectChange={handleSelectedChange} />
 
     <label htmlFor="table" className="block font-bold text-xs mr-2 ml-3">

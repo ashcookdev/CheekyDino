@@ -94,13 +94,8 @@ export default function Kitchen() {
     
 
     <main className="py-10">
-  <div
-    className="bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-blue-800 via-purple-700 to-sky-300 mx-auto max-w-7xl sm:px-6 lg:px-8"
-  >
-    <div className="text-white py-6">
-    <button className="rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" onClick={() => {ipcRenderer.send('play-sound');
-        }
-      }>Play</button>
+  <div className="bg-white mx-auto max-w-7xl sm:px-6 lg:px-8">
+    <div className="text-white text-center py-6 border border-gray-300 shadow-lg bg-gradient-to-tr from-indigo-800 via-purple-500 to-violet-700 rounded-lg ">
       <h1 className="text-2xl font-medium">Kitchen</h1>
       <p className="mt-2">
         {time} | {date}
@@ -112,26 +107,17 @@ export default function Kitchen() {
     </div>
 
     <div className="flex flex-col md:flex-row">
-    
-      <div className="w-full md:w-1/2 mb-4 md:mb-0">
-        <h2 className="text-lg font-medium text-white">Orders</h2>
+      <div className="w-full md:w-1/2 mb-4 md:mb-0 mt-3">
+        <h2 className="text-lg font-medium text-purple-700 text-center">Orders</h2>
         <CafeKitchen />
       </div>
-      <div className="w-full md:w-1/2">
-        <h2 className="text-lg font-medium text-white">Party</h2>
+      <div className="w-full md:w-1/2 border-l border-gray-300">
+        <h2 className="text-lg font-medium text-purple-700 mt-3 text-center">Party</h2>
         <PartyKitchen />
       </div>
     </div>
   </div>
 </main>
-
-      </div>
-  );
-}
-
-
-
-
-
-
+    </div>
+)}
   

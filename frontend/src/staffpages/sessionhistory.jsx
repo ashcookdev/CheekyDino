@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import BarGraph from './graph';
 import { set } from 'date-fns';
 import ConsumerAnalytics from './consumeranayltics';
+import { useNavigate } from 'react-router-dom';
 
 export default function OrderHistory() {
   const [sessions, setSessions] = useState([]);
@@ -11,6 +12,15 @@ export default function OrderHistory() {
   const [showFutureSessions, setShowFutureSessions] = useState(false);
   const [open, setOpen] = useState(false);
   const [session, setSession] = useState([]);
+  const [back, setBack] = useState(false);
+
+
+  const navigate = useNavigate();
+
+  if (back === true) {
+    navigate('/dashboard', { replace: true });
+  }
+
 
   useEffect(() => {
     async function getSessions() {
@@ -86,6 +96,8 @@ export default function OrderHistory() {
   return (
     <>
       <div className="flex flex-col items-start sm:items-center sm:flex-row sm:justify-between">
+      <button className="mt-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:mt-0" onClick={() => setBack(true)}>Back</button>
+
         <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
           Time Range
         </label>

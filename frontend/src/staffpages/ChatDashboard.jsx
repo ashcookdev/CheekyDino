@@ -21,7 +21,7 @@ import {
   ArrowLeftIcon, 
   ClockIcon,
   CogIcon,
-  TvIcon, LightBulbIcon, CakeIcon, KeyIcon 
+  TvIcon, LightBulbIcon, CakeIcon, KeyIcon, BoltIcon, 
 
 
 
@@ -141,22 +141,26 @@ function App() {
 
 
   const navigation = [
-    { name: 'Home', href: '/dashboard', icon: HomeIcon, current: false },
     { name: 'Till', href: '/till', icon: CurrencyPoundIcon, current: true },
-    {name: 'Make a Booking', href: '/reservations', icon: FolderIcon, current: false },
+    {name: 'Make a Booking', href: '/reservations', icon: PencilIcon, current: false },
+    {name: 'Pre-Bookings', href: '/Barcode', icon: CalendarIcon, current: false },
   { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
+  { name: 'Control Panel', href: '/controlpanel', icon: BoltIcon, current: false },
   { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
-  { name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
+  { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
   { name: 'Edit Landing Page', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Customer Screen', href: '/customerscreen', icon: TvIcon, current: false },
+  {name: 'Front Customer Screen', href: '/customerscreenfront', icon: TvIcon, current: false },
+
+  
   {name: 'Clock In', href: '/clockin', icon: ClockIcon, current: false },
   {name: 'Staff', href: '/staff', icon: UsersIcon, current: false },
 { name: 'Reports', href: '/finance', icon: ChartPieIcon, current: false },
 {name: 'Settings', href: '/settings', icon: CogIcon, current: false },
 {name: 'Master Close', href: '/masterclose', icon: KeyIcon, current: false },  
-  { name: 'Training', href: '/training', icon: LightBulbIcon, current: false },
 
 ]
+
     
 
   const groups = ['Kitchen', 'PartyHost','Staff'];
@@ -177,7 +181,8 @@ function App() {
 
   return (
     <div>
-        <Transition.Root show={sidebarOpen} as={Fragment}>
+       
+       <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
             <Transition.Child
               as={Fragment}
@@ -233,11 +238,13 @@ function App() {
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                <Link to={item.href}
+                                <Link
+                                  to={item.href}
                                   className={classNames(
                                     item.current
                                       ? 'bg-gray-50 text-indigo-600'
-                                      : 'text-indigo-600 hover:text-indigo-600 hover:bg-gray-50',
+                                    
+                                      : 'text-indigo-700 hover:text-indigo-600 hover:bg-gray-50',
                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                   )}
                                 >
@@ -259,11 +266,12 @@ function App() {
                           <ul role="list" className="-mx-2 mt-2 space-y-1">
                             {teams.map((team) => (
                               <li key={team.name}>
-                                <Link to={team.href}
+                                <Link
+                                  to={team.href}
                                   className={classNames(
                                     team.current
                                       ? 'bg-gray-50 text-indigo-600'
-                                      : 'text-indigo-600 hover:text-indigo-600 hover:bg-gray-50',
+                                      : 'text-indigo-700 hover:text-indigo-600 hover:bg-gray-50',
                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                   )}
                                 >
@@ -271,7 +279,7 @@ function App() {
                                     className={classNames(
                                       team.current
                                         ? 'text-indigo-600 border-indigo-600'
-                                        : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
+                                        : 'text-indigo-600 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
                                       'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
                                     )}
                                   >
@@ -296,27 +304,31 @@ function App() {
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
-          <div className="flex h-16 shrink-0 items-center">
-  <img className="h-12 w-auto mr-4" src="./versa.gif" alt="Your Company" />
-</div>
-
+            <div className="flex h-16 shrink-0 items-center">
+              <img
+                className="h-8 w-auto"
+                src="./versa.gif"
+                alt="Your Company"
+              />
+            </div>
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <li>
                   <ul role="list" className="-mx-2 space-y-1">
                     {navigation.map((item) => (
                       <li key={item.name}>
-                        <Link to={item.href}
+                        <Link
+                          to={item.href}
                           className={classNames(
                             item.current
                               ? 'bg-gray-50 text-indigo-600'
-                              : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                              : 'text-indigo-700 hover:text-indigo-600 hover:bg-gray-50',
                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                           )}
                         >
                           <item.icon
                             className={classNames(
-                              item.current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
+                              item.current ? 'text-indigo-600' : 'text-indigo-400 group-hover:text-indigo-600',
                               'h-6 w-6 shrink-0'
                             )}
                             aria-hidden="true"
@@ -332,7 +344,8 @@ function App() {
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
                     {teams.map((team) => (
                       <li key={team.name}>
-                        <Link to = {team.href}
+                        <Link
+                          to={team.href}
                           className={classNames(
                             team.current
                               ? 'bg-gray-50 text-indigo-600'
@@ -367,12 +380,21 @@ function App() {
             <span className="sr-only">Open sidebar</span>
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
-          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Chat Dashboard</div>
+          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">  <div className="flex items-center">
+      <div
+        id="scroll-container"
+        className="flex overflow-x-scroll hide-scroll-bar"
+        style={{ width: '80%' }}
+      >
+       
+      </div>
+    </div></div>
+          
           <a href="#">
             <span className="sr-only">Your profile</span>
             <img
               className="h-8 w-8 rounded-full bg-gray-50"
-              src="./versa.gif"
+              src="versa.gif"
               alt=""
             />
           </a>

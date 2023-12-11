@@ -7,8 +7,15 @@ import { useNavigate } from 'react-router-dom';
 export default function Qrscanner() {
   const [isLoading, setIsLoading] = useState(false);
   const [session, setSession] = useState(null);
+  const [back, setBack] = useState(false)
 
   const navigate = useNavigate();
+
+
+  if (back === true) {
+window.location.reload()    
+  }
+
 
   let timeoutId = null;
 
@@ -49,7 +56,7 @@ export default function Qrscanner() {
         <button 
           type="button"
           className="inline-flex mb-5 items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none mr-5"
-          onClick={() => {navigate("/till") }}
+          onClick={() => setBack(true)}
         >
           Back
         </button>

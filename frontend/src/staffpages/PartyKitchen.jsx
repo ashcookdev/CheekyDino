@@ -139,15 +139,15 @@ export default function Kitchen() {
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
 
     
-<ul className="divide-y divide-gray-100 bg-transparent rounded-lg shadow-lg">
-{noPartyBookings && <p className='text-white'>No party bookings today.</p>}
+<ul className="divide-y divide-gray-100 bg-transparent rounded-lg ">
+{noPartyBookings && <p className='text-purple-700 text-center'>No party bookings today.</p>}
 
 {party
   .filter((booking) => !booking.PartyFoodComplete)
   .sort((a, b) => new Date(a.PartyTime) - new Date(b.PartyTime))
   .concat(bookingConfirmed ? party.shift() : [])
   .map((party) => {
-            let buttonClasses = 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded';
+            let buttonClasses = 'bg-blue-500 hover:bg-blue-700 text-purple-700 font-bold py-2 px-4 rounded';
 
             return (
               <li
@@ -159,22 +159,22 @@ export default function Kitchen() {
               >
                 <div className="flex gap-x-4">
                   <div className="min-w-0 flex-auto">
-                    <p className="text-sm font-semibold leading-6 text-white">
+                    <p className="text-sm font-semibold leading-6 text-purple-700">
                       Child's Name: {party.ChildName}
                     </p>
-                    <p className="mt-1 truncate text-xs leading-5 text-white">
+                    <p className="mt-1 truncate text-xs leading-5 text-purple-700">
                       Guests: {party.NoOfChildren}
                     </p>
-                    <p className="mt-1 truncate text-xs leading-5 text-white">
+                    <p className="mt-1 truncate text-xs leading-5 text-purple-700">
                       Start Time: {party.PartyTime}
                     </p>
-                    <p className="mt-1 truncate text-xs leading-5 text-white">
+                    <p className="mt-1 truncate text-xs leading-5 text-purple-700">
                       Party Type: {party.PartyType}
                     </p>
-                    <p className="mt-1 truncate text-xs leading-5 text-white">
+                    <p className="mt-1 truncate text-xs leading-5 text-purple-700">
                       Finish Time: {party.PartyFinish}
                     </p>
-                    <p className="mt-1 truncate text-xs leading-5 text-white">
+                    <p className="mt-1 truncate text-xs leading-5 text-purple-700">
                       Party Food Time: {party.PartyFoodTimeDue}
                     </p>
                    
@@ -206,7 +206,7 @@ export default function Kitchen() {
                     onClick={handleViewOrderClick}
                     className={classNames(
                       allGuestsSelected ? 'bg-green-500 ' : 'bg-green-500 animate-pulse',
-                      'px-4 py-2 rounded-md text-white mr-2'
+                      'px-4 py-2 rounded-md text-purple-700 mr-2'
                     )}
                     disabled={!selected}
                   >
@@ -215,7 +215,7 @@ export default function Kitchen() {
                     onClick={() => handleConfirmClick(party)}
                     className={classNames(
                       allGuestsSelected ? 'bg-green-500' : 'bg-green-500 hover:bg-green-700',
-                      'px-4 py-2 rounded-md text-white mr-2'
+                      'px-4 py-2 rounded-md text-purple-700 mr-2'
                     )}
                     disabled={!selected}
                   >
@@ -223,7 +223,7 @@ export default function Kitchen() {
                   </button>
                   <button 
                     onClick={handleAdultFoodClick}
-                    className= 'bg-green-500 hover:bg-green-700 px-4 py-2 rounded-md text-white mr-2'
+                    className= 'bg-green-500 hover:bg-green-700 px-4 py-2 rounded-md text-purple-700 mr-2'
                     
                   >
                     Adult Party Food

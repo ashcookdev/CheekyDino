@@ -49,7 +49,6 @@
     "howler": "^2.2.4",
     "jspdf": "^2.5.1",
     "lodash": "^4.17.21",
-    "node-hid": "^3.0.0",
     "nodemailer": "^6.9.7",
     "qrcode": "^1.5.3",
     "react": "^18.2.0",
@@ -85,12 +84,11 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
-  
   "devDependencies": {
     "concurrently": "^7.0.0",
     "cross-env": "^7.0.3",
     "electron": "^27.0.4",
-    "electron-builder": "^22.14.13",
+    "electron-builder": "^24.9.1",
     "wait-on": "^6.0.0"
   },
   "build": {
@@ -104,7 +102,7 @@
       "../amplify/**/*"
     ],
     "appId": "com.versasoft.cheekydino",
-    "productName": "Cheeky Dino 1.0",
+    "productName": "Cheeky Dino 1.1",
     "win": {
       "target": [
         "nsis"

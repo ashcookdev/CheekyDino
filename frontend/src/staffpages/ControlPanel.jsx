@@ -6,11 +6,19 @@ import { DataStore } from 'aws-amplify';
 import { Gates } from '../models';
 import { Auth } from 'aws-amplify';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 
 export default function ControlPanel() {
   const [open, setOpen] = useState(true)
+
+  const Navigate = useNavigate();
+
+  
+  if (open === false) {
+    Navigate("/dashboard")
+  }
 
   const isElectron = window && window.process && window.process.type;
   const ipcRenderer = isElectron ? window.require('electron').ipcRenderer : null;
@@ -32,26 +40,25 @@ useEffect(() => {
 
 
 useEffect(() => {
-
-  const subscription = DataStore.observe(Gates).subscribe(msg => {
-    console.log(msg.model, msg.opType, msg.element);
-    if (msg.opType === 'INSERT') {
-      console.log('New Message:', msg.element);
-      const content = parseInt(msg.element.content, 10);
-      if (content === 1) {
-        ipcRenderer.send("entrance");
-      } else if (content === 2) {
-        ipcRenderer.send("exit");
-      }
-    }
-  });
-
+  if (user === 'frontdesk@cheekydino.co.uk') {
+    const subscription = DataStore.observe(Gates).subscribe(msg => {
+      console.log(msg.model, msg.opType, msg.element);
+      if (msg.opType === 'INSERT') {
+        console.log('New Message:', msg.element);
+        const content = parseInt(msg.element.content, 10);
         
+        if (content === 1) {
+          ipcRenderer.send("entrance");
+        } else if (content === 2) {
+          ipcRenderer.send("exit");
+        }
+      }
+    });
 
+    return () => subscription.unsubscribe();
+  }
+}, [user]); // Don't forget to add `userEmail` to the dependency array
 
-
-  return () => subscription.unsubscribe();
-}, []);
 
 
 
@@ -116,11 +123,11 @@ useEffect(() => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <div className="fixed inset-0 bg-black"  />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-hidden">
-          <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden bg-contain bg-center bg-gradient-to-t from-indigo-700 via-sky-300 to-purple-600">
             <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
               <Transition.Child
                 as={Fragment}
@@ -162,7 +169,7 @@ Controls                        </Dialog.Title>
         Till Drawer (Front)
       </motion.button>
       <motion.button
-        className="w-20 h-20 bg-green-500 text-white m-2"
+        className="w-20 h-20 bg-green-500 text-white m-2  border-2 border-green-700"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={handleClick2}
@@ -172,7 +179,7 @@ Controls                        </Dialog.Title>
     </div>
     <div className="flex flex-row justify-center">
       <motion.button
-        className="w-20 h-20 bg-purple-500 text-white m-2"
+        className="w-20 h-20 bg-purple-500 text-white m-2  border-2 border-purple-700"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={handleClick3}
@@ -180,7 +187,7 @@ Controls                        </Dialog.Title>
         Front Gate (Entry)
       </motion.button>
       <motion.button
-        className="w-20 h-20 bg-blue-500 text-white m-2"
+        className="w-20 h-20 bg-blue-500 text-white m-2  border-2 border-blue-700"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={handleClick4}
@@ -190,7 +197,7 @@ Controls                        </Dialog.Title>
     </div>
     <div className="flex flex-row justify-center">
       <motion.button
-        className="w-20 h-20 bg-red-500 text-white m-2"
+        className="w-20 h-20 bg-red-500 text-white m-2  border-2 border-red-700"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={handleClick5}

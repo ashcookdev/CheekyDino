@@ -20,6 +20,8 @@ export default function EditBooking() {
             const awsDate = format(date, 'yyyy-MM-dd');
             const todaysSessions = sessionsData.filter(session => session.Date === awsDate);
             setSessions(todaysSessions);
+            
+            
         };
         fetchSessions();
     }, []);
@@ -39,12 +41,23 @@ export default function EditBooking() {
         setChildData(newData);
     };
 
-    const handleExactAgeChange = (index, value) => {
-        const newData = [...childData];
-        newData[index].exactAge = value;
-        setChildData(newData);
+    const handleDelete = async () => {
+        // Find the session to delete
+        const sessionToDelete = sessions.find(session => session.Name === selectedSession);
+    
+        // Delete the session
+        try {
+            await DataStore.delete(sessionToDelete);
+            window.location.reload()
+    
+            // Remove the session from the local state
+            setSessions(sessions.filter(session => session.Name !== selectedSession));
+            setSelectedSession(null); // Reset the selected session
+        } catch (error) {
+            console.error('Error deleting session:', error);
+        }
     };
-
+    
     const calculatePrice = (childData, adults, children) => {
         let price = 0;
         if (childData) {
@@ -115,13 +128,16 @@ if (pass === true) {
                 ))}
             </select>
             {selectedSession && (
-                <div>
-                    <p>Selected session: {selectedSession}</p>
-                    <p>Number of children: {sessions.find(session => session.Name === selectedSession).Children}</p>
-                    <p>Number of adults: {sessions.find(session => session.Name === selectedSession).Adults}</p>
-                    <p>Table: {sessions.find(session => session.Name === selectedSession).Table}</p>
-                    <p>Total: £{sessions.find(session => session.Name === selectedSession).TotalSpent.toFixed(2)} </p>
+                <div className='mx-auto p-6 mt-8 border-2 border-gray-300 shadow-lg rounded-md max-w-md bg-purple-100'>
+
+                    <p className='font-bold'>Selected session: {selectedSession}</p>
+                    <p className='font-bold'>Number of Children: {sessions.find(session => session.Name === selectedSession).Children}</p>
+                    <p className='font-bold'>Number of Adults: {sessions.find(session => session.Name === selectedSession).Adults}</p>
+                    <p className='font-bold'>Table: {sessions.find(session => session.Name === selectedSession).Table}</p>
+                    <p className='font-bold'>Total: £{sessions.find(session => session.Name === selectedSession).TotalSpent.toFixed(2)} </p>
+
                     <div>
+                        
                         <label htmlFor="children" className="block text-sm font-medium leading-6 text-gray-900">
                             Extra Children
                         </label>
@@ -172,9 +188,14 @@ if (pass === true) {
                             </div>
                         ))}
                     </div>
-                <button className="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleConfirm} >
+                    <div>
+                    <button className="mt-5 bg-indigo-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleConfirm} >
 Confirm                </button>
+<button onClick={handleDelete} className='mt-5 ml-8 px-4 py-2 bg-red-500 text-white rounded shadow-lg hover:bg-red-600'>Delete Session</button>
 
+
+                    </div>
+                
 
             
                 </div>
