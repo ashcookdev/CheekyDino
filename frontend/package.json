@@ -21,7 +21,6 @@
     "@fontsource/inter": "^4.5.15",
     "@headlessui/react": "^1.7.14",
     "@heroicons/react": "^2.0.17",
-    "@josephdadams/usbrelay": "^1.0.3",
     "@react-three/drei": "^9.80.1",
     "@react-three/fiber": "^8.13.6",
     "@tailwindcss/aspect-ratio": "^0.4.2",
@@ -64,7 +63,6 @@
     "react-scripts": "5.0.1",
     "react-to-print": "^2.14.13",
     "recharts": "^2.7.2",
-    "serialport": "^12.0.0",
     "simple-peer": "^9.11.1",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
@@ -102,7 +100,7 @@
       "../amplify/**/*"
     ],
     "appId": "com.versasoft.cheekydino",
-    "productName": "Cheeky Dino 1.1",
+    "productName": "Cheeky Dino Beta Test",
     "win": {
       "target": [
         "nsis"

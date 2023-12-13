@@ -3,6 +3,8 @@ import SessionCalenderTill from './sessioncalendertill';
 import StaffTill from './StaffTill';
 import { DataStore } from 'aws-amplify';
 import { Sessions } from '../models';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 export default function SessionBook() {
   const [children, setChildren] = useState(1);
@@ -17,6 +19,20 @@ export default function SessionBook() {
   const [email, setEmail] = useState('');
   const [telephone, setNumber] = useState('');
   const [price, setPrice] = useState(0);
+  const [menu, setMenu] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleMenu = () => {
+    setMenu(true);
+  };
+
+  if (menu === true) {
+    navigate('/dashboard');
+    
+  }
+
+
 
   const handleChildrenChange = (e) => {
     const value = e.target.value;
@@ -89,152 +105,144 @@ export default function SessionBook() {
   
 
   return (
-        <div className="flex">
-    <div className="w-1/2 border">
-    <div className="bg-white py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:mx-0">
-          <h2 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Book Your Session
-          </h2>
-          <div>
-          <div>
-            <div>
-            <StaffTill onSelectChange={handleSelectedChange}/>  
-            </div>
-            <label
-                htmlFor="Email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Email
-              </label>
-              <input
-                onChange={(e) => setEmail(e.target.value)}
-                id="email"
-                type='text'
-                name="email"
-                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+    <div className="flex bg-white">
+     
 
-              >
+    <div className="w-1/2 p-6 border">
+    <motion.button
+      onClick={handleMenu}
+      className=" top-4 left-4 p-2 border rounded-md bg-red-500 text-white hover:bg-red-900"
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+    >
+      Back
+    </motion.button>
+      <div className="mb-2">
+        <StaffTill onSelectChange={handleSelectedChange} />
+      </div>
 
-              </input>
-              <div className='mt-3'>
-            {sessions.length > 0 && (
-  <select value={selectedSession} onChange={(e) => setSelectedSession(e.target.value)}>
-  <option disabled value="">Select a session</option>
-  {sessions.map((session, index) => (
-    <option key={index} value={session.id}>
-      {session.Name} - {session.Adults} Adults, {session.Children} Children - {session.Date}
-    </option>
-  ))}
-</select>
+      <div>
+        <label htmlFor="email" className="block text-sm font-medium text-gray-900">
+          Email
+        </label>
+        <input
+          onChange={(e) => setEmail(e.target.value)}
+          id="email"
+          type="text"
+          name="email"
+          className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        ></input>
+      </div>
 
+      <div className="mt-1">
+        {sessions.length > 0 && (
+          <select
+            onChange={(e) => setSelectedSession(e.target.value)}
+            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          >
+            <option disabled defaultValue="">
+              Select a session
+            </option>
+            {sessions.map((session, index) => (
+              <option key={index} value={session.id}>
+                {session.Name} - {session.Adults} Adults, {session.Children} Children - {session.Date}
+              </option>
+            ))}
+          </select>
+        )}
+        <p className="mt-1 text-sm text-gray-900 font-medium">Selected session: {selectedSession}</p>
 
-)}
-  <p>Selected session: {selectedSession}</p>
+        <motion.button
+onClick={AutoFill}
+className="mt-1 w-full inline-flex items-center justify-center px-2 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-600 md:py-2 md:text-base md:px-4 shadow-md"
+whileHover={{ scale: 1.05 }}
+whileTap={{ scale: 0.95 }}
+>
+AutoFill
+</motion.button>
 
+      </div>
 
-  <button
-    onClick={AutoFill}
-    className="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-  >
-    AutoFill
-  </button>
-</div>
-          <label htmlFor="children" className="block text-sm font-medium leading-6 text-gray-900">
-Adult Name            </label>
-            <input
-              onChange={(e) => setName(e.target.value)}
-              id="name"
-              type="text"
-              name="name"
-              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={name}
-            ></input>
-          </div>
-             
-            <div>
-
-              <label
-                htmlFor="phone"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Telephone
-              </label>
-              <input
-                onChange={(e) => setNumber(e.target.value)}
-                id="number"
-                type='text'
-                name="number"
-                value={telephone}
-                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-
-              >
-
-              </input>
-            </div>
-
-
-
-
-          <div>
-            <label htmlFor="adults" className="block text-sm font-medium leading-6 text-gray-900">
-              Number of Adults
-            </label>
-            <input
-              onChange={(e) => setAdults(e.target.value)}
-              id="adults"
-              name="adults"
-              type="number"
-              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={adults}
-
-            >
-            </input>
-          </div>
-
-          <div>
-            <label htmlFor="children" className="block text-sm font-medium leading-6 text-gray-900">
-              Number of Children
-            </label>
-            <input
-              onChange={handleChildrenChange}
-              id="children"
-              name="children"
-              type="number"
-              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-value={children}            ></input>
-          </div>
-          <div>
-           
-          <div>
-
-
-
-{childData.map((data, index) => (
-  <div key={index}>
     <div>
-      <label htmlFor={`child-age-${index}`} className="block text-sm font-medium leading-6 text-gray-900">
-        Child's Age
+      <label htmlFor="name" className="block text-sm font-medium text-gray-900">
+        Adult Name
       </label>
-      <select
-        onChange={(e) => handleChildAgeChange(index, e.target.value)}
-        id={`child-age-${index}`}
-        name={`child-age-${index}`}
-        className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-      >
-        <option value="6 months and under">6 months and under</option>
-        <option value="Under 1 year">under 1 year</option>
-        <option value="1-2 years old">1-2 years old</option>
-        <option value="sibling">sibling</option>
-        <option value="2+">2+</option>
-      </select>
+      <input
+        onChange={(e) => setName(e.target.value)}
+        id="name"
+        type="text"
+        name="name"
+        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        defaultValue={name}
+      ></input>
     </div>
 
-   
-  </div>
-))}
-          </div>
+    <div>
+      <label htmlFor="number" className="block text-sm font-medium text-gray-900">
+        Telephone
+      </label>
+      <input
+        onChange={(e) => setNumber(e.target.value)}
+        id="number"
+        type="text"
+        name="number"
+        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        value={telephone}
+      ></input>
+    </div>
+
+    <div>
+      <label htmlFor="adults" className="block text-sm font-medium text-gray-900">
+        Number of Adults
+      </label>
+      <input
+        onChange={(e) => setAdults(e.target.value)}
+        id="adults"
+        type="number"
+        name="adults"
+        min={0}
+        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        value={adults}
+      ></input>
+    </div>
+
+    <div>
+      <label htmlFor="children" className="block text-sm font-medium text-gray-900">
+        Number of Children
+      </label>
+      <input
+        onChange={handleChildrenChange}
+        id="children"
+        type="number"
+        name="children"
+        min={0}
+        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        value={children}
+      ></input>
+    </div>
+
+    <div>
+      {childData.map((data, index) => (
+        <div key={index} className="space-y-2">
+          <label htmlFor={`child-age-${index}`} className="block text-sm font-medium text-gray-900">
+            Child's Age- Do Not Select Sibling First
+          </label>
+          <select
+            onChange={(e) => handleChildAgeChange(index, e.target.value)}
+            id={`child-age-${index}`}
+            name={`child-age-${index}`}
+            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          >
+            <option value="6 months and under">6 months and under</option>
+            <option value="Under 1 year">under 1 year</option>
+            <option value="1-2 years old">1-2 years old</option>
+            {childData.length > 1 && <option value="sibling">sibling</option>}
+            <option value="2+">2+</option>
+          </select>
+        </div>
+      ))}
+    </div>
+
           <div>
             <label htmlFor="date" className="block text-sm font-medium leading-6 text-gray-900">
               Date
@@ -256,19 +264,11 @@ className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border 
 Book
 </button>
 </div>
-</div>
-</div>
 
 
 
 
 
-
-      </div>
-    </div>
-   
-
-    </div>
     <div className="w-1/2 border">
   {submitted && (
     <SessionCalenderTill children={children} staff={staff} adults={adults} date={date} childData={childData} email={email} telephone={telephone} name={name} price={price} />

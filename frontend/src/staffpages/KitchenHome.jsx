@@ -62,9 +62,7 @@ export default function Kitchen() {
     setMessages(prevMessages => [...prevMessages, msg.element]);
     console.log(messages)
     setShow(true);
-    if (ipcRenderer) {
-      ipcRenderer.send('play-sound');
-    }
+
     setTimeout(() => setShow(false), 30000); // hide after 30 seconds
   });
 

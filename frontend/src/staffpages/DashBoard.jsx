@@ -96,7 +96,7 @@ useEffect(() => {
   { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
   { name: 'Control Panel', href: '/controlpanel', icon: BoltIcon, current: false },
   { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
-  { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
+  { name: 'Tables', href: '/tables', icon: TableCellsIcon, current: false },
   { name: 'Edit Landing Page', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Customer Screen', href: '/customerscreen', icon: TvIcon, current: false },
   {name: 'Front Customer Screen', href: '/customerscreenfront', icon: TvIcon, current: false },

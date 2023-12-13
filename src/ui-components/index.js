@@ -4,8 +4,6 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
-export { default as CafeOrderCreateForm } from "./CafeOrderCreateForm";
-export { default as CafeOrderUpdateForm } from "./CafeOrderUpdateForm";
 export { default as ClockInCreateForm } from "./ClockInCreateForm";
 export { default as ClockInUpdateForm } from "./ClockInUpdateForm";
 export { default as CustomerScreenCreateForm } from "./CustomerScreenCreateForm";

@@ -28,6 +28,14 @@ export default function Example() {
     navigate('/dashboard')
   }
     
+  useEffect(() => {
+    // set a timer to refresh the page every 2 minutes
+    const interval = setInterval(() => {
+      window.location.reload();
+    }, 120000);
+
+    return () => clearInterval(interval);
+  }, []);
   
 
 

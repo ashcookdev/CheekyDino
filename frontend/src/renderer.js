@@ -168,7 +168,10 @@ export function AppRoutes() {
           '/customerscreen',
           '/training/',
           '/customerscreenfront',
-          '/customerprebooking'
+          '/customerprebooking',
+          '/booknow',
+          '/booklater',
+
         ].includes(location.pathname) ? (
         <StaffNav />
       ) : ![
@@ -181,7 +184,9 @@ export function AppRoutes() {
           '/customerscreen',
           '/training/',
           '/customerscreenfront',
-          '/customerprebooking'
+          '/customerprebooking',
+          '/booknow',
+          '/booklater',
         ].includes(location.pathname) ? (
         <Navbar />
       ) : null}

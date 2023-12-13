@@ -32,6 +32,7 @@ export default function CafeKitchen() {
   const [selected, setSelected] = useState({})
   const allOrdersSelected = selected.length === orders.length;
   const currentDate = new Date();
+  const [prevOrderCount, setPrevOrderCount] = useState(0);
 
 
 
@@ -45,13 +46,20 @@ export default function CafeKitchen() {
 
 
   
-  useEffect(() => {
-    const timer = setInterval(() => {
-      window.location.reload();
-    }, 60000); // Reloads the page every 60,000 milliseconds (1 minute)
+// use effect refreshes the page every minute
 
-    return () => clearInterval(timer); // Clears the interval when the component unmounts
-  }, []);
+useEffect(() => {
+  const interval = setInterval(() => {
+    window.location.reload();
+  }, 60000);
+
+  return () => clearInterval(interval);
+}
+  , []);
+
+  
+
+
 
   
 
@@ -84,11 +92,8 @@ export default function CafeKitchen() {
         order.Kitchen
     );
 
-
-    if (orders.length > 0 && (!prevOrders || orders.length > prevOrders.length)) {
-      // Send 'play-sound' message to main process
-      ipcRenderer.send('play-sound');
-    }
+console.log(orders);
+   
 
 
     setOrders(orders);
@@ -101,24 +106,25 @@ export default function CafeKitchen() {
 
 
 
-
-
-
   useEffect(() => {
     fetchTodaysOrders();
-    const subscription = DataStore.observe(CafeOrder).subscribe(() =>
-
-      fetchTodaysOrders()
-
-    );
+    const subscription = DataStore.observe(CafeOrder).subscribe(msg => {
+      if (msg.opType === 'INSERT') {
+        fetchTodaysOrders();
+      }
+    });
 
     return () => subscription.unsubscribe();
+}, [orders]);
 
-  }
 
-    , [orders]);
+
+
 
   async function HandleOrderConfirmed(order) {
+
+
+
     // Calculate the current time and format it as a string
     const currentTime = new Date();
     const options = { timeZone: "Europe/London", hour12: false };
@@ -201,7 +207,20 @@ export default function CafeKitchen() {
         group: ["Staff", "Kitchen", "Team Leader", "Admin", "Developer"],
       })
     );
+
+    const data = {
+      product: orders.map((item) => item.HotItems),
+      name: "customer",
+      table: orders.map((item) => item.Table),
+    };
+  
+    // Send the data to the cafe-print channel
+    if (isElectron) {
+      ipcRenderer.send('kitchen-print', { data });
+    }
   }
+
+  
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -275,6 +294,7 @@ export default function CafeKitchen() {
                   <p className="mt-1 text-xs leading-5 text-white">
                     Order Time: {format(parse(order.CreatedTime, 'HH:mm:ss', new Date()), 'h:mm a')}
                   </p>
+                 
                   <p className='text-white text-xs'>Ready By: {readyBy}</p>
                   <Countdown date={orderTimePlus20} renderer={renderer} />
 

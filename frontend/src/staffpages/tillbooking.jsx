@@ -9,6 +9,8 @@ import tableData from './TableData.json';
 import SessionBooker from './sessionbooker';
 import StaffCalenderParty from './PartyStaffCalendar';
 import StaffTill from './StaffTill';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -35,6 +37,25 @@ export default function SessionBook() {
   const [previousStaff, setPreviousStaff] = useState(staff);
   const [sessions, setSessions] = useState([]);
 const [selectedSession, setSelectedSession] = useState(null);
+const [menu, setMenu] = useState(false);
+
+  const navigate = useNavigate();
+
+
+
+
+  const handleMenu = () => {
+    setMenu(true);
+  }
+
+  if (menu === true) {
+    navigate('/dashboard')
+  }
+
+
+
+
+
 
 
 
@@ -224,164 +245,173 @@ setNumber(session.Number);
 
   }
 
+  const variants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+  };
+  
+
   
 
   // filter sessions for now or later using TimeSlotTo and TimeSlotFrom and Table 
   return (
-    <div className="flex">
-  <div className="w-1/2 border">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div>
-            <div className="mt-6">
-              <StaffTill onSelectChange={handleSelectedChange}/>  
-            </div>
+    <div className="flex bg-white">
+     
 
-            <label
-                htmlFor="Email"
-                className="block text-lg font-large leading-6 text-gray-900"
-              >
-                Email
-              </label>
-              <input
-                onChange={(e) => setEmail(e.target.value)|| setPreviousEmail(e.target.value)}
-                id="email"
-                type='text'
-                name="email"
-                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-
-              >
-
-              </input>
-            <div className='mt-3'>
-            {sessions.length > 0 && (
-  <select onChange={(e) => setSelectedSession(e.target.value)}>
-  <option disabled selected value="">Select a session</option>
-  {sessions.map((session, index) => (
-    <option key={index} value={session.id}>
-      {session.Name} - {session.Adults} Adults, {session.Children} Children - {session.Date}
-    </option>
-  ))}
-</select>
-
-)}
-  <p>Selected session: {selectedSession}</p>
-
-
-  <button
-    onClick={AutoFill}
-    className="bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-  >
-    AutoFill
-  </button>
-</div>
-            <div>
-
-            <label htmlFor="children" className="block text-lg font-large leading-6 text-gray-900">
-Adult Name            </label>
-            <input
-              onChange={(e) => setName(e.target.value)|| setPreviousName(e.target.value)}
-              id="name"
-              type="text"
-              name="name"
-              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              defaultValue={name}
-              ></input>
-          </div>
-            
-
-
-            </div>
-            <div>
-          
-              <label
-                htmlFor="phone"
-                className="block text-large font-large leading-6 text-gray-900"
-              >
-                Telephone
-              </label>
-              <input
-                onChange={(e) => setNumber(e.target.value)|| setPreviousNumber(e.target.value)}
-                id="number"
-                type='text'
-                name="number"
-                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-value={number}
-              >
-
-              </input>
-            </div>
-
-
-
-
-          <div>
-            <label htmlFor="children" className="block text-large font-large leading-6 text-gray-900">
-              Number of Adults
-            </label>
-            <input
-              onChange={(e) => setAdults(e.target.value)|| setPreviousAdults(e.target.value)}
-              id="adults"
-              type="number"
-              name="adults"
-              min={0}
-              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-value={adults}            >
-
-            </input>
-          </div>
-
-          <div>
-            <label htmlFor="children" className="block text-large font-large leading-6 text-gray-900">
-              Number of Children
-            </label>
-            <input
-              onChange={handleChildrenChange}
-              id="children"
-              type="number"
-              name="children"
-              min={0}
-              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-value={children}            ></input>
-          </div>
-
-          <div>
-
-
-
-          {childData.map((data, index) => (
-  <div key={index}>
-    <div>
-      <label htmlFor={`child-age-${index}`} className="block text-large font-large leading-6 text-gray-900">
-        Child's Age- Do Not Select Sibling First
-      </label>
-      <select
-        onChange={(e) => handleChildAgeChange(index, e.target.value)}
-        id={`child-age-${index}`}
-        name={`child-age-${index}`}
-        className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+      <div className="w-1/2 p-6 border">
+      <motion.button
+        onClick={handleMenu}
+        className=" top-4 left-4 p-2 border rounded-md bg-red-500 text-white hover:bg-red-900"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
       >
-        <option value="6 months and under">6 months and under</option>
-        <option value="Under 1 year">under 1 year</option>
-        <option value="1-2 years old">1-2 years old</option>
-        {childData.length > 1 && <option value="sibling">sibling</option>}
-        <option value="2+">2+</option>
-      </select>
-    </div>
-  </div>
-))}
-          </div>
-         
-          <button
-            type="submit"
-            onClick={handleNowSubmit}
-            className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
-          >
-            Book
-          </button>
-          </div>
+        Back
+      </motion.button>
+        <div className="mb-2">
+          <StaffTill onSelectChange={handleSelectedChange} />
+        </div>
+
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-900">
+            Email
+          </label>
+          <input
+            onChange={(e) => setEmail(e.target.value) || setPreviousEmail(e.target.value)}
+            id="email"
+            type="text"
+            name="email"
+            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          ></input>
+        </div>
+
+        <div className="mt-1">
+          {sessions.length > 0 && (
+            <select
+              onChange={(e) => setSelectedSession(e.target.value)}
+              className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            >
+              <option disabled defaultValue="">
+                Select a session
+              </option>
+              {sessions.map((session, index) => (
+                <option key={index} value={session.id}>
+                  {session.Name} - {session.Adults} Adults, {session.Children} Children - {session.Date}
+                </option>
+              ))}
+            </select>
+          )}
+          <p className="mt-1 text-sm text-gray-900 font-medium">Selected session: {selectedSession}</p>
+
+          <motion.button
+  onClick={AutoFill}
+  className="mt-1 w-full inline-flex items-center justify-center px-2 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-600 md:py-2 md:text-base md:px-4 shadow-md"
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+>
+  AutoFill
+</motion.button>
 
         </div>
-        <div className="w-1/2 border">
+  
+      <div>
+        <label htmlFor="name" className="block text-sm font-medium text-gray-900">
+          Adult Name
+        </label>
+        <input
+          onChange={(e) => setName(e.target.value) || setPreviousName(e.target.value)}
+          id="name"
+          type="text"
+          name="name"
+          className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          defaultValue={name}
+        ></input>
+      </div>
+  
+      <div>
+        <label htmlFor="number" className="block text-sm font-medium text-gray-900">
+          Telephone
+        </label>
+        <input
+          onChange={(e) => setNumber(e.target.value) || setPreviousNumber(e.target.value)}
+          id="number"
+          type="text"
+          name="number"
+          className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          value={number}
+        ></input>
+      </div>
+  
+      <div>
+        <label htmlFor="adults" className="block text-sm font-medium text-gray-900">
+          Number of Adults
+        </label>
+        <input
+          onChange={(e) => setAdults(e.target.value) || setPreviousAdults(e.target.value)}
+          id="adults"
+          type="number"
+          name="adults"
+          min={0}
+          className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          value={adults}
+        ></input>
+      </div>
+  
+      <div>
+        <label htmlFor="children" className="block text-sm font-medium text-gray-900">
+          Number of Children
+        </label>
+        <input
+          onChange={handleChildrenChange}
+          id="children"
+          type="number"
+          name="children"
+          min={0}
+          className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          value={children}
+        ></input>
+      </div>
+  
+      <div>
+        {childData.map((data, index) => (
+          <div key={index} className="space-y-2">
+            <label htmlFor={`child-age-${index}`} className="block text-sm font-medium text-gray-900">
+              Child's Age- Do Not Select Sibling First
+            </label>
+            <select
+              onChange={(e) => handleChildAgeChange(index, e.target.value)}
+              id={`child-age-${index}`}
+              name={`child-age-${index}`}
+              className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            >
+              <option value="6 months and under">6 months and under</option>
+              <option value="Under 1 year">under 1 year</option>
+              <option value="1-2 years old">1-2 years old</option>
+              {childData.length > 1 && <option value="sibling">sibling</option>}
+              <option value="2+">2+</option>
+            </select>
+          </div>
+        ))}
+      </div>
+  
+      <div className="space-y-2">
+          <motion.button
+            type="submit"
+            onClick={handleNowSubmit}
+            className="mt-3 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-3 md:text-lg md:px-6"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Book
+          </motion.button>
+        </div>
+    </div>
+  
+    <motion.div 
+  className="w-1/2 p-6 border"
+  initial="hidden"
+  animate="visible"
+  variants={variants}
+>
   {truee === true && (
     <TableSelect
       availableTables={availableTables}
@@ -390,10 +420,9 @@ value={children}            ></input>
       handleBack={handleBack}
     />
   )}
-</div>
-
-</div>
-
+</motion.div>
+  </div>
+  
 
               
     

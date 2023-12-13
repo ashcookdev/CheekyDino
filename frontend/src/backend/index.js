@@ -3,7 +3,7 @@ const cors = require('cors');
 const escpos = require('escpos');
 escpos.Network = require('escpos-network');
 const http = require('http');
-const USBRelay = require('@josephdadams/usbrelay');
+// const USBRelay = require('@josephdadams/usbrelay');
 
 
 
@@ -20,40 +20,40 @@ app.use(cors());
 // Middleware to parse JSON in the request body
 app.use(express.json());
 
-let relay;
-try {
-  relay = new USBRelay();
-} catch (error) {
-  console.log('USBRelay not available:', error);
-}
+// let relay;
+// try {
+//   relay = new USBRelay();
+// } catch (error) {
+//   console.log('USBRelay not available:', error);
+// }
 
-function toggleRelay(relayNumber, state, delay) {
-  if (!relay) return;
-  relay.setState(relayNumber, state);
-  console.log(`Relay ${relayNumber} enabled? ${relay.getState(relayNumber)}`);
-  if (delay) {
-    setTimeout(() => {
-      relay.setState(relayNumber, false);
-      console.log(`Relay ${relayNumber} enabled? ${relay.getState(relayNumber)}`);
-    }, delay);
-  }
-}
+// function toggleRelay(relayNumber, state, delay) {
+//   if (!relay) return;
+//   relay.setState(relayNumber, state);
+//   console.log(`Relay ${relayNumber} enabled? ${relay.getState(relayNumber)}`);
+//   if (delay) {
+//     setTimeout(() => {
+//       relay.setState(relayNumber, false);
+//       console.log(`Relay ${relayNumber} enabled? ${relay.getState(relayNumber)}`);
+//     }, delay);
+//   }
+// }
 
-app.post('/entrance', function (req, res) {
-  toggleRelay(1, true, 10000);
-  res.send('Entrance relay toggled');
-});
+// app.post('/entrance', function (req, res) {
+//   toggleRelay(1, true, 10000);
+//   res.send('Entrance relay toggled');
+// });
 
-app.post('/exit', function (req, res) {
-  toggleRelay(2, true, 10000);
-  res.send('Exit relay toggled');
-});
+// app.post('/exit', function (req, res) {
+//   toggleRelay(2, true, 10000);
+//   res.send('Exit relay toggled');
+// });
 
-app.post('/closing', function (req, res) {
-  toggleRelay(1, true, 300000);
-  toggleRelay(2, true, 300000);
-  res.send('Closing relays toggled');
-});
+// app.post('/closing', function (req, res) {
+//   toggleRelay(1, true, 300000);
+//   toggleRelay(2, true, 300000);
+//   res.send('Closing relays toggled');
+// });
 
 
 
@@ -272,16 +272,16 @@ app.post('/cafeprinter', (req, res) => {
 )}
 );
 
-app.post('/kitchenprinter', (req, res) => {
+app.post('/kitchenprinter', async (req, res) => {
   const body = req.body;
 
-  const device = new escpos.Network('192.168.1.223', 9100);
+  const device = new escpos.Network('192.168.1.222', 9100);
   const options = { encoding: 'GB18030' /* default */ };
   const printer = new escpos.Printer(device, options);
 
   console.log("cafe printer called")
 
-  device.open(function(error) {
+  device.open(async function(error) {
     if (error) {
       console.error('Error opening device:', error);
       res.status(500).json({ error: 'Error opening device' });
@@ -289,7 +289,34 @@ app.post('/kitchenprinter', (req, res) => {
     }
 
     try {
-      printReceiptAndOpenDrawer(body, printer);
+      // Initialize the printer, set the font size, print some text, cut the paper, and open the drawer
+      await printer
+        .font('a')
+        .align('ct')
+        .style('b')
+        .size(1, 1) // Changed the size to 1, 1
+        .text('The Cheeky Dino')
+        .text('--------------------------------')
+        .align('lt')
+        .style('normal')
+        .size(1, 1) // Changed the size to 0.5, 0.5
+        .text('--------------------------------')
+        .text(`Product: ${body.data.product}`)
+        .text(`Name: ${body.data.name}`)
+        .text(`Table: ${body.data.table}`)
+        .text('--------------------------------')
+        .align('rt')
+        .style('b')
+        .size(1, 1) // Changed the size to 1, 1
+        // .text(`Change: ${body.data.change}`)
+        .text('--------------------------------')
+        .align('ct')
+        .style('normal')
+        .size(1, 1) // Changed the size to 0.5, 0.5
+        .cut() // Cut the paper
+        .close(); // Close the printer connection
+
+      console.log('Printed successfully and drawer opened');
       res.status(200).json({ message: 'Printed successfully and drawer opened' });
     } catch (error) {
       console.error('Error printing receipt:', error);
@@ -297,9 +324,9 @@ app.post('/kitchenprinter', (req, res) => {
     } finally {
       device.close();
     }
-  }
-)}
-);
+  });
+});
+
 
 // route to handle usb relay
 

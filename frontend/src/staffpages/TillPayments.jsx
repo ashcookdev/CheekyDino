@@ -2,10 +2,9 @@ import { DataStore, Predicates } from "aws-amplify";
 import { CafeOrder, Sessions } from "../models";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import ReactToPrint from "react-to-print";
 import React from "react";
 import { motion } from "framer-motion"; // Import Framer Motion
-import QRCode from "react-qr-code";
+import KitchenLoader from "./kitchenloader";
 
 
 
@@ -31,6 +30,8 @@ export default function TillPayment({
   const [isChangeGiven, setIsChangeGiven] = useState(false); // Flag to track if change is given
   const [discount, setDiscount] = useState(false);
   const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     // Check if ipcRenderer is available before using it
@@ -49,11 +50,16 @@ export default function TillPayment({
 
 
   console.log(orders);
-  const navigate = useNavigate();
 
   const receiptRef = useRef();
+  const navigate = useNavigate();
+
+
+
 
   const handleConfirmClick = async () => {
+
+
     const currentTime = new Date();
     const options = {
       timeZone: "Europe/London",
@@ -75,6 +81,8 @@ export default function TillPayment({
       alert("Error: No customer at table");
       return;
     }
+
+    setLoading(true);
 
     // Update the session with the new order and total price
     await DataStore.save(
@@ -108,7 +116,6 @@ export default function TillPayment({
         Sessionid: session.id,
         Delieved: !kitchen,
         Kitchen: kitchen,
-        HotOrderPrep: prepTime,
         KitchenMenuId: orders.map((item) => item.ID),
         TotalNoVAT: total / 1.2,
         StaffOrderName: staff,
@@ -116,16 +123,16 @@ export default function TillPayment({
         SessionEmail: session.Email,
         Notes: comment,
       })
-    );
+      ).then(() => {
+        console.log('Order confirmed' + session.id);
+        setTimeout(() => {
+ setLoading(false);  // Hide the loading spinner.
+      window.location.reload();        }, 3000);
+      }).catch((error) => {
+        console.error('Error saving data:', error);
+      });
 
-    console.log("Order confirmed" + session.id);
-    // Reset the order and total price
-    setOrder([]);
-    setTotal(0);
-    setPaymentMethod(null);
-    setAmountEntered(0);
-    setIsFlashing(false);
-    window.location.reload();
+     
   };
 
   const handleCashClick = () => {
@@ -162,6 +169,7 @@ export default function TillPayment({
     setAmountEntered(updatedAmount.toString());
     const newChange = updatedAmount - total;
     setChange(newChange);
+    setIsFlashing(true)
     if (ipcRenderer ) {
       ipcRenderer.send('cafe-drawer', {orders, newtotal, amountEntered, change});
 
@@ -181,11 +189,14 @@ export default function TillPayment({
     setAmountEntered(updatedAmount.toString());
     const newChange = updatedAmount - total;
     setChange(newChange);
+    setIsFlashing(true)
+
   };
 
   const handleDecimalClick = () => {
     if (!amountEntered.includes(".")) {
       setAmountEntered(amountEntered + ".");
+
     }
   };
 
@@ -227,7 +238,9 @@ export default function TillPayment({
   };
 
   return (
+    
     <div className="grid grid-cols-3 gap-4 p-4">
+
       <div className="border-r border-gray-300 pr-4 mb-3 mt-3">
         <motion.button
           variants={buttonVariants}
@@ -386,11 +399,20 @@ export default function TillPayment({
             >
               £50
             </motion.button>
+            <motion.button
+              className="bg-blue-500 p-2 rounded"
+              onClick={() => handleCardClick()}
+              variants={buttonVariants}
+              whileHover="hover"
+            >
+              Full Amount
+            </motion.button>
           </div>
         )}
       </div>
       
       <div className="grid grid-cols-3 gap-2 border-r border-gray-300 pr-4">
+
         
         {[...Array(9)].map((_, i) => (
           <motion.button
@@ -438,12 +460,15 @@ Order Notes      </label>
        
       </div>
       <div>
+      {loading? <KitchenLoader /> : null}
+        <h2 className="text-lg font-bold">Order Summary</h2>
+
         <ul>
           {table && <li>Table: {table}</li>}
-          {childName && <li>Child: {childName}</li>}
+          {childName && <li>Name: {childName}</li>}
           {order.map((item, index) => (
             <li key={index} className="mb-2">
-              {item.Name} £{item.Price.toFixed(2)}
+              Product: {item.Name}
             </li>
           ))}
         </ul>

@@ -148,36 +148,18 @@ ipcMain.on('cafe-drawer', async (event, data) => {
   }
 });
 
-ipcMain.on('entrance', async (event, data) => {
-  try {
-    const response = await axios.post('http://localhost:5253/entrance', data);
-    event.reply('entrance-reply', response.data);
-  } catch (error) {
-    console.error('Error in entrance:', error);
-    event.reply('entrance-reply', { error: 'An error occurred' });
-  }
+ipcMain.on('entrance', (event, data) => {
+  console.log('Entrance event received with data:', data);
 });
 
-ipcMain.on('exit', async (event, data) => {
-  try {
-    const response = await axios.post('http://localhost:5253/exit', data);
-    event.reply('entrance-reply', response.data);
-  } catch (error) {
-    console.error('Error in entrance:', error);
-    event.reply('entrance-reply', { error: 'An error occurred' });
-  }
+ipcMain.on('exit', (event, data) => {
+  console.log('Exit event received with data:', data);
 });
 
-ipcMain.on('closing', async (event, data) => {
-  try {
-    const response = await axios.post('http://localhost:5253/closing', data);
-    event.reply('closing-reply', response.data);
-  } catch (error) {
-    console.error('Error in closing:', error);
-    event.reply('closing-reply', { error: 'An error occurred' });
-  }
-}
-);
+ipcMain.on('closing', (event, data) => {
+  console.log('Closing event received with data:', data);
+});
+
 
 ipcMain.on('play-sound', () => {
   soundWindow = new BrowserWindow({
