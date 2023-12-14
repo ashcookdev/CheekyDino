@@ -223,7 +223,7 @@ window.location.reload();
     {categories.length > 0 && (
       <div className="block">
         <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-2 sm:space-x-8" aria-label="Tabs">
+          <nav className="-mb-px flex flex-col space-y-2 sm:flex-row sm:space-x-8 sm:space-y-0" aria-label="Tabs">
             {categories.map((category) => (
               <a
                 key={category}
@@ -232,7 +232,7 @@ window.location.reload();
                   selectedCategory === category
                     ? 'border-orange-500 text-orange-600 component-title'
                     : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 component-title'
-                } whitespace-nowrap border-b-2 py-2 px-1 sm:py-4 sm:px-1 text-sm font-medium cursor-pointer`}
+                } whitespace-normal sm:whitespace-nowrap border-b-2 py-2 px-1 sm:py-4 sm:px-1 text-sm font-medium cursor-pointer`}
               >
                 {category}
               </a>
@@ -242,6 +242,7 @@ window.location.reload();
       </div>
     )}
   </div>
+
 
         {selectedCategory && (
           <ul role="list" className="divide-y divide-gray-100">
