@@ -8,6 +8,22 @@ const { format } = require('date-fns');
 
 
 export default function Menu() {
+
+
+// reload page every 1 min 
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    window.location.reload();
+  }, 60000);
+  return () => clearInterval(interval);
+}, []);
+
+
+
+
+
+
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
@@ -84,7 +100,19 @@ console.log(session)
 // save total into session 
 // save created time into session using date-fns format
 
-const createdTime = format(new Date(), 'HH:mm:ss.SSS');
+const currentTime = new Date();
+
+const options = {
+  timeZone: "Europe/London",
+  hour12: false,
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  millisecond: "2-digit",
+};
+
+const awstime = currentTime.toLocaleTimeString("en-GB", options);
+
 
 const totalCost = selectedProducts.reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
 
@@ -121,7 +149,7 @@ await DataStore.save(
     new CafeOrder({
       HotItems: hotItems,
         DrinkItems: drinkItems,
-        CreatedTime: createdTime,
+        CreatedTime: awstime,
         CreatedDate: new Date().toISOString().split("T")[0],
         Total: totalCost,
         Table: session[0].Table,
@@ -129,7 +157,6 @@ await DataStore.save(
         Sessionid: session[0].id,
         Delieved: false,
         Kitchen: true,
-        HotOrderPrep: prepTime,
         KitchenMenuId: se.map((item) => item.id),
         TotalNoVAT: totalCost / 1.2,
         sessionsID: session[0].id,

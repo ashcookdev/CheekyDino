@@ -52,6 +52,19 @@ function App() {
   const formattedDate = format(date, 'hh:mm');
 
 
+  
+  useEffect(() => {
+
+    const interval = setInterval(() => {
+        window.location.reload();
+    }
+        , 120000);
+    return () => clearInterval(interval);
+}, []);
+
+
+
+
   React.useEffect(() => {
     fetchMessages();
     const subscription = DataStore.observe(Messages).subscribe(() =>

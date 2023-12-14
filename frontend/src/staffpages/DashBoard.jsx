@@ -57,6 +57,19 @@ export default function Dashboard() {
 
     //get all orders for today from database  
 
+
+    // reload page every 2 minutes
+
+    useEffect(() => {
+
+        const interval = setInterval(() => {
+            window.location.reload();
+        }
+            , 120000);
+        return () => clearInterval(interval);
+    }, []);
+
+    
     
 
 const [currentTime, setCurrentTime] = useState(new Date());

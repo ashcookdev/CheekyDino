@@ -18,6 +18,19 @@ function OccupiedTables() {
   const [moveTable, setMoveTable] = useState([]);
   const [moveState, setMoveState] = useState(false);
 
+
+  
+  useEffect(() => {
+
+    const interval = setInterval(() => {
+        window.location.reload();
+    }
+        , 120000);
+    return () => clearInterval(interval);
+}, []);
+
+
+
   let ipcRenderer = null;
   if (window.require) {
     ipcRenderer = window.require('electron').ipcRenderer;
