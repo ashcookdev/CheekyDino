@@ -13,7 +13,7 @@ export default function Qrscanner() {
 
 
   if (back === true) {
-window.location.reload()    
+navigate('/dashboard')    
   }
 
 

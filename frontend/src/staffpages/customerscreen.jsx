@@ -7,6 +7,10 @@ import "./screencss.css"
 import { Sessions } from '../models';
 import TableLayout from './tablelayout';
 import { useNavigate } from 'react-router-dom';
+import Weather from './weatherdata';
+
+
+
 
 
 export default function Example() {
@@ -32,7 +36,7 @@ export default function Example() {
     // set a timer to refresh the page every 2 minutes
     const interval = setInterval(() => {
       window.location.reload();
-    }, 6000);
+    }, 60000);
 
     return () => clearInterval(interval);
   }, []);
@@ -143,15 +147,21 @@ export default function Example() {
 
   return (
     <>
-      <div className="fixed top-0 left-0 w-full h-16 flex justify-between items-center px-4 bg-gradient-to-r from-orange-500 to-yellow-500">
-        <div className="text-white font-bold text-lg">
-          {format(new Date(), 'HH:mm')}
-        </div>
-        
-       
-        <button onClick={() => setDash(true)}>Close</button>
+     <div class="fixed top-0 left-0 w-full h-25 flex items-center px-4 bg-gradient-to-r from-orange-500 to-yellow-500">
+  <div class="text-white font-bold text-lg mr-auto">
+    {format(new Date(), "HH:mm")}
+  </div>
+  <div class="flex-grow flex items-center justify-center">
+    <div class="text-white font-bold">
+      <Weather />
+    </div>
+  </div>
+  <button class="text-white font-bold bg-transparent border border-white rounded-md px-4 py-2 ml-auto" onClick={() => setDash(true)}>
+    Close
+  </button>
+</div>
 
-      </div>
+
   
       <div className="flex bg-fixed bg-center bg-no-repeat bg-cover pt-16">
         <header className="flex items-center justify-between px-4 py-3 bg-white border-b-4 border-indigo-600">
@@ -174,7 +184,6 @@ export default function Example() {
                   <h1 className="mt-24 text-4xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-6xl">
                     {message}
                   </h1>
-                  <audio autoPlay controls src={audioSrc} className="hidden" />
                 </>
               ) : (
                 <>

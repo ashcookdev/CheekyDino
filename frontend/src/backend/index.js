@@ -5,13 +5,6 @@ escpos.Network = require('escpos-network');
 const http = require('http');
 // const USBRelay = require('@josephdadams/usbrelay');
 
-
-
-
-
-
-
-
 const app = express();
 const port = 5253;
 // Enable CORS

@@ -32,11 +32,9 @@ export default function MasterClose() {
                     await DataStore.save(updatedSession);
                 })
             );
-
             await DataStore.delete(Messages, Predicates.ALL);
            await DataStore.delete(CustomerScreen, Predicates.ALL);
            await DataStore.delete(Gates, Predicates.ALL);
-           await Datastore.delete(CustomerScreen, Predicates.ALL)
 
 
 

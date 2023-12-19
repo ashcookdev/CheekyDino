@@ -7,6 +7,13 @@ import { Auth } from 'aws-amplify'
 // const socket = io.connect('http://localhost:5253');
 
 export default function Example() {
+
+  // check if its electron or web 
+
+
+
+
+  
 //   const [user, setUser] = useState(null);
 //   const [callActive, setCallActive] = useState(false);
 //   const [peers, setPeers] = useState([]);
