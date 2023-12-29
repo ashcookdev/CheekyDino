@@ -31,6 +31,7 @@ import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import Online from './online';
 import { Link } from 'react-router-dom';
+import { CheckIcon } from '@heroicons/react/24/solid';
 
 
 const templates = ['Party Host to Front Desk', 'Party Finished Clean Upstairs', 'Table (number) Food is Ready'];
@@ -161,6 +162,7 @@ function App() {
   { name: 'Control Panel', href: '/controlpanel', icon: BoltIcon, current: false },
   { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
   { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
+  { name: 'Used By Stock', href: '/usedby', icon: CheckIcon, current: false },
   { name: 'Edit Landing Page', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Customer Screen', href: '/customerscreen', icon: TvIcon, current: false },
   {name: 'Front Customer Screen', href: '/customerscreenfront', icon: TvIcon, current: false },
@@ -239,11 +241,11 @@ function App() {
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2">
                     <div className="flex h-16 shrink-0 items-center">
-                      <img
-                        className="h-8 w-auto"
-                        src="./versa.gif"
-                        alt="Your Company"
-                      />
+                    <img
+                className="h-20 w-auto"
+                src="versalogo.png"
+                alt="Your Company"
+              />
                     </div>
                     <nav className="flex flex-1 flex-col">
                       <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -318,9 +320,9 @@ function App() {
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
             <div className="flex h-16 shrink-0 items-center">
-              <img
-                className="h-8 w-auto"
-                src="./versa.gif"
+            <img
+                className="h-20 w-auto"
+                src="versalogo.png"
                 alt="Your Company"
               />
             </div>

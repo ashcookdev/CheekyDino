@@ -33,6 +33,7 @@ import {
   UserPlusIcon,
   UsersIcon,
   XMarkIcon,
+  CheckIcon
 } from '@heroicons/react/24/outline'
 import TodaysBookings from './todaysbookings'
 import Announcements from './Announcement'
@@ -41,6 +42,7 @@ import { ArrowLeftIcon, BoltIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIco
 } from '@heroicons/react/20/solid'
 import Modal from './modal'
 import { Link } from 'react-router-dom'
+import UsedByStock from './UsedByStock'
 
 
 
@@ -109,7 +111,8 @@ useEffect(() => {
   { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
   { name: 'Control Panel', href: '/controlpanel', icon: BoltIcon, current: false },
   { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
-  { name: 'Tables', href: '/tables', icon: TableCellsIcon, current: false },
+  { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
+  { name: 'Used By Stock', href: '/usedby', icon: CheckIcon, current: false },
   { name: 'Edit Landing Page', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Customer Screen', href: '/customerscreen', icon: TvIcon, current: false },
   {name: 'Front Customer Screen', href: '/customerscreenfront', icon: TvIcon, current: false },
@@ -121,10 +124,7 @@ useEffect(() => {
 {name: 'Settings', href: '/settings', icon: CogIcon, current: false },
 {name: 'Master Close', href: '/masterclose', icon: KeyIcon, current: false },  
 
-
 ]
-
-
 
     const currentDate = new Date();
     const formattedDate = format(currentDate, 'MMMM dd, yyyy');
@@ -235,7 +235,7 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                     <div className="flex h-16 shrink-0 items-center">
                       <img
                         className="h-8 w-auto"
-                        src="./versa.gif"
+                        src="./versalogo.png"
                         alt="Your Company"
                       />
                     </div>
@@ -313,8 +313,8 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
             <div className="flex h-16 shrink-0 items-center">
               <img
-                className="h-8 w-auto"
-                src="./versa.gif"
+                className="h-20 w-auto"
+                src="versalogo.png"
                 alt="Your Company"
               />
             </div>
@@ -400,8 +400,8 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
           <a href="#">
             <span className="sr-only">Your profile</span>
             <img
-              className="h-8 w-8 rounded-full bg-gray-50"
-              src="versa.gif"
+              className="h-8 w-16 rounded-full bg-gray-50"
+              src="versalogo.png"
               alt=""
             />
           </a>
@@ -424,7 +424,6 @@ const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
                       
 <Stats/>                            
                     </div>
-
                     <div
                         className="absolute left-0 top-full -z-10 mt-96 origin-top-left translate-y-40 -rotate-90 transform-gpu opacity-20 blur-3xl sm:left-1/2 sm:-ml-96 sm:-mt-10 sm:translate-y-0 sm:rotate-0 sm:transform-gpu sm:opacity-50"
                         aria-hidden="true"
@@ -501,7 +500,24 @@ Table Layout                            </h2>
 <Tables/>                        </div>
                     </div>
                 </div>
-                    
+                <div className="space-y-16 py-16 xl:space-y-20">
+                    <div>
+                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                            <h2 className="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
+                                 Used By Stock 
+                            </h2>
+                            
+                        </div>
+                        
+                        <div className="mt-6 overflow-hidden border-t border-gray-100" id='section6'>
+                            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                                <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+                                    <UsedByStock/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
 
                 <div className="space-y-16 py-16 xl:space-y-20">
                     <div>

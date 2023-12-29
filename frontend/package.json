@@ -100,7 +100,7 @@
       "../amplify/**/*"
     ],
     "appId": "com.versasoft.cheekydino",
-    "productName": "Cheeky Dino Beta Test",
+    "productName": "Cheeky Dino 1.1",
     "win": {
       "target": [
         "nsis"
@@ -113,7 +113,12 @@
     },
     "directories": {
       "buildResources": "assets"
-    }
+    },
+    "publish": [{
+      "provider": "github",
+      "owner": "ashcookdev",
+      "repo": "CheekyDino"
+    }]
   },
   "browserslist": {
     "production": [

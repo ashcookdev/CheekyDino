@@ -53,6 +53,7 @@ type EagerStockControl = {
   readonly ProductId?: string | null;
   readonly NewPrice?: number | null;
   readonly NewVAT?: number | null;
+  readonly UsedBy?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -76,6 +77,7 @@ type LazyStockControl = {
   readonly ProductId?: string | null;
   readonly NewPrice?: number | null;
   readonly NewVAT?: number | null;
+  readonly UsedBy?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

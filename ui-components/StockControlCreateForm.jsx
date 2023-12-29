@@ -10,10 +10,9 @@ import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { StockControl } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify/datastore";
-export default function StockControlUpdateForm(props) {
+export default function StockControlCreateForm(props) {
   const {
-    id: idProp,
-    stockControl: stockControlModelProp,
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -35,6 +34,7 @@ export default function StockControlUpdateForm(props) {
     ProductId: "",
     NewPrice: "",
     NewVAT: "",
+    UsedBy: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Weight, setWeight] = React.useState(initialValues.Weight);
@@ -50,38 +50,24 @@ export default function StockControlUpdateForm(props) {
   const [ProductId, setProductId] = React.useState(initialValues.ProductId);
   const [NewPrice, setNewPrice] = React.useState(initialValues.NewPrice);
   const [NewVAT, setNewVAT] = React.useState(initialValues.NewVAT);
+  const [UsedBy, setUsedBy] = React.useState(initialValues.UsedBy);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = stockControlRecord
-      ? { ...initialValues, ...stockControlRecord }
-      : initialValues;
-    setName(cleanValues.Name);
-    setWeight(cleanValues.Weight);
-    setQuantity(cleanValues.Quantity);
-    setPrice(cleanValues.Price);
-    setPreVAT(cleanValues.PreVAT);
-    setSupplier(cleanValues.Supplier);
-    setVAT(cleanValues.VAT);
-    setCurrentStockLevel(cleanValues.CurrentStockLevel);
-    setCases(cleanValues.Cases);
-    setProductId(cleanValues.ProductId);
-    setNewPrice(cleanValues.NewPrice);
-    setNewVAT(cleanValues.NewVAT);
+    setName(initialValues.Name);
+    setWeight(initialValues.Weight);
+    setQuantity(initialValues.Quantity);
+    setPrice(initialValues.Price);
+    setPreVAT(initialValues.PreVAT);
+    setSupplier(initialValues.Supplier);
+    setVAT(initialValues.VAT);
+    setCurrentStockLevel(initialValues.CurrentStockLevel);
+    setCases(initialValues.Cases);
+    setProductId(initialValues.ProductId);
+    setNewPrice(initialValues.NewPrice);
+    setNewVAT(initialValues.NewVAT);
+    setUsedBy(initialValues.UsedBy);
     setErrors({});
   };
-  const [stockControlRecord, setStockControlRecord] = React.useState(
-    stockControlModelProp
-  );
-  React.useEffect(() => {
-    const queryData = async () => {
-      const record = idProp
-        ? await DataStore.query(StockControl, idProp)
-        : stockControlModelProp;
-      setStockControlRecord(record);
-    };
-    queryData();
-  }, [idProp, stockControlModelProp]);
-  React.useEffect(resetStateValues, [stockControlRecord]);
   const validations = {
     Name: [],
     Weight: [],
@@ -95,6 +81,7 @@ export default function StockControlUpdateForm(props) {
     ProductId: [],
     NewPrice: [],
     NewVAT: [],
+    UsedBy: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -134,6 +121,7 @@ export default function StockControlUpdateForm(props) {
           ProductId,
           NewPrice,
           NewVAT,
+          UsedBy,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -163,13 +151,12 @@ export default function StockControlUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(
-            StockControl.copyOf(stockControlRecord, (updated) => {
-              Object.assign(updated, modelFields);
-            })
-          );
+          await DataStore.save(new StockControl(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -177,7 +164,7 @@ export default function StockControlUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "StockControlUpdateForm")}
+      {...getOverrideProps(overrides, "StockControlCreateForm")}
       {...rest}
     >
       <TextField
@@ -201,6 +188,7 @@ export default function StockControlUpdateForm(props) {
               ProductId,
               NewPrice,
               NewVAT,
+              UsedBy,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -240,6 +228,7 @@ export default function StockControlUpdateForm(props) {
               ProductId,
               NewPrice,
               NewVAT,
+              UsedBy,
             };
             const result = onChange(modelFields);
             value = result?.Weight ?? value;
@@ -279,6 +268,7 @@ export default function StockControlUpdateForm(props) {
               ProductId,
               NewPrice,
               NewVAT,
+              UsedBy,
             };
             const result = onChange(modelFields);
             value = result?.Quantity ?? value;
@@ -318,6 +308,7 @@ export default function StockControlUpdateForm(props) {
               ProductId,
               NewPrice,
               NewVAT,
+              UsedBy,
             };
             const result = onChange(modelFields);
             value = result?.Price ?? value;
@@ -357,6 +348,7 @@ export default function StockControlUpdateForm(props) {
               ProductId,
               NewPrice,
               NewVAT,
+              UsedBy,
             };
             const result = onChange(modelFields);
             value = result?.PreVAT ?? value;
@@ -392,6 +384,7 @@ export default function StockControlUpdateForm(props) {
               ProductId,
               NewPrice,
               NewVAT,
+              UsedBy,
             };
             const result = onChange(modelFields);
             value = result?.Supplier ?? value;
@@ -431,6 +424,7 @@ export default function StockControlUpdateForm(props) {
               ProductId,
               NewPrice,
               NewVAT,
+              UsedBy,
             };
             const result = onChange(modelFields);
             value = result?.VAT ?? value;
@@ -470,6 +464,7 @@ export default function StockControlUpdateForm(props) {
               ProductId,
               NewPrice,
               NewVAT,
+              UsedBy,
             };
             const result = onChange(modelFields);
             value = result?.CurrentStockLevel ?? value;
@@ -511,6 +506,7 @@ export default function StockControlUpdateForm(props) {
               ProductId,
               NewPrice,
               NewVAT,
+              UsedBy,
             };
             const result = onChange(modelFields);
             value = result?.Cases ?? value;
@@ -546,6 +542,7 @@ export default function StockControlUpdateForm(props) {
               ProductId: value,
               NewPrice,
               NewVAT,
+              UsedBy,
             };
             const result = onChange(modelFields);
             value = result?.ProductId ?? value;
@@ -585,6 +582,7 @@ export default function StockControlUpdateForm(props) {
               ProductId,
               NewPrice: value,
               NewVAT,
+              UsedBy,
             };
             const result = onChange(modelFields);
             value = result?.NewPrice ?? value;
@@ -624,6 +622,7 @@ export default function StockControlUpdateForm(props) {
               ProductId,
               NewPrice,
               NewVAT: value,
+              UsedBy,
             };
             const result = onChange(modelFields);
             value = result?.NewVAT ?? value;
@@ -638,19 +637,54 @@ export default function StockControlUpdateForm(props) {
         hasError={errors.NewVAT?.hasError}
         {...getOverrideProps(overrides, "NewVAT")}
       ></TextField>
+      <TextField
+        label="Used by"
+        isRequired={false}
+        isReadOnly={false}
+        value={UsedBy}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Weight,
+              Quantity,
+              Price,
+              PreVAT,
+              Supplier,
+              VAT,
+              CurrentStockLevel,
+              Cases,
+              ProductId,
+              NewPrice,
+              NewVAT,
+              UsedBy: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.UsedBy ?? value;
+          }
+          if (errors.UsedBy?.hasError) {
+            runValidationTasks("UsedBy", value);
+          }
+          setUsedBy(value);
+        }}
+        onBlur={() => runValidationTasks("UsedBy", UsedBy)}
+        errorMessage={errors.UsedBy?.errorMessage}
+        hasError={errors.UsedBy?.hasError}
+        {...getOverrideProps(overrides, "UsedBy")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
       >
         <Button
-          children="Reset"
+          children="Clear"
           type="reset"
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || stockControlModelProp)}
-          {...getOverrideProps(overrides, "ResetButton")}
+          {...getOverrideProps(overrides, "ClearButton")}
         ></Button>
         <Flex
           gap="15px"
@@ -660,10 +694,7 @@ export default function StockControlUpdateForm(props) {
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={
-              !(idProp || stockControlModelProp) ||
-              Object.values(errors).some((e) => e?.hasError)
-            }
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>

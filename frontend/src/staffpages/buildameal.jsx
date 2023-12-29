@@ -12,6 +12,7 @@ export default function EnterStock() {
     const [product, setProduct] = useState('');
     const [supplier, setSupplier] = useState('');
     const [productID, setProductID] = useState('');
+    const [usedBy, setUsedBy] = useState('');
 
     const navigate = useNavigate();
 
@@ -44,7 +45,8 @@ export default function EnterStock() {
         PreVAT: beforeVAT,
         VAT: difference,
         CurrentStockLevel: newQuantity === 0 ? newWeight : newQuantity,
-        ProductId: productID
+        ProductId: productID,
+        UsedBy: usedBy
 
 
       })
@@ -174,6 +176,21 @@ window.location.reload();
             />
 
     </div>
+    <div className="mt-2">
+          <label htmlFor="pricePreVAT" className="block text-sm font-medium leading-6 text-gray-900">
+           Used By
+          </label>
+          <input onChange={(e) => setUsedBy(e.target.value)}
+            type="date"
+            name="date"
+            id="date"
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            placeholder=""  
+            aria-describedby=""
+            />
+
+    </div>
+
 
     <div className= "mt-2">
         <p>Price before VAT: £{prevat}</p>

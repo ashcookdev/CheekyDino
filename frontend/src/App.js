@@ -78,6 +78,7 @@ import PreBookTill2 from './staffpages/PrebookTill2';
 import TestTill from './staffpages/testtill';
 import Audio from './staffpages/audiochat';
 import ControlPanel from './staffpages/ControlPanel';
+import UsedByStock from './staffpages/UsedByStock';
 
 
 
@@ -232,6 +233,7 @@ function App() {
             <Route path= '/testtill' element={<TestTill />} />
             <Route path= '/audio' element={<Audio />} />
             <Route path= '/controlpanel' element={<ControlPanel />} />
+            <Route path= '/usedby' element={<UsedByStock />} />
           </>
         )}
         

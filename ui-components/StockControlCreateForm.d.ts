@@ -34,6 +34,7 @@ export declare type StockControlCreateFormInputValues = {
     ProductId?: string;
     NewPrice?: number;
     NewVAT?: number;
+    UsedBy?: string;
 };
 export declare type StockControlCreateFormValidationValues = {
     Name?: ValidationFunction<string>;
@@ -48,6 +49,7 @@ export declare type StockControlCreateFormValidationValues = {
     ProductId?: ValidationFunction<string>;
     NewPrice?: ValidationFunction<number>;
     NewVAT?: ValidationFunction<number>;
+    UsedBy?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type StockControlCreateFormOverridesProps = {
@@ -64,6 +66,7 @@ export declare type StockControlCreateFormOverridesProps = {
     ProductId?: PrimitiveOverrideProps<TextFieldProps>;
     NewPrice?: PrimitiveOverrideProps<TextFieldProps>;
     NewVAT?: PrimitiveOverrideProps<TextFieldProps>;
+    UsedBy?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type StockControlCreateFormProps = React.PropsWithChildren<{
     overrides?: StockControlCreateFormOverridesProps | undefined | null;

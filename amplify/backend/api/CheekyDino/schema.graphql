@@ -18,6 +18,7 @@ type StockControl @model @auth(rules: [{allow: private}]) {
   ProductId: String
   NewPrice: Float
   NewVAT: Float
+  UsedBy: String
 }
 
 type ClockIn @model @auth(rules: [{allow: private}, {allow: owner}]) {

@@ -4,6 +4,7 @@ import { StockControl, KitchenMenu } from '../models';
 import { useNavigate } from 'react-router-dom';
 import MealProfitMargins from './mealprofitmargins';
 import { StockControlEdit } from './stockcontroledit';
+import UsedByStock from './UsedByStock';
 export default function Buildameal() {
 
 
@@ -30,6 +31,7 @@ export default function Buildameal() {
   const [searchTerm, setSearchTerm] = useState("");
   const [extraPrices, setExtraPrices] = useState({});
   const [menuSearch, setMenuSearch] = useState("");
+  const [used, setUsed] = useState("");
 
   const getStock = async () => {
 
@@ -131,6 +133,7 @@ function handleConfirmation(stock) {
     StockControl.copyOf(selectedStock, (updated) => {
       updated.NewPrice = newPrice;
    updated.NewPreVAT = preVAT;
+   updated.UsedBy = used;
 
      updated.CurrentStockLevel = newWeightOrQuantity;
       updated.Cases = cases;
@@ -197,6 +200,7 @@ function handleSelectExtras(event) {
   function handleDelete(stock) {
     DataStore.delete(stock);
     console.log('Stock deleted');
+    window.location.reload();
   }
 
   const filteredMenu = menu.filter(menu => menu.Name.toLowerCase().includes(menuSearch.toLowerCase()));
@@ -311,7 +315,7 @@ Estimated Prep Time              </label>
 
         <div className="px-4 py-6 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">
           {/* Main content */}
-          
+          <UsedByStock />
         <h2 className="text-lg font-medium text-gray-900 text-center mt-10">Stock Items</h2>
         <button onClick={()=> setAdd(true)} className='relative inline-flex mt-3 items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none'>Add Item</button>
         <div>
@@ -368,6 +372,9 @@ Estimated Prep Time              </label>
           ) : null}
           <p className="truncate text-sm text-gray-500">
             Stock Level: {stock.CurrentStockLevel}
+          </p>
+          <p className="truncate text-sm text-red-500">
+            Used By: {stock.UsedBy}
           </p>
           <p className="truncate text-sm text-red-500">
             Price £{stock.Price}
@@ -428,6 +435,20 @@ Cases      </label>
           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           placeholder="£0.00"
         />
+      </div>
+      <div>
+      <label htmlFor="UsedBy" className="block text-sm font-medium leading-6 text-gray-900">
+        Used By
+      </label>
+      <div className="mt-2">
+        <input onChange={(event) => setUsed(event.target.value)}
+          type="date"
+          name="date"
+          id="date"
+          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          
+        />
+      </div>
       </div>
     </div>
     <div>
@@ -493,7 +514,7 @@ Cases      </label>
   {filteredMenu.map((menuItem) => (
     <div
       key={menuItem.Name}
-      className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-indigo-100 px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
+      className="relative flex items-center space-x-3 mt-3  rounded-lg border border-gray-300 bg-indigo-100 px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
     >
       <div className="flex-shrink-0"></div>
       <div className="min-w-0 flex-1">

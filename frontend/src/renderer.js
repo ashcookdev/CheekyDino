@@ -77,6 +77,7 @@ import PreBookTill2 from './staffpages/PrebookTill2';
 import TestTill from './staffpages/testtill';
 import AudioChat from './staffpages/audiochat';
 import ControlPanel from './staffpages/ControlPanel';
+import UsedByStock from './staffpages/UsedByStock';
 import {Routes, Route, useLocation } from "react-router-dom";
 
 
@@ -247,6 +248,8 @@ export function AppRoutes() {
             <Route path= '/testtill' element={<TestTill />} />
             <Route path= '/audio' element={<AudioChat />} />
             <Route path= '/controlpanel' element={<ControlPanel />} />
+            <Route path= '/usedby' element={<UsedByStock />} />
+
           </>
         )}
         
