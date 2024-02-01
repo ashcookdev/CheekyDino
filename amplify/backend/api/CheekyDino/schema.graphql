@@ -19,6 +19,7 @@ type StockControl @model @auth(rules: [{allow: private}]) {
   NewPrice: Float
   NewVAT: Float
   UsedBy: String
+  MatchCode: String
 }
 
 type ClockIn @model @auth(rules: [{allow: private}, {allow: owner}]) {
@@ -37,6 +38,9 @@ type ClockIn @model @auth(rules: [{allow: private}, {allow: owner}]) {
   Break: Boolean
   BreakStart: AWSTime
   BreakEnd: AWSTime
+  HoursWorked: Float
+  HourlyRate: Float
+  TotalPay: Float
 }
 
 type Teddys @model @auth(rules: [{allow: private}]) {

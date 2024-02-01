@@ -531,7 +531,7 @@ window.location.reload();
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
-              {extra.name} - £{extra.price.toFixed(2)} - Stock: {kitchenItem.StockLevel ? kitchenItem.StockLevel : 'N/A'}
+              {extra.name} - £{extra.price} - Stock: {kitchenItem.StockLevel ? kitchenItem.StockLevel : 'N/A'}
             </motion.button>
           );
         } else {

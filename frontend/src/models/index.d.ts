@@ -54,6 +54,7 @@ type EagerStockControl = {
   readonly NewPrice?: number | null;
   readonly NewVAT?: number | null;
   readonly UsedBy?: string | null;
+  readonly MatchCode?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -78,6 +79,7 @@ type LazyStockControl = {
   readonly NewPrice?: number | null;
   readonly NewVAT?: number | null;
   readonly UsedBy?: string | null;
+  readonly MatchCode?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -108,6 +110,9 @@ type EagerClockIn = {
   readonly Break?: boolean | null;
   readonly BreakStart?: string | null;
   readonly BreakEnd?: string | null;
+  readonly HoursWorked?: number | null;
+  readonly HourlyRate?: number | null;
+  readonly TotalPay?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -132,6 +137,9 @@ type LazyClockIn = {
   readonly Break?: boolean | null;
   readonly BreakStart?: string | null;
   readonly BreakEnd?: string | null;
+  readonly HoursWorked?: number | null;
+  readonly HourlyRate?: number | null;
+  readonly TotalPay?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

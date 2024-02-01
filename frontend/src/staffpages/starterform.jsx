@@ -20,12 +20,26 @@ export default function StaffForm () {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setStaff((prevState) => ({ ...prevState, [name]: value }));
+    if (name === 'HourlyRate') {
+      setStaff((prevState) => ({ ...prevState, [name]: parseFloat(value) }));
+    } else if (name === 'Current') {
+      setStaff((prevState) => ({ ...prevState, [name]: Boolean(value) }));
+    } else {
+      setStaff((prevState) => ({ ...prevState, [name]: value }));
+    }
+  
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await DataStore.save(new Staff({ ...staff }));
+    const staffToSave = {
+      ...staff,
+      // ... other properties
+      EndDate: staff.Current ? undefined : staff.EndDate,
+    };
+
+    await DataStore.save(new Staff(staffToSave));
+    
     setStaff({
       Name: '',
       Email: '',
@@ -40,6 +54,7 @@ export default function StaffForm () {
       Age: '',
       DOB: ''
     });
+    window.location.reload();
   };
 return (
 
@@ -138,7 +153,7 @@ return (
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
     </div>
-    <div className="mb-4">
+    {staff.Current ? false : ( <div className="mb-4">
         <label htmlFor="EndDate" className="block text-gray-700 text-sm font-bold mb-2">End Date:</label>
         <input
         type="date"
@@ -149,6 +164,8 @@ return (
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
     </div>
+    )}
+   
     <div className="mb-4">
         <label htmlFor="Age" className="block text-gray-700 text-sm font-bold mb-2">Age:</label>
         <input
@@ -171,6 +188,8 @@ return (
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
     </div>
+    
+
     <div className="flex items-center justify-between">
     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
       Submit

@@ -15,6 +15,7 @@ import { DataStore, Predicates } from 'aws-amplify'
 import { useEffect } from 'react'
 import { Auth } from 'aws-amplify'
 import { Link } from 'react-router-dom'
+import { QueueListIcon, SignalIcon } from '@heroicons/react/24/solid'
 
 
 
@@ -59,14 +60,15 @@ export default function Example() {
       }, []);
 
       const secondaryNavigation = [
-        { name: 'General', href: '#', icon: UserCircleIcon, current: true },
-        { name: 'Password', href: '#', icon: FingerPrintIcon, current: false },
+
        
         ...(userGroups.includes('Developer') || userGroups.includes('Admin')
           ? [
           { name: 'Stock Control ', href: '/stockcontrol', icon: CubeIcon, current: false },
           { name: 'Party Stock', href: '/partystock', icon: BellIcon, current: false},
           {name: 'Till Products', href: '/tillproducts', icon: Bars3Icon, current: false},
+          { name: 'Stock Swap', href: '/stockswap', icon: SignalIcon, current: false },
+          {name: 'Shopping List', href: '/shoppinglist', icon: QueueListIcon, current: false},
 
           { name: 'Add Stock Items ', href: '/buildameal', icon: CakeIcon, current: false },
           { name: 'Billing', href: '#', icon: CreditCardIcon, current: false },]
@@ -90,13 +92,13 @@ export default function Example() {
                     className={classNames(
                       item.current
                         ? 'bg-gray-50 text-indigo-600'
-                        : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                        : 'text-indigo-700 hover:text-indigo-600 hover:bg-gray-50',
                       'group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold'
                     )}
                   >
                     <item.icon
                       className={classNames(
-                        item.current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
+                        item.current ? 'text-indigo-600' : 'text-indigo-400 group-hover:text-indigo-600',
                         'h-6 w-6 shrink-0'
                       )}
                       aria-hidden="true"

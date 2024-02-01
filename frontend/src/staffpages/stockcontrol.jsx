@@ -32,6 +32,8 @@ export default function Buildameal() {
   const [extraPrices, setExtraPrices] = useState({});
   const [menuSearch, setMenuSearch] = useState("");
   const [used, setUsed] = useState("");
+  const [selectedMenu, setSelectedMenu] = useState(null);
+
 
   const getStock = async () => {
 
@@ -206,6 +208,11 @@ function handleSelectExtras(event) {
   const filteredMenu = menu.filter(menu => menu.Name.toLowerCase().includes(menuSearch.toLowerCase()));
   
   
+  function handleSelectExtras(event) {
+    const selectedExtra = event.target.value;
+    setSelectedExtras((prevSelectedExtras) => [...prevSelectedExtras, selectedExtra]);
+  }
+
 
  
 
@@ -315,7 +322,6 @@ Estimated Prep Time              </label>
 
         <div className="px-4 py-6 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">
           {/* Main content */}
-          <UsedByStock />
         <h2 className="text-lg font-medium text-gray-900 text-center mt-10">Stock Items</h2>
         <button onClick={()=> setAdd(true)} className='relative inline-flex mt-3 items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none'>Add Item</button>
         <div>
@@ -340,9 +346,9 @@ Estimated Prep Time              </label>
     </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-3">
-  {filteredStock.map((stock) => (
+  {filteredStock.map((stock, index) => (
     <div
-      key={stock.Name}
+      key={index}
       className={`relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400 ${stock.Weight > 0 ? (stock.CurrentStockLevel > 500 ? 'bg-green-100' : 'bg-red-100') : (stock.Quantity > 0 ? (stock.CurrentStockLevel > 50 ? 'bg-green-100' : 'bg-red-100') : '')}`}
       >    
       <div className="flex-shrink-0"></div>
@@ -356,7 +362,10 @@ Estimated Prep Time              </label>
             Cases:{stock.Cases}
           </p>
           <p className="text-sm text-gray-500 font-italic truncate">
-            {stock.Supplier}
+            Supplier: {stock.Supplier}
+          </p>
+          <p className="truncate text-sm text-gray-500">
+            Match Code: {stock.MatchCode}
           </p>
           <p className="truncate text-sm text-blue-500">
             ID:{stock.ProductId}
@@ -511,24 +520,26 @@ Cases      </label>
         </div>
       </div>
     </div>
-  {filteredMenu.map((menuItem) => (
-    <div
-      key={menuItem.Name}
-      className="relative flex items-center space-x-3 mt-3  rounded-lg border border-gray-300 bg-indigo-100 px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
-    >
+ {filteredMenu.map((menuItem) => (
+            <div
+              key={menuItem.Name}
+              className="relative flex items-center space-x-3 mt-3 rounded-lg border border-gray-300 bg-indigo-100 px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
+            >
       <div className="flex-shrink-0"></div>
       <div className="min-w-0 flex-1">
         <span className=" inset-0" aria-hidden="true" />
         <p className="text-sm font-medium text-gray-900">{menuItem.Name}</p>
         <p className="text-sm text-gray-500 truncate">{menuItem.Category}</p>
-        <p className="truncate text-sm text-red-500">Price £{menuItem.Price}</p>
+        <p className=" text-sm text-gray-500">{menuItem.Kitchen}</p>
+        <p className=" text-sm text-red-500">Price £{menuItem.Price.toFixed(2)}</p>
+
         <button
-          onClick={() => AddExtras(menuItem)}
-          type="button"
-          className="relative inline-flex mt-3 items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none"
-        >
-          Add Extras
-        </button>
+                  onClick={() => AddExtras(menuItem)}
+                  type="button"
+                  className="relative inline-flex mt-3 items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none"
+                >
+                  Add Extras
+                </button>
         <div>
           {menuExtra === menuItem && (
             // select menu items to add to the menu
@@ -558,7 +569,7 @@ Cases      </label>
     <li>{extra}</li>
     <input
   onChange={(event) => handlePriceChange(event, extra)}
-  value={extraPrices[extra] || ''}
+  value={extraPrices[extra] || '0.00'}
   type="number"
   step="0.01"
   placeholder="Enter price"

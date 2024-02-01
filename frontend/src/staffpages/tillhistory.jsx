@@ -1,7 +1,8 @@
 import { DataStore } from 'aws-amplify';
-import { CafeOrder, KitchenMenu } from '../models';
+import { CafeOrder, KitchenMenu, StockControl } from '../models';
 import { format, subHours, startOfDay, startOfWeek, startOfMonth } from 'date-fns';
 import React, { useState, useEffect } from 'react';
+import { set } from 'lodash';
 
 export default function OrderHistory() {
     const [orders, setOrders] = useState([]);
@@ -9,6 +10,42 @@ export default function OrderHistory() {
     const [menuItems, setMenuItems] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [sortOrder, setSortOrder] = useState('desc');
+    const [popular, setPopular] = useState('');
+    const [leastPopular, setLeastPopular] = useState('')
+
+    useEffect(() => {
+        async function getStock() {
+            const stock = await DataStore.query(StockControl);
+            // filter stock to find the most popular supplier and least popular supplier
+
+            // find the most popular supplier
+            const supplierCount = {};
+            stock.forEach(item => {
+                if (supplierCount[item.Supplier]) {
+                    supplierCount[item.Supplier]++;
+                } else {
+                    supplierCount[item.Supplier] = 1;
+                }
+            }); 
+
+            const mostPopularSupplier = Object.keys(supplierCount).sort((a, b) => supplierCount[b] - supplierCount[a])[0];
+console.log(mostPopularSupplier);
+setPopular(mostPopularSupplier)
+
+            // find the least popular supplier
+
+            const leastPopularSupplier = Object.keys(supplierCount).sort((a, b) => supplierCount[a] - supplierCount[b])[0];
+console.log(leastPopularSupplier);
+
+setLeastPopular(leastPopularSupplier)            
+            
+            console.log(stock);
+        }
+
+        getStock();
+    }, []);
+
+
 
     useEffect(() => {
         async function getOrders() {
@@ -154,6 +191,8 @@ export default function OrderHistory() {
             <div>
                 <p className='text-sm font-bold text-purple-900'>Most Popular Drink Items: {mostPopularDrinkItems.join(', ')}</p>
                 <p className='text-sm font-bold text-purple-900'>Most Popular Hot Items: {mostPopularHotItems.join(', ')}</p>
+                <p className='text-sm font-bold text-green-500'>Most Popular Supplier: {popular}</p>
+                <p className='text-sm font-bold text-red-500'>Least Popular Supplier: {leastPopular}</p>
             </div>
             <div className="mt-8">
                 <div className="flex justify-between">

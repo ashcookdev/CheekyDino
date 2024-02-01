@@ -33,16 +33,19 @@ import {
   UserPlusIcon,
   UsersIcon,
   XMarkIcon,
-  CheckIcon
+  CheckIcon,
+  
+  
 } from '@heroicons/react/24/outline'
 import TodaysBookings from './todaysbookings'
 import Announcements from './Announcement'
-import { ArrowLeftIcon, BoltIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CogIcon, CurrencyPoundIcon, LightBulbIcon, PencilIcon, PhoneIcon, TableCellsIcon, TvIcon
+import { ArrowLeftIcon, BoltIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CogIcon, CurrencyPoundIcon, HeartIcon, LightBulbIcon,PencilIcon, PhoneIcon, TableCellsIcon, TvIcon
 
 } from '@heroicons/react/20/solid'
 import Modal from './modal'
 import { Link } from 'react-router-dom'
 import UsedByStock from './UsedByStock'
+import TillProducts from './tillproducts'
 
 
 
@@ -98,7 +101,6 @@ useEffect(() => {
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     const teams = [{ id: 1, name: 'Orders', href: '/orders', initial: 'O', current: false },
-    { id: 2, name: 'Till History', href: '/tillhistory', initial: 'TH', current: false },
     { id: 3, name: 'Sessions', href: '/sessionhistory', initial: 'T', current: false },
     { id: 4, name: 'Parties', href: '/partyhistory', initial: 'P', current: false },
   ]
@@ -112,6 +114,8 @@ useEffect(() => {
   { name: 'Control Panel', href: '/controlpanel', icon: BoltIcon, current: false },
   { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
   { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
+  { name: 'Popular Items', href: '/tillhistory', icon: HeartIcon, current: false},
+
   { name: 'Used By Stock', href: '/usedby', icon: CheckIcon, current: false },
   { name: 'Edit Landing Page', href: '/edithome', icon: PencilIcon, current: false },
   {name: 'Customer Screen', href: '/customerscreen', icon: TvIcon, current: false },
@@ -500,24 +504,7 @@ Table Layout                            </h2>
 <Tables/>                        </div>
                     </div>
                 </div>
-                <div className="space-y-16 py-16 xl:space-y-20">
-                    <div>
-                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                            <h2 className="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
-                                 Used By Stock 
-                            </h2>
-                            
-                        </div>
-                        
-                        <div className="mt-6 overflow-hidden border-t border-gray-100" id='section6'>
-                            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                                <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
-                                    <UsedByStock/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
+                
 
                 <div className="space-y-16 py-16 xl:space-y-20">
                     <div>
@@ -582,7 +569,7 @@ Table Layout                            </h2>
                     </div>
                 </div>
                 </div>
-                
+                <TillProducts/>
                
                
                

@@ -97,7 +97,19 @@ const awspreptime = Prep + ':00';
     setEditProduct(product);
   }
   
-  
+  const handleDeleteExtras = async (product) => {
+    try {
+      const updatedProduct = KitchenMenu.copyOf(product, (updated) => {
+        updated.Extras = [];
+      });
+      await DataStore.save(updatedProduct);
+      fetchProducts();
+    } catch (error) {
+      console.error('Error deleting extras:', error);
+    }
+  };
+
+
   
   
 
@@ -111,7 +123,7 @@ const awspreptime = Prep + ':00';
   };
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
+    <div className="px-4 sm:px-6 lg:px-8 mt-5">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">Products</h1>
@@ -254,7 +266,13 @@ const awspreptime = Prep + ':00';
                     Price
                   </th>
                   <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+Difference                  </th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                     Profit Margin
+                  </th>
+<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Margin Percentage
+
                   </th>
                   <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                     Stock Level
@@ -264,6 +282,9 @@ Category                  </th>
 
                   <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                     Ingredients
+                  </th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Extras
                   </th>
                   <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                     Kitchen
@@ -279,23 +300,57 @@ Category                  </th>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                       {product.Name}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{product.Price}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">£{product.Price.toFixed(2)}</td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
   {product.ProfitMargin !== null ? `£${product.ProfitMargin.toFixed(2)}` : ''}
 </td>
+<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+  £{(() => {
+    if (product.Price && product.ProfitMargin) {
+      const result = product.Price.toFixed(2) - product.ProfitMargin.toFixed(2);
+      return (result === 0 || result === null) ? null : result.toFixed(2);
+    }
+    return null;
+  })()}
+</td>
+
+
+<td className="whitespace-nowrap px-3 py-4 text-sm text-green-500">
+  {product.Price !== null ? `${((product.ProfitMargin / product.Price) * 100).toFixed(1)}%` : ''}
+</td>
+
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.StockLevel}</td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.Category}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-3 py-4 text;o-sm text-gray-500">
   {product.Ingredients ? (
     product.Ingredients.map((ingredient, index) => (
       <div key={index}>
-        {ingredient.name}: {ingredient.weight}g or Quantity: {ingredient.quantity}
+        {ingredient.name}: {ingredient.weight}g or Quantity: {ingredient.quantity}: Price £{ingredient.price.toFixed(2)}
       </div>
     ))
   ) : (
     ''
   )}
 </td>
+<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+  {product.Extras ? (
+    product.Extras.map((extra, index) => (
+      <div key={index}>
+        Name: {extra.name}, Price: £{extra.price.toFixed(2)}
+      </div>
+    ))
+  ) : (
+    ''
+  )}
+  <button
+    onClick={() => handleDeleteExtras(product)}
+    className="mt-2 text-red-600 hover:text-red-900"
+  >
+    Delete Extras
+  </button>
+</td>
+
+
 
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {product.Kitchen ? 'Yes' : 'No'}

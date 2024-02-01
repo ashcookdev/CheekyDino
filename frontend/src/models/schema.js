@@ -286,6 +286,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "MatchCode": {
+                    "name": "MatchCode",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -433,6 +440,27 @@ export const schema = {
                     "name": "BreakEnd",
                     "isArray": false,
                     "type": "AWSTime",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "HoursWorked": {
+                    "name": "HoursWorked",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "HourlyRate": {
+                    "name": "HourlyRate",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "TotalPay": {
+                    "name": "TotalPay",
+                    "isArray": false,
+                    "type": "Float",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -3076,5 +3104,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "5a75045e04e0c42472eb6cf91946d71f"
+    "version": "fe80b7155c237e744d7c5a95cf40b4c8"
 };

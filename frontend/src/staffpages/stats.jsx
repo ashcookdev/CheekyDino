@@ -6,10 +6,11 @@ import {
     UsersIcon
   } from '@heroicons/react/20/solid';
   import { useEffect, useState } from 'react';
-  import { DataStore } from 'aws-amplify';
-  import { Sessions, PartyBooking, StockControl, CafeOrder, ClockIn } from '../models';
+  import { DataStore, Predicates } from 'aws-amplify';
+  import { Sessions, PartyBooking, StockControl, CafeOrder, ClockIn, } from '../models';
   import { format } from 'date-fns';
 import { ArrowRightCircleIcon, CakeIcon, ClockIcon, CurrencyPoundIcon, ScaleIcon, ShoppingBagIcon, TableCellsIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+import { id } from 'date-fns/locale';
 
 
     const classNames = (...classes) => {
@@ -20,7 +21,6 @@ import { ArrowRightCircleIcon, CakeIcon, ClockIcon, CurrencyPoundIcon, ScaleIcon
  export default function FinancialStats() {
     const [sessions, setSessions] = useState([]);
     const [partyBookings, setPartyBookings] = useState([]);
-    const [stockControl, setStockControl] = useState([]);
     const [cafeOrders, setCafeOrders] = useState([]);
     const [staff, setStaff] = useState([]);
 
@@ -40,6 +40,11 @@ import { ArrowRightCircleIcon, CakeIcon, ClockIcon, CurrencyPoundIcon, ScaleIcon
     const fetchStaff = async () => {
         const staff = await DataStore.query(ClockIn);
         setStaff(staff);
+
+
+
+
+
         };
 
 
@@ -47,16 +52,17 @@ import { ArrowRightCircleIcon, CakeIcon, ClockIcon, CurrencyPoundIcon, ScaleIcon
       const partyBookings = await DataStore.query(PartyBooking);
       setPartyBookings(partyBookings);
     };
-  
-    const fetchStockControl = async () => {
-      const stockControl = await DataStore.query(StockControl);
-      setStockControl(stockControl);
-    };
-  
+   
+
+
+
+
+    // work out staff costs 
+
+
     useEffect(() => {
       fetchSessions();
       fetchPartyBookings();
-      fetchStockControl();
         fetchCafeOrders();
         fetchStaff();
     }, []);
@@ -113,11 +119,16 @@ const totalAllSessions = yesterdaySessionsTotalSpent / yesterdaySessions.length;
 
 // find out how many staff are clocked in
 
-const staffClockedIn = staff.filter(staff => staff.ClockedIn === true && staff.ClockedOut === null);
+const staffClockedIn = staff.filter(staff => staff.ClockedIn === true && staff.ClockedOut === false && today === staff.Date);
 const staffClockedInCount = staffClockedIn.length;
 
 const staffOnBreak = staff.filter(staff => staff.Break === true);
 const staffOnBreakCount = staffOnBreak.length;
+
+// find out how much staff costs are 
+
+
+
 
 const mostPopularDrink = cafeOrders.reduce((acc, order) => {
   order.DrinkItems.forEach((drink) => {
@@ -222,6 +233,29 @@ const mostPopularMeal = cafeOrders.reduce((acc, order) => {
         stat: staffClockedInCount,
         icon: UserGroupIcon,
       },
+
+      {
+        id: 11,
+        name: 'Most Popular Drink',
+        stat: mostPopularDrink && Object.keys(mostPopularDrink).length > 0 ? Object.keys(mostPopularDrink).reduce((a, b) => mostPopularDrink[a] > mostPopularDrink[b] ? a : b) : 'null',
+        icon: EnvelopeOpenIcon,
+      },
+      {
+        id: 12,
+        name: 'Most Popular Meal',
+        stat: mostPopularMeal && Object.keys(mostPopularMeal).length > 0 ? Object.keys(mostPopularMeal).reduce((a, b) => mostPopularMeal[a] > mostPopularMeal[b] ? a : b) : 'null',
+        icon: EnvelopeOpenIcon,
+      }
+      
+
+      
+      
+     
+
+
+
+
+      
       
        
     ];

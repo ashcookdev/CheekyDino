@@ -4,40 +4,37 @@ import { ClockIn } from '../models';
 import { CSVLink } from 'react-csv';
 
 function ClockInTable() {
-    const [clockIns, setClockIns] = useState([]);
-  
-    useEffect(() => {
-      fetchClockIns();
-      const subscription = DataStore.observe(ClockIn).subscribe(() => fetchClockIns());
-      return () => subscription.unsubscribe();
-    }, []);
-  
-    async function fetchClockIns() {
-      const clockIns = await DataStore.query(ClockIn);
-      setClockIns(clockIns);
-    }
-  
+  const [clockIns, setClockIns] = useState([]);
 
-    function DownloadButton({ clockIns }) {
-      const headers = [
-        { label: "Name", key: "name" },
-        { label: "Date", key: "date" },
-        { label: "Clock In", key: "clockIn" },
-        { label: "Clock Out", key: "clockOut" },
-        { label: "Break Start", key: "breakStart" },
-        { label: "Break End", key: "breakEnd" },
-        { label: "Staff Hours", key: "staffHours" },
-        { label: "Staff Break", key: "staffBreak" }
-      ];
-    
-      return (
-        <CSVLink data={clockIns} headers={headers}>
-          Download CSV
-        </CSVLink>
-      );
-    }
-  
-  
+  useEffect(() => {
+    fetchClockIns();
+    const subscription = DataStore.observe(ClockIn).subscribe(() => fetchClockIns());
+    return () => subscription.unsubscribe();
+  }, []);
+
+  async function fetchClockIns() {
+    const clockIns = await DataStore.query(ClockIn);
+    setClockIns(clockIns);
+  }
+
+  function DownloadButton({ clockIns }) {
+    const headers = [
+      { label: "Name", key: "name" },
+      { label: "Date", key: "date" },
+      { label: "Clock In", key: "clockIn" },
+      { label: "Clock Out", key: "clockOut" },
+      { label: "Break Start", key: "breakStart" },
+      { label: "Break End", key: "breakEnd" },
+      { label: "Staff Hours", key: "staffHours" },
+      { label: "Staff Break", key: "staffBreak" }
+    ];
+
+    return (
+      <CSVLink data={clockIns} headers={headers}>
+        Download CSV
+      </CSVLink>
+    );
+  }
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
@@ -60,61 +57,70 @@ function ClockInTable() {
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-          <table className="min-w-full divide-y divide-gray-300">
-  <thead>
-    <tr>
-      <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0 mr-3">
-        Name
-      </th>
-      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-        Date
-      </th>
-      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-        Clock In
-      </th>
-      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-        Clock Out
-      </th>
-      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-        Break Start
-      </th>
-      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-        Break End
-      </th>
-      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-        Staff Hours
-      </th>
-      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-        Staff Break
-      </th>
-
-      
-    </tr>
-  </thead>
-              <tbody className="divide-y divide-gray-200">
-                {clockIns.map((person) => (
-                  <tr key={person.email}>
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                      {person.name}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.StaffId}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.Date}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.ClockIn}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.ClockOut}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.BreakStart}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.BreakEnd}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.StaffHours}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.StaffBreak}</td>
-                    
+            <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+              <table className="min-w-full divide-y divide-gray-300">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0 mr-3">
+                      Name
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Date
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Clock In
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Clock Out
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Break Start
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Break End
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Staff Hours
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Staff Break
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {clockIns.map((person) => {
+                    const clockInTime = new Date(`1970-01-01T${person.ClockIn}Z`);
+                    const clockOutTime = new Date(`1970-01-01T${person.ClockOut}Z`);
+
+                    // Format the time to hh:mm
+                    const formattedClockInTime = clockInTime.getHours().toString().padStart(2, '0') + ':' + clockInTime.getMinutes().toString().padStart(2, '0');
+                    const formattedClockOutTime = clockOutTime.getHours().toString().padStart(2, '0') + ':' + clockOutTime.getMinutes().toString().padStart(2, '0');
+
+                    // Calculate the hours worked
+                    const hours = Math.abs(clockInTime - clockOutTime) / 36e5;
+
+                    return (
+                      <tr key={person.email}>
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                          {person.name}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.StaffId}</td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{formattedClockInTime}</td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{formattedClockOutTime}</td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.BreakStart}</td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.BreakEnd}</td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{hours.toFixed(2)}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default ClockInTable;

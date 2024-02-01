@@ -13,6 +13,7 @@ export default function EnterStock() {
     const [supplier, setSupplier] = useState('');
     const [productID, setProductID] = useState('');
     const [usedBy, setUsedBy] = useState('');
+    const [match, setMatch] = useState('');
 
     const navigate = useNavigate();
 
@@ -46,7 +47,8 @@ export default function EnterStock() {
         VAT: difference,
         CurrentStockLevel: newQuantity === 0 ? newWeight : newQuantity,
         ProductId: productID,
-        UsedBy: usedBy
+        UsedBy: usedBy,
+        MatchCode: match,
 
 
       })
@@ -164,7 +166,7 @@ window.location.reload();
     </div>
     <div className="mt-2">
           <label htmlFor="pricePreVAT" className="block text-sm font-medium leading-6 text-gray-900">
-            Product Id
+            Supplier Product Id
           </label>
           <input onChange={(e) => setProductID(e.target.value)}
             type="text"
@@ -184,6 +186,20 @@ window.location.reload();
             type="date"
             name="date"
             id="date"
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            placeholder=""  
+            aria-describedby=""
+            />
+
+    </div>
+    <div className="mt-2">
+          <label htmlFor="MatchID" className="block text-sm font-medium leading-6 text-gray-900">
+           Match ID
+          </label>
+          <input onChange={(e) => setMatch(e.target.value)}
+            type="text"
+            name="matchid"
+            id="match"
             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             placeholder=""  
             aria-describedby=""

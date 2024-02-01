@@ -79,6 +79,10 @@ import TestTill from './staffpages/testtill';
 import Audio from './staffpages/audiochat';
 import ControlPanel from './staffpages/ControlPanel';
 import UsedByStock from './staffpages/UsedByStock';
+import Jobs from './customer-pages/Careers';
+import Application from './customer-pages/applicationform';
+import StockSwap from './staffpages/stockswap';
+import ShoppingList from './staffpages/ShoppingList';
 
 
 
@@ -234,6 +238,8 @@ function App() {
             <Route path= '/audio' element={<Audio />} />
             <Route path= '/controlpanel' element={<ControlPanel />} />
             <Route path= '/usedby' element={<UsedByStock />} />
+            <Route path='/stockswap' element={<StockSwap />} />
+            <Route path='/shoppinglist' element={<ShoppingList />} /> 
           </>
         )}
         
@@ -258,6 +264,8 @@ function App() {
         <Route path="/sessionlogin" element={<SessionLogin />} />
         <Route path="/register" element={<Register />} />
         <Route path="/privatehireregister" element={<PrivateHireRegister />} />
+        <Route path="/jobs" element={<Jobs />} />
+        <Route path= "/jobs/apply" element={<Application />} />
         
 
 

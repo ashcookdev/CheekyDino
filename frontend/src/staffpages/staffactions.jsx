@@ -56,6 +56,7 @@ export default function StaffActions() {
 
   // Rest of your logic here...
   const handleClockInOut = async (staff) => {
+    console.log(staff); // This will log the staff member that was clicked on
     setIsLoading(true); // Start loading
     setTimeout(() => setIsLoading(false), 3000); // End loading after 20 seconds
 
@@ -79,13 +80,15 @@ export default function StaffActions() {
       const clockOut = new Date(`${dateOnly}T${timeOnly}`);
   
       const shiftLength = (clockOut - clockIn) / 60000;
+      const totalpay = shiftLength * staff.HourlyRate;
   
       await DataStore.save(
         ClockIn.copyOf(clockInData[0], updated => {
           updated.ClockOut = timeOnly;
           updated.ClockedOut = true;
           updated.ClockedIn = false;
-          updated.StaffHours = parseFloat(shiftLength);
+          updated.HoursWorked = parseFloat(shiftLength);
+          updated.TotalPay = parseFloat(totalpay);
         })
       );
   
@@ -110,6 +113,7 @@ export default function StaffActions() {
           ClockIn: timeOnly,
           ClockedIn: true,
           ClockedOut: false,
+          HourlyRate: staff.HourlyRate,
           StaffId: userEmail,
           Date: dateOnly,
         })

@@ -268,7 +268,7 @@ app.post('/cafeprinter', (req, res) => {
 app.post('/kitchenprinter', async (req, res) => {
   const body = req.body;
 
-  const device = new escpos.Network('192.168.1.222', 9100);
+  const device = new escpos.Network('192.168.1.223', 9100);
   const options = { encoding: 'GB18030' /* default */ };
   const printer = new escpos.Printer(device, options);
 

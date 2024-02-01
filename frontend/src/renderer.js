@@ -78,6 +78,12 @@ import TestTill from './staffpages/testtill';
 import AudioChat from './staffpages/audiochat';
 import ControlPanel from './staffpages/ControlPanel';
 import UsedByStock from './staffpages/UsedByStock';
+import Jobs from './customer-pages/Careers';
+import Application from './customer-pages/applicationform';
+import StockSwap from './staffpages/stockswap';
+import ShoppingList from './staffpages/ShoppingList';
+
+
 import {Routes, Route, useLocation } from "react-router-dom";
 
 
@@ -249,6 +255,11 @@ export function AppRoutes() {
             <Route path= '/audio' element={<AudioChat />} />
             <Route path= '/controlpanel' element={<ControlPanel />} />
             <Route path= '/usedby' element={<UsedByStock />} />
+    
+            <Route path='/stockswap' element={<StockSwap />} />
+            <Route path='/shoppinglist' element={<ShoppingList />} />
+
+
 
           </>
         )}
@@ -265,6 +276,8 @@ export function AppRoutes() {
         <Route path="/teddyparty" element={<TeddyPartyCalender />} />
         <Route path="/privatehire" element={<PrivateHire />} />
         <Route path="/privatehirecalender" element={<PrivateHireCalender />} />
+        <Route path="/jobs" element={<Jobs />} />
+        <Route path="/jobs/apply" element={<Application />} />
 
         
         <Route path="/football" element={<Football />} />

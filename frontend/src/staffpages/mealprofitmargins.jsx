@@ -19,6 +19,9 @@ export default function Example({ selectedItems, mealName, category, img, descri
   const [descriptionstate, setDescription] = useState('');
     const [portions, setPortionAmount] = useState(0);
     const [prep, setPrep] = useState(0);
+    const [kitchen, setKitchen] = useState(true);
+
+
 
 
   useEffect(() => {
@@ -76,6 +79,22 @@ export default function Example({ selectedItems, mealName, category, img, descri
 
           setPortionAmount(lowestPortionAmount * 2);}}
 
+
+  const handleKitchenChange = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const kitchen = e.target.value;
+    if (kitchen === "true") {
+      setKitchen(true);
+    } else {
+      setKitchen(false);
+    }
+
+
+  };
+
+
+
   
   
   const handleSubmit = async () => {
@@ -97,7 +116,7 @@ const meal = await DataStore.save(
     Category: categorystate,
     imageSrc: imgstate,
     StockLevel: portions,
-    Kitchen: true,
+    Kitchen: kitchen,
     Description: descriptionstate,
     ProfitMargin: profitMargin,
     Prep: prep,
@@ -108,6 +127,9 @@ const meal = await DataStore.save(
         weight: item.Quantity === 0 ? parseFloat(itemValues[index]) : 0,
         quantity: item.Quantity === 0 ? 0 : parseFloat(itemValues[index]),
         price: parseFloat(itemPrices[index]),
+        supplier: item.Supplier,
+        matchCode: item.MatchCode,
+        
       }))
     ),
   })
@@ -168,6 +190,21 @@ window.location.reload();
       <div className="flex justify-between items-center mb-4">
   <p className="text-sm font-medium text-black">Portions In Stock:</p>
   <p className="text-sm font-medium text-black">{portions}</p>
+  <div>
+      <label htmlFor="Kitchen" className="block text-sm font-medium leading-6 text-gray-900">
+        Kitchen Product
+      </label>
+      <select
+      onChange={handleKitchenChange}
+      id="kitchen"
+      name="kitchen"
+      className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+      value={kitchen.toString()}
+    >
+      <option value="true">True</option>
+      <option value="false">False</option>
+    </select>
+    </div>
 </div>
 
   <div className="mt-8 flow-root">
