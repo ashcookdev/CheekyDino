@@ -12,70 +12,73 @@ import AdultFoodOptions from './AdultFoodOptions';
 
 
 export default function MyBooking() {
-    
-    const [fullName, setFullName] = useState('');
-    const [partyType, setPartyType] = useState('');
-    const [time, setTime] = useState('');
-    const [total, setTotal] = useState('');
-    const [date, setDate] = useState('');
-    const [noOfChildren, setNoOfChildren] = useState('');
-    const [foodOptionSelected, setFoodOptionSelected] = useState('');
-    const [childAge, setChildAge] = useState('');
-    const [id, setId] = useState('');
-    const [adultFood, setAdultFood] = useState(false);
-    const [email, setEmail] = useState('');
-    const [telephone, setTelephone] = useState('');
+  const [parties, setParties] = useState([]);
+  const [selectedPartyIndex, setSelectedPartyIndex] = useState(0);
 
+  const [fullName, setFullName] = useState('');
+  const [partyType, setPartyType] = useState('');
+  const [time, setTime] = useState('');
+  const [total, setTotal] = useState('');
+  const [date, setDate] = useState('');
+  const [noOfChildren, setNoOfChildren] = useState('');
+  const [foodOptionSelected, setFoodOptionSelected] = useState('');
+  const [childAge, setChildAge] = useState('');
+  const [id, setId] = useState('');
+  const [adultFood, setAdultFood] = useState(false);
+  const [email, setEmail] = useState('');
+  const [telephone, setTelephone] = useState('');
 
-    console.log(id);
-    console.log(partyType)
-    console.log(email)
+  console.log(id);
+  console.log(partyType)
+  console.log(email)
 
-    const deposit = total * 0.5;
-    
-let formattedNum = deposit.toFixed(2);
-console.log(formattedNum); // "3.14"
+  const deposit = total * 0.5;
+  let formattedNum = deposit.toFixed(2);
+  console.log(formattedNum);
 
-    console.log(deposit);
+  console.log(deposit);
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        async function getPartyBooking() {
-            const user = await Auth.currentAuthenticatedUser();
-            const userId = user.attributes.sub;
-            console.log(userId);
-            
-            const partyBookings = (await DataStore.query(PartyBooking)).filter(booking => booking.partybookingID === userId);
-            const partyBooking = partyBookings[0];
+  useEffect(() => {
+      async function getPartyBookings() {
+          const user = await Auth.currentAuthenticatedUser();
+          const userId = user.attributes.sub;
+          console.log(userId);
 
-            console.log(partyBooking.Telephone);
+          const partyBookings = (await DataStore.query(PartyBooking)).filter(booking => booking.partybookingID === userId);
+          setParties(partyBookings);
 
-            setEmail(partyBooking.Email);
-            setTelephone(partyBooking.Telephone)
+          if (partyBookings.length > 0) {
+              const partyBooking = partyBookings[selectedPartyIndex];
 
-          setFullName(partyBooking.ChildName);
-          setPartyType(partyBooking.PartyType);
-          setTime(partyBooking.PartyTime);
-          setTotal(partyBooking.Total);
-          setDate(partyBooking.PartyDate);
-            setNoOfChildren(partyBooking.NoOfChildren);
-            setFoodOptionSelected(partyBooking.FoodOptionSelected);
-            setTime(partyBooking.PartyTime);
-setChildAge(partyBooking.ChildAge);  
-setId(partyBooking.id)
-setAdultFood(partyBooking.PartyAdultFoodChoices.join(', '));      
-setTelephone(partyBooking.Telephone);}
-        getPartyBooking();
-        
-      }, []);
-      
-      if (adultFood === true) {
-        return (
-          <AdultFoodOptions selectedParty={id} />
-        )
-        
+              setEmail(partyBooking.Email);
+              setTelephone(partyBooking.Telephone)
+              setFullName(partyBooking.ChildName);
+              setPartyType(partyBooking.PartyType);
+              setTime(partyBooking.PartyTime);
+              setTotal(partyBooking.Total);
+              setDate(partyBooking.PartyDate);
+              setNoOfChildren(partyBooking.NoOfChildren);
+              setFoodOptionSelected(partyBooking.FoodOptionSelected);
+              setTime(partyBooking.PartyTime);
+              setChildAge(partyBooking.ChildAge);
+              setId(partyBooking.id)
+              setAdultFood(partyBooking.PartyAdultFoodChoices ? partyBooking.PartyAdultFoodChoices.join(', ') : '');
+              setTelephone(partyBooking.Telephone);
+          }
       }
+
+      getPartyBookings();
+
+  }, [selectedPartyIndex]);
+
+  if (adultFood === true) {
+      return (
+          <AdultFoodOptions selectedParty={id} />
+      )
+  }
+
 
 
 
@@ -85,6 +88,23 @@ setTelephone(partyBooking.Telephone);}
       <h3 className="text-base font-semibold leading-7 text-gray-900 text-center component-title">
         My Booking
       </h3>
+      <div className="mt-6">
+      {parties.length > 1 && (
+                    <div className="flex justify-center space-x-4">
+                        {parties.map((party, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setSelectedPartyIndex(index)}
+                                className={`rounded-full px-2.5 py-1 text-sm font-semibold ${index === selectedPartyIndex ? 'bg-indigo-600 text-white' : 'bg-gray-300 text-gray-800'} hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+                            >
+                                Party {index + 1}
+                            </button>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+
     </div>
     <div className="w-full max-w-md px-4 py-6 sm:px-6 flex justify-center space-x-4">
       <button

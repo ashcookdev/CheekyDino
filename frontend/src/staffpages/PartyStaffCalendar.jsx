@@ -47,7 +47,12 @@ export default function Booking() {
       timeSlots = ['17:00'];
     } else if (partyType === 'Private Hire') {
       timeSlots = ['17:00'];
+    } else if (partyType === 'Disco') {
+      timeSlots = ['14:30'];
+    } else if (partyType === 'Football') {
+      timeSlots = ['14:30'];
     }
+
 
     // Create an array to store the availability information for each time slot
     let availability = [];
@@ -55,15 +60,16 @@ export default function Booking() {
     // Check if the selected date is a valid day based on the selected party type
     const dayOfWeek = new Date(date).getDay();
     let isValidDay;
-    if (partyType === 'T-Rex' || partyType === 'Teddy') {
-      isValidDay = dayOfWeek === 6 || dayOfWeek === 0;
-    } else if (partyType === 'Character') {
-      isValidDay = dayOfWeek === 6 || dayOfWeek === 0;
-    } else if (partyType === 'Laser') {
-      isValidDay = dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0;
-    } else if (partyType === 'Private Hire') {
-      isValidDay = dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0;
-    }
+if (partyType === 'T-Rex' || partyType === 'Teddy') {
+  isValidDay = dayOfWeek === 6 || dayOfWeek === 0;
+} else if (partyType === 'Character' || partyType === 'Disco' || partyType === 'Football') {
+  isValidDay = dayOfWeek === 6 || dayOfWeek === 0;
+} else if (partyType === 'Laser') {
+  isValidDay = dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0;
+} else if (partyType === 'Private Hire') {
+  isValidDay = dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0;
+}
+
 
     if (isValidDay) {
       // Loop through each time slot
@@ -226,7 +232,7 @@ const handleDayClick = async (date) => {
             <option>Private Hire</option>
           </select>
         </div>
-        <button onClick={handleSubmit} type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+        <button onClick={handleSubmit} type="submit" className="bg-purple-500 mt-5 text-white py-2 px-4 rounded">
           Next
         </button>
       </div>

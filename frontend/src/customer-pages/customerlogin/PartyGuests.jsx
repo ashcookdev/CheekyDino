@@ -4,9 +4,7 @@ import { DataStore } from '@aws-amplify/datastore';
 import { PartyBooking } from '../../models';
 
 import { PartyGuests, Teddys } from '../../models';
-import { CheckIcon } from '@heroicons/react/24/solid';
 import "./customer.css";
-import { set } from 'date-fns';
 
 
 function classNames(...classes) {
@@ -65,31 +63,47 @@ export default function GuestDashboard() {
     const formData = new FormData(event.target);
     // Get party booking ID
     const partyBookingId = id;
-    // Save data to PartyGuests model
+  
     for (let i = 0; i < noOfChildren; i++) {
       // Only save fields that have a value
       if (formData.get(`childName${i}`)) {
-        const selectedTeddyName = formData.get(`selectedTeddy${i}`);
-        const selectedTeddyImgSrc = teddys.find(
-          (teddy) => teddy.Name === selectedTeddyName
-        ).ImgSrc;
-        await DataStore.save(
-          new PartyGuests({
-            ChildName: formData.get(`childName${i}`),
-            FoodOption: formData.get(`foodOption${i}`),
-            Allergies: formData.get(`allergies${i}`),
-            ContactInfoEmail: formData.get(`contactInfoEmail${i}`),
-            TeddyTasticBear: selectedTeddyName,
-            ImgSrc: selectedTeddyImgSrc,
-            partybookingID: partyBookingId,
-            Arrived: false,
-          })
-        );
+        // Check if the party type is 'Teddy'
+        if (party === 'Teddy') {
+          const selectedTeddyName = formData.get(`selectedTeddy${i}`);
+          const selectedTeddyImgSrc = teddys.find(
+            (teddy) => teddy.Name === selectedTeddyName
+          ).ImgSrc;
+          await DataStore.save(
+            new PartyGuests({
+              ChildName: formData.get(`childName${i}`),
+              FoodOption: formData.get(`foodOption${i}`),
+              Allergies: formData.get(`allergies${i}`),
+              ContactInfoEmail: formData.get(`contactInfoEmail${i}`),
+              TeddyTasticBear: selectedTeddyName,
+              ImgSrc: selectedTeddyImgSrc,
+              partybookingID: partyBookingId,
+              Arrived: false,
+            })
+          );
+        } else {
+          // Save non-Teddy-related information if the party type is not 'Teddy'
+          await DataStore.save(
+            new PartyGuests({
+              ChildName: formData.get(`childName${i}`),
+              FoodOption: formData.get(`foodOption${i}`),
+              Allergies: formData.get(`allergies${i}`),
+              ContactInfoEmail: formData.get(`contactInfoEmail${i}`),
+              partybookingID: partyBookingId,
+              Arrived: false,
+            })
+          );
+        }
       }
     }
     // Re-query PartyGuests model to update guestsData state
     getGuestsData();
   }
+  
   
   
   async function handleDelete(guestId) {
@@ -111,24 +125,26 @@ const backgroundImage = "https://media.giphy.com/media/ZdIdb8TWH8VW6fpuUt/giphy.
   return (
     <div className="min-h-screen bg-gray-100">
   <div className="bg-white">
-    <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-      <h2 className="text-2xl font-extrabold tracking-tight text-center text-gray-900 component-title">Teddys</h2>
-      <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
-        {teddys.map((product) => (
-          <div key={product.id} className="group relative">
-            <div className="w-full h-32 overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75">
-              <img
-                src={product.ImgSrc}
-                alt={product.imageAlt}
-                className="h-full w-full object-contain object-center"
-              />
-            </div>
-            <p className="text-sm text-center mt-2 component-title">{product.Name}</p>
+  {party === 'Teddy' && (
+  <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <h2 className="text-2xl font-extrabold tracking-tight text-center text-gray-900 component-title">Teddys</h2>
+    <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+      {teddys.map((product) => (
+        <div key={product.id} className="group relative">
+          <div className="w-full h-32 overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75">
+            <img
+              src={product.ImgSrc}
+              alt={product.imageAlt}
+              className="h-full w-full object-contain object-center"
+            />
           </div>
-        ))}
-      </div>
+          <p className="text-sm text-center mt-2 component-title">{product.Name}</p>
+        </div>
+      ))}
     </div>
   </div>
+)}
+</div>
 
   
 
@@ -206,6 +222,9 @@ const backgroundImage = "https://media.giphy.com/media/ZdIdb8TWH8VW6fpuUt/giphy.
       <option value="Kids Mozzarella Sticks and Chips Meal">Mozzarella Sticks</option>
       <option value="Kids Sausage and Chips Meal">Sausages</option>
       <option value="Kids Chicken Burger and Chips Meal"> Chicken Burger</option>
+      <option value="Kids Chicken Burger and Chips Meal"> Hot Dog</option>
+
+
     </select>
   )}
 </td>

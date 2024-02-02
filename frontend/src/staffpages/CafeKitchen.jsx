@@ -214,7 +214,7 @@ console.log(orders);
       table: orders.map((item) => item.Table),
     };
   
-    // Send the data to the cafe-print channel
+    // Send the data to the kitchen-print channel
     if (isElectron) {
       ipcRenderer.send('kitchen-print', { data });
     }

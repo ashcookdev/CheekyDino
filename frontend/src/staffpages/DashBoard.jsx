@@ -143,8 +143,6 @@ useEffect(() => {
     }, []);
 
    
-const staffImg = "https://media.giphy.com/media/2SYpZ92iLQsF6QZl5u/giphy.gif"
-    //current tables occupied & future bookings today and how many guests in branch
 
     const [scrollPosition, setScrollPosition] = useState(0);
   const [touchStartX, setTouchStartX] = useState(0);

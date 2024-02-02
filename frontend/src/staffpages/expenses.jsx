@@ -70,67 +70,7 @@ export default function Wages() {
   }, []);
 
 
-  useEffect(() => { 
-    // get price of all stock sold today
-
-    const fetchStock = async () => {
-      const stockData = await DataStore.query(StockControl);
-      console.log(stockData);
-      const products = await DataStore.query(KitchenMenu);
-      const orders = await DataStore.query(CafeOrder);
-
-      // search for all orders today using date fns yyyy-mm-dd
-      const today = new Date();
-      const todayString = today.toISOString().split('T')[0];
-
-      const todaysOrders = orders.filter(order => order.CreatedDate === todayString);
-
-      // filter hot items and drinkitems from today's orders
-      const hotItems = todaysOrders.filter(order => order.HotItems);
-      const drinkItems = todaysOrders.filter(order => order.DrinkItems);
-
-      // match hot items and drink items to kitchenMenu Ingredients json and add up total price of ingredients
-
-      const hotItemsTotal = hotItems.reduce((acc, item) => {
-        const ingredients = JSON.parse(item.HotItems);
-        ingredients.forEach(ingredient => {
-          const product = products.find(product => product.Name === ingredient.Name);
-          acc += (product.Price * ingredient.Quantity);
-        });
-        return acc;
-      }, 0);
-
-      const drinkItemsTotal = drinkItems.reduce((acc, item) => {
-        const ingredients = JSON.parse(item.DrinkItems);
-        ingredients.forEach(ingredient => {
-          const product = products.find(product => product.Name === ingredient.Name);
-          acc += (product.Price * ingredient.Quantity);
-        });
-        return acc;
-      }, 0);
-
-      const totalStockSoldToday = hotItemsTotal + drinkItemsTotal;
-
-      console.log(totalStockSoldToday);
-
-      // get total stock sold this week
-      
-
-    
-
-
-
-
-
-
-
-
-
-    }
-
-    fetchStock();
-
-  }, []);
+ 
 
 
     // get price of all stock sold this week

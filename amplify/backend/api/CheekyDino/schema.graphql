@@ -244,5 +244,4 @@ type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: [
   PartyAdultFoodChoices: [String]
   Email: String
   Telephone: String
-}
- 
+} 

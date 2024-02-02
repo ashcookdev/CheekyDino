@@ -58,13 +58,9 @@ const faqs = [
   {
     question: 'How long is the party?',
     answer:
-      'The icons are in SVG (Scalable Vector Graphic) format. They can be imported into your design tool of choice and used directly in code.',
+      'The Party is 2.5 hours long, there is 30 mins of play in the centre, 1 hour of entertainment and food is included.',
   },
-  {
-    question: 'Can I use the icons at different sizes?',
-    answer:
-      "Yes. The icons are drawn on a 24 x 24 pixel grid, but the icons can be scaled to different sizes as needed. We don't recommend going smaller than 20 x 20 or larger than 64 x 64 to retain legibility and visual balance.",
-  },
+  
   // More FAQs...
 ]
 
