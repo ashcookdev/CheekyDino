@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import CustomerEdit from './customeredit.jsx';
-import CustomerEvent from './customerevent.jsx';
+import Event from './events.jsx';
 import TrexModel from './trexmodel.jsx';
 import './customerfont.css';
 
@@ -68,7 +68,9 @@ function Example() {
     <div className="relative bg-white mb-5">
       <CustomerEdit />
       <div className='mt-5 mb-5'>
-        <CustomerEvent />
+</div>
+      <div className='mt-5 mb-5'>
+        <Event />
       </div>
 
       <section

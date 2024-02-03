@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -34,6 +34,9 @@ export declare type HomePageCreateFormInputValues = {
     EventThreeTitle?: string;
     EventThreePic?: string;
     EventThreeWriting?: string;
+    EventOneButton?: boolean;
+    EventTwoButton?: boolean;
+    EventThreeButton?: boolean;
 };
 export declare type HomePageCreateFormValidationValues = {
     TopSectionTitle?: ValidationFunction<string>;
@@ -48,6 +51,9 @@ export declare type HomePageCreateFormValidationValues = {
     EventThreeTitle?: ValidationFunction<string>;
     EventThreePic?: ValidationFunction<string>;
     EventThreeWriting?: ValidationFunction<string>;
+    EventOneButton?: ValidationFunction<boolean>;
+    EventTwoButton?: ValidationFunction<boolean>;
+    EventThreeButton?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type HomePageCreateFormOverridesProps = {
@@ -64,6 +70,9 @@ export declare type HomePageCreateFormOverridesProps = {
     EventThreeTitle?: PrimitiveOverrideProps<TextFieldProps>;
     EventThreePic?: PrimitiveOverrideProps<TextFieldProps>;
     EventThreeWriting?: PrimitiveOverrideProps<TextFieldProps>;
+    EventOneButton?: PrimitiveOverrideProps<SwitchFieldProps>;
+    EventTwoButton?: PrimitiveOverrideProps<SwitchFieldProps>;
+    EventThreeButton?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type HomePageCreateFormProps = React.PropsWithChildren<{
     overrides?: HomePageCreateFormOverridesProps | undefined | null;

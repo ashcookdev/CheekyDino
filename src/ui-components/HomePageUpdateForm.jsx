@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { HomePage } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify/datastore";
@@ -35,6 +41,9 @@ export default function HomePageUpdateForm(props) {
     EventThreeTitle: "",
     EventThreePic: "",
     EventThreeWriting: "",
+    EventOneButton: false,
+    EventTwoButton: false,
+    EventThreeButton: false,
   };
   const [TopSectionTitle, setTopSectionTitle] = React.useState(
     initialValues.TopSectionTitle
@@ -68,6 +77,15 @@ export default function HomePageUpdateForm(props) {
   const [EventThreeWriting, setEventThreeWriting] = React.useState(
     initialValues.EventThreeWriting
   );
+  const [EventOneButton, setEventOneButton] = React.useState(
+    initialValues.EventOneButton
+  );
+  const [EventTwoButton, setEventTwoButton] = React.useState(
+    initialValues.EventTwoButton
+  );
+  const [EventThreeButton, setEventThreeButton] = React.useState(
+    initialValues.EventThreeButton
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = homePageRecord
@@ -85,6 +103,9 @@ export default function HomePageUpdateForm(props) {
     setEventThreeTitle(cleanValues.EventThreeTitle);
     setEventThreePic(cleanValues.EventThreePic);
     setEventThreeWriting(cleanValues.EventThreeWriting);
+    setEventOneButton(cleanValues.EventOneButton);
+    setEventTwoButton(cleanValues.EventTwoButton);
+    setEventThreeButton(cleanValues.EventThreeButton);
     setErrors({});
   };
   const [homePageRecord, setHomePageRecord] = React.useState(homePageModelProp);
@@ -111,6 +132,9 @@ export default function HomePageUpdateForm(props) {
     EventThreeTitle: [],
     EventThreePic: [],
     EventThreeWriting: [],
+    EventOneButton: [],
+    EventTwoButton: [],
+    EventThreeButton: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -150,6 +174,9 @@ export default function HomePageUpdateForm(props) {
           EventThreeTitle,
           EventThreePic,
           EventThreeWriting,
+          EventOneButton,
+          EventTwoButton,
+          EventThreeButton,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -217,6 +244,9 @@ export default function HomePageUpdateForm(props) {
               EventThreeTitle,
               EventThreePic,
               EventThreeWriting,
+              EventOneButton,
+              EventTwoButton,
+              EventThreeButton,
             };
             const result = onChange(modelFields);
             value = result?.TopSectionTitle ?? value;
@@ -252,6 +282,9 @@ export default function HomePageUpdateForm(props) {
               EventThreeTitle,
               EventThreePic,
               EventThreeWriting,
+              EventOneButton,
+              EventTwoButton,
+              EventThreeButton,
             };
             const result = onChange(modelFields);
             value = result?.TopSectionPic ?? value;
@@ -287,6 +320,9 @@ export default function HomePageUpdateForm(props) {
               EventThreeTitle,
               EventThreePic,
               EventThreeWriting,
+              EventOneButton,
+              EventTwoButton,
+              EventThreeButton,
             };
             const result = onChange(modelFields);
             value = result?.TopSectionWriting ?? value;
@@ -324,6 +360,9 @@ export default function HomePageUpdateForm(props) {
               EventThreeTitle,
               EventThreePic,
               EventThreeWriting,
+              EventOneButton,
+              EventTwoButton,
+              EventThreeButton,
             };
             const result = onChange(modelFields);
             value = result?.EventTitle ?? value;
@@ -359,6 +398,9 @@ export default function HomePageUpdateForm(props) {
               EventThreeTitle,
               EventThreePic,
               EventThreeWriting,
+              EventOneButton,
+              EventTwoButton,
+              EventThreeButton,
             };
             const result = onChange(modelFields);
             value = result?.EventPic ?? value;
@@ -394,6 +436,9 @@ export default function HomePageUpdateForm(props) {
               EventThreeTitle,
               EventThreePic,
               EventThreeWriting,
+              EventOneButton,
+              EventTwoButton,
+              EventThreeButton,
             };
             const result = onChange(modelFields);
             value = result?.EventWriting ?? value;
@@ -429,6 +474,9 @@ export default function HomePageUpdateForm(props) {
               EventThreeTitle,
               EventThreePic,
               EventThreeWriting,
+              EventOneButton,
+              EventTwoButton,
+              EventThreeButton,
             };
             const result = onChange(modelFields);
             value = result?.EventTwoTitle ?? value;
@@ -464,6 +512,9 @@ export default function HomePageUpdateForm(props) {
               EventThreeTitle,
               EventThreePic,
               EventThreeWriting,
+              EventOneButton,
+              EventTwoButton,
+              EventThreeButton,
             };
             const result = onChange(modelFields);
             value = result?.EventTwoPic ?? value;
@@ -499,6 +550,9 @@ export default function HomePageUpdateForm(props) {
               EventThreeTitle,
               EventThreePic,
               EventThreeWriting,
+              EventOneButton,
+              EventTwoButton,
+              EventThreeButton,
             };
             const result = onChange(modelFields);
             value = result?.EventTwoWriting ?? value;
@@ -534,6 +588,9 @@ export default function HomePageUpdateForm(props) {
               EventThreeTitle: value,
               EventThreePic,
               EventThreeWriting,
+              EventOneButton,
+              EventTwoButton,
+              EventThreeButton,
             };
             const result = onChange(modelFields);
             value = result?.EventThreeTitle ?? value;
@@ -569,6 +626,9 @@ export default function HomePageUpdateForm(props) {
               EventThreeTitle,
               EventThreePic: value,
               EventThreeWriting,
+              EventOneButton,
+              EventTwoButton,
+              EventThreeButton,
             };
             const result = onChange(modelFields);
             value = result?.EventThreePic ?? value;
@@ -604,6 +664,9 @@ export default function HomePageUpdateForm(props) {
               EventThreeTitle,
               EventThreePic,
               EventThreeWriting: value,
+              EventOneButton,
+              EventTwoButton,
+              EventThreeButton,
             };
             const result = onChange(modelFields);
             value = result?.EventThreeWriting ?? value;
@@ -620,6 +683,120 @@ export default function HomePageUpdateForm(props) {
         hasError={errors.EventThreeWriting?.hasError}
         {...getOverrideProps(overrides, "EventThreeWriting")}
       ></TextField>
+      <SwitchField
+        label="Event one button"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={EventOneButton}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              TopSectionTitle,
+              TopSectionPic,
+              TopSectionWriting,
+              EventTitle,
+              EventPic,
+              EventWriting,
+              EventTwoTitle,
+              EventTwoPic,
+              EventTwoWriting,
+              EventThreeTitle,
+              EventThreePic,
+              EventThreeWriting,
+              EventOneButton: value,
+              EventTwoButton,
+              EventThreeButton,
+            };
+            const result = onChange(modelFields);
+            value = result?.EventOneButton ?? value;
+          }
+          if (errors.EventOneButton?.hasError) {
+            runValidationTasks("EventOneButton", value);
+          }
+          setEventOneButton(value);
+        }}
+        onBlur={() => runValidationTasks("EventOneButton", EventOneButton)}
+        errorMessage={errors.EventOneButton?.errorMessage}
+        hasError={errors.EventOneButton?.hasError}
+        {...getOverrideProps(overrides, "EventOneButton")}
+      ></SwitchField>
+      <SwitchField
+        label="Event two button"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={EventTwoButton}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              TopSectionTitle,
+              TopSectionPic,
+              TopSectionWriting,
+              EventTitle,
+              EventPic,
+              EventWriting,
+              EventTwoTitle,
+              EventTwoPic,
+              EventTwoWriting,
+              EventThreeTitle,
+              EventThreePic,
+              EventThreeWriting,
+              EventOneButton,
+              EventTwoButton: value,
+              EventThreeButton,
+            };
+            const result = onChange(modelFields);
+            value = result?.EventTwoButton ?? value;
+          }
+          if (errors.EventTwoButton?.hasError) {
+            runValidationTasks("EventTwoButton", value);
+          }
+          setEventTwoButton(value);
+        }}
+        onBlur={() => runValidationTasks("EventTwoButton", EventTwoButton)}
+        errorMessage={errors.EventTwoButton?.errorMessage}
+        hasError={errors.EventTwoButton?.hasError}
+        {...getOverrideProps(overrides, "EventTwoButton")}
+      ></SwitchField>
+      <SwitchField
+        label="Event three button"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={EventThreeButton}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              TopSectionTitle,
+              TopSectionPic,
+              TopSectionWriting,
+              EventTitle,
+              EventPic,
+              EventWriting,
+              EventTwoTitle,
+              EventTwoPic,
+              EventTwoWriting,
+              EventThreeTitle,
+              EventThreePic,
+              EventThreeWriting,
+              EventOneButton,
+              EventTwoButton,
+              EventThreeButton: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.EventThreeButton ?? value;
+          }
+          if (errors.EventThreeButton?.hasError) {
+            runValidationTasks("EventThreeButton", value);
+          }
+          setEventThreeButton(value);
+        }}
+        onBlur={() => runValidationTasks("EventThreeButton", EventThreeButton)}
+        errorMessage={errors.EventThreeButton?.errorMessage}
+        hasError={errors.EventThreeButton?.hasError}
+        {...getOverrideProps(overrides, "EventThreeButton")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

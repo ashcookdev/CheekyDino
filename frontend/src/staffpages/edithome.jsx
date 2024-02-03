@@ -1,6 +1,8 @@
 import { DataStore } from 'aws-amplify';
 import { HomePage } from '../models';
 import { useState } from 'react';
+import { useEffect } from 'react';
+import Home from '../customer-pages/home';
 
 export default function Example() {
   const [topSectionTitle, setTopSectionTitle] = useState('');
@@ -16,58 +18,80 @@ export default function Example() {
     const [eventPicThree, setEventPicThree] = useState('');
     const [eventWritingThree, setEventWritingThree] = useState('');
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    await DataStore.save(
-      new HomePage({
-        TopSectionTitle: topSectionTitle,
-        TopSectionPic: topSectionPic,
-        TopSectionWriting: topSectionWriting,
-        
-      })
-    );
-  };
-
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+      const existingRecord = await DataStore.query(HomePage, c =>
+        c.TopSectionTitle('eq', topSectionTitle)
+      );
+  
+      if (existingRecord.length > 0) {
+        // If record already exists, update it
+        await DataStore.save(
+          HomePage.copyOf(existingRecord[0], updated => {
+            updated.TopSectionPic = topSectionPic;
+            updated.TopSectionWriting = topSectionWriting;
+          })
+        );
+      } else {
+        // If record doesn't exist, create a new one
+        await DataStore.save(
+          new HomePage({
+            TopSectionTitle: topSectionTitle,
+            TopSectionPic: topSectionPic,
+            TopSectionWriting: topSectionWriting,
+          })
+        );
+      }
+    };
+  
     const handleEvent = async (event) => {
-    event.preventDefault();
-    await DataStore.save(
-        new HomePage({
-            EventTitle: eventTitle,
-            EventPic: eventPic,
-            EventWriting: eventWriting,
-        })
-    );
+      event.preventDefault();
+      await handleEventData(eventTitle, eventPic, eventWriting);
     };
-
+  
     const handleEventTwo = async (event) => {
-        event.preventDefault();
-        await DataStore.save(
-
-            new HomePage({
-                EventTitleTwo: eventTitleTwo,
-                EventPicTwo: eventPicTwo,
-                EventWritingTwo: eventWritingTwo,
-            })
-        );
+      event.preventDefault();
+      await handleEventData(eventTitleTwo, eventPicTwo, eventWritingTwo);
     };
-
+  
     const handleEventThree = async (event) => {
-        event.preventDefault();
-        await DataStore.save(
-
-            new HomePage({
-                EventTitleThree: eventTitleThree,
-                EventPicThree: eventPicThree,
-                EventWritingThree: eventWritingThree,
-            })
-        );
+      event.preventDefault();
+      await handleEventData(eventTitleThree, eventPicThree, eventWritingThree);
     };
-
+  
+    const handleEventData = async (title, pic, writing) => {
+      const existingRecord = await DataStore.query(HomePage, c =>
+        c.EventTitle('eq', title)
+      );
+  
+      if (existingRecord.length > 0) {
+        // If record already exists, update it
+        await DataStore.save(
+          HomePage.copyOf(existingRecord[0], updated => {
+            updated.EventPic = pic;
+            updated.EventWriting = writing;
+          })
+        );
+      } else {
+        // If record doesn't exist, create a new one
+        await DataStore.save(
+          new HomePage({
+            EventTitle: title,
+            EventPic: pic,
+            EventWriting: writing,
+          })
+        );
+      }
+      window.location.reload();
+    };
+  
+    
 
 
 
   return (
     <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+      <Home />
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="top-section-title" className="block text-sm font-medium leading-6 text-gray-900">

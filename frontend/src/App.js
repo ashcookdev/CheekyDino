@@ -83,6 +83,8 @@ import Jobs from './customer-pages/Careers';
 import Application from './customer-pages/applicationform';
 import StockSwap from './staffpages/stockswap';
 import ShoppingList from './staffpages/ShoppingList';
+import CreateEvent from './staffpages/createevent';
+import Event from './customer-pages/events';
 
 
 
@@ -240,6 +242,7 @@ function App() {
             <Route path= '/usedby' element={<UsedByStock />} />
             <Route path='/stockswap' element={<StockSwap />} />
             <Route path='/shoppinglist' element={<ShoppingList />} /> 
+            <Route path='/createevent' element={<CreateEvent />} />
           </>
         )}
         
@@ -255,6 +258,7 @@ function App() {
         <Route path="/teddyparty" element={<TeddyPartyCalender />} />
         <Route path="/privatehire" element={<PrivateHire />} />
         <Route path="/privatehirecalender" element={<PrivateHireCalender />} />
+        <Route path='/events' element={<Event />} />
 
         
         <Route path="/football" element={<Football />} />

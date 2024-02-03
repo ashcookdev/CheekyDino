@@ -6,6 +6,114 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 
 
 
+type EagerEvents = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Events, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Name?: string | null;
+  readonly Description?: string | null;
+  readonly Food?: boolean | null;
+  readonly StartTime?: string | null;
+  readonly Date?: string | null;
+  readonly Tables?: number | null;
+  readonly KidsPrice?: number | null;
+  readonly Image?: string | null;
+  readonly AdultMenu?: string | null;
+  readonly KidsMenu?: string | null;
+  readonly CustomeEvents?: (EventsCustomerEvent | null)[] | null;
+  readonly EndTime?: string | null;
+  readonly AdultPrice?: string | null;
+  readonly Price2?: number | null;
+  readonly Price3?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyEvents = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Events, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Name?: string | null;
+  readonly Description?: string | null;
+  readonly Food?: boolean | null;
+  readonly StartTime?: string | null;
+  readonly Date?: string | null;
+  readonly Tables?: number | null;
+  readonly KidsPrice?: number | null;
+  readonly Image?: string | null;
+  readonly AdultMenu?: string | null;
+  readonly KidsMenu?: string | null;
+  readonly CustomeEvents: AsyncCollection<EventsCustomerEvent>;
+  readonly EndTime?: string | null;
+  readonly AdultPrice?: string | null;
+  readonly Price2?: number | null;
+  readonly Price3?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Events = LazyLoading extends LazyLoadingDisabled ? EagerEvents : LazyEvents
+
+export declare const Events: (new (init: ModelInit<Events>) => Events) & {
+  copyOf(source: Events, mutator: (draft: MutableModel<Events>) => MutableModel<Events> | void): Events;
+}
+
+type EagerCustomerEvent = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<CustomerEvent, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly EventName?: string | null;
+  readonly EventDate?: string | null;
+  readonly EventTime?: string | null;
+  readonly CustomerName?: string | null;
+  readonly Children?: string | null;
+  readonly Adults?: string | null;
+  readonly Table?: string | null;
+  readonly FoodOptions?: string | null;
+  readonly Total?: number | null;
+  readonly Email?: string | null;
+  readonly Telephone?: string | null;
+  readonly FoodOption?: boolean | null;
+  readonly eventss?: (EventsCustomerEvent | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyCustomerEvent = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<CustomerEvent, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly EventName?: string | null;
+  readonly EventDate?: string | null;
+  readonly EventTime?: string | null;
+  readonly CustomerName?: string | null;
+  readonly Children?: string | null;
+  readonly Adults?: string | null;
+  readonly Table?: string | null;
+  readonly FoodOptions?: string | null;
+  readonly Total?: number | null;
+  readonly Email?: string | null;
+  readonly Telephone?: string | null;
+  readonly FoodOption?: boolean | null;
+  readonly eventss: AsyncCollection<EventsCustomerEvent>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type CustomerEvent = LazyLoading extends LazyLoadingDisabled ? EagerCustomerEvent : LazyCustomerEvent
+
+export declare const CustomerEvent: (new (init: ModelInit<CustomerEvent>) => CustomerEvent) & {
+  copyOf(source: CustomerEvent, mutator: (draft: MutableModel<CustomerEvent>) => MutableModel<CustomerEvent> | void): CustomerEvent;
+}
+
 type EagerGates = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Gates, 'id'>;
@@ -234,6 +342,9 @@ type EagerHomePage = {
   readonly EventThreeTitle?: string | null;
   readonly EventThreePic?: string | null;
   readonly EventThreeWriting?: string | null;
+  readonly EventOneButton?: boolean | null;
+  readonly EventTwoButton?: boolean | null;
+  readonly EventThreeButton?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -256,6 +367,9 @@ type LazyHomePage = {
   readonly EventThreeTitle?: string | null;
   readonly EventThreePic?: string | null;
   readonly EventThreeWriting?: string | null;
+  readonly EventOneButton?: boolean | null;
+  readonly EventTwoButton?: boolean | null;
+  readonly EventThreeButton?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -786,6 +900,40 @@ export declare type PartyBooking = LazyLoading extends LazyLoadingDisabled ? Eag
 
 export declare const PartyBooking: (new (init: ModelInit<PartyBooking>) => PartyBooking) & {
   copyOf(source: PartyBooking, mutator: (draft: MutableModel<PartyBooking>) => MutableModel<PartyBooking> | void): PartyBooking;
+}
+
+type EagerEventsCustomerEvent = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<EventsCustomerEvent, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly eventsId?: string | null;
+  readonly customerEventId?: string | null;
+  readonly events: Events;
+  readonly customerEvent: CustomerEvent;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyEventsCustomerEvent = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<EventsCustomerEvent, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly eventsId?: string | null;
+  readonly customerEventId?: string | null;
+  readonly events: AsyncItem<Events>;
+  readonly customerEvent: AsyncItem<CustomerEvent>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type EventsCustomerEvent = LazyLoading extends LazyLoadingDisabled ? EagerEventsCustomerEvent : LazyEventsCustomerEvent
+
+export declare const EventsCustomerEvent: (new (init: ModelInit<EventsCustomerEvent>) => EventsCustomerEvent) & {
+  copyOf(source: EventsCustomerEvent, mutator: (draft: MutableModel<EventsCustomerEvent>) => MutableModel<EventsCustomerEvent> | void): EventsCustomerEvent;
 }
 
 type EagerKitchenMenuStockControl = {

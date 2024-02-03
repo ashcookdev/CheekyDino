@@ -54,6 +54,12 @@ export default function Example() {
                     Private Hire
                   </Link>
                   <Link
+                    to="/events"
+                    className="inline-flex items-center border-b-2 border-transparent component-title px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  >
+                    Events
+                  </Link>
+                  <Link
                     to="/jobs"
                     className="inline-flex items-center border-b-2 border-transparent component-title px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                   >
@@ -151,30 +157,42 @@ export default function Example() {
 
           <Disclosure.Panel className="lg:hidden">
   <div className="space-y-1 pb-3 pt-2">
-    <Link
-      to="/session"
-      className="block border-l-4 component-title border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
-    >
-      Book a Session
-    </Link>
-    <Link
-      to="/packages"
-      className="block border-l-4 border-transparent component-title py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800"
-    >
-      Party Packages
-    </Link>
-    <Link
-      to="/about"
-      className="block border-l-4 border-transparent component-title py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800"
-    >
-      About Us
-    </Link>
-    <Link
-      to="/login"
-      className="block border-l-4 border-transparent component-title py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800"
-    >
-      Log in
-    </Link>
+  <Link
+                    to="/sessionlogin"
+                    className="inline-flex items-center border-b-2 component-title border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900"
+                  >
+                    Book a Session
+                  </Link>
+                  <Link
+                    to="/packages"
+                    className="inline-flex items-center border-b-2 component-title border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  >
+                    Party Packages
+                  </Link>
+                  <Link
+                    to="/privatehire"
+                    className="inline-flex items-center border-b-2 border-transparent component-title px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  >
+                    Private Hire
+                  </Link>
+                  <Link
+                    to="/events"
+                    className="inline-flex items-center border-b-2 border-transparent component-title px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  >
+                    Events
+                  </Link>
+                  <Link
+                    to="/jobs"
+                    className="inline-flex items-center border-b-2 border-transparent component-title px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  >
+                    Careers
+                  </Link>
+                  <Link
+                    to="/login"
+                    className="inline-flex items-center border-b-2 border-transparent component-title px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  >
+                    Log In
+                  </Link>
   </div>
 </Disclosure.Panel>
         </>

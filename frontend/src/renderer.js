@@ -82,6 +82,9 @@ import Jobs from './customer-pages/Careers';
 import Application from './customer-pages/applicationform';
 import StockSwap from './staffpages/stockswap';
 import ShoppingList from './staffpages/ShoppingList';
+import CreateEvent from './staffpages/createevent';
+import Event from './customer-pages/events';
+
 
 
 import {Routes, Route, useLocation } from "react-router-dom";
@@ -258,6 +261,9 @@ export function AppRoutes() {
     
             <Route path='/stockswap' element={<StockSwap />} />
             <Route path='/shoppinglist' element={<ShoppingList />} />
+            <Route path='/createevent' element={<CreateEvent />} />
+
+
 
 
 
@@ -278,6 +284,7 @@ export function AppRoutes() {
         <Route path="/privatehirecalender" element={<PrivateHireCalender />} />
         <Route path="/jobs" element={<Jobs />} />
         <Route path="/jobs/apply" element={<Application />} />
+        <Route path="/events" element={<Event />} />
 
         
         <Route path="/football" element={<Football />} />

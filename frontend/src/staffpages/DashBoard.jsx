@@ -34,6 +34,7 @@ import {
   UsersIcon,
   XMarkIcon,
   CheckIcon,
+  SunIcon,
   
   
 } from '@heroicons/react/24/outline'
@@ -113,8 +114,9 @@ useEffect(() => {
   { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
   { name: 'Control Panel', href: '/controlpanel', icon: BoltIcon, current: false },
   { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
-  { name: 'Tables', href: '#section4', icon: TableCellsIcon, current: false },
+  { name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
   { name: 'Popular Items', href: '/tillhistory', icon: HeartIcon, current: false},
+  {name: 'Create Event', href: '/createevent', icon: SunIcon, current: false},
 
   { name: 'Used By Stock', href: '/usedby', icon: CheckIcon, current: false },
   { name: 'Edit Landing Page', href: '/edithome', icon: PencilIcon, current: false },
