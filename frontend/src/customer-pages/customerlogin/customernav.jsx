@@ -48,6 +48,7 @@ export default function CustomerNav() {
     { name: 'Session Bookings', href: '/sessionbookings', current: false },
     { name: 'Party Booking', href: '/my-booking', current: true },
     { name: 'Payments', href: '/payments', current: false },
+    { name: 'Events', href: '/bookedevents', current: false },
     // Add a new option that only appears when Arrived is true and LeftCenter is false
     Arrived && !LeftCenter && { name: 'Order', href: '/Order', current: false },
   ].filter(Boolean);

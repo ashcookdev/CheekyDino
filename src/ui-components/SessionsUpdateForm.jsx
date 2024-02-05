@@ -210,6 +210,8 @@ export default function SessionsUpdateForm(props) {
     orderid: [],
     Staff: "",
     CustomerbookingID: "",
+    Event: false,
+    EventID: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Email, setEmail] = React.useState(initialValues.Email);
@@ -239,6 +241,8 @@ export default function SessionsUpdateForm(props) {
   const [CustomerbookingID, setCustomerbookingID] = React.useState(
     initialValues.CustomerbookingID
   );
+  const [Event, setEvent] = React.useState(initialValues.Event);
+  const [EventID, setEventID] = React.useState(initialValues.EventID);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = sessionsRecord
@@ -265,6 +269,8 @@ export default function SessionsUpdateForm(props) {
     setCurrentOrderidValue("");
     setStaff(cleanValues.Staff);
     setCustomerbookingID(cleanValues.CustomerbookingID);
+    setEvent(cleanValues.Event);
+    setEventID(cleanValues.EventID);
     setErrors({});
   };
   const [sessionsRecord, setSessionsRecord] = React.useState(sessionsModelProp);
@@ -301,6 +307,8 @@ export default function SessionsUpdateForm(props) {
     orderid: [],
     Staff: [],
     CustomerbookingID: [],
+    Event: [],
+    EventID: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -348,6 +356,8 @@ export default function SessionsUpdateForm(props) {
           orderid,
           Staff,
           CustomerbookingID,
+          Event,
+          EventID,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -423,6 +433,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -466,6 +478,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.Email ?? value;
@@ -510,6 +524,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.TimeslotFrom ?? value;
@@ -554,6 +570,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.TimeslotTo ?? value;
@@ -598,6 +616,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.TimeLeft ?? value;
@@ -642,6 +662,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.TimeArrived ?? value;
@@ -686,6 +708,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.Date ?? value;
@@ -733,6 +757,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.Table ?? value;
@@ -780,6 +806,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.Orders ?? value;
@@ -823,6 +851,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.Prepaid ?? value;
@@ -870,6 +900,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.TotalSpent ?? value;
@@ -917,6 +949,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.Adults ?? value;
@@ -964,6 +998,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.Children ?? value;
@@ -1007,6 +1043,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.Arrived ?? value;
@@ -1050,6 +1088,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.LeftCenter ?? value;
@@ -1097,6 +1137,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.ExtraTables ?? value;
@@ -1140,6 +1182,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.Telephone ?? value;
@@ -1179,6 +1223,8 @@ export default function SessionsUpdateForm(props) {
               orderid: values,
               Staff,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             values = result?.orderid ?? values;
@@ -1247,6 +1293,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff: value,
               CustomerbookingID,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.Staff ?? value;
@@ -1290,6 +1338,8 @@ export default function SessionsUpdateForm(props) {
               orderid,
               Staff,
               CustomerbookingID: value,
+              Event,
+              EventID,
             };
             const result = onChange(modelFields);
             value = result?.CustomerbookingID ?? value;
@@ -1305,6 +1355,96 @@ export default function SessionsUpdateForm(props) {
         errorMessage={errors.CustomerbookingID?.errorMessage}
         hasError={errors.CustomerbookingID?.hasError}
         {...getOverrideProps(overrides, "CustomerbookingID")}
+      ></TextField>
+      <SwitchField
+        label="Event"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={Event}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Staff,
+              CustomerbookingID,
+              Event: value,
+              EventID,
+            };
+            const result = onChange(modelFields);
+            value = result?.Event ?? value;
+          }
+          if (errors.Event?.hasError) {
+            runValidationTasks("Event", value);
+          }
+          setEvent(value);
+        }}
+        onBlur={() => runValidationTasks("Event", Event)}
+        errorMessage={errors.Event?.errorMessage}
+        hasError={errors.Event?.hasError}
+        {...getOverrideProps(overrides, "Event")}
+      ></SwitchField>
+      <TextField
+        label="Event id"
+        isRequired={false}
+        isReadOnly={false}
+        value={EventID}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Staff,
+              CustomerbookingID,
+              Event,
+              EventID: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.EventID ?? value;
+          }
+          if (errors.EventID?.hasError) {
+            runValidationTasks("EventID", value);
+          }
+          setEventID(value);
+        }}
+        onBlur={() => runValidationTasks("EventID", EventID)}
+        errorMessage={errors.EventID?.errorMessage}
+        hasError={errors.EventID?.hasError}
+        {...getOverrideProps(overrides, "EventID")}
       ></TextField>
       <Flex
         justifyContent="space-between"

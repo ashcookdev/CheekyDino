@@ -15,7 +15,7 @@ function App({ signOut, user }) {
         const groups = userInfo.signInUserSession.accessToken.payload['cognito:groups'];
         if (groups && groups.some(group => ['Staff', 'Developer', 'PartyHost', 'Admin', 'Superuser'].includes(group))) {
           // Redirect the user to the /chat page
-          navigate('/chat');
+          navigate('/clockin');
           window.location.reload();
         } else {
           // Redirect the user to the /dashboard page

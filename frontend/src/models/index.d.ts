@@ -27,6 +27,7 @@ type EagerEvents = {
   readonly AdultPrice?: string | null;
   readonly Price2?: number | null;
   readonly Price3?: number | null;
+  readonly TicketsSold?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -52,6 +53,7 @@ type LazyEvents = {
   readonly AdultPrice?: string | null;
   readonly Price2?: number | null;
   readonly Price3?: number | null;
+  readonly TicketsSold?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -595,6 +597,8 @@ type EagerSessions = {
   readonly orderid?: (string | null)[] | null;
   readonly Staff?: string | null;
   readonly CustomerbookingID?: string | null;
+  readonly Event?: boolean | null;
+  readonly EventID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -626,6 +630,8 @@ type LazySessions = {
   readonly orderid?: (string | null)[] | null;
   readonly Staff?: string | null;
   readonly CustomerbookingID?: string | null;
+  readonly Event?: boolean | null;
+  readonly EventID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

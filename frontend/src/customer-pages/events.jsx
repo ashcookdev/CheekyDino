@@ -1,39 +1,54 @@
-import { DataStore } from "aws-amplify"
-import { useEffect, useState } from "react"
-import {Events} from "../models"
-import './customerfont.css'
-
-
+import { DataStore } from "aws-amplify";
+import { useEffect, useState } from "react";
+import { Events } from "../models";
+import { format } from 'date-fns';
+import './customerfont.css';
+import { useNavigate } from 'react-router-dom'
 
 
 export default function EventsPage() {
+    const [events, setEvents] = useState([]);
+    const [book , setBook] = useState(false);
 
-    const [events, setEvents] = useState([])
+    const Navigate = useNavigate();
+
+    if(book){
+        Navigate('/eventregister',{state: events});
+    }
+
 
     const fetchEvents = async () => {
         const today = new Date();
         const todayStr = today.toISOString().split('T')[0]; // get yyyy-mm-dd format
-        const events = (await DataStore.query(Events)).filter(event => event.Date >= todayStr);
-        setEvents(events);
+        const fetchedEvents = (await DataStore.query(Events)).filter(event => event.Date >= todayStr);
+        setEvents(fetchedEvents.sort((a, b) => new Date(a.Date) - new Date(b.Date))); // sort events by date
     }
-    
 
     useEffect(() => {
-        fetchEvents()
+        fetchEvents();
+    }, []);
+
+    const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
+        return format(date, 'EEEE, MMMM do, yyyy');
     }
-    , [])
 
-
+    const handleBookNow = (event) => {
+        // Set the 'book' state to true and navigate to '/eventregister' with the 'events' state
+        setBook(true);
+        Navigate('/eventregister', { state: { events: event } });
+      };
 
 
 
     return (
-        <div>
+        <div className="mt-5">
+            
             {events.map((event, index) => (
-      <div key={index} className="relative bg-gray-900">
-        <div className="relative h-80 overflow-hidden bg-indigo-600 md:absolute md:left-0 md:h-full md:w-1/3 lg:w-1/2">
+      <div key={index} className="relative bg-black">
+        <div className="relative h-80 overflow-hidden bg-black md:absolute md:left-0 md:h-full md:w-1/3 lg:w-1/2">
           <img
-            className="h-full w-full object-cover"
+            className="h-full w-full object-contain"
             src={event.Image}
             alt=""
           />
@@ -65,19 +80,21 @@ export default function EventsPage() {
         <div className="relative mx-auto max-w-7xl py-24 sm:py-32 lg:px-8 lg:py-40">
           <div className="pl-6 pr-6 md:ml-auto md:w-2/3 md:pl-16 lg:w-1/2 lg:pl-24 lg:pr-0 xl:pl-32">
             <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl component-title">{event.Name}</h1>
-            <p className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-4xl component-title">£{event.KidsPrice}.00 Per Child</p>
-            <p className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl component-title">{event.Date}</p>
+            <h3 className="mt-2 font-bold  text-white component-title">£{event.KidsPrice}.00 Per Child</h3>
+            <p className="mt-2 font-bold  text-white component-title">{formatDate(event.Date)}</p>
+            <p className="mt-2 font-bold text-white component-title">{event.StartTime}- {event.EndTime}</p>
 
 
             <p className="mt-6 text-base leading-7 text-gray-300">
              {event.Description}
             </p>
             <div className="mt-8">
-              <button
-                className="inline-flex rounded-md bg-white/10 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-              >
-                Book Now
-              </button>
+            <button
+              onClick={() => handleBookNow(event)}
+              className="inline-flex rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-orange-500 shadow-sm hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              Book Now
+            </button>
             </div>
           </div>
         </div>

@@ -15,6 +15,7 @@ type Events @model @auth(rules: [{allow: private}, {allow: public, operations: [
   AdultPrice: String
   Price2: Float
   Price3: Float
+  TicketsSold: Int
 }
 
 type CustomerEvent @model @auth(rules: [{allow: public}, {allow: owner}]) {
@@ -194,6 +195,8 @@ type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: pub
   orderid: [String]
   Staff: String
   CustomerbookingID: String
+  Event: Boolean
+  EventID: String
 }
 
 type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}, {allow: groups, groups: ["Kitchen"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Cafe"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Staff"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartyHosts"], operations: [read, create, update, delete]}, {allow: public}]) {

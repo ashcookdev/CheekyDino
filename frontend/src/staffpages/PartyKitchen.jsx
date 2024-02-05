@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
 import { PartyBooking, PartyGuests, Messages } from '../models';
 import { format } from 'date-fns';
@@ -7,21 +7,15 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-
-
 export default function Kitchen() {
   const [currentTime, setCurrentTime] = useState(0);
-  const [party, setPartyBookings] = useState([]);
-  const [partyGuests, setPartyGuests] = useState([]);
-  const [selected, setSelected] = useState({});
-  const allGuestsSelected = selected.length === partyGuests.length;
+  const [parties, setParties] = useState([]);
+  const [selectedGuests, setSelectedGuests] = useState({});
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
   const [fieldsetVisible, setFieldsetVisible] = useState(false);
   const [noPartyBookings, setNoPartyBookings] = useState(false);
   const [adultFood, setAdultFood] = useState(false);
-
-  const currentDate = new Date();
-  const formattedDate = format(currentDate, 'MMMM dd, yyyy');
+  const [clickedGuests, setClickedGuests] = useState({});
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -30,43 +24,6 @@ export default function Kitchen() {
 
     return () => clearInterval(interval);
   }, []);
-
-  const formattedTime = format(currentTime, 'h:mm:ss a');
-
-  console.log(selected);
-
-  async function fetchTodaysPartyBookings() {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    const allPartyBookings = await DataStore.query(PartyBooking);
-    const partyBookings = allPartyBookings.filter(
-      (booking) =>
-        new Date(booking.PartyDate) >= today && new Date(booking.PartyDate) < tomorrow
-    );
-    console.log(partyBookings);
-    setPartyBookings(partyBookings);
-    if (partyBookings.length > 0) {
-      setNoPartyBookings(false);
-      const partybookingId = partyBookings[0].id;
-      const partyGuests = await DataStore.query(PartyGuests);
-      // get booking id from party booking and filter results from party guests
-      const guests = partyGuests.filter((guest) => guest.partybookingID === partybookingId);
-      console.log(guests);
-      setPartyGuests(guests);
-    } else {
-      setNoPartyBookings(true);
-    }
-  }
-
-  const stats = [
-    { id: 1, name: 'Partys Today', value: party.length },
-    { id: 2, name: 'Tables Occupied', value: '$119 trillion' },
-    { id: 3, name: 'Current Orders', value: '46,000' },
-  ];
 
   useEffect(() => {
     fetchTodaysPartyBookings();
@@ -79,14 +36,47 @@ export default function Kitchen() {
     return () => subscription.unsubscribe();
   }, []);
 
-  function handleViewOrderClick() {
-    setFieldsetVisible((prevVisible) => !prevVisible);
+  async function fetchTodaysPartyBookings() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+  
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+  
+    const allPartyBookings = await DataStore.query(PartyBooking);
+    const partyBookings = allPartyBookings.filter(
+      (booking) =>
+        new Date(booking.PartyDate) >= today && new Date(booking.PartyDate) < tomorrow
+    );
+  
+    const allGuests = await DataStore.query(PartyGuests);
+    const selectedGuests = {};
+  
+    for (const party of partyBookings) {
+      const guests = allGuests.filter((guest) => guest.partybookingID === party.id);
+      selectedGuests[party.id] = guests;
+    }
+  
+    setParties(partyBookings);
+    setSelectedGuests(selectedGuests);
+    setNoPartyBookings(partyBookings.length === 0);
+  }
+  
+
+  function handleViewOrderClick(partyId) {
+    calculateFoodOptions(selectedGuests[partyId]);
+    calculateAllergies(selectedGuests[partyId]);
+    setFieldsetVisible((prevVisible) => ({
+      ...prevVisible,
+      [partyId]: !prevVisible[partyId],
+    }));
   }
 
-  function handleRadioChange(event) {
-    const { name, value } = event.target;
-    setSelected((prevSelected) => ({ ...prevSelected, [name]: JSON.parse(value) }));
-  }
+  
+  
+
+
+  
 
   async function handleConfirmClick(party) {
     const awstime = currentTime.toISOString().split('T')[1].split('.')[0];
@@ -121,10 +111,53 @@ export default function Kitchen() {
     window.location.reload();
   }
 
-  async function handleAdultFoodClick() {
+  function handleAdultFoodClick() {
     setAdultFood((prevAdultFood) => !prevAdultFood);
   }
 
+
+  function allGuestsSelected(partyId) {
+    const selected = selectedGuests[partyId];
+    return selected && Object.values(selected).every((guest) => guest.Arrived === true);
+  }
+
+  function handleGuestClick(partyId, guestName) {
+    setClickedGuests((prevClickedGuests) => ({
+      ...prevClickedGuests,
+      [partyId]: {
+        ...(prevClickedGuests[partyId] || {}),
+        [guestName]: !prevClickedGuests[partyId]?.[guestName],
+      },
+    }));
+  }
+  
+  const calculateFoodOptions = (guests) => {
+    const foodOptions = {};
+  
+    guests.forEach((guest) => {
+      if (foodOptions[guest.FoodOption]) {
+        foodOptions[guest.FoodOption]++;
+      } else {
+        foodOptions[guest.FoodOption] = 1;
+      }
+    });
+  
+    return foodOptions;
+  };
+
+  const calculateAllergies = (guests) => {
+    const allergies = {};
+  
+    guests.forEach((guest) => {
+      if (allergies[guest.Allergies]) {
+        allergies[guest.Allergies]++;
+      } else {
+        allergies[guest.Allergies] = 1;
+      }
+    });
+  
+    return allergies;
+  };
 
 
 
@@ -133,153 +166,125 @@ export default function Kitchen() {
    
 
   return (
-   
-
-   
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-
-    
-<ul className="divide-y divide-gray-100 bg-transparent rounded-lg ">
-{noPartyBookings && <p className='text-purple-700 text-center'>No party bookings today.</p>}
-
-{party
-  .filter((booking) => !booking.PartyFoodComplete)
-  .sort((a, b) => new Date(a.PartyTime) - new Date(b.PartyTime))
-  .concat(bookingConfirmed ? party.shift() : [])
-  .map((party) => {
-            let buttonClasses = 'bg-blue-500 hover:bg-blue-700 text-purple-700 font-bold py-2 px-4 rounded';
-
-            return (
-              <li
-                key={party.id}
-                className={classNames(
-                  bookingConfirmed ? 'bg-green-500' : 'blurry-bg',
-                  'flex justify-between gap-x-6 py-5'
-                )}
-              >
-                <div className="flex gap-x-4">
-                  <div className="min-w-0 flex-auto">
-                    <p className="text-sm font-semibold leading-6 text-purple-700">
-                      Child's Name: {party.ChildName}
-                    </p>
-                    <p className="mt-1 truncate text-xs leading-5 text-purple-700">
-                      Guests: {party.NoOfChildren}
-                    </p>
-                    <p className="mt-1 truncate text-xs leading-5 text-purple-700">
-                      Start Time: {party.PartyTime}
-                    </p>
-                    <p className="mt-1 truncate text-xs leading-5 text-purple-700">
-                      Party Type: {party.PartyType}
-                    </p>
-                    <p className="mt-1 truncate text-xs leading-5 text-purple-700">
-                      Finish Time: {party.PartyFinish}
-                    </p>
-                    <p className="mt-1 truncate text-xs leading-5 text-purple-700">
-                      Party Food Time: {party.PartyFoodTimeDue}
-                    </p>
-                   
-
-                  {/* Render guest information */}
-<ul className="mt-4 space-y-2">
-  {Object.keys(selected).map((key) => {
-    if (selected[key] && selected[key].Arrived === true) {
-      return (
-
-        <li key={key}>
-          {selected[key].ChildName} - {selected[key].FoodOption}
-        </li>
-      );
-    }
-  })}
-  
-</ul>
-
-
-
-
-
-
-                  </div>
-                </div>
-                <div className='flex'>
-                  <button
-                    onClick={handleViewOrderClick}
-                    className={classNames(
-                      allGuestsSelected ? 'bg-green-500 ' : 'bg-green-500 animate-pulse',
-                      'px-4 py-2 rounded-md text-purple-700 mr-2'
-                    )}
-                    disabled={!selected}
-                  >
-                    View        </button>
-                  <button
-                    onClick={() => handleConfirmClick(party)}
-                    className={classNames(
-                      allGuestsSelected ? 'bg-green-500' : 'bg-green-500 hover:bg-green-700',
-                      'px-4 py-2 rounded-md text-purple-700 mr-2'
-                    )}
-                    disabled={!selected}
-                  >
-                    Confirm
-                  </button>
-                  <button 
-                    onClick={handleAdultFoodClick}
-                    className= 'bg-green-500 hover:bg-green-700 px-4 py-2 rounded-md text-purple-700 mr-2'
-                    
-                  >
-                    Adult Party Food
-                  </button>
-                </div>
-
-              </li>
-            );
-          })}
-      </ul>
-      {fieldsetVisible && (
-
-        <fieldset>
-          <legend className="sr-only">Party guests</legend>
-          <div className="relative -space-y-px rounded-md bg-white">
-            {partyGuests.map((guest) => (
-              
-              <div key={guest.ChildName} className="relative flex cursor-pointer flex-col border p-4 focus:outline-none md:grid md:grid-cols-3 md:pl-4 md:pr-6">
-                <label className="flex items-center text-sm">
-                  <input
-                    type="radio"
-                    name={guest.ChildName}
-                    value={JSON.stringify(guest)}
-                    onChange={handleRadioChange}
-                    className="h-4 w-4 rounded  flex items-center justify-center"
-                  />
-
-                  <span className="ml-3 font-medium">{guest.ChildName}- {guest.FoodOption}- Allergies- {guest.Allergies} </span>
-                </label>
-              </div>
-            ))}
-          </div>
-        </fieldset>
-      )}
-      {adultFood && (
-        <fieldset>
-          <legend className="sr-only">Adult Food </legend>
-          <div className="relative -space-y-px rounded-md bg-white">
-            {party.map((partys) => (
-              <li key={partys.id} className="relative flex cursor-pointer flex-col border p-4 focus:outline-none md:grid md:grid-cols-3 md:pl-4 md:pr-6">
-<p>{partys.PartyAdultFoodChoices.join(', ')}</p>    
-              </li>
-            ))}
-          </div>
-        </fieldset>
-      )              
-          }
+{parties.filter(party => !party.PartyFoodComplete).map((party) => (
+        <div key={party.id} className="mt-8">
+          <div className="flex justify-between gap-x-6 py-5">
+            <div className="flex gap-x-4">
+              <div className="min-w-0 flex-auto">
+                <p className="text-sm font-semibold leading-6 text-purple-700">
+                  Child's Name: {party.ChildName}
+                </p>
+                <p className="mt-1 truncate text-xs leading-5 text-purple-700">
+                  Guests: {party.NoOfChildren}
+                </p>
+                <p className="mt-1 truncate text-xs leading-5 text-purple-700">
+                  Party Time: {party.PartyTime}
+                </p>
+                <p className="mt-1 truncate text-xs leading-5 text-purple-700">
+                  Party Date: {format(new Date(party.PartyDate), 'dd/MM/yyyy')}
+                </p>
+                <h3 className="mt-1 mb-5 truncate text-xs leading-5 text-purple-700">
+                  Party Food Due: {party.PartyFoodTimeDue}
+                </h3>
+                {Object.entries(calculateFoodOptions(selectedGuests[party.id] || [])).map(([foodOption, count]) => (
+        <p className='mt-1 truncate text-xs leading-5 text-orange-700' key={foodOption}>{`${foodOption}: ${count}`}</p>
+      ))}
+      {Object.entries(calculateAllergies(selectedGuests[party.id] || [])).map(([allergy, count]) => (
+        <p className='mt-1 truncate text-xs leading-5 text-red-700' key={allergy}>{`Allergies: ${allergy}`}</p>
+      ))}
       
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <button
+                onClick={() => handleViewOrderClick(party.id)}
+                className={classNames(
+                  allGuestsSelected(party.id) ? 'bg-purple-500 ' : 'bg-purple-500 animate-pulse',
+                  'px-4 py-2 rounded-md text-white mb-2'
+                )}
+                disabled={!selectedGuests[party.id]}
+              >
+                View Guests
+              </button>
+              <button
+                onClick={() => handleConfirmClick(party)}
+                className={classNames(
+                  allGuestsSelected(party.id) ? 'bg-green-500' : 'bg-green-500 hover:bg-green-700',
+                  'px-4 py-2 rounded-md text-white mb-2'
+                )}
+                disabled={!selectedGuests[party.id]}
+              >
+                Confirm
+              </button>
+              <button
+                onClick={handleAdultFoodClick}
+                className="bg-indigo-500 hover:bg-green-700 px-4 py-2 rounded-md text-white mb-2"
+              >
+                Adult Party Food
+              </button>
+            </div>
+          </div>
+          {fieldsetVisible[party.id] && (
+          <fieldset>
+            <legend className="sr-only">Party guests</legend>
+            <div className="relative rounded-md bg-purple-100 w-full">
+              
+              {(selectedGuests[party.id] || []).map((guest, index) => (
+                <div
+                  key={guest.ChildName}
+                  onClick={() => handleGuestClick(party.id, guest.ChildName)}
+                  className={classNames(
+                    'relative flex cursor-pointer flex-col border p-4 focus:outline-none md:grid md:grid-cols-3 md:pl-4 md:pr-6 w-full shadow-lg',
+                    {
+                      'bg-green-500': clickedGuests[party.id]?.[guest.ChildName], // Change color based on the click status
+                    }
+                  )}
+                >
+                  <span className="ml-3 w-full font-medium mt-5">
+                    
+                    <ol>
+                      <li>
+                        <span
+                          className={classNames(
+                            'inline-block h-4 w-4 rounded-full mr-2',
+                            {
+                              'bg-green-500': guest.Arrived,
+                            }
+                          )}
+                        ></span>
+                        {index + 1}
+                      </li>
+                      <li className='text-black text-xs'>{guest.ChildName}</li>
+                      <li className='text-black text-xs text-bold'>{guest.FoodOption}</li>
+                      <li className='text-red-900 text-sm'>Allergies: {guest.Allergies}</li>
+                    </ol>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </fieldset>
 
 
-
-
+          )}
+          {adultFood && (
+            <fieldset>
+              <legend className="sr-only">Adult Food</legend>
+              <div className="relative -space-y-px rounded-md bg-white">
+                <li
+                  key={party.id}
+                  className="relative flex cursor-pointer flex-col border p-4 focus:outline-none md:grid md:grid-cols-3 md:pl-4 md:pr-6"
+                >
+                  <p>{party.PartyAdultFoodChoices.join(', ')}</p>
+                </li>
+              </div>
+            </fieldset>
+          )}
+        </div>
+      ))}
     </div>
-
-
-
-
-  )
+  );
+  
 }
+
+

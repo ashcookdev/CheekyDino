@@ -28,6 +28,9 @@ import { PhoneIcon } from "@heroicons/react/20/solid";
 import AudioChat from "./audiochat";
 import ControlPanel from "./ControlPanel";
 import Modal from "./modal";  // import the modal component
+import { Switch } from '@headlessui/react'
+import { ca } from "date-fns/locale";
+
 
 
 
@@ -70,6 +73,8 @@ const [chat, setChat] = useState(false);
 const [drawer, SetDrawer] = useState(false);
 const [show, setShow] = useState(false);
 const [messages, setMessages] = useState([]);
+const [enabled, setEnabled] = useState(false)
+
 
 
 
@@ -212,7 +217,9 @@ setShowTopBar(true)
   }, []);
 
 
-
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+  }
   
 
   
@@ -365,8 +372,8 @@ window.location.reload();
       <div className="flex-grow justify-start flex flex-wrap">
         {party.map((partyBooking) => (
           <button
-            className="w-full sm:w-auto h-16 bg-indigo-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center animate-pulse"
-            key={partyBooking.id}
+          className="mt-2 items-center animate-pulse block w-1/5 ml-1 rounded-md border-0 py-1.5 pl-2 pr-10 text-gray-900 ring-1 ring-inset ring-purple-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"            
+          key={partyBooking.id}
             onClick={() =>
               setSelectedParty(partyBooking.id) || setPartyNow(true)
             }
@@ -460,21 +467,30 @@ window.location.reload();
         <h2 className="font-bold text-lg mb-4">Menu:</h2>
         {showCategories && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {categories.map((category, index) => (
-            <motion.button
-              key={category}
-              onClick={() => handleCategoryClick(category)}
-              className={`${
-                colors[index % colors.length]
-              } text-white font-bold py-2 px-4 rounded-full shadow-md`}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              {category}
-            </motion.button>
-          ))}
-        </div>
-      )}
+        {categories.map((category, index) => {
+          const allowedCategories = ['Event', 'Hot Drinks', 'Kids Drinks', 'Cold Drinks', 'Snacks'];
+          if (!enabled || (enabled && allowedCategories.includes(category))) {
+            return (
+              <motion.button
+                key={category}
+                onClick={() => handleCategoryClick(category)}
+                className={`${
+                  colors[index % colors.length]
+                } text-white font-bold py-2 px-4 rounded-full shadow-md`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                {category}
+              </motion.button>
+            );
+          }
+          return null;
+        })}
+      </div>
+    )}
+      
+
+
       {showItems && (
 
         <div className="mt-10 mr-5 ml-5">
@@ -555,8 +571,29 @@ window.location.reload();
 
 
         <div className="w-1/3 border-purple-400">
-        <div className="border  p-4 mt-2 bg-purple-200 p-4 rounded-lg shadow-md">
 
+        <div className="border  p-4 mt-2 bg-purple-200 p-4 rounded-lg shadow-md">
+        <Switch.Group as="div" className="flex items-center mb-2 mt-2">
+      <Switch
+        checked={enabled}
+        onChange={setEnabled}
+        className={classNames(
+          enabled ? 'bg-indigo-600' : 'bg-gray-200',
+          'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2'
+        )}
+      >
+        <span
+          aria-hidden="true"
+          className={classNames(
+            enabled ? 'translate-x-5' : 'translate-x-0',
+            'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+          )}
+        />
+      </Switch>
+      <Switch.Label as="span" className="ml-3 text-sm">
+        <span className="font-medium text-gray-900">Event</span>{' '}
+      </Switch.Label>
+    </Switch.Group>
         <p className="font-bold">Table:{table}</p>
               <p className="font-bold"> Name:{childName}</p>
               <p className="font-bold"> Staff:{staff}</p>

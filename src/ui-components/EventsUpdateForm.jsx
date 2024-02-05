@@ -44,6 +44,7 @@ export default function EventsUpdateForm(props) {
     AdultPrice: "",
     Price2: "",
     Price3: "",
+    TicketsSold: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Description, setDescription] = React.useState(
@@ -61,6 +62,9 @@ export default function EventsUpdateForm(props) {
   const [AdultPrice, setAdultPrice] = React.useState(initialValues.AdultPrice);
   const [Price2, setPrice2] = React.useState(initialValues.Price2);
   const [Price3, setPrice3] = React.useState(initialValues.Price3);
+  const [TicketsSold, setTicketsSold] = React.useState(
+    initialValues.TicketsSold
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = eventsRecord
@@ -89,6 +93,7 @@ export default function EventsUpdateForm(props) {
     setAdultPrice(cleanValues.AdultPrice);
     setPrice2(cleanValues.Price2);
     setPrice3(cleanValues.Price3);
+    setTicketsSold(cleanValues.TicketsSold);
     setErrors({});
   };
   const [eventsRecord, setEventsRecord] = React.useState(eventsModelProp);
@@ -117,6 +122,7 @@ export default function EventsUpdateForm(props) {
     AdultPrice: [],
     Price2: [],
     Price3: [],
+    TicketsSold: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -158,6 +164,7 @@ export default function EventsUpdateForm(props) {
           AdultPrice,
           Price2,
           Price3,
+          TicketsSold,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -227,6 +234,7 @@ export default function EventsUpdateForm(props) {
               AdultPrice,
               Price2,
               Price3,
+              TicketsSold,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -264,6 +272,7 @@ export default function EventsUpdateForm(props) {
               AdultPrice,
               Price2,
               Price3,
+              TicketsSold,
             };
             const result = onChange(modelFields);
             value = result?.Description ?? value;
@@ -301,6 +310,7 @@ export default function EventsUpdateForm(props) {
               AdultPrice,
               Price2,
               Price3,
+              TicketsSold,
             };
             const result = onChange(modelFields);
             value = result?.Food ?? value;
@@ -338,6 +348,7 @@ export default function EventsUpdateForm(props) {
               AdultPrice,
               Price2,
               Price3,
+              TicketsSold,
             };
             const result = onChange(modelFields);
             value = result?.StartTime ?? value;
@@ -376,6 +387,7 @@ export default function EventsUpdateForm(props) {
               AdultPrice,
               Price2,
               Price3,
+              TicketsSold,
             };
             const result = onChange(modelFields);
             value = result?.Date ?? value;
@@ -417,6 +429,7 @@ export default function EventsUpdateForm(props) {
               AdultPrice,
               Price2,
               Price3,
+              TicketsSold,
             };
             const result = onChange(modelFields);
             value = result?.Tables ?? value;
@@ -458,6 +471,7 @@ export default function EventsUpdateForm(props) {
               AdultPrice,
               Price2,
               Price3,
+              TicketsSold,
             };
             const result = onChange(modelFields);
             value = result?.KidsPrice ?? value;
@@ -495,6 +509,7 @@ export default function EventsUpdateForm(props) {
               AdultPrice,
               Price2,
               Price3,
+              TicketsSold,
             };
             const result = onChange(modelFields);
             value = result?.Image ?? value;
@@ -532,6 +547,7 @@ export default function EventsUpdateForm(props) {
               AdultPrice,
               Price2,
               Price3,
+              TicketsSold,
             };
             const result = onChange(modelFields);
             value = result?.AdultMenu ?? value;
@@ -569,6 +585,7 @@ export default function EventsUpdateForm(props) {
               AdultPrice,
               Price2,
               Price3,
+              TicketsSold,
             };
             const result = onChange(modelFields);
             value = result?.KidsMenu ?? value;
@@ -606,6 +623,7 @@ export default function EventsUpdateForm(props) {
               AdultPrice,
               Price2,
               Price3,
+              TicketsSold,
             };
             const result = onChange(modelFields);
             value = result?.EndTime ?? value;
@@ -643,6 +661,7 @@ export default function EventsUpdateForm(props) {
               AdultPrice: value,
               Price2,
               Price3,
+              TicketsSold,
             };
             const result = onChange(modelFields);
             value = result?.AdultPrice ?? value;
@@ -684,6 +703,7 @@ export default function EventsUpdateForm(props) {
               AdultPrice,
               Price2: value,
               Price3,
+              TicketsSold,
             };
             const result = onChange(modelFields);
             value = result?.Price2 ?? value;
@@ -725,6 +745,7 @@ export default function EventsUpdateForm(props) {
               AdultPrice,
               Price2,
               Price3: value,
+              TicketsSold,
             };
             const result = onChange(modelFields);
             value = result?.Price3 ?? value;
@@ -738,6 +759,48 @@ export default function EventsUpdateForm(props) {
         errorMessage={errors.Price3?.errorMessage}
         hasError={errors.Price3?.hasError}
         {...getOverrideProps(overrides, "Price3")}
+      ></TextField>
+      <TextField
+        label="Tickets sold"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={TicketsSold}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Description,
+              Food,
+              StartTime,
+              Date,
+              Tables,
+              KidsPrice,
+              Image,
+              AdultMenu,
+              KidsMenu,
+              EndTime,
+              AdultPrice,
+              Price2,
+              Price3,
+              TicketsSold: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.TicketsSold ?? value;
+          }
+          if (errors.TicketsSold?.hasError) {
+            runValidationTasks("TicketsSold", value);
+          }
+          setTicketsSold(value);
+        }}
+        onBlur={() => runValidationTasks("TicketsSold", TicketsSold)}
+        errorMessage={errors.TicketsSold?.errorMessage}
+        hasError={errors.TicketsSold?.hasError}
+        {...getOverrideProps(overrides, "TicketsSold")}
       ></TextField>
       <Flex
         justifyContent="space-between"

@@ -124,6 +124,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "TicketsSold": {
+                    "name": "TicketsSold",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -1945,6 +1952,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "Event": {
+                    "name": "Event",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "EventID": {
+                    "name": "EventID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -3571,5 +3592,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "ccab9cc2ca087a7e1175c8c7b599f28b"
+    "version": "0d83a46c326b140579c24ee83d05f1d5"
 };

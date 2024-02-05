@@ -77,7 +77,10 @@ useEffect(() => {
 
     // convert time to aws format if needed
 
+// i want to take the last 4 letters from the image and replace them with raw=1
 
+    const image = image.slice(0, -4) + 'raw=1'; 
+    
 
     try {
       await DataStore.save(

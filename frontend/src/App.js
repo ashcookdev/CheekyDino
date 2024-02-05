@@ -85,6 +85,8 @@ import StockSwap from './staffpages/stockswap';
 import ShoppingList from './staffpages/ShoppingList';
 import CreateEvent from './staffpages/createevent';
 import Event from './customer-pages/events';
+import Eventregister from './customer-pages/Login/eventregister';
+import EventDetails from './customer-pages/eventdetails';
 
 
 
@@ -188,6 +190,7 @@ function App() {
             <Route path="/my-booking" element={<MyBooking />} />
             <Route path="/add-guests" element={<PartyGuests />} />
             <Route path="/sessionbookings" element={<SessionBooking />} />
+            <Route path="/bookedevents" element={<EventDetails />} />
             <Route path="/order" element={<Order />} />
             <Route path="/order/kidsmenu" element={<KidsMenu />} />
           </>
@@ -270,6 +273,7 @@ function App() {
         <Route path="/privatehireregister" element={<PrivateHireRegister />} />
         <Route path="/jobs" element={<Jobs />} />
         <Route path= "/jobs/apply" element={<Application />} />
+        <Route path="/eventregister" element={< Eventregister />} />
         
 
 

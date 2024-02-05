@@ -36,6 +36,7 @@ export declare type EventsCreateFormInputValues = {
     AdultPrice?: string;
     Price2?: number;
     Price3?: number;
+    TicketsSold?: number;
 };
 export declare type EventsCreateFormValidationValues = {
     Name?: ValidationFunction<string>;
@@ -52,6 +53,7 @@ export declare type EventsCreateFormValidationValues = {
     AdultPrice?: ValidationFunction<string>;
     Price2?: ValidationFunction<number>;
     Price3?: ValidationFunction<number>;
+    TicketsSold?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type EventsCreateFormOverridesProps = {
@@ -70,6 +72,7 @@ export declare type EventsCreateFormOverridesProps = {
     AdultPrice?: PrimitiveOverrideProps<TextFieldProps>;
     Price2?: PrimitiveOverrideProps<TextFieldProps>;
     Price3?: PrimitiveOverrideProps<TextFieldProps>;
+    TicketsSold?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type EventsCreateFormProps = React.PropsWithChildren<{
     overrides?: EventsCreateFormOverridesProps | undefined | null;
