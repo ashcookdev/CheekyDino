@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { PartyBooking, PartyGuests, Messages } from '../models';
+import { PartyBooking, PartyGuests, Messages, KitchenMenu } from '../models';
 import { format } from 'date-fns';
 
 function classNames(...classes) {
@@ -160,13 +160,107 @@ export default function Kitchen() {
   };
 
 
-
+  const calibrateStock = async () => {
+    console.log('Starting stock calibration...');
+  
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+  
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+  
+    const allBookings = await DataStore.query(PartyBooking);
+    const todaysBookings = allBookings.filter(
+      (booking) =>
+        new Date(booking.PartyDate) >= today && new Date(booking.PartyDate) < tomorrow
+    );
+  
+    console.log(todaysBookings);
+  
+    const allGuests = await DataStore.query(PartyGuests);
+    const guestsForToday = {};
+  
+    for (const booking of todaysBookings) {
+      const guests = allGuests.filter((guest) => guest.partybookingID === booking.id);
+      guestsForToday[booking.id] = guests;
+    }
+  
+    console.log(guestsForToday);
+  
+    const foodCount = {};
+  
+    for (const bookingId in guestsForToday) {
+      const guests = guestsForToday[bookingId];
+      guests.forEach((guest) => {
+        if (foodCount[guest.FoodOption]) {
+          foodCount[guest.FoodOption]++;
+        } else {
+          foodCount[guest.FoodOption] = 1;
+        }
+      });
+    }
+  
+    console.log(foodCount);
+  
+    const menuData = await DataStore.query(KitchenMenu);
+    const foodNames = Object.keys(foodCount);
+    const availableFoodOptions = menuData.filter((menu) => foodNames.includes(menu.Name));
+  
+    console.log(availableFoodOptions);
+  
+    for (const foodOption of availableFoodOptions) {
+      const foodName = foodOption.Name;
+      const portions = foodCount[foodName];
+      const menuItem = (await DataStore.query(KitchenMenu)).find(
+        (item) => item.Name === foodName
+      );
+  
+      if (menuItem) {
+        const remainingPortions = [];
+  
+        for (const ingredient of menuItem.Ingredients) {
+          const requiredStock = ingredient.weight > 0 ? ingredient.weight : ingredient.quantity;
+          const stockItem = await DataStore.query(StockControl, ingredient.id);
+  
+          if (stockItem) {
+            await DataStore.save(
+              StockControl.copyOf(stockItem, (updated) => {
+                updated.CurrentStockLevel -= requiredStock * portions;
+              })
+            );
+  
+            remainingPortions.push(
+              Math.floor(stockItem.CurrentStockLevel / requiredStock)
+            );
+          }
+        }
+  
+        const minRemainingPortions = Math.min(...remainingPortions);
+  
+        await DataStore.save(
+          KitchenMenu.copyOf(menuItem, (updated) => {
+            updated.StockLevel = minRemainingPortions;
+          })
+        );
+      }
+      await DataStore.save(
+        PartyBooking.copyOf(allBookings, (updated) => {
+          updated.CalibrateStock = true;
+        })
+      );
+    }
+  }
+  
 
 
    
 
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div className="flex items-center">
+      {parties.Calibrate === true ? null : <button className='bg-red-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded' onClick={calibrateStock}>Calibrate Stock At Start of Day</button>
+      }
+       </div>
 {parties.filter(party => !party.PartyFoodComplete).map((party) => (
         <div key={party.id} className="mt-8">
           <div className="flex justify-between gap-x-6 py-5">

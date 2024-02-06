@@ -207,6 +207,7 @@ export default function PartyBookingCreateForm(props) {
     PartyAdultFoodChoices: [],
     Email: "",
     Telephone: "",
+    CalibrateStock: false,
   };
   const [ChildName, setChildName] = React.useState(initialValues.ChildName);
   const [ChildAge, setChildAge] = React.useState(initialValues.ChildAge);
@@ -246,6 +247,9 @@ export default function PartyBookingCreateForm(props) {
   );
   const [Email, setEmail] = React.useState(initialValues.Email);
   const [Telephone, setTelephone] = React.useState(initialValues.Telephone);
+  const [CalibrateStock, setCalibrateStock] = React.useState(
+    initialValues.CalibrateStock
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setChildName(initialValues.ChildName);
@@ -267,6 +271,7 @@ export default function PartyBookingCreateForm(props) {
     setCurrentPartyAdultFoodChoicesValue("");
     setEmail(initialValues.Email);
     setTelephone(initialValues.Telephone);
+    setCalibrateStock(initialValues.CalibrateStock);
     setErrors({});
   };
   const [
@@ -293,6 +298,7 @@ export default function PartyBookingCreateForm(props) {
     PartyAdultFoodChoices: [],
     Email: [],
     Telephone: [],
+    CalibrateStock: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -338,6 +344,7 @@ export default function PartyBookingCreateForm(props) {
           PartyAdultFoodChoices,
           Email,
           Telephone,
+          CalibrateStock,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -384,6 +391,7 @@ export default function PartyBookingCreateForm(props) {
             PartyAdultFoodChoices: modelFields.PartyAdultFoodChoices,
             Email: modelFields.Email,
             Telephone: modelFields.Telephone,
+            CalibrateStock: modelFields.CalibrateStock,
           };
           await DataStore.save(new PartyBooking(modelFieldsToSave));
           if (onSuccess) {
@@ -428,6 +436,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.ChildName ?? value;
@@ -473,6 +482,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.ChildAge ?? value;
@@ -518,6 +528,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.NoOfChildren ?? value;
@@ -559,6 +570,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.FoodOptionSelected ?? value;
@@ -600,6 +612,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.AdultHotFoodQty ?? value;
@@ -639,6 +652,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.AdultColdFoodQty ?? value;
@@ -684,6 +698,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.Total ?? value;
@@ -725,6 +740,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.partybookingID ?? value;
@@ -766,6 +782,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.PartyFoodComplete ?? value;
@@ -809,6 +826,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.LeftBranch ?? value;
@@ -854,6 +872,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.CurrentGuests ?? value;
@@ -896,6 +915,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.LeftBranchTime ?? value;
@@ -941,6 +961,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.Table ?? value;
@@ -982,6 +1003,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.PartyFoodDelivered ?? value;
@@ -1025,6 +1047,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.AmountPaid ?? value;
@@ -1062,6 +1085,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices: values,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             values = result?.PartyAdultFoodChoices ?? values;
@@ -1136,6 +1160,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email: value,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.Email ?? value;
@@ -1177,6 +1202,7 @@ export default function PartyBookingCreateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone: value,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.Telephone ?? value;
@@ -1191,6 +1217,48 @@ export default function PartyBookingCreateForm(props) {
         hasError={errors.Telephone?.hasError}
         {...getOverrideProps(overrides, "Telephone")}
       ></TextField>
+      <SwitchField
+        label="Calibrate stock"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={CalibrateStock}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              ChildName,
+              ChildAge,
+              NoOfChildren,
+              FoodOptionSelected,
+              AdultHotFoodQty,
+              AdultColdFoodQty,
+              Total,
+              partybookingID,
+              PartyFoodComplete,
+              LeftBranch,
+              CurrentGuests,
+              LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
+              CalibrateStock: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.CalibrateStock ?? value;
+          }
+          if (errors.CalibrateStock?.hasError) {
+            runValidationTasks("CalibrateStock", value);
+          }
+          setCalibrateStock(value);
+        }}
+        onBlur={() => runValidationTasks("CalibrateStock", CalibrateStock)}
+        errorMessage={errors.CalibrateStock?.errorMessage}
+        hasError={errors.CalibrateStock?.hasError}
+        {...getOverrideProps(overrides, "CalibrateStock")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

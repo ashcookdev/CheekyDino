@@ -71,18 +71,21 @@ useEffect(() => {
 
 
   // Add state for other fields based on your schema
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     // convert time to aws format if needed
 
-// i want to take the last 4 letters from the image and replace them with raw=1
-
-    const image = image.slice(0, -4) + 'raw=1'; 
-    
+    // i want to take the last 4 letters from the image and replace them with raw=1
 
     try {
+        let modifiedImage;
+        if (image && typeof image === 'string') {
+            modifiedImage = image.slice(0, -4) + 'raw=1';
+        } else {
+            throw new Error('image is not defined or not a string');
+        }
+
       await DataStore.save(
         new Events({
           Name: name,
@@ -95,10 +98,7 @@ useEffect(() => {
             AdultPrice: adultPrice,
             Price1: price1,
             Price2: Number(price2),
-            Image: image,
-
-
-            
+            Image: modifiedImage,
           // Add other fields based on your schema
         })
       );
@@ -110,6 +110,8 @@ useEffect(() => {
       // Handle error, e.g., show an error message to the user
     }
   };
+
+
 
 return (
             <form onSubmit={handleSubmit}>
@@ -329,7 +331,7 @@ return (
 
                                                     {food === 'Yes' && (
                                                         kitchenMenu
-                                                            .filter(item => item.Category === 'Kids Meals')
+                                                            .filter(item => item.Category === 'Event')
                                                             .map((item, index) => (
 
                                                                 <div key={index} className="col-span-full">
@@ -337,7 +339,7 @@ return (
                                                                         {item.Name}
                                                                     </label>
                                                                     <div className="mt-2">
-                                                                        <input
+                                                                        <input onChange={(e) => setKitchenMenu(e.target.value)}
                                                                             type="checkbox"
                                                                             name="kitchen-menu"
                                                                             id="kitchen-menu"

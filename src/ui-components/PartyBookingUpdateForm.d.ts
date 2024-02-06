@@ -51,6 +51,7 @@ export declare type PartyBookingUpdateFormInputValues = {
     PartyAdultFoodChoices?: string[];
     Email?: string;
     Telephone?: string;
+    CalibrateStock?: boolean;
 };
 export declare type PartyBookingUpdateFormValidationValues = {
     PartyType?: ValidationFunction<string>;
@@ -81,6 +82,7 @@ export declare type PartyBookingUpdateFormValidationValues = {
     PartyAdultFoodChoices?: ValidationFunction<string>;
     Email?: ValidationFunction<string>;
     Telephone?: ValidationFunction<string>;
+    CalibrateStock?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type PartyBookingUpdateFormOverridesProps = {
@@ -113,6 +115,7 @@ export declare type PartyBookingUpdateFormOverridesProps = {
     PartyAdultFoodChoices?: PrimitiveOverrideProps<TextFieldProps>;
     Email?: PrimitiveOverrideProps<TextFieldProps>;
     Telephone?: PrimitiveOverrideProps<TextFieldProps>;
+    CalibrateStock?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type PartyBookingUpdateFormProps = React.PropsWithChildren<{
     overrides?: PartyBookingUpdateFormOverridesProps | undefined | null;

@@ -1,4 +1,4 @@
-type Events @model @auth(rules: [{allow: private}, {allow: public, operations: [read]}, {allow: owner}]) {
+type Events @model @auth(rules: [{allow: public}, {allow: owner}]) {
   id: ID!
   Name: String
   Description: String
@@ -16,6 +16,8 @@ type Events @model @auth(rules: [{allow: private}, {allow: public, operations: [
   Price2: Float
   Price3: Float
   TicketsSold: Int
+  CalibrateStock: Boolean
+  Total: Float
 }
 
 type CustomerEvent @model @auth(rules: [{allow: public}, {allow: owner}]) {
@@ -286,5 +288,6 @@ type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: [
   PartyAdultFoodChoices: [String]
   Email: String
   Telephone: String
+  CalibrateStock: Boolean
 }
  

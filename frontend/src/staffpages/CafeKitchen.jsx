@@ -113,10 +113,10 @@ console.log(orders);
         fetchTodaysOrders();
       }
     });
-
+  
     return () => subscription.unsubscribe();
-}, [orders]);
-
+  }, []); // Removed orders from the dependency array
+  
 
 
 

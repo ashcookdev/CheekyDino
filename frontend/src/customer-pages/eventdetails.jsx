@@ -29,7 +29,7 @@ function MyComponent() {
         {[...sessions].reverse().map((session, index) => (
           <div
             key={session.id}
-            className="border p-4 rounded w-full max-w-md mb-4 shadow-lg border-purple-500 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500"
+            className="border p-4 rounded w-full max-w-md mb-4 shadow-lg border-purple-500 bg-gradient-to-r from-orange-400 via-pink-500 to-red-500"
           >
             <div className="flex justify-between items-center mb-2">
               <span className="text-lg font-semibold leading-6 text-white">
@@ -50,6 +50,7 @@ function MyComponent() {
               <div>Children: {session.Children}</div>
               <div>Email: {session.Email}</div>
               <div>Table: {session.Table}</div>
+              <div>Total: {session.Total}</div>
               
               <div>Date: {session.EventDate}</div>
             </div>

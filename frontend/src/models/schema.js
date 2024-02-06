@@ -131,6 +131,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "CalibrateStock": {
+                    "name": "CalibrateStock",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Total": {
+                    "name": "Total",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -160,17 +174,11 @@ export const schema = {
                     "properties": {
                         "rules": [
                             {
-                                "allow": "private",
+                                "allow": "public",
                                 "operations": [
                                     "create",
                                     "update",
                                     "delete",
-                                    "read"
-                                ]
-                            },
-                            {
-                                "allow": "public",
-                                "operations": [
                                     "read"
                                 ]
                             },
@@ -3064,6 +3072,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "CalibrateStock": {
+                    "name": "CalibrateStock",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -3592,5 +3607,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "0d83a46c326b140579c24ee83d05f1d5"
+    "version": "999a6e96546e7f8b23a92d43cb6eaa86"
 };

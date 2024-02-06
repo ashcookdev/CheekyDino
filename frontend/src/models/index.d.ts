@@ -28,6 +28,8 @@ type EagerEvents = {
   readonly Price2?: number | null;
   readonly Price3?: number | null;
   readonly TicketsSold?: number | null;
+  readonly CalibrateStock?: boolean | null;
+  readonly Total?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -54,6 +56,8 @@ type LazyEvents = {
   readonly Price2?: number | null;
   readonly Price3?: number | null;
   readonly TicketsSold?: number | null;
+  readonly CalibrateStock?: boolean | null;
+  readonly Total?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -859,6 +863,7 @@ type EagerPartyBooking = {
   readonly PartyAdultFoodChoices?: (string | null)[] | null;
   readonly Email?: string | null;
   readonly Telephone?: string | null;
+  readonly CalibrateStock?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -898,6 +903,7 @@ type LazyPartyBooking = {
   readonly PartyAdultFoodChoices?: (string | null)[] | null;
   readonly Email?: string | null;
   readonly Telephone?: string | null;
+  readonly CalibrateStock?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

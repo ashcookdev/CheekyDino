@@ -44,6 +44,8 @@ export default function EventsCreateForm(props) {
     Price2: "",
     Price3: "",
     TicketsSold: "",
+    CalibrateStock: false,
+    Total: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Description, setDescription] = React.useState(
@@ -64,6 +66,10 @@ export default function EventsCreateForm(props) {
   const [TicketsSold, setTicketsSold] = React.useState(
     initialValues.TicketsSold
   );
+  const [CalibrateStock, setCalibrateStock] = React.useState(
+    initialValues.CalibrateStock
+  );
+  const [Total, setTotal] = React.useState(initialValues.Total);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.Name);
@@ -81,6 +87,8 @@ export default function EventsCreateForm(props) {
     setPrice2(initialValues.Price2);
     setPrice3(initialValues.Price3);
     setTicketsSold(initialValues.TicketsSold);
+    setCalibrateStock(initialValues.CalibrateStock);
+    setTotal(initialValues.Total);
     setErrors({});
   };
   const validations = {
@@ -99,6 +107,8 @@ export default function EventsCreateForm(props) {
     Price2: [],
     Price3: [],
     TicketsSold: [],
+    CalibrateStock: [],
+    Total: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -141,6 +151,8 @@ export default function EventsCreateForm(props) {
           Price2,
           Price3,
           TicketsSold,
+          CalibrateStock,
+          Total,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -210,6 +222,8 @@ export default function EventsCreateForm(props) {
               Price2,
               Price3,
               TicketsSold,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -248,6 +262,8 @@ export default function EventsCreateForm(props) {
               Price2,
               Price3,
               TicketsSold,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.Description ?? value;
@@ -286,6 +302,8 @@ export default function EventsCreateForm(props) {
               Price2,
               Price3,
               TicketsSold,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.Food ?? value;
@@ -324,6 +342,8 @@ export default function EventsCreateForm(props) {
               Price2,
               Price3,
               TicketsSold,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.StartTime ?? value;
@@ -363,6 +383,8 @@ export default function EventsCreateForm(props) {
               Price2,
               Price3,
               TicketsSold,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.Date ?? value;
@@ -405,6 +427,8 @@ export default function EventsCreateForm(props) {
               Price2,
               Price3,
               TicketsSold,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.Tables ?? value;
@@ -447,6 +471,8 @@ export default function EventsCreateForm(props) {
               Price2,
               Price3,
               TicketsSold,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.KidsPrice ?? value;
@@ -485,6 +511,8 @@ export default function EventsCreateForm(props) {
               Price2,
               Price3,
               TicketsSold,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.Image ?? value;
@@ -522,6 +550,8 @@ export default function EventsCreateForm(props) {
               Price2,
               Price3,
               TicketsSold,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.AdultMenu ?? value;
@@ -559,6 +589,8 @@ export default function EventsCreateForm(props) {
               Price2,
               Price3,
               TicketsSold,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.KidsMenu ?? value;
@@ -597,6 +629,8 @@ export default function EventsCreateForm(props) {
               Price2,
               Price3,
               TicketsSold,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.EndTime ?? value;
@@ -635,6 +669,8 @@ export default function EventsCreateForm(props) {
               Price2,
               Price3,
               TicketsSold,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.AdultPrice ?? value;
@@ -677,6 +713,8 @@ export default function EventsCreateForm(props) {
               Price2: value,
               Price3,
               TicketsSold,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.Price2 ?? value;
@@ -719,6 +757,8 @@ export default function EventsCreateForm(props) {
               Price2,
               Price3: value,
               TicketsSold,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.Price3 ?? value;
@@ -761,6 +801,8 @@ export default function EventsCreateForm(props) {
               Price2,
               Price3,
               TicketsSold: value,
+              CalibrateStock,
+              Total,
             };
             const result = onChange(modelFields);
             value = result?.TicketsSold ?? value;
@@ -774,6 +816,90 @@ export default function EventsCreateForm(props) {
         errorMessage={errors.TicketsSold?.errorMessage}
         hasError={errors.TicketsSold?.hasError}
         {...getOverrideProps(overrides, "TicketsSold")}
+      ></TextField>
+      <SwitchField
+        label="Calibrate stock"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={CalibrateStock}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Description,
+              Food,
+              StartTime,
+              Date,
+              Tables,
+              KidsPrice,
+              Image,
+              AdultMenu,
+              KidsMenu,
+              EndTime,
+              AdultPrice,
+              Price2,
+              Price3,
+              TicketsSold,
+              CalibrateStock: value,
+              Total,
+            };
+            const result = onChange(modelFields);
+            value = result?.CalibrateStock ?? value;
+          }
+          if (errors.CalibrateStock?.hasError) {
+            runValidationTasks("CalibrateStock", value);
+          }
+          setCalibrateStock(value);
+        }}
+        onBlur={() => runValidationTasks("CalibrateStock", CalibrateStock)}
+        errorMessage={errors.CalibrateStock?.errorMessage}
+        hasError={errors.CalibrateStock?.hasError}
+        {...getOverrideProps(overrides, "CalibrateStock")}
+      ></SwitchField>
+      <TextField
+        label="Total"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={Total}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Description,
+              Food,
+              StartTime,
+              Date,
+              Tables,
+              KidsPrice,
+              Image,
+              AdultMenu,
+              KidsMenu,
+              EndTime,
+              AdultPrice,
+              Price2,
+              Price3,
+              TicketsSold,
+              CalibrateStock,
+              Total: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Total ?? value;
+          }
+          if (errors.Total?.hasError) {
+            runValidationTasks("Total", value);
+          }
+          setTotal(value);
+        }}
+        onBlur={() => runValidationTasks("Total", Total)}
+        errorMessage={errors.Total?.errorMessage}
+        hasError={errors.Total?.hasError}
+        {...getOverrideProps(overrides, "Total")}
       ></TextField>
       <Flex
         justifyContent="space-between"

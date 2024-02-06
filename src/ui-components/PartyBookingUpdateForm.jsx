@@ -218,6 +218,7 @@ export default function PartyBookingUpdateForm(props) {
     PartyAdultFoodChoices: [],
     Email: "",
     Telephone: "",
+    CalibrateStock: false,
   };
   const [PartyType, setPartyType] = React.useState(initialValues.PartyType);
   const [ChildName, setChildName] = React.useState(initialValues.ChildName);
@@ -281,6 +282,9 @@ export default function PartyBookingUpdateForm(props) {
   );
   const [Email, setEmail] = React.useState(initialValues.Email);
   const [Telephone, setTelephone] = React.useState(initialValues.Telephone);
+  const [CalibrateStock, setCalibrateStock] = React.useState(
+    initialValues.CalibrateStock
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = partyBookingRecord
@@ -315,6 +319,7 @@ export default function PartyBookingUpdateForm(props) {
     setCurrentPartyAdultFoodChoicesValue("");
     setEmail(cleanValues.Email);
     setTelephone(cleanValues.Telephone);
+    setCalibrateStock(cleanValues.CalibrateStock);
     setErrors({});
   };
   const [partyBookingRecord, setPartyBookingRecord] = React.useState(
@@ -364,6 +369,7 @@ export default function PartyBookingUpdateForm(props) {
     PartyAdultFoodChoices: [],
     Email: [],
     Telephone: [],
+    CalibrateStock: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -419,6 +425,7 @@ export default function PartyBookingUpdateForm(props) {
           PartyAdultFoodChoices,
           Email,
           Telephone,
+          CalibrateStock,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -502,6 +509,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.PartyType ?? value;
@@ -553,6 +561,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.ChildName ?? value;
@@ -608,6 +617,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.ChildAge ?? value;
@@ -660,6 +670,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.PartyDate ?? value;
@@ -712,6 +723,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.PartyTime ?? value;
@@ -767,6 +779,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.NoOfChildren ?? value;
@@ -818,6 +831,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.ThirdPartyContactedDate ?? value;
@@ -871,6 +885,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.FoodOptionSelected ?? value;
@@ -928,6 +943,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.Total ?? value;
@@ -979,6 +995,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.SweetConesSelected ?? value;
@@ -1032,6 +1049,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.CharacterSelected ?? value;
@@ -1085,6 +1103,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.BearVoiceRecorders ?? value;
@@ -1139,6 +1158,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.PartyFoodPrepared ?? value;
@@ -1192,6 +1212,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.PartyHostAssigned ?? value;
@@ -1246,6 +1267,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.PartyChildMumArrived ?? value;
@@ -1300,6 +1322,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.PartyFoodTimeDue ?? value;
@@ -1352,6 +1375,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.PartyFinish ?? value;
@@ -1403,6 +1427,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.partybookingID ?? value;
@@ -1454,6 +1479,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.PartyFoodComplete ?? value;
@@ -1507,6 +1533,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.LeftBranch ?? value;
@@ -1562,6 +1589,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.CurrentGuests ?? value;
@@ -1614,6 +1642,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.LeftBranchTime ?? value;
@@ -1669,6 +1698,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.Table ?? value;
@@ -1720,6 +1750,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.PartyFoodDelivered ?? value;
@@ -1773,6 +1804,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.AmountPaid ?? value;
@@ -1820,6 +1852,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices: values,
               Email,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             values = result?.PartyAdultFoodChoices ?? values;
@@ -1904,6 +1937,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email: value,
               Telephone,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.Email ?? value;
@@ -1955,6 +1989,7 @@ export default function PartyBookingUpdateForm(props) {
               PartyAdultFoodChoices,
               Email,
               Telephone: value,
+              CalibrateStock,
             };
             const result = onChange(modelFields);
             value = result?.Telephone ?? value;
@@ -1969,6 +2004,58 @@ export default function PartyBookingUpdateForm(props) {
         hasError={errors.Telephone?.hasError}
         {...getOverrideProps(overrides, "Telephone")}
       ></TextField>
+      <SwitchField
+        label="Calibrate stock"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={CalibrateStock}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              PartyType,
+              ChildName,
+              ChildAge,
+              PartyDate,
+              PartyTime,
+              NoOfChildren,
+              ThirdPartyContactedDate,
+              FoodOptionSelected,
+              Total,
+              SweetConesSelected,
+              CharacterSelected,
+              BearVoiceRecorders,
+              PartyFoodPrepared,
+              PartyHostAssigned,
+              PartyChildMumArrived,
+              PartyFoodTimeDue,
+              PartyFinish,
+              partybookingID,
+              PartyFoodComplete,
+              LeftBranch,
+              CurrentGuests,
+              LeftBranchTime,
+              Table,
+              PartyFoodDelivered,
+              AmountPaid,
+              PartyAdultFoodChoices,
+              Email,
+              Telephone,
+              CalibrateStock: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.CalibrateStock ?? value;
+          }
+          if (errors.CalibrateStock?.hasError) {
+            runValidationTasks("CalibrateStock", value);
+          }
+          setCalibrateStock(value);
+        }}
+        onBlur={() => runValidationTasks("CalibrateStock", CalibrateStock)}
+        errorMessage={errors.CalibrateStock?.errorMessage}
+        hasError={errors.CalibrateStock?.hasError}
+        {...getOverrideProps(overrides, "CalibrateStock")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

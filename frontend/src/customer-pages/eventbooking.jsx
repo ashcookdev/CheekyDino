@@ -156,7 +156,7 @@ const navigate = useNavigate();
   const handleSubmit = async () => {
     // Fetch availability data and calculate total price
     await calculateAvailability();
-    const totalPrice = calculatePrice(childData, parseInt(adults), parseInt(children));
+    const totalPrice = await calculatePrice(childData, parseInt(adults), parseInt(children));
   
     // Create a new customer event object
     const newCustomerEvent = new CustomerEvent({
@@ -182,10 +182,10 @@ const navigate = useNavigate();
      Date: event[0].Date,
       TimeslotFrom: event[0].StartTime,
       TimeslotTo: event[0].EndTime,
-      Table: freeTablesResult.recommendedTables.join(', '),
+      Table: Number(freeTablesResult.recommendedTables.join(', ')),
       Telephone: telephone,
-      Adults: adults,
-      Children: children,
+      Adults: Number(adults),
+      Children: Number(children),
       Arrived: false,
       LeftCenter: false,
       Event: true,
@@ -198,7 +198,7 @@ const navigate = useNavigate();
       const original = await DataStore.query(Events, event[0].id);
       await DataStore.save(
         Events.copyOf(original, (updated) => {
-          updated.TicketsSold += children + adults;
+          updated.TicketsSold += Number(children + adults);
         }
 
       ));

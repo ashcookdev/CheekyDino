@@ -34,6 +34,7 @@ import { useEffect } from "react";
 import Modal from "./modal";  // import the modal component
 import { Link } from "react-router-dom";
 import { PhoneIcon } from "@heroicons/react/20/solid";
+import { Switch } from '@headlessui/react'
 
 
 
@@ -53,6 +54,7 @@ export default function Kitchen() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [show, setShow] = useState(false);
+  const [enabled, setEnabled] = useState(false);
 
   
 
@@ -79,7 +81,9 @@ export default function Kitchen() {
 
 
 
-
+if (enabled) {
+  
+}
   
   
 
@@ -98,6 +102,23 @@ export default function Kitchen() {
       <p className="mt-2">
         {time} | {date}
       </p>
+      <Switch
+      checked={enabled}
+      onChange={setEnabled}
+      className={classNames(
+        enabled ? 'bg-indigo-600' : 'bg-gray-200',
+        'relative mt-2 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-stone-300 focus:ring-offset-2'
+      )}
+    >
+      <span className="sr-only">Events</span>
+      <span
+        aria-hidden="true"
+        className={classNames(
+          enabled ? 'translate-x-5' : 'translate-x-0',
+          'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+        )}
+      />
+    </Switch>
       <div className="mt-4"></div>
       <div className='fixed top-0 w-full mx-auto'>
         <Modal show={show} setShow={setShow} message={messages[messages.length - 1]} />
