@@ -1974,6 +1974,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "EventName": {
+                    "name": "EventName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -2193,6 +2200,20 @@ export const schema = {
                     "name": "SessionEmail",
                     "isArray": false,
                     "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "EventID": {
+                    "name": "EventID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Event": {
+                    "name": "Event",
+                    "isArray": false,
+                    "type": "Boolean",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -3607,5 +3628,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "999a6e96546e7f8b23a92d43cb6eaa86"
+    "version": "95377a07ee7bbf8c2a36ee3527592d61"
 };

@@ -191,7 +191,11 @@ const navigate = useNavigate();
       Event: true,
       EventID: event[0].id,
       Total: totalPrice,
+      EventName: event[0].Name,
     });
+
+      
+
 
      // update the event with ticket sales
      

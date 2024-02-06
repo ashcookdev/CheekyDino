@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { CustomerEvent } from '../models';
+import { Sessions, CustomerEvent } from '../models';
 import { Auth } from 'aws-amplify';
 import QRCode from 'react-qr-code';
 import { useNavigate } from 'react-router-dom';
@@ -13,8 +13,13 @@ function MyComponent() {
     async function fetchSessions() {
       const user = await Auth.currentAuthenticatedUser();
       const email = user.attributes.email;
-      const sessions = await DataStore.query(CustomerEvent, c => c.Email.eq(email));
-      setSessions(sessions);
+      const sessions = await DataStore.query(Sessions, c => c.Email.eq(email));
+      const filteredSessions = sessions.filter(event => event.Event === true);
+
+      
+
+      
+      setSessions(filteredSessions );
     }
     fetchSessions();
   }, []);
@@ -44,7 +49,7 @@ function MyComponent() {
               <QRCode value={session.id} size={Math.min(200, window.innerWidth - 100)} />
             </div>
             <div className="flex flex-col gap-y-1 mt-2 text-center text-white">
-              <div>Name: {session.CustomerName}</div>
+              <div>Name: {session.Name}</div>
               <div>Event: {session.EventName}</div>
               <div>Adults: {session.Adults}</div>
               <div>Children: {session.Children}</div>
@@ -52,7 +57,7 @@ function MyComponent() {
               <div>Table: {session.Table}</div>
               <div>Total: {session.Total}</div>
               
-              <div>Date: {session.EventDate}</div>
+              <div>Date: {session.Date}</div>
             </div>
           </div>
         ))}

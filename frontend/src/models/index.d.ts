@@ -603,6 +603,7 @@ type EagerSessions = {
   readonly CustomerbookingID?: string | null;
   readonly Event?: boolean | null;
   readonly EventID?: string | null;
+  readonly EventName?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -636,6 +637,7 @@ type LazySessions = {
   readonly CustomerbookingID?: string | null;
   readonly Event?: boolean | null;
   readonly EventID?: string | null;
+  readonly EventName?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -672,6 +674,8 @@ type EagerCafeOrder = {
   readonly StaffOrderName?: string | null;
   readonly kitchenmenus?: (KitchenMenuCafeOrder | null)[] | null;
   readonly SessionEmail?: string | null;
+  readonly EventID?: string | null;
+  readonly Event?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -702,6 +706,8 @@ type LazyCafeOrder = {
   readonly StaffOrderName?: string | null;
   readonly kitchenmenus: AsyncCollection<KitchenMenuCafeOrder>;
   readonly SessionEmail?: string | null;
+  readonly EventID?: string | null;
+  readonly Event?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
