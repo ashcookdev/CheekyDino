@@ -41,6 +41,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import Stats from './stats';
 import { Link } from 'react-router-dom'
 import Expenses from './expenses';
+import EventAnalytics from './eventanalytics';
 
 
 
@@ -477,6 +478,9 @@ return (
 
         <main className="py-10 lg:pl-72">
           <Stats />
+          <div className="flex mb-3 mt-3 items-center justify-between px-4 sm:px-6 lg:px-8">
+          <EventAnalytics />
+          </div>
         <>
         <div className="mt-8 flow-root">
           <div className="-mt-4 -ml-8 flex flex-wrap justify-between items-center">

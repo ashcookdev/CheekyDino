@@ -258,6 +258,7 @@ console.log(orders);
           }
 
           return (
+            
             <li
               key={order.id}
               className={`relative flex justify-between gap-x-6 px-4 py-5 sm:px-6 lg:px-8 ${backgroundColor} rounded-lg mt-2 mb-2 border border-gray-200 shadow-lg `}
@@ -270,6 +271,7 @@ console.log(orders);
                   <h3 className="text-lg font-medium leading-6 text-white">
                     Table:{order.Table}
                   </h3>
+                  
                   <ul className="ml-3 font-medium text-white">
                     {order.HotItems.map((item, index) => (
                       <li key={`${item}-${index}`}>

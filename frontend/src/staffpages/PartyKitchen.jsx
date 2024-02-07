@@ -252,14 +252,18 @@ export default function Kitchen() {
   }
   
 
-
+const isPartyToday = parties.some(party => new Date(party.PartyDate).toDateString() === new Date().toDateString());
    
 
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div className="flex items-center">
-      {parties.Calibrate === true ? null : <button className='bg-red-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded' onClick={calibrateStock}>Calibrate Stock At Start of Day</button>
-      }
+      {!isPartyToday || parties.Calibrate === true ? null : 
+    <button className='bg-red-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded' onClick={calibrateStock}>
+        Calibrate Stock At Start of Day
+    </button>
+}
+
        </div>
 {parties.filter(party => !party.PartyFoodComplete).map((party) => (
         <div key={party.id} className="mt-8">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { DataStore } from 'aws-amplify';
-import { Sessions, Events, CustomerEvent } from '../models';
+import { Sessions, Events, CustomerEvent, CafeOrder } from '../models';
 import { Auth } from 'aws-amplify';
 import tableData from '../staffpages/TableData.json';
 import { useNavigate } from 'react-router-dom';
@@ -153,85 +153,95 @@ const navigate = useNavigate();
   };
   
 
-  const handleSubmit = async () => {
-    // Fetch availability data and calculate total price
-    await calculateAvailability();
-    const totalPrice = await calculatePrice(childData, parseInt(adults), parseInt(children));
-  
-    // Create a new customer event object
-    const newCustomerEvent = new CustomerEvent({
-      EventName: event[0].Name,
-      EventDate: event[0].Date,
-      EventTime: `${event[0].StartTime} - ${event[0].EndTime}`,
-      CustomerName: name,
-      Children: children.toString(),
-      Adults: adults.toString(),
-      Table: freeTablesResult.recommendedTables.join(', '),
-      FoodOptions: { foodOption1: '...', foodOption2: '...' },
-      Total: totalPrice,
-      Email: email,
-      Telephone: telephone,
-      FoodOption: true,
-      Date: event[0].Date,
-    });
-  
-    // Create a new session object
-    const newSession = new Sessions({
-      Name: name,
-      Email: email,
-     Date: event[0].Date,
-      TimeslotFrom: event[0].StartTime,
-      TimeslotTo: event[0].EndTime,
-      Table: Number(freeTablesResult.recommendedTables.join(', ')),
-      Telephone: telephone,
-      Adults: Number(adults),
-      Children: Number(children),
-      Arrived: false,
-      LeftCenter: false,
-      Event: true,
-      EventID: event[0].id,
-      Total: totalPrice,
-      EventName: event[0].Name,
-    });
-
-      
 
 
-     // update the event with ticket sales
-     
-      const original = await DataStore.query(Events, event[0].id);
-      await DataStore.save(
-        Events.copyOf(original, (updated) => {
-          updated.TicketsSold += Number(children + adults);
-        }
 
-      ));
-
-  
-    try {
-      // Save the new customer event to DataStore
-      await DataStore.save(newCustomerEvent);
-      console.log('Customer event saved successfully!');
-  
-      // Save the new session to DataStore
-      await DataStore.save(newSession);
-      console.log('Session saved successfully!');
-  
-      // Set timer to 5 seconds and then redirect to the /bookedevents page
-      setTimeout(() => {
-        navigate('/bookedevents');
-      }, 5000);
-    } catch (error) {
-      console.error('Error saving data:', error);
-    }
-  
-    // Set the submitted state to true
-    setSubmitted(true);
-  };
-  
-  
-
-
+    const handleSubmit = async () => {
+      // Fetch availability data and calculate total price
+      await calculateAvailability();
+      const totalPrice = await calculatePrice(childData, parseInt(adults), parseInt(children));
+    
+      // Create a new customer event object
+      const newCustomerEvent = new CustomerEvent({
+        EventName: event[0].Name,
+        EventDate: event[0].Date,
+        EventTime: `${event[0].StartTime} - ${event[0].EndTime}`,
+        CustomerName: name,
+        Children: children.toString(),
+        Adults: adults.toString(),
+        Table: freeTablesResult.recommendedTables.join(', '),
+        FoodOptions: { foodOption1: '...', foodOption2: '...' },
+        Total: totalPrice,
+        Email: email,
+        Telephone: telephone,
+        FoodOption: true,
+        Date: event[0].Date,
+      });
+    
+      // Convert FoodOptions object to an array
+      const foodOptionsArray = Object.values(newCustomerEvent.FoodOptions);
+    
+      // Create a new session object
+      const newSession = new Sessions({
+        Name: name,
+        Email: email,
+        Date: event[0].Date,
+        TimeslotFrom: event[0].StartTime,
+        TimeslotTo: event[0].EndTime,
+        Table: Number(freeTablesResult.recommendedTables.join(', ')),
+        Telephone: telephone,
+        Adults: Number(adults),
+        Children: Number(children),
+        Arrived: false,
+        LeftCenter: false,
+        Event: true,
+        EventID: event[0].id,
+        Total: totalPrice,
+        EventName: event[0].Name,
+      });
+    
+      try {
+        // Save the new customer event to DataStore
+        await DataStore.save(newCustomerEvent);
+        console.log('Customer event saved successfully!');
+    
+        // Save the new session to DataStore
+        const savedSession = await DataStore.save(newSession);
+        console.log('Session saved successfully!');
+    
+        // Create a new CafeOrder object with the SessionID
+        const newCafeOrder = new CafeOrder({
+          CreatedDate: event[0].Date,
+          Total: totalPrice,
+        
+          HotItems: foodOptionsArray,
+          Table: Number(freeTablesResult.recommendedTables.join(', ')),
+          Completed: false,
+          Delieved: false,
+          sessionsID: savedSession.id,
+          Sessionid: savedSession.id,
+          Kitchen:true,
+          SessionEmail: email,
+          EventID: event[0].id,
+          Event: true
+        });
+    
+        // Save the new CafeOrder to DataStore
+        await DataStore.save(newCafeOrder);
+        console.log('CafeOrder saved successfully!');
+    
+        // Set timer to 5 seconds and then redirect to the /bookedevents page
+        setTimeout(() => {
+          navigate('/bookedevents');
+        }, 5000);
+      } catch (error) {
+        console.error('Error saving data:', error);
+      }
+    
+      // Set the submitted state to true
+      setSubmitted(true);
+    };
+    
 
 return (
     <div className="flex flex-col md:flex-row">
