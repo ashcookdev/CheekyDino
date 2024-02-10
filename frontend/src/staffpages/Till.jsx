@@ -466,29 +466,34 @@ window.location.reload();
       <div className="mt-4 border-b-2 border-gray-200 pb-4">
         <h2 className="font-bold text-lg mb-4">Menu:</h2>
         {showCategories && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        {categories.map((category, index) => {
-          const allowedCategories = ['Event', 'Hot Drinks', 'Kids Drinks', 'Cold Drinks', 'Snacks'];
-          if (!enabled || (enabled && allowedCategories.includes(category))) {
-            return (
-              <motion.button
-                key={category}
-                onClick={() => handleCategoryClick(category)}
-                className={`${
-                  colors[index % colors.length]
-                } text-white font-bold py-2 px-4 rounded-full shadow-md`}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                {category}
-              </motion.button>
-            );
-          }
-          return null;
-        })}
-      </div>
-    )}
-      
+  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    {categories
+      .slice() // Create a shallow copy of the array to avoid modifying the original
+      .sort((a, b) => a.localeCompare(b)) // Sort the categories alphabetically
+      .map((category, index) => {
+        const allowedCategories = ['Event', 'Hot Drinks', 'Kids Drinks', 'Cold Drinks', 'Snacks'];
+
+        if (!enabled || (enabled && allowedCategories.includes(category))) {
+          return (
+            <motion.button
+              key={category}
+              onClick={() => handleCategoryClick(category)}
+              className={`${
+                colors[index % colors.length]
+              } text-white font-bold py-2 px-4 rounded-full shadow-md`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {category}
+            </motion.button>
+          );
+        }
+
+        return null;
+      })}
+  </div>
+)}
+
 
 
       {showItems && (

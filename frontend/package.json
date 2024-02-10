@@ -100,7 +100,7 @@
       "../amplify/**/*"
     ],
     "appId": "com.versasoft.cheekydino",
-    "productName": "Cheeky Dino 1.1",
+    "productName": "Versasoft Cheeky Dino",
     "win": {
       "target": [
         "nsis"

@@ -732,6 +732,8 @@ type EagerMessages = {
   readonly sessionID?: string | null;
   readonly partyID?: string | null;
   readonly delivered?: boolean | null;
+  readonly FoodReady?: boolean | null;
+  readonly FoodDelivered?: boolean | null;
   readonly updatedAt?: string | null;
 }
 
@@ -749,6 +751,8 @@ type LazyMessages = {
   readonly sessionID?: string | null;
   readonly partyID?: string | null;
   readonly delivered?: boolean | null;
+  readonly FoodReady?: boolean | null;
+  readonly FoodDelivered?: boolean | null;
   readonly updatedAt?: string | null;
 }
 

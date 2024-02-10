@@ -278,12 +278,29 @@ const Delivered = async (order) => {
   const records = await DataStore.query(CafeOrder, order.id);
   console.log('records:', records);
 
+  
+
   const save = await DataStore.save(
     CafeOrder.copyOf(records, (updated) => {
       updated.Delieved = true;
       updated.TimeDelivered = format(new Date(), 'HH:mm');
     })
   );
+  
+  // find message that matches the order id and set FoodDelivered to true and FoodReady to true
+  const message = await DataStore.query(Messages);
+  const messageToSave = message.find((message) => message.orderID === order.id);
+  console.log('message:', message);
+  const saveMessage = await DataStore.save(
+    Messages.copyOf(messageToSave, (updated) => {
+      updated.delivered = true;
+      updated.FoodReady = true;
+    })
+  );
+  console.log('saveMessage:', saveMessage);
+
+
+
   console.log('save:', save);
 
   

@@ -30,6 +30,8 @@ export declare type MessagesCreateFormInputValues = {
     sessionID?: string;
     partyID?: string;
     delivered?: boolean;
+    FoodReady?: boolean;
+    FoodDelivered?: boolean;
 };
 export declare type MessagesCreateFormValidationValues = {
     content?: ValidationFunction<string>;
@@ -40,6 +42,8 @@ export declare type MessagesCreateFormValidationValues = {
     sessionID?: ValidationFunction<string>;
     partyID?: ValidationFunction<string>;
     delivered?: ValidationFunction<boolean>;
+    FoodReady?: ValidationFunction<boolean>;
+    FoodDelivered?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MessagesCreateFormOverridesProps = {
@@ -52,6 +56,8 @@ export declare type MessagesCreateFormOverridesProps = {
     sessionID?: PrimitiveOverrideProps<TextFieldProps>;
     partyID?: PrimitiveOverrideProps<TextFieldProps>;
     delivered?: PrimitiveOverrideProps<SwitchFieldProps>;
+    FoodReady?: PrimitiveOverrideProps<SwitchFieldProps>;
+    FoodDelivered?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type MessagesCreateFormProps = React.PropsWithChildren<{
     overrides?: MessagesCreateFormOverridesProps | undefined | null;

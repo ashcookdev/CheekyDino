@@ -4,10 +4,12 @@ import { format } from 'date-fns';
 import CustomerTables from './customertables';
 import { CustomerScreen } from '../models';
 import "./screencss.css"
-import { Sessions } from '../models';
+import { Sessions, Messages } from '../models';
 import TableLayout from './tablelayout';
 import { useNavigate } from 'react-router-dom';
 import Weather from './weatherdata';
+import { BellIcon } from '@heroicons/react/20/solid';
+import '../customer-pages/customerfont.css'
 
 
 
@@ -17,14 +19,11 @@ export default function Example() {
   const [message, setMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
   const [showOriginalComponent, setShowOriginalComponent] = useState(true);
-  const [numbers, setNumbers] = useState('');
-  const [audioSrc, setAudioSrc] = useState('');
-  const [nowFalse, setFalse] = useState(true);
   const [messageCount, setMessageCount] = useState(0);
-  const [displayMessage, setDisplayMessage] = useState('');
   const [sessions, setSessions] = useState([]);
-  const [weatherData, setWeatherData] = useState(null);
   const [dash, setDash] = useState(false);
+
+const [announce , setAnnounce] = useState('')
 
   const navigate = useNavigate();
 
@@ -40,6 +39,11 @@ export default function Example() {
 
     return () => clearInterval(interval);
   }, []);
+
+  
+
+
+
   
 
 
@@ -67,21 +71,7 @@ export default function Example() {
     // clean up the subscription when the component unmounts
 
 
-  const timesToDisplay = {
-    '09:30': 'Can Everyone Booked in from 9:30 to 11:30. Please Make Your Way Out Of The Center, We Hope You Enjoyed Your Time With Us!',
-    '10:00': 'Can Everyone Booked in from 9:30 to 11:30. Please Make Your Way Out Of The Center, We Hope You Enjoyed Your Time With Us!',
-    '10:30': 'Can Everyone Booked in from 9:30 to 11:30. Please Make Your Way Out Of The Center, We Hope You Enjoyed Your Time With Us!',
-    '11:00': 'Can Everyone Booked in from 9:30 to 11:30. Please Make Your Way Out Of The Center, We Hope You Enjoyed Your Time With Us!',
-    '11:30': 'Can Everyone Booked in from 9:30 to 11:30. Please Make Your Way Out Of The Center, We Hope You Enjoyed Your Time With Us!',
-    '12:00': 'Can Everyone Booked in from 12:00 to 14:00. Please Make Your Way Out Of The Center, We Hope You Enjoyed Your Time With Us!',
-    '12:30': 'Can Everyone Booked in from 12:00 to 14:00. Please Make Your Way Out Of The Center, We Hope You Enjoyed Your Time With Us!',
-    '13:00': 'Can Everyone Booked in from 12:00 to 14:00. Please Make Your Way Out Of The Center, We Hope You Enjoyed Your Time With Us!',
-    '13:30': 'Can Everyone Booked in from 12:00 to 14:00. Please Make Your Way Out Of The Center, We Hope You Enjoyed Your Time With Us!',
-    '14:00': 'Can Everyone Booked in from 14:00 to 16:00. Please Make Your Way Out Of The Center, We Hope You Enjoyed Your Time With Us!',
-    '14:30': 'Can Everyone Booked in from 14:30 to 16:30. Please Make Your Way Out Of The Center, We Hope You Enjoyed Your Time With Us!',
-    '15:00': 'Can Everyone Booked in from 15:00 to 17:00. Please Make Your Way Out Of The Center, We Hope You Enjoyed Your Time With Us!',
-    '16:34': 'Can Everyone Booked in from 15:30 to 17:30. Please Make Your Way Out Of The Center, We Hope You Enjoyed Your Time With Us!',
-  };
+  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -117,18 +107,7 @@ export default function Example() {
     return () => clearInterval(nowFalse);
   }, []);
 
-  useEffect(() => {
-    let newAudioSrc = '';
-    if (numbers === 1) {
-      newAudioSrc = './announcements/partyGuests.mp3';
-    } else if (numbers === 2) {
-      newAudioSrc = './announcements/leaving.mp3';
-    } else if (numbers === 3) {
-      newAudioSrc = './audio/file3.mp3';
-    }
-    setAudioSrc(newAudioSrc);
-  }, [numbers]);
-
+ 
   useEffect(() => {
     // get current sessions 
     const fetchSessions = async () => {
@@ -140,62 +119,90 @@ export default function Example() {
       setSessions(todaysSessions);
     }
 
+    const fetchMessages = async () => {
+      const messages = await DataStore.query(Messages);
+      const filter = messages.filter(message => message.FoodReady === true && message.delivered === false);
+
+      setAnnounce(filter);
+    }
+
+
+
+    fetchMessages();
+    
+
+
     fetchSessions();
-  }, []);
+
+  }, [announce]);
 
   const shouldMoveDown = sessions.length > 3;
 
   return (
     <>
-     <div class="fixed top-0 left-0 w-full h-25 flex items-center px-4 bg-gradient-to-r from-orange-500 to-yellow-500">
-  <div class="text-white font-bold text-lg mr-auto">
-    {format(new Date(), "HH:mm")}
-  </div>
-  <div class="flex-grow flex items-center justify-center">
-    <div class="text-white font-bold">
-      <Weather />
+     <div>
+  {announce.length > 0 ? (
+    announce.map(announcement => (
+      <div className="flex flex-col items-center justify-center h-screen text-white mt-10 ml-10 animate-pulse font-bold text-3xl border-4 border-orange-500 rounded-lg bg-center bg-no-repeat bg-cover" style={{ backgroundImage: 'url("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcms0ZjljOWFxcHR5YmhzMW5qYjdnMnllanp3aWp4dmQyenNrOXVyeCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oKHW5ygEPHUNrb1SM/giphy.gif")' }}>
+       <BellIcon className="h-24 w-24 border-4 border-orange-500 rounded-full p-2 component-title" aria-hidden="true" />
+          {announcement.content}
     </div>
-  </div>
-  <button class="text-white font-bold bg-transparent border border-white rounded-md px-4 py-2 ml-auto" onClick={() => setDash(true)}>
-    Close
-  </button>
-</div>
+    ))
+ 
 
-
-  
-      <div className="flex bg-fixed bg-center bg-no-repeat bg-cover pt-16">
-        <header className="flex items-center justify-between px-4 py-3 bg-white border-b-4 border-indigo-600">
-          <div className="flex items-center"></div>
-        </header>
-  
-        <div className="w-1/2">
-          <div className="overflow-hidden h-full">
-            <div className={`customer-tables ${shouldMoveDown ? 'move-down' : ''}`}>
-              
-              <CustomerTables />
+        ) : (
+          <>
+            <div className="fixed top-0 left-0 w-full h-10 flex items-center px-4 bg-white">
+              <div className="text-orange-500 font-bold text-xl mr-auto">
+                {format(new Date(), "HH:mm")}
+              </div>
+              <div className="flex-grow flex items-center justify-center">
+                <div className="text-white font-bold">
+                  <Weather />
+                </div>
+              </div>
+              <button
+                className="text-white font-bold bg-transparent border border-white rounded-md px-4 py-2 ml-auto"
+                onClick={() => setDash(true)}
+              >
+                Close
+              </button>
             </div>
-          </div>
-        </div>
-        {showOriginalComponent && (
-          <div className="w-1/2 flex flex-col">
-            <div className="flex-1 h-screen">
-              {showMessage && message ? (
-                <>
-                  <h1 className="mt-24 text-4xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-6xl">
-                    {message}
-                  </h1>
-                </>
-              ) : (
-                <>
-                  <div className="h-full">
-                    <TableLayout />
+  
+            <div className="flex bg-fixed bg-center bg-no-repeat bg-cover pt-16 bg-no-repeat bg-cover" style={{ backgroundImage: 'url("https://media.giphy.com/media/3og0IK7lSFBFRKuBqg/giphy.gif")' }}>
+             
+  
+              <div className="w-1/2">
+                <div className="overflow-hidden h-full mt-5">
+                <div className="w-full grid grid-cols-2 gap-4 justify-center items-center"> 
+                <CustomerTables />
+              </div>
+                </div>
+              </div>
+              {showOriginalComponent && (
+                <div className="w-1/2 flex flex-col">
+                  <div className="flex-1 h-screen">
+                    {showMessage && message ? (
+                      <>
+                        <h1 className="mt-24 text-4xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-6xl">
+                          {message}
+                        </h1>
+                      </>
+                    ) : (
+                      <>
+                        <div className="h-full mt-5">
+                          <TableLayout />
+                        </div>
+                      </>
+                    )}
                   </div>
-                </>
+                </div>
               )}
             </div>
-          </div>
+          </>
         )}
       </div>
     </>
   );
+  
 }

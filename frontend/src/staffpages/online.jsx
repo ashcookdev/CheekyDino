@@ -71,11 +71,7 @@ export default function Online() {
             {staff.Break && (
               <span className="absolute bg-red-500 bottom-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-red-400 animate-pulse"></span>
             )}
-            <img
-              className="h-10 w-10 rounded-full"
-              src={staffImg}
-              alt=""
-            />
+           
           </div>
           <div className="min-w-0 flex-1">
             <Link to = "/chat" className="focus:outline-none">

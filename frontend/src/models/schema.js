@@ -2454,6 +2454,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "FoodReady": {
+                    "name": "FoodReady",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "FoodDelivered": {
+                    "name": "FoodDelivered",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "updatedAt": {
                     "name": "updatedAt",
                     "isArray": false,
@@ -3628,5 +3642,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "95377a07ee7bbf8c2a36ee3527592d61"
+    "version": "d444e45dcad5a2d55d0a8f41f2a654e4"
 };

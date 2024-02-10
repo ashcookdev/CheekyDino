@@ -2,8 +2,8 @@ import { CafeOrder } from '../models';
 import { DataStore } from 'aws-amplify';
 import { useState, useEffect, useRef } from 'react';
 import { format, parse, set } from 'date-fns';
-import { Messages, PartyBooking, StockControl, KitchenMenu } from '../models';
-import { RocketLaunchIcon, ChevronRightIcon, CircleStackIcon, CheckCircleIcon, ClockIcon } from '@heroicons/react/20/solid';
+import { Messages, PartyBooking, StockControl, KitchenMenu, FoodReady } from '../models';
+import { RocketLaunchIcon, ChevronRightIcon, CircleStackIcon, CheckCircleIcon, ClockIcon, TicketIcon, CogIcon } from '@heroicons/react/20/solid';
 import Countdown from 'react-countdown';
 
 function classNames(...classes) {
@@ -33,6 +33,8 @@ export default function CafeKitchen() {
   const allOrdersSelected = selected.length === orders.length;
   const currentDate = new Date();
   const [prevOrderCount, setPrevOrderCount] = useState(0);
+  const [printing , setPrinting] = useState(false);
+  
 
 
 
@@ -124,6 +126,7 @@ console.log(orders);
   async function HandleOrderConfirmed(order) {
 
 
+    setPrinting(true);
 
     // Calculate the current time and format it as a string
     const currentTime = new Date();
@@ -204,9 +207,13 @@ console.log(orders);
         createdAt: awstime,
         sessionID: order.Sessionid,
         orderID: order.id,
+        FoodReady: true,
+        delivered: false,
         group: ["Staff", "Kitchen", "Team Leader", "Admin", "Developer"],
       })
     );
+
+    
 
     const data = {
       product: orders.map((item) => item.HotItems),
@@ -216,7 +223,13 @@ console.log(orders);
   
     // Send the data to the kitchen-print channel
     if (isElectron) {
-      ipcRenderer.send('kitchen-print', { data });
+      // Introduce a 3-second delay before sending
+      setTimeout(() => {
+        ipcRenderer.send('kitchen-print', { data });
+        // Set printing to false after sending
+        setPrinting(false);
+        window.location.reload();
+      }, 3000);
     }
   }
 
@@ -271,7 +284,10 @@ console.log(orders);
                   <h3 className="text-lg font-medium leading-6 text-white">
                     Table:{order.Table}
                   </h3>
-                  
+                  {printing && (
+                      <CogIcon className="w-10 h-10 animate-spin text-white" /> 
+                    )
+                    }
                   <ul className="ml-3 font-medium text-white">
                     {order.HotItems.map((item, index) => (
                       <li key={`${item}-${index}`}>
@@ -302,6 +318,7 @@ console.log(orders);
 
 
                   <div>
+                   
                     <button
                       type="button"
                       onClick={() => HandleOrderConfirmed(order)}

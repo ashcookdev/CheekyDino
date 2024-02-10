@@ -197,6 +197,8 @@ export default function MessagesCreateForm(props) {
     sessionID: "",
     partyID: "",
     delivered: false,
+    FoodReady: false,
+    FoodDelivered: false,
   };
   const [content, setContent] = React.useState(initialValues.content);
   const [createdAt, setCreatedAt] = React.useState(initialValues.createdAt);
@@ -206,6 +208,10 @@ export default function MessagesCreateForm(props) {
   const [sessionID, setSessionID] = React.useState(initialValues.sessionID);
   const [partyID, setPartyID] = React.useState(initialValues.partyID);
   const [delivered, setDelivered] = React.useState(initialValues.delivered);
+  const [FoodReady, setFoodReady] = React.useState(initialValues.FoodReady);
+  const [FoodDelivered, setFoodDelivered] = React.useState(
+    initialValues.FoodDelivered
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setContent(initialValues.content);
@@ -217,6 +223,8 @@ export default function MessagesCreateForm(props) {
     setSessionID(initialValues.sessionID);
     setPartyID(initialValues.partyID);
     setDelivered(initialValues.delivered);
+    setFoodReady(initialValues.FoodReady);
+    setFoodDelivered(initialValues.FoodDelivered);
     setErrors({});
   };
   const [currentGroupValue, setCurrentGroupValue] = React.useState("");
@@ -230,6 +238,8 @@ export default function MessagesCreateForm(props) {
     sessionID: [],
     partyID: [],
     delivered: [],
+    FoodReady: [],
+    FoodDelivered: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -265,6 +275,8 @@ export default function MessagesCreateForm(props) {
           sessionID,
           partyID,
           delivered,
+          FoodReady,
+          FoodDelivered,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -327,6 +339,8 @@ export default function MessagesCreateForm(props) {
               sessionID,
               partyID,
               delivered,
+              FoodReady,
+              FoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.content ?? value;
@@ -359,6 +373,8 @@ export default function MessagesCreateForm(props) {
               sessionID,
               partyID,
               delivered,
+              FoodReady,
+              FoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.createdAt ?? value;
@@ -390,6 +406,8 @@ export default function MessagesCreateForm(props) {
               sessionID,
               partyID,
               delivered,
+              FoodReady,
+              FoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -417,6 +435,8 @@ export default function MessagesCreateForm(props) {
               sessionID,
               partyID,
               delivered,
+              FoodReady,
+              FoodDelivered,
             };
             const result = onChange(modelFields);
             values = result?.group ?? values;
@@ -473,6 +493,8 @@ export default function MessagesCreateForm(props) {
               sessionID,
               partyID,
               delivered,
+              FoodReady,
+              FoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.orderID ?? value;
@@ -504,6 +526,8 @@ export default function MessagesCreateForm(props) {
               sessionID: value,
               partyID,
               delivered,
+              FoodReady,
+              FoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.sessionID ?? value;
@@ -535,6 +559,8 @@ export default function MessagesCreateForm(props) {
               sessionID,
               partyID: value,
               delivered,
+              FoodReady,
+              FoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.partyID ?? value;
@@ -566,6 +592,8 @@ export default function MessagesCreateForm(props) {
               sessionID,
               partyID,
               delivered: value,
+              FoodReady,
+              FoodDelivered,
             };
             const result = onChange(modelFields);
             value = result?.delivered ?? value;
@@ -579,6 +607,72 @@ export default function MessagesCreateForm(props) {
         errorMessage={errors.delivered?.errorMessage}
         hasError={errors.delivered?.hasError}
         {...getOverrideProps(overrides, "delivered")}
+      ></SwitchField>
+      <SwitchField
+        label="Food ready"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={FoodReady}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              content,
+              createdAt,
+              email,
+              group,
+              orderID,
+              sessionID,
+              partyID,
+              delivered,
+              FoodReady: value,
+              FoodDelivered,
+            };
+            const result = onChange(modelFields);
+            value = result?.FoodReady ?? value;
+          }
+          if (errors.FoodReady?.hasError) {
+            runValidationTasks("FoodReady", value);
+          }
+          setFoodReady(value);
+        }}
+        onBlur={() => runValidationTasks("FoodReady", FoodReady)}
+        errorMessage={errors.FoodReady?.errorMessage}
+        hasError={errors.FoodReady?.hasError}
+        {...getOverrideProps(overrides, "FoodReady")}
+      ></SwitchField>
+      <SwitchField
+        label="Food delivered"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={FoodDelivered}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              content,
+              createdAt,
+              email,
+              group,
+              orderID,
+              sessionID,
+              partyID,
+              delivered,
+              FoodReady,
+              FoodDelivered: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.FoodDelivered ?? value;
+          }
+          if (errors.FoodDelivered?.hasError) {
+            runValidationTasks("FoodDelivered", value);
+          }
+          setFoodDelivered(value);
+        }}
+        onBlur={() => runValidationTasks("FoodDelivered", FoodDelivered)}
+        errorMessage={errors.FoodDelivered?.errorMessage}
+        hasError={errors.FoodDelivered?.hasError}
+        {...getOverrideProps(overrides, "FoodDelivered")}
       ></SwitchField>
       <Flex
         justifyContent="space-between"

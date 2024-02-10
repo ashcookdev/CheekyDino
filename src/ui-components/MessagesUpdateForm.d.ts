@@ -31,6 +31,8 @@ export declare type MessagesUpdateFormInputValues = {
     sessionID?: string;
     partyID?: string;
     delivered?: boolean;
+    FoodReady?: boolean;
+    FoodDelivered?: boolean;
 };
 export declare type MessagesUpdateFormValidationValues = {
     content?: ValidationFunction<string>;
@@ -41,6 +43,8 @@ export declare type MessagesUpdateFormValidationValues = {
     sessionID?: ValidationFunction<string>;
     partyID?: ValidationFunction<string>;
     delivered?: ValidationFunction<boolean>;
+    FoodReady?: ValidationFunction<boolean>;
+    FoodDelivered?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MessagesUpdateFormOverridesProps = {
@@ -53,6 +57,8 @@ export declare type MessagesUpdateFormOverridesProps = {
     sessionID?: PrimitiveOverrideProps<TextFieldProps>;
     partyID?: PrimitiveOverrideProps<TextFieldProps>;
     delivered?: PrimitiveOverrideProps<SwitchFieldProps>;
+    FoodReady?: PrimitiveOverrideProps<SwitchFieldProps>;
+    FoodDelivered?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type MessagesUpdateFormProps = React.PropsWithChildren<{
     overrides?: MessagesUpdateFormOverridesProps | undefined | null;

@@ -116,7 +116,7 @@ export default function TillPayment({
         Sessionid: session.id,
         Delieved: !kitchen,
         Kitchen: kitchen,
-        KitchenMenuId: orders.map((item) => item.ID),
+        KitchenMenuId: orders.map((item) => item.id),
         TotalNoVAT: total / 1.2,
         StaffOrderName: staff,
         sessionsID: session.id,

@@ -8,7 +8,6 @@ import './progress.css'
 
 function OccupiedTables() {
   const [sessions, setSessions] = useState([]);
-  const [selectedTable, setSelectedTable] = useState({});
   const [orders, setOrders] = useState([]);
   const [orderStatuses, setOrderStatuses] = useState({});
 
@@ -33,7 +32,15 @@ function OccupiedTables() {
   }, []);
 
 
+// reload the page every 2 minutes
 
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      window.location.reload();
+    }, 120000);
+    return () => clearInterval(interval);
+  }, [sessions]);
 
 
 
@@ -85,77 +92,15 @@ function OccupiedTables() {
     };
   });
 
-  async function handleLeftCenter(table) {
-    // Retrieve the records with the matching id
-    const records = await DataStore.query(Sessions, table.id);
+  
 
-    if (!records || records.length === 0) {
-      console.error('Record not found:', table.id);
-      return;
-    }
-
-    // Update the LeftCenter field for all matching records
-    for (const record of records) {
-      await DataStore.save(
-        Sessions.copyOf(record, (updated) => {
-          updated.LeftCenter = true;
-          updated.TimeLeft = format(new Date(), 'HH:mm:ss.SSS');
-        })
-      );
-    }
-    window.location.reload();
-  }
-
-
-
-
-  async function handleMoveTable(table) {
-    console.log("handleMoveTable called with table:", table);
-
-    // Get all sessions
-    const sessions = await DataStore.query(Sessions);
-
-    // Filter the sessions array to only include sessions with the same time frame as the given table
     
-    const matchingSessions = sessions.filter(
-      (session) =>
-        session.TimeslotFrom === table.TimeslotFrom &&
-        session.TimeslotTo === table.TimeslotTo
-    );
 
-    // Get all occupied tables
-    const occupiedTables = matchingSessions.map((session) => session.Table);
 
-    // Get all available tables
-    const availableTables = TableData.filter(
-      (t) => !occupiedTables.includes(t.table)
-    );
 
-    // Show the dropdown menu for the selected table
-    setSelectedTable({ [table.number]: availableTables });
-  }
 
-  async function handleMoveTableConfirm(table, newTableNumber) {
-    // Retrieve the records with the matching id
-    const records = await DataStore.query(Sessions, table.id);
+  
 
-    if (!records || records.length === 0) {
-      console.error("Record not found:", table.id);
-      return;
-    }
-
-    // Update the Table field for all matching records
-    for (const record of records) {
-      await DataStore.save(
-        Sessions.copyOf(record, (updated) => {
-          updated.Table = parseInt(newTableNumber);
-        })
-      );
-    }
-
-    // Hide the dropdown menu
-    setSelectedTable({});
-  }
 
 
   useEffect(() => {
@@ -201,28 +146,6 @@ function OccupiedTables() {
     console.log('newOrderStatuses:', newOrderStatuses);
   }, [orders]);
   
-const Delivered = async (order) => {
-  console.log('Delivered function called');
-  console.log('table:', order.id);
-  const records = await DataStore.query(CafeOrder, order.id);
-  console.log('records:', records);
-
-  const save = await DataStore.save(
-    CafeOrder.copyOf(records, (updated) => {
-      updated.Delieved = true;
-      updated.TimeDelivered = format(new Date(), 'HH:mm');
-    })
-  );
-  console.log('save:', save);
-
-  
-   
-  window.location.reload();
-};
-
-
-
-
 
 
   return (
@@ -290,31 +213,11 @@ const Delivered = async (order) => {
                 {" "}
                 Status: {status}
               </p>
-              <p className="text-sm font-medium text-gray-900">
-                Order{order.length}: {order.HotItems} + {order.ColdItems}
-              </p>
-              <p className="text-sm font-medium text-gray-900">
-                Time Created {order.CreatedTime}
-              </p>
-              <p className="text-sm font-medium text-gray-900">
-                Time Delivered: {order.TimeDelivered}
-              </p>
+              
+             
   
 
-              {status !== "Delivered" && (
-                <div className="mt-6" aria-hidden="true">
-                  <div className="overflow-hidden rounded-full bg-blue-200">
-                    <div
-                      className={`h-2 rounded-full ${color} animate-pulse transition-all duration-500 ease-in-out progress-bar`}
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                  <div className="mt-6 text-sm font-medium text-gray-600">
-                    {status}
-                  </div>
-                
-                </div>
-              )}
+             
             </div>
           );
         })}

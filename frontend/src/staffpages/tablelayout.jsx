@@ -41,7 +41,7 @@ function RestaurantLayout() {
   }
 
   return (
-<div className="grid grid-cols-8 grid-rows-5 gap-4 p-10 border border-color-black" style={{ boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.75)' }}>      {tableData.map((table) => {
+<div className="grid grid-cols-8 grid-rows-5 gap-4 p-10 border border-color-white" style={{ boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.75)' }}>      {tableData.map((table) => {
         const session = sessions.find(session => session.Table === table.table);
         const isAvailable = !session;
         const isEndingSoon = session && (new Date(session.TimeslotTo) - new Date()) <= 600000; // 10 minutes in milliseconds
@@ -66,7 +66,7 @@ function RestaurantLayout() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           key={table.table}
-          className={`p-2 ${table.shape === 'square' ? 'w-12 h-12 mt-5 mb-5' : 'w-10 h-10 rounded-full mt-5 mb-5'} 
+          className={`p-2 ${table.shape === 'square' ? 'w-8 h-8 mt-2 mb-2' : 'w-8 h-8 rounded-full mt-2 mb-2'} 
           ${isEndingSoon ? 'bg-red-500 animate-pulse' : isAvailable ? 'bg-green-500' : 'bg-red-500'}`}
           style={{ gridColumn: tableCols, gridRow: `${tableRow} / span 1`, border: '2px solid gray-300', boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.75)' }}
           onClick={() => setNav(true)}

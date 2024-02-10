@@ -30,12 +30,12 @@ const Weather = () => {
   const weatherIconCode = weather[0].icon;
 
   return (
-    <div className="flex items-center justify-center p-4 space-x-2 bg-gray-200 rounded-lg shadow-md">
+    <div className="flex items-center justify-center p-4 space-x-2 bg-blue-500 rounded-lg shadow-md">
       <img
         src={`https://openweathermap.org/img/wn/${weatherIconCode}@2x.png`}
         alt={weather[0].main}
-        width={72}
-        height={72}
+        width={20}
+        height={20}
       />
       <span className="text-4xl font-bold">{temp}°C</span>
     </div>
