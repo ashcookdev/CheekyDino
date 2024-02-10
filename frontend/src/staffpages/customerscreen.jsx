@@ -136,7 +136,7 @@ const [announce , setAnnounce] = useState('')
 
   }, [announce]);
 
-  const shouldMoveDown = sessions.length > 3;
+
 
   return (
     <>
@@ -174,7 +174,7 @@ const [announce , setAnnounce] = useState('')
   
               <div className="w-1/2">
                 <div className="overflow-hidden h-full mt-5">
-                <div className="w-full grid grid-cols-2 gap-4 justify-center items-center"> 
+                <div className={`animate-moveUp space-y-4 ${sessions.length > 3 ? "animate-moveUp" : ""}`}>
                 <CustomerTables />
               </div>
                 </div>
