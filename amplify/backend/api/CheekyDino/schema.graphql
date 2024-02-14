@@ -61,7 +61,7 @@ type StockControl @model @auth(rules: [{allow: private}]) {
   MatchCode: String
 }
 
-type ClockIn @model @auth(rules: [{allow: private}, {allow: owner}]) {
+type ClockIns @model @auth(rules: [{allow: private}, {allow: owner}]) {
   id: ID!
   ClockIn: AWSTime
   ClockOut: AWSTime
