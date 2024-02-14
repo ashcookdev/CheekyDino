@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataStore } from "@aws-amplify/datastore";
-import { ClockIn } from "../models";
+import { ClockIns} from "../models";
 import { Link } from 'react-router-dom';
 
 
@@ -13,7 +13,7 @@ export default function Online() {
   useEffect(() => {
     const fetchClockedInStaff = async () => {
 
-      const clockInRecords = await DataStore.query(ClockIn);
+      const clockInRecords = await DataStore.query(ClockIns);
     
       // Get today's date in 'yyyy-mm-dd' format
       const today = new Date().toISOString().split('T')[0];
@@ -31,7 +31,7 @@ export default function Online() {
 
     fetchClockedInStaff();
 
-    const subscription = DataStore.observe(ClockIn).subscribe(() => {
+    const subscription = DataStore.observe(ClockIns).subscribe(() => {
       fetchClockedInStaff();
     });
 

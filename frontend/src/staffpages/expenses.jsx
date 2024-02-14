@@ -1,5 +1,5 @@
 import { DataStore } from "aws-amplify";
-import { Staff, ClockIn, StockControl, KitchenMenu, CafeOrder } from "../models";
+import { Staff, ClockIns, StockControl, KitchenMenu, CafeOrder } from "../models";
 import { useEffect, useState } from "react";
 import { parse, differenceInMinutes } from "date-fns";
 import Online from "./online";
@@ -18,7 +18,7 @@ export default function Wages() {
 
   useEffect(() => {
     const fetchClockIns = async () => {
-      const clockInData = await DataStore.query(ClockIn);
+      const clockInData = await DataStore.query(ClockIns);
 
       let totalHoursToday = 0;
       let totalHoursWeek = 0;

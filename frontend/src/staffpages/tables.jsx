@@ -11,6 +11,7 @@ import { Messages } from '../models'; // Import the Messages model
 
 
 
+
 function OccupiedTables() {
   const [sessions, setSessions] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -133,7 +134,9 @@ function OccupiedTables() {
 
   async function handleLeftCenter(event, table) {
     event.preventDefault();
-ipcRenderer.send("exit");
+
+    // if electron is running, send a message to the main process to exit the app
+    
 
 
     

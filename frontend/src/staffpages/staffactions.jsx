@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore, Auth } from 'aws-amplify';
-import { ClockIn, Staff, Messages } from '../models';
+import { ClockIns, Staff, Messages } from '../models';
 import { ClockIcon, MoonIcon, SunIcon } from '@heroicons/react/20/solid';
 import ClockInData from './clockindata';
 import { set } from 'date-fns';
 import { format } from 'date-fns';
 import Modal from './modal';
+import { useNavigate } from 'react-router-dom';
 
 export default function StaffActions() {
   const [staffList, setStaffList] = useState([]);
@@ -13,6 +14,8 @@ export default function StaffActions() {
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState([]);
   const [show, setShow] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const subscription = DataStore.observe(Messages).subscribe(msg => {
@@ -24,13 +27,13 @@ export default function StaffActions() {
     });
   
     return () => subscription.unsubscribe();
-  }, []);
+  }, [clock]);
 
 
   useEffect(() => {
     const fetchStaff = async () => {
       const staff = await DataStore.query(Staff);
-      const clockInDataAll = await DataStore.query(ClockIn);
+      const clockInDataAll = await DataStore.query(ClockIns);
   
       const staffData = await Promise.all(staff.map(async (staffMember) => {
         const userEmail = staffMember.Email;
@@ -58,7 +61,6 @@ export default function StaffActions() {
   const handleClockInOut = async (staff) => {
     console.log(staff); // This will log the staff member that was clicked on
     setIsLoading(true); // Start loading
-    setTimeout(() => setIsLoading(false), 3000); // End loading after 20 seconds
 
     const userEmail = staff.Email;
     const dateTime = new Date();
@@ -69,21 +71,21 @@ export default function StaffActions() {
       .split('Z')[0];
     const dateOnly = dateTime.toISOString().split('T')[0];
   
-    const clockInDataAll = await DataStore.query(ClockIn);
+    const clockInDataAll = await DataStore.query(ClockIns);
     const clockInData = clockInDataAll.filter(c => c.StaffId === userEmail && c.Date === dateOnly);
   
     if (clockInData.length > 0 && clockInData[0].ClockedIn && !clockInData[0].ClockedOut) {
       // If the staff member is already clocked in but not clocked out, update the ClockOut time and ClockedOut status
       // work out how long the shift was
   
-      const clockIn = new Date(`${dateOnly}T${clockInData[0].ClockIn}`);
+      const clockIn = new Date(`${dateOnly}T${clockInData[0].ClockIns}`);
       const clockOut = new Date(`${dateOnly}T${timeOnly}`);
   
       const shiftLength = (clockOut - clockIn) / 60000;
       const totalpay = shiftLength * staff.HourlyRate;
   
       await DataStore.save(
-        ClockIn.copyOf(clockInData[0], updated => {
+        ClockIns.copyOf(clockInData[0], updated => {
           updated.ClockOut = timeOnly;
           updated.ClockedOut = true;
           updated.ClockedIn = false;
@@ -105,11 +107,10 @@ export default function StaffActions() {
       );
   
       console.log(`${staff.Name} clocked out`);
-      window.location.reload();
-    } else {
+navigate("/clockin")    } else {
       // If the staff member is not clocked in, save a new ClockIn entry
       await DataStore.save(
-        new ClockIn({
+        new ClockIns({
           ClockIn: timeOnly,
           ClockedIn: true,
           ClockedOut: false,
@@ -133,12 +134,13 @@ export default function StaffActions() {
   
       console.log(`${staff.Name} clocked in`);
     }
+    setIsLoading(false);
+navigate('/clockin');
   };
   
   
   const handleBreakStartEnd = async (staff) => {
     setIsLoading(true); // Start loading
-    setTimeout(() => setIsLoading(false), 5000); // End loading after 20 seconds
     const userEmail = staff.Email;
     const dateTime = new Date();
     const timezoneOffset = dateTime.getTimezoneOffset() * 60000;
@@ -148,7 +150,7 @@ export default function StaffActions() {
       .split('Z')[0];
     const dateOnly = dateTime.toISOString().split('T')[0];
   
-    const clockInDataAll = await DataStore.query(ClockIn);
+    const clockInDataAll = await DataStore.query(ClockIns);
     const clockInData = clockInDataAll.filter(c => c.StaffId === userEmail && c.Date === dateOnly);
   
     if (clockInData.length > 0 && clockInData[0].Break) {
@@ -159,7 +161,7 @@ export default function StaffActions() {
       const breakLength = (breakEnd - breakStart) / 60000;
   
       await DataStore.save(
-        ClockIn.copyOf(clockInData[0], updated => {
+        ClockIns.copyOf(clockInData[0], updated => {
           updated.BreakEnd = timeOnly;
           updated.Break = false;
           
@@ -183,7 +185,7 @@ export default function StaffActions() {
     } else {
       // If the staff member is not on break, update the BreakStart time and Break status
       await DataStore.save(
-        ClockIn.copyOf(clockInData[0], updated => {
+        ClockIns.copyOf(clockInData[0], updated => {
           updated.BreakStart = timeOnly;
           updated.Break = true;
         })
@@ -203,6 +205,9 @@ export default function StaffActions() {
       console.log(`${staff.Name} started break`);
       window.location.reload();
     }
+    setIsLoading(false);
+    navigate("/clockin") // Set loading to false after all operations have completed
+
   };
   
   

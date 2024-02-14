@@ -413,13 +413,18 @@ useEffect(() => {
         </div>
 
         <main className="py-10 lg:pl-72">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className='fixed top-0 w-full md:w-3/4 lg:w-1/2 xl:w-1/3 2xl:w-1/4 mx-auto'>
+  <Modal show={show} setShow={setShow} message={messages[messages.length - 1]} />
+</div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between">
+
             <p className="text-2xl font-semibold text-gray-900">{formattedTime}</p>
             <Weather />
 
-            <div className='fixed top-0 w-full md:w-3/4 lg:w-1/2 xl:w-1/3 2xl:w-1/4 mx-auto'>
-  <Modal show={show} setShow={setShow} message={messages[messages.length - 1]} />
-</div>
+            </div>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+          
 
 
             

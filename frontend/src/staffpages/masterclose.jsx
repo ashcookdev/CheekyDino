@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { DataStore, Predicates } from "aws-amplify";
-import { Sessions, ClockIn, Messages, CustomerScreen, Gates } from "../models";
+import { Sessions, ClockIns, Messages, CustomerScreen, Gates } from "../models";
 import { useNavigate } from "react-router-dom";
 import { CheckBadgeIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Storage } from "aws-amplify";
@@ -38,10 +38,10 @@ export default function MasterClose() {
 
 
 
-            const clockIns = await DataStore.query(ClockIn, Predicates.ALL);
+            const clockIns = await DataStore.query(ClockIns, Predicates.ALL);
             await Promise.all(
                 clockIns.map(async (clockIn) => {
-                    const updatedClockIn = ClockIn.copyOf(clockIn, updated => {
+                    const updatedClockIn = ClockIns.copyOf(clockIn, updated => {
                         updated.ClockOut = timeString;
                         updated.ClockedOut = true;
                     });

@@ -1,35 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { DataStore, Predicates } from "aws-amplify";
-import { format, parse, set } from "date-fns";
 import { PartyBooking } from '../models';
-import { PartyGuests } from '../models';
 import BarCodeScanner from "./barcodescanner";
-import TillBooking from "./tillbooking";
 import { Sessions } from "../models";
-import Tables from "./tables";
-import { Analytics } from 'aws-amplify';
-import TillSession from "./tillsession";
+
 import { Messages, KitchenMenu,  } from "../models";
 import TillParty from "./TillParty";
 import TillPayments from "./TillPayments";
 import { useNavigate } from "react-router-dom";
-import Kitchen from "./KitchenHome";
 import Timeslot from "./todaysbookings";
-import Home from "./DashBoard";
 import { checkStockLevel } from "./tillstock";
 import { motion } from 'framer-motion';
 import StaffTill from "./StaffTill";
 import { ChatBubbleBottomCenterIcon, InboxIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import MakeReservation from "./makereservation";
 import SlideOver from "./slideover";
-import axios from "axios";
-import {Link} from 'react-router-dom';
-import { PhoneIcon } from "@heroicons/react/20/solid";
-import AudioChat from "./audiochat";
 import ControlPanel from "./ControlPanel";
 import Modal from "./modal";  // import the modal component
 import { Switch } from '@headlessui/react'
-import { ca } from "date-fns/locale";
 
 
 
@@ -121,6 +109,8 @@ useEffect(() => {
 
 
   const categories = [...new Set(kitchenMenu.map((item) => item.Category))];
+
+  
   const [selectedItem, setSelectedItem] = useState(null);
   
   const handleItemClick = async (item) => {
@@ -464,7 +454,6 @@ window.location.reload();
   <div className="w-full lg:w-2/3">
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div className="mt-4 border-b-2 border-gray-200 pb-4">
-        <h2 className="font-bold text-lg mb-4">Menu:</h2>
         {showCategories && (
   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
     {categories
@@ -480,7 +469,7 @@ window.location.reload();
               onClick={() => handleCategoryClick(category)}
               className={`${
                 colors[index % colors.length]
-              } text-white font-bold py-2 px-4 rounded-full shadow-md`}
+              } text-white font-bold h-20 w-30 py-2 px-4  shadow-md`}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
@@ -498,30 +487,33 @@ window.location.reload();
 
       {showItems && (
 
-        <div className="mt-10 mr-5 ml-5">
-          {filteredData.map((item,index) => {
-            let stockColor;
-            if (item.StockLevel < 5) {
-              stockColor = 'bg-red-500';
-            } else if (item.StockLevel >= 5 && item.StockLevel <= 10) {
-              stockColor = 'bg-yellow-500';
-            } else {
-              stockColor = colors[index % colors.length];
-            }
+<div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+{filteredData
+  .sort((a, b) => a.Name.localeCompare(b.Name)) // Sort alphabetically based on the Name property
+  .map((item, index) => {
+    let stockColor;
+    if (item.StockLevel < 5) {
+      stockColor = 'bg-red-500';
+    } else if (item.StockLevel >= 5 && item.StockLevel <= 10) {
+      stockColor = 'bg-yellow-500';
+    } else {
+      stockColor = colors[index % colors.length];
+    }
 
-            return (
-              <motion.button
-                key={item.id}
-                onClick={() => handleItemClick(item)}
-                className={`text-white font-bold py-2 px-4 rounded-full shadow-md mt-2 mr-2 ${stockColor}`}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                {item.Name} - £{item.Price.toFixed(2)} - Stock: {item.StockLevel}
-              </motion.button>
-            );
-          })}
-        </div>
+    return (
+      <motion.button
+        key={item.id}
+        onClick={() => handleItemClick(item)}
+        className={`text-white font-bold h-20 w-30 py-2 px-4  shadow-md  ${stockColor}`}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        {item.Name} - £{item.Price.toFixed(2)} - Stock: {item.StockLevel}
+      </motion.button>
+    );
+  })}
+</div>
+
       )}
 
     {selectedItem && selectedItem.Extras && (

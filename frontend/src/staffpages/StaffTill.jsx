@@ -1,5 +1,5 @@
 import { DataStore } from "aws-amplify";
-import { ClockIn } from "../models";
+import { ClockIns } from "../models";
 import { useEffect, useState, Fragment } from "react";
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckBadgeIcon, ChevronDoubleDownIcon } from "@heroicons/react/24/solid";
@@ -22,7 +22,7 @@ export default function TillStaff({onSelectChange}) {
     useEffect(() => {
       const today = new Date();
         const fetchClockIn = async () => {
-          const clockIn = await DataStore.query(ClockIn);
+          const clockIn = await DataStore.query(ClockIns);
           const filterClockIn = clockIn.filter(
             (c) =>
               c.ClockedIn === true &&

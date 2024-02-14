@@ -7,7 +7,7 @@ import {
   } from '@heroicons/react/20/solid';
   import { useEffect, useState } from 'react';
   import { DataStore, Predicates } from 'aws-amplify';
-  import { Sessions, PartyBooking, StockControl, CafeOrder, ClockIn, } from '../models';
+  import { Sessions, PartyBooking, StockControl, CafeOrder, ClockIns, } from '../models';
   import { format } from 'date-fns';
 import { ArrowRightCircleIcon, CakeIcon, ClockIcon, CurrencyPoundIcon, ScaleIcon, ShoppingBagIcon, TableCellsIcon, UserGroupIcon } from '@heroicons/react/24/outline';
 import { id } from 'date-fns/locale';
@@ -38,7 +38,7 @@ import { id } from 'date-fns/locale';
         };
 
     const fetchStaff = async () => {
-        const staff = await DataStore.query(ClockIn);
+        const staff = await DataStore.query(ClockIns);
         setStaff(staff);
 
 

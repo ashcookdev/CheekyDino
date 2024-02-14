@@ -698,8 +698,8 @@ export const schema = {
                 }
             ]
         },
-        "ClockIn": {
-            "name": "ClockIn",
+        "ClockIns": {
+            "name": "ClockIns",
             "fields": {
                 "id": {
                     "name": "id",
@@ -3642,5 +3642,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "d444e45dcad5a2d55d0a8f41f2a654e4"
+    "version": "e0f0cb6d1c72ce3127b5a8758b0ab2bb"
 };

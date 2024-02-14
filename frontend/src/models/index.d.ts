@@ -204,9 +204,9 @@ export declare const StockControl: (new (init: ModelInit<StockControl>) => Stock
   copyOf(source: StockControl, mutator: (draft: MutableModel<StockControl>) => MutableModel<StockControl> | void): StockControl;
 }
 
-type EagerClockIn = {
+type EagerClockIns = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<ClockIn, 'id'>;
+    identifier: ManagedIdentifier<ClockIns, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
@@ -231,9 +231,9 @@ type EagerClockIn = {
   readonly updatedAt?: string | null;
 }
 
-type LazyClockIn = {
+type LazyClockIns = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<ClockIn, 'id'>;
+    identifier: ManagedIdentifier<ClockIns, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
@@ -258,10 +258,10 @@ type LazyClockIn = {
   readonly updatedAt?: string | null;
 }
 
-export declare type ClockIn = LazyLoading extends LazyLoadingDisabled ? EagerClockIn : LazyClockIn
+export declare type ClockIns = LazyLoading extends LazyLoadingDisabled ? EagerClockIns : LazyClockIns
 
-export declare const ClockIn: (new (init: ModelInit<ClockIn>) => ClockIn) & {
-  copyOf(source: ClockIn, mutator: (draft: MutableModel<ClockIn>) => MutableModel<ClockIn> | void): ClockIn;
+export declare const ClockIns: (new (init: ModelInit<ClockIns>) => ClockIns) & {
+  copyOf(source: ClockIns, mutator: (draft: MutableModel<ClockIns>) => MutableModel<ClockIns> | void): ClockIns;
 }
 
 type EagerTeddys = {

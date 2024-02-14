@@ -280,6 +280,7 @@ setNumber(session.Number);
             id="email"
             type="text"
             name="email"
+            autoComplete='on'
             className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           ></input>
         </div>
@@ -324,6 +325,7 @@ setNumber(session.Number);
           name="name"
           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           defaultValue={name}
+          autoComplete='on'
         ></input>
       </div>
   
@@ -338,6 +340,7 @@ setNumber(session.Number);
           name="number"
           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           value={number}
+          autoComplete='on'
         ></input>
       </div>
   
@@ -353,6 +356,7 @@ setNumber(session.Number);
           min={0}
           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           value={adults}
+          autoComplete='on'
         ></input>
       </div>
   
@@ -368,6 +372,7 @@ setNumber(session.Number);
           min={0}
           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           value={children}
+          autoComplete='on'
         ></input>
       </div>
   
