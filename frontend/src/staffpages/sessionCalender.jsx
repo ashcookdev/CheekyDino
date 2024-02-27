@@ -62,6 +62,19 @@ console.log(childData[0].name)
 
     // Fetch availability data
       
+const handlePayment = async (item) => {
+
+  // pass the child data and item and render the payment page
+
+  navigate('/paymentsession', { state: { childData: childData, item: item, date: date, children: children, adults: adults, email: email, telephone: telephone, name: name, staff: staff } });
+
+
+
+
+}
+
+
+
 
     
 
@@ -212,7 +225,9 @@ childData.forEach(item => {
                   <div style={{ width: `${(1 - item.freeTables / tableData.length) * 100}%` }} className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${item.freeTables > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
                 </div>
               </div>
-              <button onClick={() => handleBook(item)} className="mt-4 w-full px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-blue-600">Book</button>
+              <button onClick={() => handleBook(item)} className="mt-4 w-full px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-blue-600">Pay Later</button>
+              <button onClick={() => handlePayment(item)} className="mt-4 w-full px-4 py-2 bg-green-500 text-white rounded-md hover:bg-blue-600">Pay Now</button>
+
             </motion.div>
           ))}
         </div>

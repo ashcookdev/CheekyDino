@@ -1,11 +1,8 @@
-const AWS = require('aws-sdk');
-const lambda = new AWS.Lambda();
 const crypto = require('crypto');
 const httpBuildQuery = require('http-build-query');
 const url = require('url');
 const htmlUtils = require('./htmlUtils.js');
 const gateway = require('../../../paymentlambda/gateway.js').Gateway;
-const assert = require('assert');
 
 exports.handler = async (event, context) => {
     const getParams = url.parse(event.url, true).query;
@@ -29,7 +26,7 @@ exports.handler = async (event, context) => {
             var post = qs.parse(body);
 
             if (anyKeyStartsWith(post, 'browserInfo[')) {
-                let fields = getInitialFields('https://gateway.example.com/', '127.0.0.1');
+                let fields = getInitialFields(event);
                 for ([k, v] of Object.entries(post)) {
                     fields[k.substr(12, k.length - 13)] = v;
                 }
@@ -41,12 +38,9 @@ exports.handler = async (event, context) => {
                     console.error(error);
                 });
             } else if (!anyKeyStartsWith(post, 'threeDSResponse[')) {
-                let reqFields = {
-                    action: 'SALE',
-                    merchantID: getInitialFields(null, null).merchantID,
-                    threeDSRef: global.threeDSRef,
-                    threeDSResponse: '',
-                };
+                let reqFields = getInitialFields(event);
+                reqFields.threeDSRef = global.threeDSRef;
+                reqFields.threeDSResponse = '';
 
                 for ([k, v] of Object.entries(post)) {
                     reqFields.threeDSResponse += '[' + k + ']' + '__EQUAL__SIGN__' + v + '&';
@@ -93,7 +87,7 @@ function sendResponse(body) {
     };
 }
 
-function getInitialFields(pageURL, remoteAddress) {
+function getInitialFields(event) {
     let uniqid = Math.random().toString(36).substr(2, 10)
 
     return {
@@ -103,19 +97,19 @@ function getInitialFields(pageURL, remoteAddress) {
         "transactionUnique": uniqid,
         "countryCode": 826,
         "currencyCode": 826,
-        "amount": 1001,
-        "cardNumber": "4012001037141112",
-        "cardExpiryMonth": 12,
-        "cardExpiryYear": 20,
-        "cardCVV": "083",
-        "customerName": "Test Customer",
-        "customerEmail": "test@testcustomer.com",
-        "customerAddress": "16 Test Street",
-        "customerPostCode": "TE15 5ST",
+        "amount": event.amount,
+        "cardNumber": event.cardNumber,
+        "cardExpiryMonth": event.cardExpiryMonth,
+        "cardExpiryYear": event.cardExpiryYear,
+        "cardCVV": event.cardCVV,
+        "customerName": event.customerName,
+        "customerEmail": event.customerEmail,
+        "customerAddress": event.customerAddress,
+        "customerPostCode": event.customerPostCode,
         "orderRef": "Test purchase",
-        "remoteAddress": remoteAddress,
+        "remoteAddress": event.remoteAddress,
         "merchantCategoryCode": 5411,
         "threeDSVersion": "2",
-        "threeDSRedirectURL": pageURL + "&acs=1"
+        "threeDSRedirectURL": event.pageURL + "&acs=1"
     }
 }

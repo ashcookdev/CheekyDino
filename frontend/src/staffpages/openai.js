@@ -1,0 +1,6 @@
+module.exports = {
+    OPENAI_API_KEY: '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',
+  };
+
+// Path: frontend/src/staffpages/stockpdf.jsx
+  

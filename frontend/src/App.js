@@ -87,6 +87,8 @@ import CreateEvent from './staffpages/createevent';
 import Event from './customer-pages/events';
 import Eventregister from './customer-pages/Login/eventregister';
 import EventDetails from './customer-pages/eventdetails';
+import StockPdf from './staffpages/stockpdf';
+import PaymentSession from './customer-pages/paymentSession';
 
 
 
@@ -246,6 +248,7 @@ function App() {
             <Route path='/stockswap' element={<StockSwap />} />
             <Route path='/shoppinglist' element={<ShoppingList />} /> 
             <Route path='/createevent' element={<CreateEvent />} />
+            <Route path= '/stockpdf' element={<StockPdf />} />
           </>
         )}
         
@@ -274,6 +277,7 @@ function App() {
         <Route path="/jobs" element={<Jobs />} />
         <Route path= "/jobs/apply" element={<Application />} />
         <Route path="/eventregister" element={< Eventregister />} />
+        <Route path="/paymentsession" element={<PaymentSession />} />
         
 
 

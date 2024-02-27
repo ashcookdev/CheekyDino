@@ -2,10 +2,17 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 const axios = require('axios');
-const { spawn } = require('child_process');
 const net = require('net');
 const { autoUpdater } = require("electron-updater");
-const sound = require('sound-play');
+const pdfjsLib = require('pdfjs-dist');
+require('dotenv').config({ path: require('path').resolve(__dirname, '../src/.env') });
+
+// get worker file path
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = path.join(__dirname, 'pdf.worker.js');
+
+
+
 
 // Trick AWS Amplify into thinking it's running in a browser environment
 if (process.env.NODE_ENV !== 'production') {
@@ -159,6 +166,37 @@ ipcMain.on('exit', (event, data) => {
 ipcMain.on('closing', (event, data) => {
   console.log('Closing event received with data:', data);
 });
+
+ipcMain.on('file-uploaded', (event, result) => {
+  console.log('File uploaded:', result);
+  const buffer = Buffer.from(result);
+
+  let loadingTask = pdfjsLib.getDocument({data: buffer});
+  loadingTask.promise.then(function(pdf) {
+    console.log('PDF loaded');
+    
+    // Fetch the first page
+    let pageNumber = 1;
+    pdf.getPage(pageNumber).then(function(page) {
+      console.log('Page loaded');
+      
+      // Extract the text content from the page
+      page.getTextContent().then(function(textContent) {
+        console.log('Text content:', textContent);
+        
+        // Convert the text content to a JSON string
+        let jsonString = JSON.stringify(textContent);
+        
+        // Send the JSON string back to the renderer process
+        event.sender.send('file-content', jsonString);
+      });
+    });
+  }, function (reason) {
+    // PDF loading error
+    console.error(reason);
+  });
+});
+
 
 
 ipcMain.on('play-sound', () => {

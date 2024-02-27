@@ -84,6 +84,8 @@ import StockSwap from './staffpages/stockswap';
 import ShoppingList from './staffpages/ShoppingList';
 import CreateEvent from './staffpages/createevent';
 import Event from './customer-pages/events';
+import StockPdf from './staffpages/stockpdf';
+
 
 
 
@@ -262,6 +264,8 @@ export function AppRoutes() {
             <Route path='/stockswap' element={<StockSwap />} />
             <Route path='/shoppinglist' element={<ShoppingList />} />
             <Route path='/createevent' element={<CreateEvent />} />
+            <Route path= '/stockpdf' element={<StockPdf />} />
+
 
 
 
