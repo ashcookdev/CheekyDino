@@ -168,14 +168,14 @@ function OccupiedTables() {
               Table {table.number}
             </p>
             
-            <h3 className="text-sm font-medium text-white">
+            <h3 className="text-lg font-medium text-white">
               Booked for {table.timeslot}
             </h3>
-            <h3 className="text-sm font-medium text-white">
+            <h3 className="text-lg font-medium text-white">
               Time Arrived: {table.timeArrived}
             </h3>
             
-            <h3 className="text-sm font-medium text-white">
+            <h3 className="text-lg font-medium text-white">
               Time Remaining: {table.timeRemaining} minutes
             </h3>
           </div>

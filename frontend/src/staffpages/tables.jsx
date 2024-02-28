@@ -6,6 +6,7 @@ import { CafeOrder } from '../models';
 import './progress.css'
 import { useNavigate } from 'react-router-dom';
 import { Messages } from '../models'; // Import the Messages model
+import { CogIcon } from '@heroicons/react/20/solid';
 
 
 
@@ -18,6 +19,7 @@ function OccupiedTables() {
   const [orderStatuses, setOrderStatuses] = useState({});
   const [moveTable, setMoveTable] = useState([]);
   const [moveState, setMoveState] = useState(false);
+  const [loading, setLoading] = useState(false);
 
 
   
@@ -275,42 +277,40 @@ orders: sessionCafeOrders.map((item) => item.length),
     console.log('newOrderStatuses:', newOrderStatuses);
   }, [orders]);
   
-const Delivered = async (order) => {
-  console.log('Delivered function called');
-  console.log('table:', order.id);
-  const records = await DataStore.query(CafeOrder, order.id);
-  console.log('records:', records);
-
+  const Delivered = async (order) => {
+    setLoading(true);
+    console.log('Delivered function called');
+    console.log('table:', order.id);
+    const records = await DataStore.query(CafeOrder, order.id);
+    console.log('records:', records);
   
-
-  const save = await DataStore.save(
-    CafeOrder.copyOf(records, (updated) => {
-      updated.Delieved = true;
-      updated.TimeDelivered = format(new Date(), 'HH:mm');
-    })
-  );
+    const save = await DataStore.save(
+      CafeOrder.copyOf(records, (updated) => {
+        updated.Delieved = true;
+        updated.TimeDelivered = format(new Date(), 'HH:mm');
+      })
+    );
+    
+    // find message that matches the order id and set FoodDelivered to true and FoodReady to true
+    const message = await DataStore.query(Messages);
+    const messageToSave = message.filter((message) => message.orderID === order.id);
+    console.log(order.id)
+    console.log(messageToSave)
+    console.log('message:', message);
+    const saveMessage = await DataStore.save(
+      Messages.copyOf(messageToSave[0], (updated) => {
+        updated.delivered = true;
+        updated.FoodReady = true;
+      })
+    );
+    console.log('saveMessage:', saveMessage);
   
-  // find message that matches the order id and set FoodDelivered to true and FoodReady to true
-  const message = await DataStore.query(Messages);
-  const messageToSave = message.find((message) => message.orderID === order.id);
-  console.log('message:', message);
-  const saveMessage = await DataStore.save(
-    Messages.copyOf(messageToSave, (updated) => {
-      updated.delivered = true;
-      updated.FoodReady = true;
-    })
-  );
-  console.log('saveMessage:', saveMessage);
-
-
-
-  console.log('save:', save);
-
+    console.log('save:', save);
   
-   
-  window.location.reload();
-};
-
+    // Set loading to false after data has been added to the DataStore
+    setLoading(false);
+  };
+  
 
   
 
@@ -373,6 +373,12 @@ console.log(tableInfo.id)
               Time Remaining: {table.timeRemaining} minutes
             </p>
           </div>
+          {loading && (
+// Add a loading spinner
+<div className="ml-auto flex-shrink-0 flex items-center space-x-4 mt-4 sm:mt-0">
+  <CogIcon className="h-5 w-5 animate-spin" aria-hidden="true" />
+</div>
+)}
   
           <div className="ml-auto flex-shrink-0 flex items-center space-x-4 mt-4 sm:mt-0">
           <button

@@ -105,13 +105,15 @@ export default function paymentSession() {
         };
 
     
-        const response = await fetch('https://i3s378dg7l.execute-api.eu-west-2.amazonaws.com/default/sessionpayments', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(request),
-        });
+        const response = await fetch('https://g1r5ykosw4.execute-api.eu-west-2.amazonaws.com/Production/pay', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*', // Add this line
+    },
+    body: JSON.stringify(request),
+});
+
     
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
