@@ -35,6 +35,7 @@ import Modal from "./modal";  // import the modal component
 import { Link } from "react-router-dom";
 import { PhoneIcon } from "@heroicons/react/20/solid";
 import { Switch } from '@headlessui/react'
+import HomeCookedKitchen from "./homecookedkitchen";
 
 
 
@@ -128,6 +129,7 @@ if (enabled) {
     <div className="flex flex-col md:flex-row">
       <div className="w-full md:w-1/2 mb-4 md:mb-0 mt-3">
         <h2 className="text-lg font-medium text-purple-700 text-center">Orders</h2>
+        <HomeCookedKitchen />
         <CafeKitchen />
       </div>
       <div className="w-full md:w-1/2 border-l border-gray-300">

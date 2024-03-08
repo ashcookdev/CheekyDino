@@ -18,6 +18,7 @@ import SlideOver from "./slideover";
 import ControlPanel from "./ControlPanel";
 import Modal from "./modal";  // import the modal component
 import { Switch } from '@headlessui/react'
+import HomeCookedTill from "./homecookedtill";
 
 
 
@@ -229,7 +230,7 @@ setShowTopBar(true)
   }
 
   if (session === true) {
-    return <Timeslot/>
+    return <HomeCookedTill/>
   }
 
   if (partyNow === true) {
@@ -372,7 +373,14 @@ window.location.reload();
           </button>
         ))}
       </div>
-      
+      <motion.button
+  className="w-16 h-16 bg-purple-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
+  onClick={() => setSession(true)}
+  whileHover={{ scale: 1.1 }}
+  whileTap={{ scale: 0.9 }}
+>
+  <img src="homecooked.png" alt="your-alt-text" />
+</motion.button>
 
     <motion.button
       className="w-16 h-16 bg-pink-500 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
@@ -407,14 +415,8 @@ window.location.reload();
       >
         Tables
       </motion.button>
-      <motion.button
-        className="w-16 h-16 bg-purple-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
-        onClick={() => setSession(true)}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        Sessions
-      </motion.button>
+      
+
       <motion.button
         className="w-16 h-16 bg-green-600 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mr-1 mb-1 flex items-center justify-center"
         onClick={() => setKitchen(true)}

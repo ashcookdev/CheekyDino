@@ -48,6 +48,7 @@ import { Link } from 'react-router-dom'
 import UsedByStock from './UsedByStock'
 import TillProducts from './tillproducts'
 import Weather from './weatherdata'
+import HomeCookedStats from './homecookedstats'
 
 
 
@@ -434,7 +435,10 @@ useEffect(() => {
                     {/* Stats */}
                     <div className="border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5" id='section1'>
                       
-<Stats/>                            
+<Stats/>      
+<div className='mt-3'>
+<HomeCookedStats/> </div>                    
+ 
                     </div>
                     <div
                         className="absolute left-0 top-full -z-10 mt-96 origin-top-left translate-y-40 -rotate-90 transform-gpu opacity-20 blur-3xl sm:left-1/2 sm:-ml-96 sm:-mt-10 sm:translate-y-0 sm:rotate-0 sm:transform-gpu sm:opacity-50"

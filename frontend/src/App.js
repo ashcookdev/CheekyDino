@@ -89,6 +89,7 @@ import Eventregister from './customer-pages/Login/eventregister';
 import EventDetails from './customer-pages/eventdetails';
 import StockPdf from './staffpages/stockpdf';
 import PaymentSession from './customer-pages/paymentSession';
+import PaymentTest from './staffpages/paymenttest';
 
 
 
@@ -249,6 +250,7 @@ function App() {
             <Route path='/shoppinglist' element={<ShoppingList />} /> 
             <Route path='/createevent' element={<CreateEvent />} />
             <Route path= '/stockpdf' element={<StockPdf />} />
+            <Route path= '/paymenttest' element={<PaymentTest />} />
           </>
         )}
         
@@ -278,6 +280,7 @@ function App() {
         <Route path= "/jobs/apply" element={<Application />} />
         <Route path="/eventregister" element={< Eventregister />} />
         <Route path="/paymentsession" element={<PaymentSession />} />
+        
         
 
 

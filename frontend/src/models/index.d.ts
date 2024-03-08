@@ -6,6 +6,96 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 
 
 
+type EagerBeautyInPlay = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<BeautyInPlay, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly AppointmentTime?: string | null;
+  readonly AppointmentDate?: string | null;
+  readonly Treatment?: string | null;
+  readonly Total?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyBeautyInPlay = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<BeautyInPlay, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly AppointmentTime?: string | null;
+  readonly AppointmentDate?: string | null;
+  readonly Treatment?: string | null;
+  readonly Total?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type BeautyInPlay = LazyLoading extends LazyLoadingDisabled ? EagerBeautyInPlay : LazyBeautyInPlay
+
+export declare const BeautyInPlay: (new (init: ModelInit<BeautyInPlay>) => BeautyInPlay) & {
+  copyOf(source: BeautyInPlay, mutator: (draft: MutableModel<BeautyInPlay>) => MutableModel<BeautyInPlay> | void): BeautyInPlay;
+}
+
+type EagerHomeCookedCollection = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<HomeCookedCollection, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly CreatedTime?: string | null;
+  readonly CreatedDate?: string | null;
+  readonly Total?: number | null;
+  readonly DrinkItems?: (string | null)[] | null;
+  readonly HotItems?: (string | null)[] | null;
+  readonly CollectionTime?: string | null;
+  readonly Completed?: boolean | null;
+  readonly Delieved?: boolean | null;
+  readonly Name?: string | null;
+  readonly Notes?: string | null;
+  readonly Kitchen?: boolean | null;
+  readonly KitchenMenuId?: (string | null)[] | null;
+  readonly Email?: string | null;
+  readonly Telephone?: string | null;
+  readonly Prepaid?: boolean | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyHomeCookedCollection = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<HomeCookedCollection, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly CreatedTime?: string | null;
+  readonly CreatedDate?: string | null;
+  readonly Total?: number | null;
+  readonly DrinkItems?: (string | null)[] | null;
+  readonly HotItems?: (string | null)[] | null;
+  readonly CollectionTime?: string | null;
+  readonly Completed?: boolean | null;
+  readonly Delieved?: boolean | null;
+  readonly Name?: string | null;
+  readonly Notes?: string | null;
+  readonly Kitchen?: boolean | null;
+  readonly KitchenMenuId?: (string | null)[] | null;
+  readonly Email?: string | null;
+  readonly Telephone?: string | null;
+  readonly Prepaid?: boolean | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type HomeCookedCollection = LazyLoading extends LazyLoadingDisabled ? EagerHomeCookedCollection : LazyHomeCookedCollection
+
+export declare const HomeCookedCollection: (new (init: ModelInit<HomeCookedCollection>) => HomeCookedCollection) & {
+  copyOf(source: HomeCookedCollection, mutator: (draft: MutableModel<HomeCookedCollection>) => MutableModel<HomeCookedCollection> | void): HomeCookedCollection;
+}
+
 type EagerEvents = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Events, 'id'>;
