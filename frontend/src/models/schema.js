@@ -210,6 +210,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "PaymentAuth": {
+                    "name": "PaymentAuth",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -406,6 +413,13 @@ export const schema = {
                     "name": "Total",
                     "isArray": false,
                     "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "PaymentAuth": {
+                    "name": "PaymentAuth",
+                    "isArray": false,
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -2251,6 +2265,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "PaymentAuth": {
+                    "name": "PaymentAuth",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -2484,6 +2505,13 @@ export const schema = {
                     "name": "Event",
                     "isArray": false,
                     "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "PaymentAuth": {
+                    "name": "PaymentAuth",
+                    "isArray": false,
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -3384,6 +3412,21 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "Payments": {
+                    "name": "Payments",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
+                "Utd": {
+                    "name": "Utd",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -3912,5 +3955,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "e4e49334b454e6a8693ebf462a80fb78"
+    "version": "e7f08716839fe97073fe3405af7c6777"
 };

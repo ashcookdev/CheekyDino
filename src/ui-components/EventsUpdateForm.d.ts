@@ -40,6 +40,7 @@ export declare type EventsUpdateFormInputValues = {
     TicketsSold?: number;
     CalibrateStock?: boolean;
     Total?: number;
+    PaymentAuth?: string;
 };
 export declare type EventsUpdateFormValidationValues = {
     Name?: ValidationFunction<string>;
@@ -59,6 +60,7 @@ export declare type EventsUpdateFormValidationValues = {
     TicketsSold?: ValidationFunction<number>;
     CalibrateStock?: ValidationFunction<boolean>;
     Total?: ValidationFunction<number>;
+    PaymentAuth?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type EventsUpdateFormOverridesProps = {
@@ -80,6 +82,7 @@ export declare type EventsUpdateFormOverridesProps = {
     TicketsSold?: PrimitiveOverrideProps<TextFieldProps>;
     CalibrateStock?: PrimitiveOverrideProps<SwitchFieldProps>;
     Total?: PrimitiveOverrideProps<TextFieldProps>;
+    PaymentAuth?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type EventsUpdateFormProps = React.PropsWithChildren<{
     overrides?: EventsUpdateFormOverridesProps | undefined | null;

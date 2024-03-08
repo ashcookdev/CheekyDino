@@ -4,6 +4,8 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
+export { default as BeautyInPlayCreateForm } from "./BeautyInPlayCreateForm";
+export { default as BeautyInPlayUpdateForm } from "./BeautyInPlayUpdateForm";
 export { default as ClockInsCreateForm } from "./ClockInsCreateForm";
 export { default as ClockInsUpdateForm } from "./ClockInsUpdateForm";
 export { default as CustomerEventCreateForm } from "./CustomerEventCreateForm";
@@ -16,6 +18,8 @@ export { default as GatesCreateForm } from "./GatesCreateForm";
 export { default as GatesUpdateForm } from "./GatesUpdateForm";
 export { default as HolidayCreateForm } from "./HolidayCreateForm";
 export { default as HolidayUpdateForm } from "./HolidayUpdateForm";
+export { default as HomeCookedCollectionCreateForm } from "./HomeCookedCollectionCreateForm";
+export { default as HomeCookedCollectionUpdateForm } from "./HomeCookedCollectionUpdateForm";
 export { default as HomePageCreateForm } from "./HomePageCreateForm";
 export { default as HomePageUpdateForm } from "./HomePageUpdateForm";
 export { default as KitchenMenuCreateForm } from "./KitchenMenuCreateForm";

@@ -61,6 +61,7 @@ type EagerHomeCookedCollection = {
   readonly Email?: string | null;
   readonly Telephone?: string | null;
   readonly Prepaid?: boolean | null;
+  readonly PaymentAuth?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -86,6 +87,7 @@ type LazyHomeCookedCollection = {
   readonly Email?: string | null;
   readonly Telephone?: string | null;
   readonly Prepaid?: boolean | null;
+  readonly PaymentAuth?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -120,6 +122,7 @@ type EagerEvents = {
   readonly TicketsSold?: number | null;
   readonly CalibrateStock?: boolean | null;
   readonly Total?: number | null;
+  readonly PaymentAuth?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -148,6 +151,7 @@ type LazyEvents = {
   readonly TicketsSold?: number | null;
   readonly CalibrateStock?: boolean | null;
   readonly Total?: number | null;
+  readonly PaymentAuth?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -694,6 +698,7 @@ type EagerSessions = {
   readonly Event?: boolean | null;
   readonly EventID?: string | null;
   readonly EventName?: string | null;
+  readonly PaymentAuth?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -728,6 +733,7 @@ type LazySessions = {
   readonly Event?: boolean | null;
   readonly EventID?: string | null;
   readonly EventName?: string | null;
+  readonly PaymentAuth?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -766,6 +772,7 @@ type EagerCafeOrder = {
   readonly SessionEmail?: string | null;
   readonly EventID?: string | null;
   readonly Event?: boolean | null;
+  readonly PaymentAuth?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -798,6 +805,7 @@ type LazyCafeOrder = {
   readonly SessionEmail?: string | null;
   readonly EventID?: string | null;
   readonly Event?: boolean | null;
+  readonly PaymentAuth?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -964,6 +972,8 @@ type EagerPartyBooking = {
   readonly Email?: string | null;
   readonly Telephone?: string | null;
   readonly CalibrateStock?: boolean | null;
+  readonly Payments?: (string | null)[] | null;
+  readonly Utd?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -1004,6 +1014,8 @@ type LazyPartyBooking = {
   readonly Email?: string | null;
   readonly Telephone?: string | null;
   readonly CalibrateStock?: boolean | null;
+  readonly Payments?: (string | null)[] | null;
+  readonly Utd?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

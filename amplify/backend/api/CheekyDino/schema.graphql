@@ -1,3 +1,31 @@
+type BeautyInPlay @model @auth(rules: [{allow: private}, {allow: owner}]) {
+  id: ID!
+  AppointmentTime: AWSTime
+  AppointmentDate: AWSDate
+  Treatment: String
+  Total: String
+}
+
+type HomeCookedCollection @model @auth(rules: [{allow: public}, {allow: owner}]) {
+  id: ID!
+  CreatedTime: AWSTime
+  CreatedDate: AWSDate
+  Total: Float
+  DrinkItems: [String]
+  HotItems: [String]
+  CollectionTime: AWSTime
+  Completed: Boolean
+  Delieved: Boolean
+  Name: String
+  Notes: String
+  Kitchen: Boolean
+  KitchenMenuId: [String]
+  Email: String
+  Telephone: String
+  Prepaid: Boolean
+  PaymentAuth: String
+}
+
 type Events @model @auth(rules: [{allow: public}, {allow: owner}]) {
   id: ID!
   Name: String
@@ -18,6 +46,7 @@ type Events @model @auth(rules: [{allow: public}, {allow: owner}]) {
   TicketsSold: Int
   CalibrateStock: Boolean
   Total: Float
+  PaymentAuth: String
 }
 
 type CustomerEvent @model @auth(rules: [{allow: public}, {allow: owner}]) {
@@ -123,7 +152,7 @@ type CustomerScreen @model @auth(rules: [{allow: private}, {allow: owner}]) {
   Number: Int
 }
 
-type KitchenMenu @model @auth(rules: [{allow: private}, {allow: owner}]) {
+type KitchenMenu @model @auth(rules: [{allow: public, operations: [read]}, {allow: owner}, {allow: private}]) {
   id: ID!
   Name: String
   Price: Float
@@ -200,6 +229,7 @@ type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: pub
   Event: Boolean
   EventID: String
   EventName: String
+  PaymentAuth: String
 }
 
 type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}, {allow: groups, groups: ["Kitchen"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Cafe"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Staff"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartyHosts"], operations: [read, create, update, delete]}, {allow: public}]) {
@@ -226,6 +256,7 @@ type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}, {allow: gr
   SessionEmail: String
   EventID: String
   Event: Boolean
+  PaymentAuth: String
 }
 
 type Messages @model @auth(rules: [{allow: private}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartHosts"], operations: [read, create]}, {allow: groups, groups: ["Staff"], operations: [read, create]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: owner, operations: [create, read]}]) {
@@ -294,5 +325,7 @@ type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: [
   Email: String
   Telephone: String
   CalibrateStock: Boolean
+  Payments: [String]
+  Utd: Boolean
 }
  

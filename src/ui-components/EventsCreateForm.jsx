@@ -46,6 +46,7 @@ export default function EventsCreateForm(props) {
     TicketsSold: "",
     CalibrateStock: false,
     Total: "",
+    PaymentAuth: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Description, setDescription] = React.useState(
@@ -70,6 +71,9 @@ export default function EventsCreateForm(props) {
     initialValues.CalibrateStock
   );
   const [Total, setTotal] = React.useState(initialValues.Total);
+  const [PaymentAuth, setPaymentAuth] = React.useState(
+    initialValues.PaymentAuth
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.Name);
@@ -89,6 +93,7 @@ export default function EventsCreateForm(props) {
     setTicketsSold(initialValues.TicketsSold);
     setCalibrateStock(initialValues.CalibrateStock);
     setTotal(initialValues.Total);
+    setPaymentAuth(initialValues.PaymentAuth);
     setErrors({});
   };
   const validations = {
@@ -109,6 +114,7 @@ export default function EventsCreateForm(props) {
     TicketsSold: [],
     CalibrateStock: [],
     Total: [],
+    PaymentAuth: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -153,6 +159,7 @@ export default function EventsCreateForm(props) {
           TicketsSold,
           CalibrateStock,
           Total,
+          PaymentAuth,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -224,6 +231,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -264,6 +272,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.Description ?? value;
@@ -304,6 +313,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.Food ?? value;
@@ -344,6 +354,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.StartTime ?? value;
@@ -385,6 +396,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.Date ?? value;
@@ -429,6 +441,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.Tables ?? value;
@@ -473,6 +486,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.KidsPrice ?? value;
@@ -513,6 +527,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.Image ?? value;
@@ -552,6 +567,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.AdultMenu ?? value;
@@ -591,6 +607,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.KidsMenu ?? value;
@@ -631,6 +648,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.EndTime ?? value;
@@ -671,6 +689,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.AdultPrice ?? value;
@@ -715,6 +734,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.Price2 ?? value;
@@ -759,6 +779,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.Price3 ?? value;
@@ -803,6 +824,7 @@ export default function EventsCreateForm(props) {
               TicketsSold: value,
               CalibrateStock,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.TicketsSold ?? value;
@@ -843,6 +865,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock: value,
               Total,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.CalibrateStock ?? value;
@@ -887,6 +910,7 @@ export default function EventsCreateForm(props) {
               TicketsSold,
               CalibrateStock,
               Total: value,
+              PaymentAuth,
             };
             const result = onChange(modelFields);
             value = result?.Total ?? value;
@@ -900,6 +924,47 @@ export default function EventsCreateForm(props) {
         errorMessage={errors.Total?.errorMessage}
         hasError={errors.Total?.hasError}
         {...getOverrideProps(overrides, "Total")}
+      ></TextField>
+      <TextField
+        label="Payment auth"
+        isRequired={false}
+        isReadOnly={false}
+        value={PaymentAuth}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Description,
+              Food,
+              StartTime,
+              Date,
+              Tables,
+              KidsPrice,
+              Image,
+              AdultMenu,
+              KidsMenu,
+              EndTime,
+              AdultPrice,
+              Price2,
+              Price3,
+              TicketsSold,
+              CalibrateStock,
+              Total,
+              PaymentAuth: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.PaymentAuth ?? value;
+          }
+          if (errors.PaymentAuth?.hasError) {
+            runValidationTasks("PaymentAuth", value);
+          }
+          setPaymentAuth(value);
+        }}
+        onBlur={() => runValidationTasks("PaymentAuth", PaymentAuth)}
+        errorMessage={errors.PaymentAuth?.errorMessage}
+        hasError={errors.PaymentAuth?.hasError}
+        {...getOverrideProps(overrides, "PaymentAuth")}
       ></TextField>
       <Flex
         justifyContent="space-between"
