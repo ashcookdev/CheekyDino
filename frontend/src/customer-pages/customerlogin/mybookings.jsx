@@ -27,6 +27,12 @@ export default function MyBooking() {
   const [adultFood, setAdultFood] = useState(false);
   const [email, setEmail] = useState('');
   const [telephone, setTelephone] = useState('');
+  const [paymentFormVisible, setPaymentFormVisible] = useState(false);
+  const [paid, setPaid] = useState(false);
+
+  const [paymentData, setPaymentData] = useState('');
+
+
 
   console.log(id);
   console.log(partyType)
@@ -66,6 +72,7 @@ export default function MyBooking() {
               setId(partyBooking.id)
               setAdultFood(partyBooking.PartyAdultFoodChoices ? partyBooking.PartyAdultFoodChoices.join(', ') : '');
               setTelephone(partyBooking.Telephone);
+              setPaid(partyBooking.Paid);
           }
       }
 
@@ -79,10 +86,51 @@ export default function MyBooking() {
       )
   }
 
+  async function payDeposit() {
+      const user = await Auth.currentAuthenticatedUser();
+      const userId = user.attributes.sub;
+
+      // take the deposit and get rid of the decimal point
+      const deposit = total * 100 / 2;
+      console.log(deposit)
+
+
+      const partyBooking = (await DataStore.query(PartyBooking)).filter(booking => booking.partybookingID === userId)[selectedPartyIndex];
+
+      const response = await fetch('https://386f2wtkpf.execute-api.eu-west-2.amazonaws.com/test/payment', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              price: deposit,
+              productName: "Deposit for Party Booking -" + partyBooking.ChildName,
+              id: partyBooking.id,
+          }),
+      });
+
+      const responseData = await response.json();
+
+      let data = responseData.body;
+      data += '<script type="text/javascript">document.forms[0].submit();</script>';
+
+      console.log(data);
+      setPaymentData(data); 
+      setPaymentFormVisible(true);
+
+  }
+
+
 
 
 
   return (
+    paymentFormVisible ? (
+      <div className="flex">
+        <iframe srcDoc={paymentData} style={{width: '100%', height: '600px'}}></iframe>
+      </div>
+  ) : (
+
     <div className="flex flex-col items-center justify-center min-h-screen bg-white overflow-hidden shadow sm:rounded-lg">
     <div className="w-full max-w-md px-4 py-6 sm:px-6">
       <h3 className="text-base font-semibold leading-7 text-gray-900 text-center component-title">
@@ -107,7 +155,7 @@ export default function MyBooking() {
 
     </div>
     <div className="w-full max-w-md px-4 py-6 sm:px-6 flex justify-center space-x-4">
-      <button
+      <button onClick={payDeposit}
       
         className="rounded-full bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
       >
@@ -196,4 +244,6 @@ export default function MyBooking() {
       </div>
     </div>
   )
+  )
+
 }

@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import emailjs from '@emailjs/browser';
 import QRCode from 'qrcode';
 import { motion } from 'framer-motion';
+import { set } from 'lodash';
 
 
 
@@ -64,14 +65,77 @@ console.log(childData[0].name)
       
 const handlePayment = async (item) => {
 
-  // pass the child data and item and render the payment page
+  // create a Id for the booking 
 
-  navigate('/paymentsession', { state: { childData: childData, item: item, date: date, children: children, adults: adults, email: email, telephone: telephone, name: name, staff: staff } });
+  const createUniqueID = () => {
+    return Math.random().toString(36).substr(2, 9);
+  };
+
+  const bookingID = createUniqueID();
+
+  // create a qr code for the booking
 
 
+  
+
+  const data = {
+
+    id: bookingID,
+    email: email,
+    name: name,
+    date: date,
+    timeslot: `${item.timeslot.start} - ${item.timeslot.end}`,
+    table: item.recommendedTables[0],
+    telephone: telephone,
+    adults: adults,
+    children: children,
+    childData: childData,
+    totalSpent: childData[0].TotalSpent.toFixed(2),
+    staff: staff,
+  }
 
 
+  const paymentData = {
+    price: childData[0].TotalSpent.toFixed(2),
+    id: bookingID,
+    productName: "2 Hour Session" + " " + formattedDate + " " + item.timeslot.start + " - " + item.timeslot.end,
+  }
+  
+  const response = await fetch('https://386f2wtkpf.execute-api.eu-west-2.amazonaws.com/test/payment', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(paymentData),
+  });
+
+  const responseData = await response.json();
+
+  let payment = responseData.body;
+  payment += '<script type="text/javascript">document.forms[0].submit();</script>';
+
+  setPaymentForm(payment); // Update the paymentForm state variable
+  setIsPayment(true); // Update the isPayment state variable
 }
+
+const [paymentForm, setPaymentForm] = useState(null);
+const [isPayment, setIsPayment] = useState(false);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -206,7 +270,12 @@ childData.forEach(item => {
   // Display available timeslots with "Book" button
     // Display available timeslots with "Book" button
     return (
+      isPayment ? (
+        <iframe srcDoc={paymentForm} style={{width: '100%', height: '600px'}}></iframe> // Render the iframe if isPayment is true
+      ) : (
       <motion.div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                {paymentForm && <iframe srcDoc={paymentForm} style={{width: '100%', height: '600px'}}></iframe>} {/* Render the iframe conditionally */}
+
         <p className="text-lg font-semibold leading-6 text-gray-900 component-title">{formattedDate}</p>
         <p className="text-center font-bold component-title">Select A Timeslot</p>
         <p className="text-center font-bold component-title mt-2">Party Size: {Number(adults) + Number(children)} </p>
@@ -229,11 +298,12 @@ childData.forEach(item => {
               <button onClick={() => handlePayment(item)} className="mt-4 w-full px-4 py-2 bg-green-500 text-white rounded-md hover:bg-blue-600">Pay Now</button>
 
             </motion.div>
-          ))}
-        </div>
-      </motion.div>
-    );
-  }
+           ))}
+           </div>
+         </motion.div>
+       )
+     );
+   }
        
       
 

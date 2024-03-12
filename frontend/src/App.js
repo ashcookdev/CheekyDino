@@ -90,6 +90,8 @@ import EventDetails from './customer-pages/eventdetails';
 import StockPdf from './staffpages/stockpdf';
 import PaymentSession from './customer-pages/paymentSession';
 import PaymentTest from './staffpages/paymenttest';
+import Confirmation from './staffpages/confirmation';
+import Payments from './staffpages/payments';
 
 
 
@@ -170,7 +172,8 @@ function App() {
           '/customerscreen',
           '/training/',
           '/customerscreenfront',
-          '/customerprebooking'
+          '/customerprebooking',
+          '/confirmation',
         ].includes(location.pathname) ? (
         <StaffNav />
       ) : ![
@@ -183,7 +186,8 @@ function App() {
           '/customerscreen',
           '/training/',
           '/customerscreenfront',
-          '/customerprebooking'
+          '/customerprebooking',
+          '/confirmation',
         ].includes(location.pathname) ? (
         <Navbar />
       ) : null}
@@ -196,6 +200,7 @@ function App() {
             <Route path="/bookedevents" element={<EventDetails />} />
             <Route path="/order" element={<Order />} />
             <Route path="/order/kidsmenu" element={<KidsMenu />} />
+            <Route path="/payments" element={<Payments />} />
           </>
         )}
       </Routes>
@@ -251,6 +256,7 @@ function App() {
             <Route path='/createevent' element={<CreateEvent />} />
             <Route path= '/stockpdf' element={<StockPdf />} />
             <Route path= '/paymenttest' element={<PaymentTest />} />
+            <Route path= '/confirmation' element={<Confirmation />} />
           </>
         )}
         
