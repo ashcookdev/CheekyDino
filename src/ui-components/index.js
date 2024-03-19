@@ -22,6 +22,8 @@ export { default as HomeCookedCollectionCreateForm } from "./HomeCookedCollectio
 export { default as HomeCookedCollectionUpdateForm } from "./HomeCookedCollectionUpdateForm";
 export { default as HomePageCreateForm } from "./HomePageCreateForm";
 export { default as HomePageUpdateForm } from "./HomePageUpdateForm";
+export { default as JobApplicationCreateForm } from "./JobApplicationCreateForm";
+export { default as JobApplicationUpdateForm } from "./JobApplicationUpdateForm";
 export { default as KitchenMenuCreateForm } from "./KitchenMenuCreateForm";
 export { default as KitchenMenuUpdateForm } from "./KitchenMenuUpdateForm";
 export { default as MessagesCreateForm } from "./MessagesCreateForm";

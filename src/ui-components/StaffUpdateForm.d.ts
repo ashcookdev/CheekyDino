@@ -35,6 +35,9 @@ export declare type StaffUpdateFormInputValues = {
     EndDate?: string;
     Age?: string;
     DOB?: string;
+    InterviewNotes?: string;
+    Medical?: string;
+    ApplicationID?: string;
 };
 export declare type StaffUpdateFormValidationValues = {
     Name?: ValidationFunction<string>;
@@ -49,6 +52,9 @@ export declare type StaffUpdateFormValidationValues = {
     EndDate?: ValidationFunction<string>;
     Age?: ValidationFunction<string>;
     DOB?: ValidationFunction<string>;
+    InterviewNotes?: ValidationFunction<string>;
+    Medical?: ValidationFunction<string>;
+    ApplicationID?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type StaffUpdateFormOverridesProps = {
@@ -65,6 +71,9 @@ export declare type StaffUpdateFormOverridesProps = {
     EndDate?: PrimitiveOverrideProps<TextFieldProps>;
     Age?: PrimitiveOverrideProps<TextFieldProps>;
     DOB?: PrimitiveOverrideProps<TextFieldProps>;
+    InterviewNotes?: PrimitiveOverrideProps<TextFieldProps>;
+    Medical?: PrimitiveOverrideProps<TextFieldProps>;
+    ApplicationID?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type StaffUpdateFormProps = React.PropsWithChildren<{
     overrides?: StaffUpdateFormOverridesProps | undefined | null;

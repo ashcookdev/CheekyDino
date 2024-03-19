@@ -1,3 +1,24 @@
+type JobApplication @model @auth(rules: [{allow: public, operations: [create, read, update]}, {allow: owner}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}]) {
+  id: ID!
+  Name: String
+  CoverLetter: String
+  Role: String
+  Town: String
+  DOB: String
+  Email: String
+  Telephone: String
+  PreviousExprience: String
+  CV: String
+  Age: String
+  Interviewed: Boolean
+  InterviewNotes: String
+  Offered: Boolean
+  InterviewTime: String
+  InterviewDate: String
+  InterviewSet: Boolean
+  NotInterested: Boolean
+}
+
 type BeautyInPlay @model @auth(rules: [{allow: private}, {allow: owner}]) {
   id: ID!
   AppointmentTime: AWSTime
@@ -201,6 +222,9 @@ type Staff @model @auth(rules: [{allow: private}, {allow: owner}]) {
   EndDate: AWSDate
   Age: String
   DOB: String
+  InterviewNotes: String
+  Medical: String
+  ApplicationID: String
 }
 
 type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: public, operations: [read]}]) {

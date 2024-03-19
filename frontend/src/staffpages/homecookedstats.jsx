@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
-import { DataStore, Predicates } from 'aws-amplify'
-import { HomeCookedCollection } from '../models'
-import { format, parse, set } from 'date-fns';
+import { useEffect, useState } from 'react';
+import { DataStore } from 'aws-amplify';
+import { HomeCookedCollection } from '../models';
 
 export default function HomeCookedStats() {
     const [todayCollection, setTodayCollection] = useState([]);
@@ -20,15 +19,17 @@ export default function HomeCookedStats() {
             return orderDate >= today && orderDate < tomorrow;
         });
 
-        const totalOrdersToday = ordersToday.length;
-
         const futureOrdersToday = ordersToday.filter((order) => {
             const collectionTime = new Date(order.CollectionTime);
             return collectionTime > new Date();
         });
 
+        const totalAmount = ordersToday.reduce((acc, order) => {
+            return acc + (order.Total || 0); // Ensure that if Total is 0, it doesn't affect the totalAmount
+        }, 0);
+
         setTodayCollection(ordersToday);
-        setTotalOrdersToday(totalOrdersToday);
+        setTotalOrdersToday(totalAmount);
         setFutureOrdersToday(futureOrdersToday);
     };
 
@@ -38,9 +39,9 @@ export default function HomeCookedStats() {
 
     const stats = [
         { id: 1, name: 'Orders Today', stat: todayCollection.length, icon: 'homecooked.png' },
-        { id: 2, name: 'Total Orders', stat: totalOrdersToday, icon: 'homecooked.png' },
+        { id: 2, name: 'Total Amount', stat: "£" + totalOrdersToday.toFixed(2), icon: 'homecooked.png' },
         { id: 3, name: 'Future Orders', stat: futureOrdersToday.length, icon: 'homecooked.png' },
-    ]
+    ];
 
     return (
         <div>
@@ -52,7 +53,7 @@ export default function HomeCookedStats() {
                     >
                         <dt>
                             <div className="absolute rounded-md bg-red-500 p-3">
-                                <img src={item.icon} className="h-6 w-6 text-white" aria-hidden="true" />
+                                <img src={item.icon} className="h-6 w-6 text-white" aria-hidden="true" alt={item.name} />
                             </div>
                             <p className="ml-16 truncate text-sm font-medium text-gray-500">{item.name}</p>
                         </dt>
@@ -70,5 +71,5 @@ export default function HomeCookedStats() {
                 ))}
             </dl>
         </div>
-    )
+    );
 }

@@ -6,6 +6,66 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 
 
 
+type EagerJobApplication = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<JobApplication, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Name?: string | null;
+  readonly CoverLetter?: string | null;
+  readonly Role?: string | null;
+  readonly Town?: string | null;
+  readonly DOB?: string | null;
+  readonly Email?: string | null;
+  readonly Telephone?: string | null;
+  readonly PreviousExprience?: string | null;
+  readonly CV?: string | null;
+  readonly Age?: string | null;
+  readonly Interviewed?: boolean | null;
+  readonly InterviewNotes?: string | null;
+  readonly Offered?: boolean | null;
+  readonly InterviewTime?: string | null;
+  readonly InterviewDate?: string | null;
+  readonly InterviewSet?: boolean | null;
+  readonly NotInterested?: boolean | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyJobApplication = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<JobApplication, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Name?: string | null;
+  readonly CoverLetter?: string | null;
+  readonly Role?: string | null;
+  readonly Town?: string | null;
+  readonly DOB?: string | null;
+  readonly Email?: string | null;
+  readonly Telephone?: string | null;
+  readonly PreviousExprience?: string | null;
+  readonly CV?: string | null;
+  readonly Age?: string | null;
+  readonly Interviewed?: boolean | null;
+  readonly InterviewNotes?: string | null;
+  readonly Offered?: boolean | null;
+  readonly InterviewTime?: string | null;
+  readonly InterviewDate?: string | null;
+  readonly InterviewSet?: boolean | null;
+  readonly NotInterested?: boolean | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type JobApplication = LazyLoading extends LazyLoadingDisabled ? EagerJobApplication : LazyJobApplication
+
+export declare const JobApplication: (new (init: ModelInit<JobApplication>) => JobApplication) & {
+  copyOf(source: JobApplication, mutator: (draft: MutableModel<JobApplication>) => MutableModel<JobApplication> | void): JobApplication;
+}
+
 type EagerBeautyInPlay = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<BeautyInPlay, 'id'>;
@@ -635,6 +695,9 @@ type EagerStaff = {
   readonly EndDate?: string | null;
   readonly Age?: string | null;
   readonly DOB?: string | null;
+  readonly InterviewNotes?: string | null;
+  readonly Medical?: string | null;
+  readonly ApplicationID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -658,6 +721,9 @@ type LazyStaff = {
   readonly EndDate?: string | null;
   readonly Age?: string | null;
   readonly DOB?: string | null;
+  readonly InterviewNotes?: string | null;
+  readonly Medical?: string | null;
+  readonly ApplicationID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

@@ -19,5 +19,5 @@ amplify-gradle-config.json
 amplifytools.xcconfig
 .secret-*
 **.sample
-src/staffpages/openai.js
+frontend/src/openai.js
 #amplify-do-not-edit-end

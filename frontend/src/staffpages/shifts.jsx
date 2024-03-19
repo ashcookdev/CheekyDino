@@ -24,6 +24,7 @@ const ShiftBooking = () => {
   const [holiday, setHoliday] = useState(false);
   const [clockedInStaff, setClockedInStaff] = useState(false);
   const [breakTime, setBreak] = useState(false);
+  const [app, setApp] = useState(false);
 
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
@@ -142,7 +143,9 @@ const ShiftBooking = () => {
 
 
   
-  
+  if (app === true) {
+    return navigate('/applications');
+  }
 
 
 
@@ -186,6 +189,17 @@ const people = [
           <h1 className="text-base font-bold leading-6 text-center text-gray-900">Shifts</h1>
           <p className="mt-2 text-sm text-gray-700">Todays Date: {currentDay}</p>
         </div>
+        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none flex justify-between mr-5">
+          <button
+            onClick={() => setApp(true)}
+            type="button"
+            className="block rounded-md bg-green-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            View Job Applications
+          </button>
+        </div>
+
+
         {userGroups.includes('Admin') || userGroups.includes('Developer') ? (
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none flex justify-between mr-5">
             <button

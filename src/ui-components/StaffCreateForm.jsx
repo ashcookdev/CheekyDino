@@ -40,6 +40,9 @@ export default function StaffCreateForm(props) {
     EndDate: "",
     Age: "",
     DOB: "",
+    InterviewNotes: "",
+    Medical: "",
+    ApplicationID: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Email, setEmail] = React.useState(initialValues.Email);
@@ -57,6 +60,13 @@ export default function StaffCreateForm(props) {
   const [EndDate, setEndDate] = React.useState(initialValues.EndDate);
   const [Age, setAge] = React.useState(initialValues.Age);
   const [DOB, setDOB] = React.useState(initialValues.DOB);
+  const [InterviewNotes, setInterviewNotes] = React.useState(
+    initialValues.InterviewNotes
+  );
+  const [Medical, setMedical] = React.useState(initialValues.Medical);
+  const [ApplicationID, setApplicationID] = React.useState(
+    initialValues.ApplicationID
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.Name);
@@ -71,6 +81,9 @@ export default function StaffCreateForm(props) {
     setEndDate(initialValues.EndDate);
     setAge(initialValues.Age);
     setDOB(initialValues.DOB);
+    setInterviewNotes(initialValues.InterviewNotes);
+    setMedical(initialValues.Medical);
+    setApplicationID(initialValues.ApplicationID);
     setErrors({});
   };
   const validations = {
@@ -86,6 +99,9 @@ export default function StaffCreateForm(props) {
     EndDate: [],
     Age: [],
     DOB: [],
+    InterviewNotes: [],
+    Medical: [],
+    ApplicationID: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -125,6 +141,9 @@ export default function StaffCreateForm(props) {
           EndDate,
           Age,
           DOB,
+          InterviewNotes,
+          Medical,
+          ApplicationID,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -191,6 +210,9 @@ export default function StaffCreateForm(props) {
               EndDate,
               Age,
               DOB,
+              InterviewNotes,
+              Medical,
+              ApplicationID,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -226,6 +248,9 @@ export default function StaffCreateForm(props) {
               EndDate,
               Age,
               DOB,
+              InterviewNotes,
+              Medical,
+              ApplicationID,
             };
             const result = onChange(modelFields);
             value = result?.Email ?? value;
@@ -261,6 +286,9 @@ export default function StaffCreateForm(props) {
               EndDate,
               Age,
               DOB,
+              InterviewNotes,
+              Medical,
+              ApplicationID,
             };
             const result = onChange(modelFields);
             value = result?.TimeEntries ?? value;
@@ -296,6 +324,9 @@ export default function StaffCreateForm(props) {
               EndDate,
               Age,
               DOB,
+              InterviewNotes,
+              Medical,
+              ApplicationID,
             };
             const result = onChange(modelFields);
             value = result?.Role ?? value;
@@ -335,6 +366,9 @@ export default function StaffCreateForm(props) {
               EndDate,
               Age,
               DOB,
+              InterviewNotes,
+              Medical,
+              ApplicationID,
             };
             const result = onChange(modelFields);
             value = result?.HourlyRate ?? value;
@@ -371,6 +405,9 @@ export default function StaffCreateForm(props) {
               EndDate,
               Age,
               DOB,
+              InterviewNotes,
+              Medical,
+              ApplicationID,
             };
             const result = onChange(modelFields);
             value = result?.StartDate ?? value;
@@ -406,6 +443,9 @@ export default function StaffCreateForm(props) {
               EndDate,
               Age,
               DOB,
+              InterviewNotes,
+              Medical,
+              ApplicationID,
             };
             const result = onChange(modelFields);
             value = result?.Current ?? value;
@@ -441,6 +481,9 @@ export default function StaffCreateForm(props) {
               EndDate,
               Age,
               DOB,
+              InterviewNotes,
+              Medical,
+              ApplicationID,
             };
             const result = onChange(modelFields);
             value = result?.Telephone ?? value;
@@ -476,6 +519,9 @@ export default function StaffCreateForm(props) {
               EndDate,
               Age,
               DOB,
+              InterviewNotes,
+              Medical,
+              ApplicationID,
             };
             const result = onChange(modelFields);
             value = result?.ContractType ?? value;
@@ -512,6 +558,9 @@ export default function StaffCreateForm(props) {
               EndDate: value,
               Age,
               DOB,
+              InterviewNotes,
+              Medical,
+              ApplicationID,
             };
             const result = onChange(modelFields);
             value = result?.EndDate ?? value;
@@ -547,6 +596,9 @@ export default function StaffCreateForm(props) {
               EndDate,
               Age: value,
               DOB,
+              InterviewNotes,
+              Medical,
+              ApplicationID,
             };
             const result = onChange(modelFields);
             value = result?.Age ?? value;
@@ -582,6 +634,9 @@ export default function StaffCreateForm(props) {
               EndDate,
               Age,
               DOB: value,
+              InterviewNotes,
+              Medical,
+              ApplicationID,
             };
             const result = onChange(modelFields);
             value = result?.DOB ?? value;
@@ -595,6 +650,120 @@ export default function StaffCreateForm(props) {
         errorMessage={errors.DOB?.errorMessage}
         hasError={errors.DOB?.hasError}
         {...getOverrideProps(overrides, "DOB")}
+      ></TextField>
+      <TextField
+        label="Interview notes"
+        isRequired={false}
+        isReadOnly={false}
+        value={InterviewNotes}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeEntries,
+              Role,
+              HourlyRate,
+              StartDate,
+              Current,
+              Telephone,
+              ContractType,
+              EndDate,
+              Age,
+              DOB,
+              InterviewNotes: value,
+              Medical,
+              ApplicationID,
+            };
+            const result = onChange(modelFields);
+            value = result?.InterviewNotes ?? value;
+          }
+          if (errors.InterviewNotes?.hasError) {
+            runValidationTasks("InterviewNotes", value);
+          }
+          setInterviewNotes(value);
+        }}
+        onBlur={() => runValidationTasks("InterviewNotes", InterviewNotes)}
+        errorMessage={errors.InterviewNotes?.errorMessage}
+        hasError={errors.InterviewNotes?.hasError}
+        {...getOverrideProps(overrides, "InterviewNotes")}
+      ></TextField>
+      <TextField
+        label="Medical"
+        isRequired={false}
+        isReadOnly={false}
+        value={Medical}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeEntries,
+              Role,
+              HourlyRate,
+              StartDate,
+              Current,
+              Telephone,
+              ContractType,
+              EndDate,
+              Age,
+              DOB,
+              InterviewNotes,
+              Medical: value,
+              ApplicationID,
+            };
+            const result = onChange(modelFields);
+            value = result?.Medical ?? value;
+          }
+          if (errors.Medical?.hasError) {
+            runValidationTasks("Medical", value);
+          }
+          setMedical(value);
+        }}
+        onBlur={() => runValidationTasks("Medical", Medical)}
+        errorMessage={errors.Medical?.errorMessage}
+        hasError={errors.Medical?.hasError}
+        {...getOverrideProps(overrides, "Medical")}
+      ></TextField>
+      <TextField
+        label="Application id"
+        isRequired={false}
+        isReadOnly={false}
+        value={ApplicationID}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeEntries,
+              Role,
+              HourlyRate,
+              StartDate,
+              Current,
+              Telephone,
+              ContractType,
+              EndDate,
+              Age,
+              DOB,
+              InterviewNotes,
+              Medical,
+              ApplicationID: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.ApplicationID ?? value;
+          }
+          if (errors.ApplicationID?.hasError) {
+            runValidationTasks("ApplicationID", value);
+          }
+          setApplicationID(value);
+        }}
+        onBlur={() => runValidationTasks("ApplicationID", ApplicationID)}
+        errorMessage={errors.ApplicationID?.errorMessage}
+        hasError={errors.ApplicationID?.hasError}
+        {...getOverrideProps(overrides, "ApplicationID")}
       ></TextField>
       <Flex
         justifyContent="space-between"

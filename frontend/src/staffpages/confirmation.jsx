@@ -1,28 +1,33 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/24/outline'
-import { useLocation } from 'react-router-dom'
 
 export default function Example() {
   const [open, setOpen] = useState(true)
-  const location = useLocation();
   const [paymentStatus, setPaymentStatus] = useState(null);
+  const [data, setData] = useState({});
+  
 
   useEffect(() => {
-    // Parse the URL parameters
-    const params = new URLSearchParams(location.search);
+    // Fetch data from your Lambda function
+    fetch('https://your-api-gateway-url/endpoint', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data); // This is the data returned from your Lambda function
+      setData(data);
 
-    // i want to get all the parameters
-
-    console.log(params);
-
-
-    // Access the data from the parameters
-    const status = params.get('status');
-
-    // Set the payment status based on the status parameter
-    setPaymentStatus(status === 'success' ? 'Payment successful' : 'Payment unsuccessful');
-  }, [location]);
+      // Set the payment status based on the status parameter
+      setPaymentStatus(data.status === 'success' ? 'Payment successful' : 'Payment unsuccessful');
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }, []);
 
   // destroy the iframe after the component is unmounted
 

@@ -92,6 +92,11 @@ import PaymentSession from './customer-pages/paymentSession';
 import PaymentTest from './staffpages/paymenttest';
 import Confirmation from './staffpages/confirmation';
 import Payments from './staffpages/payments';
+import HomeCookedFinance from './staffpages/homecookedorders';
+import ManualEntry from './staffpages/manualentry';
+import Applications from './staffpages/applications';
+import CareerRegister from './customer-pages/Login/careerRegister';
+
 
 
 
@@ -257,6 +262,9 @@ function App() {
             <Route path= '/stockpdf' element={<StockPdf />} />
             <Route path= '/paymenttest' element={<PaymentTest />} />
             <Route path= '/confirmation' element={<Confirmation />} />
+            <Route path= '/hcmhistory' element={<HomeCookedFinance />} />
+            <Route path= '/entry' element={<ManualEntry />} />
+            <Route path= '/applications' element={<Applications />} />
           </>
         )}
         
@@ -286,6 +294,7 @@ function App() {
         <Route path= "/jobs/apply" element={<Application />} />
         <Route path="/eventregister" element={< Eventregister />} />
         <Route path="/paymentsession" element={<PaymentSession />} />
+        <Route path='/careerregister' element={<CareerRegister />} />
         
         
 

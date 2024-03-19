@@ -85,6 +85,10 @@ import ShoppingList from './staffpages/ShoppingList';
 import CreateEvent from './staffpages/createevent';
 import Event from './customer-pages/events';
 import StockPdf from './staffpages/stockpdf';
+import HomeCookedHistory from './staffpages/homecookedorders';
+import ManualEntry from './staffpages/manualentry';
+import Applications from './staffpages/applications';
+
 
 
 
@@ -265,6 +269,9 @@ export function AppRoutes() {
             <Route path='/shoppinglist' element={<ShoppingList />} />
             <Route path='/createevent' element={<CreateEvent />} />
             <Route path= '/stockpdf' element={<StockPdf />} />
+            <Route path= '/hcmhistory' element={<HomeCookedHistory />} />
+            <Route path= '/entry' element={<ManualEntry />} />
+            <Route path= '/applications' element={<Applications />} />
 
 
 

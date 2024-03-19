@@ -35,12 +35,15 @@ import {
   XMarkIcon,
   CheckIcon,
   SunIcon,
+  WifiIcon,
+  FunnelIcon,
+  SwatchIcon,
   
   
 } from '@heroicons/react/24/outline'
 import TodaysBookings from './todaysbookings'
 import Announcements from './Announcement'
-import { ArrowLeftIcon, BoltIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CogIcon, CurrencyPoundIcon, HeartIcon, LightBulbIcon,PencilIcon, PhoneIcon, TableCellsIcon, TvIcon
+import { ArrowLeftIcon, BoltIcon, CakeIcon, ChatBubbleBottomCenterIcon, ClockIcon, CloudIcon, CogIcon, CurrencyPoundIcon, HeartIcon, LightBulbIcon,PencilIcon, PhoneIcon, PowerIcon, QrCodeIcon, StarIcon, TableCellsIcon, TvIcon
 
 } from '@heroicons/react/20/solid'
 import Modal from './modal'
@@ -49,6 +52,7 @@ import UsedByStock from './UsedByStock'
 import TillProducts from './tillproducts'
 import Weather from './weatherdata'
 import HomeCookedStats from './homecookedstats'
+import JobApplicationBanner from './applicationbanner'
 
 
 
@@ -112,13 +116,14 @@ useEffect(() => {
   const navigation = [
     { name: 'Till', href: '/till', icon: CurrencyPoundIcon, current: true },
     {name: 'Make a Booking', href: '/reservations', icon: PencilIcon, current: false },
-    {name: 'Pre-Bookings', href: '/Barcode', icon: CalendarIcon, current: false },
+    {name: 'QR Code Scanner', href: '/Barcode', icon: QrCodeIcon, current: false },
   { name: 'Chat', href: '/chat', icon: ChatBubbleBottomCenterIcon, current: false },
   { name: 'Control Panel', href: '/controlpanel', icon: BoltIcon, current: false },
   { name: 'Kitchen', href: '/kitchen', icon: CakeIcon , current: false },
   { name: 'Tables', href: '/Tables', icon: TableCellsIcon, current: false },
   { name: 'Popular Items', href: '/tillhistory', icon: HeartIcon, current: false},
   {name: 'Create Event', href: '/createevent', icon: SunIcon, current: false},
+  {name: 'HomeCooked Orders', href: '/hcmhistory', icon: StarIcon, current: false },
 
   { name: 'Used By Stock', href: '/usedby', icon: CheckIcon, current: false },
   { name: 'Edit Landing Page', href: '/edithome', icon: PencilIcon, current: false },
@@ -275,7 +280,7 @@ useEffect(() => {
                           </ul>
                         </li>
                         <li>
-                          <div className="text-xs font-semibold leading-6 text-gray-400">Your teams</div>
+                          <div className="text-xs font-semibold leading-6 text-purple-500">Your teams</div>
                           <ul role="list" className="-mx-2 mt-2 space-y-1">
                             {teams.map((team) => (
                               <li key={team.name}>
@@ -283,7 +288,7 @@ useEffect(() => {
                                   to={team.href}
                                   className={classNames(
                                     team.current
-                                      ? 'bg-gray-50 text-indigo-600'
+                                      ? 'bg-purple-500 text-indigo-600'
                                       : 'text-indigo-700 hover:text-indigo-600 hover:bg-gray-50',
                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                   )}
@@ -292,7 +297,7 @@ useEffect(() => {
                                     className={classNames(
                                       team.current
                                         ? 'text-indigo-600 border-indigo-600'
-                                        : 'text-indigo-600 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
+                                        : 'text-indigo-600 border-purple-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
                                       'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
                                     )}
                                   >
@@ -416,11 +421,25 @@ useEffect(() => {
         <main className="py-10 lg:pl-72">
         <div className='fixed top-0 w-full md:w-3/4 lg:w-1/2 xl:w-1/3 2xl:w-1/4 mx-auto'>
   <Modal show={show} setShow={setShow} message={messages[messages.length - 1]} />
+  <JobApplicationBanner/>
 </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between">
 
             <p className="text-2xl font-semibold text-gray-900">{formattedTime}</p>
             <Weather />
+            <button onClick={
+              // force reload of page
+              () => {
+                window.location.reload();
+              }
+
+            }
+        type="button"
+        className="rounded-full bg-red-600 p-2 text-white shadow-sm mr-5 hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      >
+        <PowerIcon className="h-5 w-5" aria-hidden="true" />
+      </button>
+
 
             </div>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

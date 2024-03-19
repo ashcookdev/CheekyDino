@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { DataStore } from 'aws-amplify';
 import { Sessions } from '../models';
 import { format, addHours } from 'date-fns';
@@ -7,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import tableData from './TableData.json';
 import { useNavigate } from 'react-router-dom';
 import { id } from 'date-fns/locale';
+import { useState, useEffect } from 'react';
 
 
 function MoveTables() {

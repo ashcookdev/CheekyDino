@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import OpenAI from 'openai';
-import config from './openai'; // Adjust the path if necessary
+import config from '../openai'; // Adjust the path if necessary
 import { CogIcon } from '@heroicons/react/20/solid';
 import { DataStore } from 'aws-amplify';
 import { StockControl } from '../models';

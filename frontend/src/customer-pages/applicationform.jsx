@@ -1,104 +1,106 @@
-import { UserCircleIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
+import { DataStore, Storage } from 'aws-amplify';
+import { JobApplication } from '../models';
+import { useNavigate } from 'react-router-dom';
 
 export default function Example() {
+  const [formData, setFormData] = useState({
+    name: '',
+    about: '',
+    role: '',
+    town: '',
+    experience: '',
+    age: '',
+    email: '',
+    telephone: '',
+    contact: false,
+    cv: null,
+  });
 
+  const handleChange = (e) => {
+    const { name, value, type, checked, files } = e.target;
+    const newValue = type === 'checkbox' ? checked : type === 'file' ? files[0] : value;
+  
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: newValue,
+    }));
+  };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const [formData, setFormData] = useState({
-        name: '',
-        about: '',
-        role: '',
-        town: '',
-        experience: '',
-        age: '',
-        email: '',
-        telephone: '',
-        contact: false,
-        cv: null,
+    if (!formData.cv) {
+      console.error('CV file is required.');
+      return;
+    }
+
+    try {
+      // Upload CV file to S3
+      const cvFile = await Storage.put(`cvs/${formData.name}-cv`, formData.cv, {
+          contentType: formData.cv.type,
       });
-    
-      const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: type === 'checkbox' ? checked : value,
-        }));
-      };
-    
-      const handleSubmit = async (e) => {
-        e.preventDefault();
-    
-        // Check if formData.cv is not null or undefined
-        if (formData.cv) {
-            // Convert the file to a base64 string
-            const reader = new FileReader();
-            reader.readAsDataURL(formData.cv);
-            reader.onloadend = async () => {
-                let base64String = reader.result.replace('data:', '').replace(/^.+,/, '');
-    
-                // Create a new FormData instance
-                let data = {
-                    name: formData.name,
-                    about: formData.about,
-                    role: formData.role,
-                    town: formData.town,
-                    experience: formData.experience,
-                    age: formData.age,
-                    email: formData.email,
-                    telephone: formData.telephone,
-                    contact: formData.contact,
-                    cv: base64String
-                };
-    
-                try {
-                    // Send the form data to the AWS Lambda function
-                    const response = await fetch('https://wlnfq9d452.execute-api.eu-west-2.amazonaws.com/default/Career', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    });
-    
-                    // Check if the request was successful
-                    if (response.ok) {
-                        console.log('Email sent, we will get back to you');
-                        return `<div><p>Email sent, we will get back to you</p></div>`;
-                    } else {
-                        throw new Error('Error sending email');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-    
-                // Reset the form data
-                setFormData({
-                    name: '',
-                    about: '',
-                    role: '',
-                    town: '',
-                    experience: '',
-                    age: '',
-                    email: '',
-                    telephone: '',
-                    contact: false,
-                    cv: null,
-                });
-            };
-        } else {
-            console.error('CV file is not provided');
-        }
-    };
-    
-    
+  
+
+      // Save the job application data with CV URL
+      const jobApplication = await DataStore.save(
+        new JobApplication({
+          Name: formData.name,
+          CoverLetter: formData.about,
+          Role: formData.role,
+          Town: formData.town,
+          PreviousExprience: formData.experience,
+          Age: formData.age,
+          Email: formData.email,
+          Telephone: formData.telephone,
+          Contact: formData.contact,
+          Interviewed: false,
+          InterviewSet: false,
+          NotInterested: false,
+          CV: cvFile.key, // Save the S3 key of the uploaded CV
+        })
+      );
+
+      console.log('Job application saved:', jobApplication);
+      setMessage(true)
+    } catch (error) {
+      console.error('Error saving the job application:', error);
+    }
+  };
+
+  const [message, setMessage] = useState(false)
+
+  const Navigate = useNavigate()
 
 
 
-
-
-
-
+                    
   return (
+    <div >
+      {message && 
+      <div className="bg-white shadow sm:rounded-lg fixed">
+      <div className="px-4 py-5 sm:p-6">
+        <h3 className="text-base font-semibold leading-6 text-gray-900">Your Application Has Been Submitted </h3>
+        <div className="mt-2 max-w-xl text-sm text-gray-500">
+          <p>
+            We have received your application and will be in touch soon. Thank you for your interest in working with us.
+          </p>
+        </div>
+        <div className="mt-5">
+          <button
+          onClick={function() {
+            Navigate('/')
+          }
+          }
+            type="button"
+            className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+      }
     <form onSubmit={handleSubmit}>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
@@ -134,7 +136,7 @@ export default function Example() {
                   name="about"
                     onChange={handleChange}
                         value={formData.about}
-                  rows={3}
+                  rows={20}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   
                 />
@@ -143,23 +145,25 @@ export default function Example() {
             </div>
 
             <div className="col-span-2">
-              <label htmlFor="role" className="block text-sm font-medium leading-6 text-gray-900">
-                Role
-              </label>
-              <div className="mt-2">
-                <select
-                  id="role"
-                    onChange={handleChange}
-                        value={formData.role}
-                  name="role"
-                  autoComplete="role"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                >
-                  <option value="Cafe Worker/Party Host">Cafe Worker/Party Host</option>
-                  <option value="Cook">Cook</option>
-                </select>
-              </div>
-            </div>
+  <label htmlFor="role" className="block text-sm font-medium leading-6 text-gray-900">
+    Role
+  </label>
+  <div className="mt-2">
+    <select
+      id="role"
+      onChange={handleChange}
+      value={formData.role} // Ensure that the selected value is bound to the formData
+      name="role"
+      autoComplete="role"
+      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+    >
+      <option value="">Select a role</option>
+      <option value="Cafe Worker/Party Host">Cafe Worker/Party Host</option>
+      <option value="Cook">Cook</option>
+    </select>
+  </div>
+</div>
+
 
             <div className="col-span-2">
               <label htmlFor="town" className="block text-sm font-medium leading-6 text-gray-900">
@@ -188,7 +192,7 @@ export default function Example() {
                     onChange={handleChange}
                         value={formData.experience}
                   name="experience"
-                  rows={3}
+                  rows={20}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -290,5 +294,6 @@ export default function Example() {
         </button>
       </div>
     </form>
+  </div>
   );
 }
