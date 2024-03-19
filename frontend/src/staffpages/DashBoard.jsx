@@ -53,6 +53,7 @@ import TillProducts from './tillproducts'
 import Weather from './weatherdata'
 import HomeCookedStats from './homecookedstats'
 import JobApplicationBanner from './applicationbanner'
+import InterviewTodayBanner from './interviewtodaybanner'
 
 
 
@@ -422,6 +423,7 @@ useEffect(() => {
         <div className='fixed top-0 w-full md:w-3/4 lg:w-1/2 xl:w-1/3 2xl:w-1/4 mx-auto'>
   <Modal show={show} setShow={setShow} message={messages[messages.length - 1]} />
   <JobApplicationBanner/>
+  <InterviewTodayBanner/>
 </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between">
 

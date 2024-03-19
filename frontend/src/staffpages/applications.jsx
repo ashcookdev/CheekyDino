@@ -104,6 +104,11 @@ export default function JobApplicationForms() {
                 })
             );
             setNotes(true); // Set notes to true after interview submission
+            // timeout and reload the page
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+
         } catch (error) {
             console.error("Error setting interview:", error);
         }
@@ -142,6 +147,9 @@ export default function JobApplicationForms() {
             console.error("Error setting role:", error);
         }
     }
+
+    
+
     
 
 
@@ -238,9 +246,9 @@ export default function JobApplicationForms() {
     Add Interview Notes
 </button>
 <button 
-    className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+    className="rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
     type="button"
-    onClick={() => setNotes(true)}
+    onClick={() => setInterest(true)}
 >
     Edit Time and Date
 </button>

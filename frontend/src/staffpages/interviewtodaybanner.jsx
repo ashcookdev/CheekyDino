@@ -6,7 +6,6 @@ import { JobApplication as JobApplicationModel } from '../models'; // Rename the
 import { format, isToday } from 'date-fns';
 
 export default function JobApplicationBanner() {
-  const [showBanner, setShowBanner] = useState(false);
   const [interviewToday, setInterviewToday] = useState(false);
   const navigate = useNavigate();
 
@@ -14,18 +13,8 @@ export default function JobApplicationBanner() {
     const getJobApplication = async () => {
       try {
         const jobApplications = await DataStore.query(JobApplicationModel);
-        const newApplications = jobApplications.filter(application => 
-            !application.Interviewed && 
-            !application.InterviewSet && 
-            !application.NotInterested
-        );
-
-        const todayInterview = newApplications.find(application => isToday(new Date(application.InterviewDate)));
-
-        if (newApplications.length > 0 || todayInterview) {
-          setShowBanner(true);
-        }
-
+        const todayInterview = jobApplications.find(application => isToday(new Date(application.InterviewDate)));
+        console.log(todayInterview);
         if (todayInterview) {
           setInterviewToday(true);
         }
@@ -43,7 +32,7 @@ export default function JobApplicationBanner() {
 
   return (
     <div>
-      {showBanner && (
+      {interviewToday && (
         <div className="rounded-md bg-blue-50 p-4">
           <div className="flex">
             <div className="flex-shrink-0">
@@ -51,7 +40,7 @@ export default function JobApplicationBanner() {
             </div>
             <div className="ml-3 flex-1 md:flex md:justify-between">
               <p className="text-sm text-blue-700">
-                {interviewToday ? "You have an interview scheduled for today." : "You have received a new job application."}
+                You have an interview scheduled for today.
               </p>
               <p className="mt-3 text-sm md:ml-6 md:mt-0">
                 <button
