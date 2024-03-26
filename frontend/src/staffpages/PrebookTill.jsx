@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ReactToPrint from "react-to-print";
 import QRCode from "react-qr-code";
 import { motion } from "framer-motion";
@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { DataStore } from "@aws-amplify/datastore";
 import { Sessions, Messages } from "../models";
 import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
 
 
 const isElectron = window && window.process && window.process.type;

@@ -28,9 +28,7 @@ export default function Qrscanner() {
       const sessions = await DataStore.query(Sessions);
       // Filter sessions based on conditions
       const filteredSessions = sessions.filter(s =>
-        s.CustomerbookingID.includes(value) && // Check if CustomerbookingID contains the value
-        s.Date === today && // Check if the Date is today
-        s.Arrived === false // Check if Arrived is false
+        s.id.includes(value)  // Check if Arrived is false
       );
 
       if (filteredSessions.length > 0) {

@@ -95,8 +95,9 @@ import { id } from 'date-fns/locale';
       .reduce((total, session) => total + (session.TotalSpent || 0), 0);    const yesterdayTotalSpend = yesterdaySessions.reduce((total, session) => total + (session.TotalSpent || 0), 0);
     const totalSpendChange = todayTotalSpend - yesterdayTotalSpend;
   
-    const currentTime = new Date();
-    const futureBookings = sessions.filter(session => session.TimeslotFrom > currentTime);
+
+    const currentTime = format(new Date(), 'HH:mm');    
+    const futureBookings = sessions.filter(session => session.TimeslotFrom > currentTime && session.Date === today && session.Arrived === false);
     const futureSessionsCount = futureBookings.length;
 
   

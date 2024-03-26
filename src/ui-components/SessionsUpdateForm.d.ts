@@ -47,6 +47,7 @@ export declare type SessionsUpdateFormInputValues = {
     EventID?: string;
     EventName?: string;
     PaymentAuth?: string;
+    PaymentMethod?: string;
 };
 export declare type SessionsUpdateFormValidationValues = {
     Name?: ValidationFunction<string>;
@@ -73,6 +74,7 @@ export declare type SessionsUpdateFormValidationValues = {
     EventID?: ValidationFunction<string>;
     EventName?: ValidationFunction<string>;
     PaymentAuth?: ValidationFunction<string>;
+    PaymentMethod?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type SessionsUpdateFormOverridesProps = {
@@ -101,6 +103,7 @@ export declare type SessionsUpdateFormOverridesProps = {
     EventID?: PrimitiveOverrideProps<TextFieldProps>;
     EventName?: PrimitiveOverrideProps<TextFieldProps>;
     PaymentAuth?: PrimitiveOverrideProps<TextFieldProps>;
+    PaymentMethod?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type SessionsUpdateFormProps = React.PropsWithChildren<{
     overrides?: SessionsUpdateFormOverridesProps | undefined | null;

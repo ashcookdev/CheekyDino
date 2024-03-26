@@ -13,7 +13,7 @@ import axios from 'axios';
 
 //
 
-export default function SessionCalender({ date, children, adults, childData, email, telephone, name, staff }) {
+export default function SessionCalender({ date, children, adults, childData, email, telephone, name, staff, total }) {
 
   const navigate = useNavigate();
 
@@ -29,6 +29,8 @@ export default function SessionCalender({ date, children, adults, childData, ema
 
 
   const [completed, setCompleted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
 
 
   
@@ -124,12 +126,14 @@ export default function SessionCalender({ date, children, adults, childData, ema
     
     // Handle booking
     async function handleBook(item) {
+      // Add a state for the loader
+    
       const createUniqueID = () => {
         return Math.random().toString(36).substr(2, 9);
       };
     
       const bookingID = createUniqueID();
-
+    
       const emailData = {
         email: email,
         name: name,
@@ -142,18 +146,20 @@ export default function SessionCalender({ date, children, adults, childData, ema
         bookingID: bookingID,
         totalSpent: childData[0].TotalSpent.toFixed(2),
         childData: childData,
-      
       }
-
+    
+      // Set loading to true before the fetch
+      setLoading(true);
+    
       const response = await fetch('https://ebaedr0fmd.execute-api.eu-west-2.amazonaws.com/send', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(emailData),
-    });
-
-   
+      });
+    
+      // Set loading to false after the fetch
     
       // Save booking information to DataStore
       DataStore.save(
@@ -179,17 +185,20 @@ export default function SessionCalender({ date, children, adults, childData, ema
         })
       );
     
-      // Redirect to /sessionbooking page
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+    
+        // set a timer to redirect to the till page
+        setTimeout(() => {
+          setCompleted(true);
+          setLoading(false);
 
-if (response.ok) {
-  const data = await response.json();
-  console.log(data);
-  setCompleted(true)    
-
-} else {
-  console.error('There was an error!', response.status);
-}
-}
+        }, 3000); // 2000ms = 2 seconds
+      } else {
+        console.error('There was an error!', response.status);
+      }
+    }
 
 
 
@@ -205,6 +214,10 @@ childData.forEach(item => {
   // Display available timeslots with "Book" button
     // Display available timeslots with "Book" button
     return (
+      <div>
+      {loading && <p>Loading...</p>
+    }
+
       <motion.div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <p className="text-lg font-semibold leading-6 text-gray-900">{date}</p>
         <p className="text-center font-bold">Select A Timeslot</p>
@@ -230,6 +243,7 @@ childData.forEach(item => {
           ))}
         </div>
       </motion.div>
+      </div>
     );
   }
        

@@ -88,6 +88,8 @@ import StockPdf from './staffpages/stockpdf';
 import HomeCookedHistory from './staffpages/homecookedorders';
 import ManualEntry from './staffpages/manualentry';
 import Applications from './staffpages/applications';
+import TillBack from './staffpages/tillback';
+
 
 
 
@@ -272,6 +274,7 @@ export function AppRoutes() {
             <Route path= '/hcmhistory' element={<HomeCookedHistory />} />
             <Route path= '/entry' element={<ManualEntry />} />
             <Route path= '/applications' element={<Applications />} />
+            <Route path='/tillback' element={<TillBack />} />
 
 
 

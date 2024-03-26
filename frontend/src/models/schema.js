@@ -2503,6 +2503,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "PaymentMethod": {
+                    "name": "PaymentMethod",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -2741,6 +2748,27 @@ export const schema = {
                 },
                 "PaymentAuth": {
                     "name": "PaymentAuth",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Tab": {
+                    "name": "Tab",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Paid": {
+                    "name": "Paid",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "PaymentMethod": {
+                    "name": "PaymentMethod",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -4186,5 +4214,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "b6bd330cacbb7b1fd7d5f4b2d4e3ee7e"
+    "version": "f70160b65e8f03c149f200a759f03a09"
 };

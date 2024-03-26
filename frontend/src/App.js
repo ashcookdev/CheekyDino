@@ -96,6 +96,7 @@ import HomeCookedFinance from './staffpages/homecookedorders';
 import ManualEntry from './staffpages/manualentry';
 import Applications from './staffpages/applications';
 import CareerRegister from './customer-pages/Login/careerRegister';
+import TillBack from './staffpages/tillback';
 
 
 
@@ -265,6 +266,7 @@ function App() {
             <Route path= '/hcmhistory' element={<HomeCookedFinance />} />
             <Route path= '/entry' element={<ManualEntry />} />
             <Route path= '/applications' element={<Applications />} />
+            <Route path= '/tillback' element={<TillBack />} />
           </>
         )}
         

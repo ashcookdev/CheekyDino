@@ -361,7 +361,7 @@ console.log(tableInfo.id)
               Orders: {table.orders}
             </p>
             <p className="text-sm font-medium text-white">
-              Total Spent: £{table.totalSpent}
+              Total Spent: £{table.totalSpent.toFixed(2)  }
             </p>
             <p className="text-sm font-medium text-white">
               Booked for {table.timeslot}

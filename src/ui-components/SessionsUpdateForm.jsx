@@ -214,6 +214,7 @@ export default function SessionsUpdateForm(props) {
     EventID: "",
     EventName: "",
     PaymentAuth: "",
+    PaymentMethod: "",
   };
   const [Name, setName] = React.useState(initialValues.Name);
   const [Email, setEmail] = React.useState(initialValues.Email);
@@ -249,6 +250,9 @@ export default function SessionsUpdateForm(props) {
   const [PaymentAuth, setPaymentAuth] = React.useState(
     initialValues.PaymentAuth
   );
+  const [PaymentMethod, setPaymentMethod] = React.useState(
+    initialValues.PaymentMethod
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = sessionsRecord
@@ -279,6 +283,7 @@ export default function SessionsUpdateForm(props) {
     setEventID(cleanValues.EventID);
     setEventName(cleanValues.EventName);
     setPaymentAuth(cleanValues.PaymentAuth);
+    setPaymentMethod(cleanValues.PaymentMethod);
     setErrors({});
   };
   const [sessionsRecord, setSessionsRecord] = React.useState(sessionsModelProp);
@@ -319,6 +324,7 @@ export default function SessionsUpdateForm(props) {
     EventID: [],
     EventName: [],
     PaymentAuth: [],
+    PaymentMethod: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -370,6 +376,7 @@ export default function SessionsUpdateForm(props) {
           EventID,
           EventName,
           PaymentAuth,
+          PaymentMethod,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -449,6 +456,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.Name ?? value;
@@ -496,6 +504,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.Email ?? value;
@@ -544,6 +553,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.TimeslotFrom ?? value;
@@ -592,6 +602,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.TimeslotTo ?? value;
@@ -640,6 +651,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.TimeLeft ?? value;
@@ -688,6 +700,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.TimeArrived ?? value;
@@ -736,6 +749,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.Date ?? value;
@@ -787,6 +801,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.Table ?? value;
@@ -838,6 +853,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.Orders ?? value;
@@ -885,6 +901,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.Prepaid ?? value;
@@ -936,6 +953,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.TotalSpent ?? value;
@@ -987,6 +1005,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.Adults ?? value;
@@ -1038,6 +1057,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.Children ?? value;
@@ -1085,6 +1105,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.Arrived ?? value;
@@ -1132,6 +1153,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.LeftCenter ?? value;
@@ -1183,6 +1205,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.ExtraTables ?? value;
@@ -1230,6 +1253,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.Telephone ?? value;
@@ -1273,6 +1297,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             values = result?.orderid ?? values;
@@ -1345,6 +1370,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.Staff ?? value;
@@ -1392,6 +1418,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.CustomerbookingID ?? value;
@@ -1441,6 +1468,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.Event ?? value;
@@ -1488,6 +1516,7 @@ export default function SessionsUpdateForm(props) {
               EventID: value,
               EventName,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.EventID ?? value;
@@ -1535,6 +1564,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName: value,
               PaymentAuth,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.EventName ?? value;
@@ -1582,6 +1612,7 @@ export default function SessionsUpdateForm(props) {
               EventID,
               EventName,
               PaymentAuth: value,
+              PaymentMethod,
             };
             const result = onChange(modelFields);
             value = result?.PaymentAuth ?? value;
@@ -1595,6 +1626,54 @@ export default function SessionsUpdateForm(props) {
         errorMessage={errors.PaymentAuth?.errorMessage}
         hasError={errors.PaymentAuth?.hasError}
         {...getOverrideProps(overrides, "PaymentAuth")}
+      ></TextField>
+      <TextField
+        label="Payment method"
+        isRequired={false}
+        isReadOnly={false}
+        value={PaymentMethod}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Name,
+              Email,
+              TimeslotFrom,
+              TimeslotTo,
+              TimeLeft,
+              TimeArrived,
+              Date,
+              Table,
+              Orders,
+              Prepaid,
+              TotalSpent,
+              Adults,
+              Children,
+              Arrived,
+              LeftCenter,
+              ExtraTables,
+              Telephone,
+              orderid,
+              Staff,
+              CustomerbookingID,
+              Event,
+              EventID,
+              EventName,
+              PaymentAuth,
+              PaymentMethod: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.PaymentMethod ?? value;
+          }
+          if (errors.PaymentMethod?.hasError) {
+            runValidationTasks("PaymentMethod", value);
+          }
+          setPaymentMethod(value);
+        }}
+        onBlur={() => runValidationTasks("PaymentMethod", PaymentMethod)}
+        errorMessage={errors.PaymentMethod?.errorMessage}
+        hasError={errors.PaymentMethod?.hasError}
+        {...getOverrideProps(overrides, "PaymentMethod")}
       ></TextField>
       <Flex
         justifyContent="space-between"

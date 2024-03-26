@@ -57,13 +57,11 @@ useEffect(() => {
 
   return () => clearInterval(interval);
 }
+
   , []);
-
   
 
 
-
-  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -105,16 +103,27 @@ console.log(orders);
     }
   }
 
+  const newOrderSound = `${process.env.PUBLIC_URL}/marimba.mp3`;
+
 
 
 
   useEffect(() => {
     fetchTodaysOrders();
     const subscription = DataStore.observe(CafeOrder).subscribe(msg => {
-      if (msg.opType === 'INSERT') {
+      console.log('Received message:', msg);
+      if (msg.opType === 'INSERT' && msg.element.Kitchen === true) {
         fetchTodaysOrders();
+        // Other handling code...
+        const audio = new Audio(newOrderSound);
+        audio.play();
       }
     });
+    
+  
+        // Play the sound
+        
+ 
   
     return () => subscription.unsubscribe();
   }, []); // Removed orders from the dependency array

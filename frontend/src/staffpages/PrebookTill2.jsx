@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ReactToPrint from "react-to-print";
 import QRCode from "react-qr-code";
 import { motion } from "framer-motion";

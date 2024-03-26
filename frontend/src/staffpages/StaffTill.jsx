@@ -8,8 +8,22 @@ import { CheckBadgeIcon, ChevronDoubleDownIcon } from "@heroicons/react/24/solid
 
 
 export default function TillStaff({onSelectChange}) {
+
+
+  const defaultStaff = { StaffId: 'Barry@Cheekydino.co.uk', /* other properties */ };
+
+
+
+  const [selected, setSelected] = useState(defaultStaff);
+
+  useEffect(() => {
+    onSelectChange(selected);
+  }, [selected]);
     
-    const [selected, setSelected] = useState(null);
+    // Assume defaultStaff is your default staff value
+
+// Set defaultStaff as the initial state
+
 
     const classNames = (...classes) => {
         return classes.filter(Boolean).join(' ')

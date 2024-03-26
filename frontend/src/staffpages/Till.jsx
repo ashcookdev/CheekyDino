@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import { DataStore, Predicates } from "aws-amplify";
 import { PartyBooking } from '../models';
 import BarCodeScanner from "./barcodescanner";
@@ -19,6 +19,10 @@ import ControlPanel from "./ControlPanel";
 import Modal from "./modal";  // import the modal component
 import { Switch } from '@headlessui/react'
 import HomeCookedTill from "./homecookedtill";
+import { Dialog, Transition } from '@headlessui/react'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import Tabs from "./tabs";
+
 
 
 
@@ -35,7 +39,7 @@ export default function Till() {
 
   const [order, setOrder] = useState([]);
   const [total, setTotal] = useState(0);
-  const [table, setTable] = useState(1);
+  const [table, setTable] = useState("");
   const [party, setPartyBookings] = useState([]);
 
   const [selectedParty, setSelectedParty] = useState(null);
@@ -63,9 +67,18 @@ const [drawer, SetDrawer] = useState(false);
 const [show, setShow] = useState(false);
 const [messages, setMessages] = useState([]);
 const [enabled, setEnabled] = useState(false)
+const [open, setOpen] = useState(true)
+const [reload, setReload] = useState(false)
+const [tab, setTab] = useState(false)
 
 
 
+const cancelButtonRef = useRef(null)
+
+
+if (reload) {
+  window.location.reload();
+}
 
 useEffect(() => {
   fetchSessions().then(setOccupiedSessions);
@@ -117,7 +130,7 @@ useEffect(() => {
   const handleItemClick = async (item) => {
     setSelectedItem(item);
     setShowItems(false);
-  setShowCategories(true)
+  setShowCategories(false)
 setShowTopBar(true)
     // Pass the selected item to the handleProductClick function
     await handleProductClick(item);
@@ -160,7 +173,13 @@ setShowTopBar(true)
       // Update the total price
       setTotal((total) => total + item.Price);
     }
+  
+    // Check if .Extras are null, then showItems(true)
+    if (!item.Extras) {
+      setShowItems(true);
+    }
   };
+  
   
 
   const handleDeleteClick = async (index) => {
@@ -222,7 +241,7 @@ setShowTopBar(true)
   }
 
   if (arrival === true) {
-    return <MakeReservation />
+   navigate('/reservations');
   }
 
   if (tablee === true) {
@@ -240,6 +259,11 @@ setShowTopBar(true)
 
   }
 
+  if (tab === true) {
+    return <Tabs />
+  }
+  
+
   if (chat === true) {
     return <SlideOver />
   }
@@ -247,17 +271,78 @@ setShowTopBar(true)
   if (kitchen === true) {
     navigate ('/kitchen')
   }
+
   if (confirm === true) {
-
-    if (staff === null) {
-
-window.location.reload();
-        }
+    console.log(table); // Log the value of table
     
+    if (!table) { // Check if table is falsy (null, undefined, empty string, etc.)
+      return (
+        <Transition.Root show={open} as={Fragment}>
+        <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          </Transition.Child>
+  
+          <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+                  <div className="sm:flex sm:items-start">
+                    <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                      <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
+                    </div>
+                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                      <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                        Please Select A Customer Table Before Confirming An Order
+                      </Dialog.Title>
+                      <div className="mt-2">
+                        
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-5 sm:ml-10 sm:mt-4 sm:flex sm:pl-4">
+                    <button
+                      type="button"
+                      className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto"
+                      onClick={() => setReload(true)}
+                    >
+                      Okay
+                    </button>
+                    
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition.Root>
+      );
+    }
+  
+    // If childName is not null, return the TillPayments component
     return (
-      <TillPayments order={order} total={total} table={table} childName= {childName} setOrder={setOrder} setTotal={setTotal} staff={staff} />
+      <TillPayments order={order} total={total} table={table} childName={childName} setOrder={setOrder} setTotal={setTotal} staff={staff} />
     );
   }
+  
+  
+  
   
   
 
@@ -314,6 +399,14 @@ window.location.reload();
     // You can add your own logic here to handle the change in the selected staff member
   };
 
+  const handleBackClick = () => {
+    setShowItems(false);
+    setShowCategories(true);
+  setShowTopBar(true)
+  }
+
+
+
 
   
 
@@ -342,21 +435,22 @@ window.location.reload();
 </label>
 <select
   id="table"
-  value={table}
+  value={table} // Use the value prop to specify the currently selected option
   onChange={handleTableChange}
-  className="border rounded-md p-1 mr-2 bg-green-200"
+  className={`border rounded-md p-1 mr-2 bg-green-200 transform transition-transform duration-500 ${!table && 'animate-pulse scale-110'}`}
 >
+  <option value="" disabled>Please select table</option>
   {occupiedSessions.map((session) => (
     <option key={session.Table} value={session.Table}>
       {`Table: ${session.Table} - Adult Name: ${session.Name}`}
     </option>
   ))}
-  {occupiedSessions.length === 1 && (
-    <option value={occupiedSessions[0].Table}>
-      {`Table: ${occupiedSessions[0].Table} - Adult Name: ${occupiedSessions[0].Name}`}
-    </option>
-  )}
 </select>
+
+
+
+
+
 
 
 
@@ -436,6 +530,7 @@ window.location.reload();
 
 
 
+
 {drawer && (
  <ControlPanel />
 )}
@@ -487,36 +582,40 @@ window.location.reload();
 
 
 
-      {showItems && (
+{showItems && (
+  <div>
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      {filteredData
+        .sort((a, b) => a.Name.localeCompare(b.Name)) // Sort alphabetically based on the Name property
+        .map((item, index) => {
+          let stockColor;
+          if (item.StockLevel < 5) {
+            stockColor = 'bg-red-500';
+          } else if (item.StockLevel >= 5 && item.StockLevel <= 10) {
+            stockColor = 'bg-yellow-500';
+          } else {
+            stockColor = colors[index % colors.length];
+          }
 
-<div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-{filteredData
-  .sort((a, b) => a.Name.localeCompare(b.Name)) // Sort alphabetically based on the Name property
-  .map((item, index) => {
-    let stockColor;
-    if (item.StockLevel < 5) {
-      stockColor = 'bg-red-500';
-    } else if (item.StockLevel >= 5 && item.StockLevel <= 10) {
-      stockColor = 'bg-yellow-500';
-    } else {
-      stockColor = colors[index % colors.length];
-    }
+          return (
+            <motion.button
+              key={item.id}
+              onClick={() => handleItemClick(item)}
+              className={`text-white font-bold h-20 w-30 py-2 px-4  shadow-md  ${stockColor}`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {item.Name} - £{item.Price.toFixed(2)} - Stock: {item.StockLevel}
+            </motion.button>
+          );
+        })}
+    </div>
+    <button onClick={handleBackClick} className="rounded-full bg-red-600 mt-5 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
 
-    return (
-      <motion.button
-        key={item.id}
-        onClick={() => handleItemClick(item)}
-        className={`text-white font-bold h-20 w-30 py-2 px-4  shadow-md  ${stockColor}`}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        {item.Name} - £{item.Price.toFixed(2)} - Stock: {item.StockLevel}
-      </motion.button>
-    );
-  })}
-</div>
-
-      )}
+      Back
+    </button>
+  </div>
+)}
 
     {selectedItem && selectedItem.Extras && (
   <motion.div
@@ -551,9 +650,15 @@ window.location.reload();
           );
         } else {
           // Handle the case where kitchenItem or extra.price is undefined
-          return null; // You can choose to display nothing or handle it differently
+          return null // You can choose to display nothing or handle it differently
         }
+          
+        
       })}
+       <button onClick={handleBackClick} className="rounded-full bg-red-600 mt-5 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+
+Back
+</button>
     </ul>
   </motion.div>
 )}
@@ -572,6 +677,10 @@ window.location.reload();
         <div className="w-1/3 border-purple-400">
 
         <div className="border  p-4 mt-2 bg-purple-200 p-4 rounded-lg shadow-md">
+        {/* <button onClick={() => setTab(true)} className="rounded-full flex bg-blue-600 mt-5 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+      Tabs
+    </button> */}
+
         <Switch.Group as="div" className="flex items-center mb-2 mt-2">
       <Switch
         checked={enabled}
@@ -593,6 +702,8 @@ window.location.reload();
         <span className="font-medium text-gray-900">Event</span>{' '}
       </Switch.Label>
     </Switch.Group>
+   
+
         <p className="font-bold">Table:{table}</p>
               <p className="font-bold"> Name:{childName}</p>
               <p className="font-bold"> Staff:{staff}</p>

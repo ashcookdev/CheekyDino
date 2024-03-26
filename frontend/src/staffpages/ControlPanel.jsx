@@ -1,110 +1,48 @@
-import { Fragment, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+
+import { useEffect, useState, Fragment } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { motion } from "framer-motion";
-import { DataStore } from 'aws-amplify';
-import { Gates } from '../models';
-import { Auth } from 'aws-amplify';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
-
 export default function ControlPanel() {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(true);
 
   const Navigate = useNavigate();
 
-  
-  if (open === false) {
-    Navigate("/dashboard")
-  }
+  useEffect(() => {
+    if (!open) {
+      Navigate("/dashboard");
+    }
+  }, [open, Navigate]);
 
   const isElectron = window && window.process && window.process.type;
   const ipcRenderer = isElectron ? window.require('electron').ipcRenderer : null;
 
-// subsciption to new messages
+  const handleClick1 = () => {
+    console.log("Button 1 clicked");
+    ipcRenderer.send("open-drawer");
+  };
 
-// get current email address of logged in user
+  const handleClick2 = () => {
+    console.log("Button 2 clicked");
+    ipcRenderer.send("cafe-drawer");
+  };
 
-const [user, setUser] = useState(null);
+  const handleClick3 = () => {
+    console.log("Button 3 clicked");
+    ipcRenderer.send("entrance");
+  };
 
+  const handleClick4 = () => {
+    console.log("Button 4 clicked");
+    ipcRenderer.send("exit");
+  };
 
-useEffect(() => {
-  Auth.currentAuthenticatedUser().then(user => {
-    setUser(user.attributes.email)
-  })
-
-}, [])
-
-
-
-useEffect(() => {
-  if (user === 'frontdesk@cheekydino.co.uk') {
-    const subscription = DataStore.observe(Gates).subscribe(msg => {
-      console.log(msg.model, msg.opType, msg.element);
-      if (msg.opType === 'INSERT') {
-        console.log('New Message:', msg.element);
-        const content = parseInt(msg.element.content, 10);
-        
-        if (content === 1) {
-          ipcRenderer.send("entrance");
-        } else if (content === 2) {
-          ipcRenderer.send("exit");
-        }
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }
-}, [user]); // Don't forget to add `userEmail` to the dependency array
-
-
-
-
-
-  
-    const handleClick1 = () => {
-
-      console.log("Button 1 clicked");
-      ipcRenderer.send("open-drawer");
-
-      
-    };
-  
-    const handleClick2 = () => {
-      console.log("Button 2 clicked");
-      ipcRenderer.send("cafe-drawer");
-    };
-  
-    const handleClick3 = async () => {
-      console.log("Button 3 clicked");
-      if (user === 'frontdesk@cheekydino.co.uk') {
-        ipcRenderer.send("entrance");
-      } else {
-        await DataStore.save(new Gates({ content: 1 }));
-      }
-    };
-    
-    const handleClick4 = async () => {
-      console.log("Button 4 clicked");
-      if (user === 'frontdesk@cheekydino.co.uk') {
-        ipcRenderer.send("exit");
-      } else {
-        await DataStore.save(new Gates({ content: 2 }));
-      }
-    };
-    
-    const handleClick5 = async () => {
-      console.log("Button 5 clicked");
-      if (user === 'frontdesk@cheekydino.co.uk') {
-        ipcRenderer.send("closing");
-      } else {
-        await DataStore.save(new Gates({ content: 1 }));
-        await DataStore.save(new Gates({ content: 2 }));
-      }
-    };
-    
+  const handleClick5 = () => {
+    console.log("Button 5 clicked");
+    ipcRenderer.send("closing");
+  };
 
 
 

@@ -765,6 +765,7 @@ type EagerSessions = {
   readonly EventID?: string | null;
   readonly EventName?: string | null;
   readonly PaymentAuth?: string | null;
+  readonly PaymentMethod?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -800,6 +801,7 @@ type LazySessions = {
   readonly EventID?: string | null;
   readonly EventName?: string | null;
   readonly PaymentAuth?: string | null;
+  readonly PaymentMethod?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -839,6 +841,9 @@ type EagerCafeOrder = {
   readonly EventID?: string | null;
   readonly Event?: boolean | null;
   readonly PaymentAuth?: string | null;
+  readonly Tab?: boolean | null;
+  readonly Paid?: boolean | null;
+  readonly PaymentMethod?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -872,6 +877,9 @@ type LazyCafeOrder = {
   readonly EventID?: string | null;
   readonly Event?: boolean | null;
   readonly PaymentAuth?: string | null;
+  readonly Tab?: boolean | null;
+  readonly Paid?: boolean | null;
+  readonly PaymentMethod?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

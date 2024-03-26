@@ -46,6 +46,7 @@ export declare type SessionsCreateFormInputValues = {
     EventID?: string;
     EventName?: string;
     PaymentAuth?: string;
+    PaymentMethod?: string;
 };
 export declare type SessionsCreateFormValidationValues = {
     Name?: ValidationFunction<string>;
@@ -72,6 +73,7 @@ export declare type SessionsCreateFormValidationValues = {
     EventID?: ValidationFunction<string>;
     EventName?: ValidationFunction<string>;
     PaymentAuth?: ValidationFunction<string>;
+    PaymentMethod?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type SessionsCreateFormOverridesProps = {
@@ -100,6 +102,7 @@ export declare type SessionsCreateFormOverridesProps = {
     EventID?: PrimitiveOverrideProps<TextFieldProps>;
     EventName?: PrimitiveOverrideProps<TextFieldProps>;
     PaymentAuth?: PrimitiveOverrideProps<TextFieldProps>;
+    PaymentMethod?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type SessionsCreateFormProps = React.PropsWithChildren<{
     overrides?: SessionsCreateFormOverridesProps | undefined | null;

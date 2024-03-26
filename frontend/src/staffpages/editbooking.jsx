@@ -3,6 +3,7 @@ import { DataStore } from 'aws-amplify';
 import { Sessions } from '../models';
 import { format } from 'date-fns';
 import SessionTill from './SessionTill';
+import EditCalenderTill from './editcalandertill';
 
 export default function EditBooking() {
     const [sessions, setSessions] = useState([]);
@@ -12,22 +13,35 @@ export default function EditBooking() {
     const [pass, setPass] = useState(false);
     const [total, setTotal] = useState(0);
     const [tillInfo, setTillInfo] = useState(null);
+    const [searchDate, setSearchDate] = useState('');
+    const [newDate, setNewDate] = useState(false);
+    const [showDateInput, setShowDateInput] = useState(false);
+    const [showAdultChildInput, setShowAdultChildInput] = useState(false);
+    const [showConfirmButton, setShowConfirmButton] = useState(false);
 
     useEffect(() => {
-        const fetchSessions = async () => {
-            const sessionsData = await DataStore.query(Sessions);
-            const date = new Date();
-            const awsDate = format(date, 'yyyy-MM-dd');
-            const todaysSessions = sessionsData.filter(session => session.Date === awsDate);
-            setSessions(todaysSessions);
-            
-            
-        };
         fetchSessions();
     }, []);
 
+    const fetchSessions = async () => {
+        const sessionsData = await DataStore.query(Sessions);
+        setSessions(sessionsData);
+    };
+
     const handleSelect = (event) => {
         setSelectedSession(event.target.value);
+    };
+
+    const handleSearchInputChange = (event) => {
+        setSearchDate(event.target.value);
+    };
+
+    const handleSearch = () => {
+        const filteredSessions = sessions.filter(session => {
+            const sessionDate = format(new Date(session.Date), 'yyyy-MM-dd');
+            return sessionDate === searchDate;
+        });
+        setSessions(filteredSessions);
     };
 
     const handleChildrenChange = (event) => {
@@ -42,22 +56,18 @@ export default function EditBooking() {
     };
 
     const handleDelete = async () => {
-        // Find the session to delete
         const sessionToDelete = sessions.find(session => session.Name === selectedSession);
-    
-        // Delete the session
+
         try {
             await DataStore.delete(sessionToDelete);
-            window.location.reload()
-    
-            // Remove the session from the local state
+            window.location.reload();
             setSessions(sessions.filter(session => session.Name !== selectedSession));
-            setSelectedSession(null); // Reset the selected session
+            setSelectedSession(null);
         } catch (error) {
             console.error('Error deleting session:', error);
         }
     };
-    
+
     const calculatePrice = (childData, adults, children) => {
         let price = 0;
         if (childData) {
@@ -85,40 +95,88 @@ export default function EditBooking() {
     const handleConfirm = async () => {
         const newTotal = calculatePrice(childData, numAdults);
         console.log(`Total price: £${newTotal.toFixed(2)}`);
-        // add the total to the session and the extra children and adults
         const session = sessions.find(session => session.Name === selectedSession);
         const updatedSession = Sessions.copyOf(session, updated => {
-            updated.TotalSpent += newTotal; // Add to existing total
-            updated.Children += childData.length; // Add to existing children count
-            updated.Adults += numAdults; // Add to existing adults count
+            updated.TotalSpent += newTotal;
+            updated.Children += childData.length;
+            updated.Adults += numAdults;
         });
-    
+
         try {
             await DataStore.save(updatedSession);
             console.log('Session updated successfully');
             setPass(true);
-            setTotal(newTotal); // Update the total state variable
+            setTotal(newTotal);
         } catch (error) {
             console.error('Error updating session:', error);
         }
-        setTillInfo(updatedSession)
+        setTillInfo(updatedSession);
     };
 
-    
-    
-if (pass === true) {
-    console.log(total);
-    console.log(selectedSession.Table);
-    console.log(tillInfo)
-    return (
-        <SessionTill order= {"2 Hour Session"} total = {total} table= {tillInfo.Table} ChildName ={tillInfo.Name} route= {true} />)
-}
+    const handleDate = () => {
+        setShowDateInput(true);
+    };
 
-    
-    
+    const handleAdultChildChange = () => {
+        setShowAdultChildInput(true);
+        setShowConfirmButton(true);
+    };
+
+    const handleDateInputChange = (event) => {
+        setSearchDate(event.target.value);
+    };
+
+    const handleDateSubmit = () => {
+        setShowDateInput(false);
+        setNewDate(true);
+    };
+
+    const handleAdultChildSubmit = () => {
+        setShowAdultChildInput(false);
+        // Logic to update adults and children
+    };
+
+    if (pass === true) {
+        console.log(total);
+        console.log(selectedSession.Table);
+        console.log(tillInfo);
+        return (
+            <SessionTill order={"2 Hour Session"} total={total} table={tillInfo.Table} ChildName={tillInfo.Name} route={true} />
+        );
+    }
+
+    if (newDate === true) {
+        const children = sessions.find(session => session.Name === selectedSession).Children;
+        const staff = sessions.find(session => session.Name === selectedSession).Staff;
+        const adults = sessions.find(session => session.Name === selectedSession).Adults;
+        const date = sessions.find(session => session.Name === selectedSession).Date;
+        const email = sessions.find(session => session.Name === selectedSession).Email;
+        const telephone = sessions.find(session => session.Name === selectedSession).Telephone;
+        const name = sessions.find(session => session.Name === selectedSession).Name;
+        const price = sessions.find(session => session.Name === selectedSession).TotalSpent;
+        const sessionID = sessions.find(session => session.Name === selectedSession).id;
+
+        
+
+        return <EditCalenderTill children={children} staff={staff} adults={adults} date={date} childData={childData} email={email} telephone={telephone} name={name} total={price} sessionID={sessionID} />;
+    }
+
+    const ageOptions = [
+        { label: "Under 1 year", value: "Under 1 year" },
+        { label: "1-2 years old", value: "1-2 years old" },
+        { label: "2+", value: "2+" },
+        { label: "Sibling", value: "sibling" },
+    ];
 
     return (
         <div className='mt-5'>
+            
+            <input
+                type="date"
+                value={searchDate}
+                onChange={handleSearchInputChange}
+            />
+            <button className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={handleSearch}>Search</button>
             <select onChange={handleSelect}>
                 <option>Select a session</option>
                 {sessions.map((session, index) => (
@@ -128,78 +186,65 @@ if (pass === true) {
                 ))}
             </select>
             {selectedSession && (
-                <div className='mx-auto p-6 mt-8 border-2 border-gray-300 shadow-lg rounded-md max-w-md bg-purple-100'>
+    <div className='mx-auto p-6 mt-8 border-2 border-gray-300 shadow-lg rounded-md max-w-screen-lg bg-purple-100'>
+        <p className='font-bold'>Selected session: {selectedSession}</p>
+        <p className='mt-2'>Date: {sessions.find(session => session.Name === selectedSession).Date}</p>
+        <p>Adults: {sessions.find(session => session.Name === selectedSession).Adults}</p>
+        <p>Children: {sessions.find(session => session.Name === selectedSession).Children}</p>
+        <p>Table: {sessions.find(session => session.Name === selectedSession).Table}</p>
+        <p>Total spent: £{sessions.find(session => session.Name === selectedSession).TotalSpent}</p>
+        <div className="flex flex-wrap justify-between mt-4">
+            <button className="rounded-md bg-red-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={handleDelete}>Delete</button>
+            <button className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={handleDate}>Change Date</button>
+            <button className="rounded-md bg-orange-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={handleAdultChildChange}>Change Adults/Children</button>
+            {showConfirmButton && (
+            <button className="rounded-md bg-green-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 animate-pulse focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={handleConfirm}>Confirm</button>
+        )}
+        </div>
+    </div>
+)}
 
-                    <p className='font-bold'>Selected session: {selectedSession}</p>
-                    <p className='font-bold'>Number of Children: {sessions.find(session => session.Name === selectedSession).Children}</p>
-                    <p className='font-bold'>Number of Adults: {sessions.find(session => session.Name === selectedSession).Adults}</p>
-                    <p className='font-bold'>Table: {sessions.find(session => session.Name === selectedSession).Table}</p>
-                    <p className='font-bold'>Total: £{sessions.find(session => session.Name === selectedSession).TotalSpent.toFixed(2)} </p>
-
-                    <div>
-                        
-                        <label htmlFor="children" className="block text-sm font-medium leading-6 text-gray-900">
-                            Extra Children
-                        </label>
-                        <div className="mt-2">
-                            <input onChange={handleChildrenChange}
-                                type="number"
-                                name="children"
-                                id="children"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                placeholder="1"
-                                aria-describedby="children"
-                            />
-                        </div>
-                        <label htmlFor="children" className="block text-sm font-medium leading-6 text-gray-900">
-                            Extra Adults
-                        </label>
-                        <div className="mt-2">
-                            <input 
-                                type="number"
-                                name="adults"
-                                id="adults"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                placeholder="1"
-                                aria-describedby="adults"
-                            />
-                        </div>
-                        {childData.map((data, index) => (
-                            <div key={index}>
-                                <div>
-                                    <label htmlFor={`child-age-${index}`} className="block text-sm font-medium leading-6 text-gray-900">
-                                        Child's Age
-                                    </label>
-                                    <select
-                                        onChange={(e) => handleChildAgeChange(index, e.target.value)}
-                                        id={`child-age-${index}`}
-                                        name={`child-age-${index}`}
-                                        className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    >
-                                        <option value="6 months and under">6 months and under</option>
-                                        <option value="Under 1 year">under 1 year</option>
-                                        <option value="1-2 years old">1-2 years old</option>
-                                        <option value="sibling">sibling</option>
-                                        <option value="2+">2+</option>
-                                    </select>
-                                </div>
-
-                                
-                            </div>
-                        ))}
-                    </div>
-                    <div>
-                    <button className="mt-5 bg-indigo-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleConfirm} >
-Confirm                </button>
-<button onClick={handleDelete} className='mt-5 ml-8 px-4 py-2 bg-red-500 text-white rounded shadow-lg hover:bg-red-600'>Delete Session</button>
+            {showDateInput && (
+                <div className='mt-5'>
+                    <input
+                        type="date"
+                        value={searchDate}
+                        onChange={handleDateInputChange}
+                    />
+                    <button className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={handleDateSubmit}>Submit</button>
+                </div>
+            )}
+            {showAdultChildInput && (
+                <div className='mt-5'>
+                    <input
+                        type="number"
+                        placeholder="Number of adults"
+                        onChange={event => setNumAdults(parseInt(event.target.value))}
+                    />
+                    <input
+                        type="number"
+                        placeholder="Number of children"
+                        onChange={handleChildrenChange}
+                    />
+                  
 
 
-                    </div>
-                
-
-            
+{childData.map((child, index) => (
+    <div key={index}>
+        <select
+            value={child.childAge}
+            onChange={event => handleChildAgeChange(index, event.target.value)}
+        >
+            {ageOptions.map(option => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+        </select>
+    </div>
+))}
+                    <button className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={handleAdultChildSubmit}>Submit</button>
                 </div>
             )}
         </div>
     );
 }
+
