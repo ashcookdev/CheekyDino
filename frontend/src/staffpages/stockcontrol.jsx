@@ -324,12 +324,16 @@ Estimated Prep Time              </label>
 
 
         <div className="px-4 py-6 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">
-   <button onClick={() => navigate("/stockpdf")}
-            type="button"
-            className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
-          >
-            Upload Stock Invoice
-          </button>
+        {isElectron && (
+  <button
+    onClick={() => navigate("/stockpdf")}
+    type="button"
+    className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+  >
+    Upload Stock Invoice
+  </button>
+)}
+
 
           {/* Main content */}
         <h2 className="text-lg font-medium text-gray-900 text-center mt-10">Stock Items</h2>

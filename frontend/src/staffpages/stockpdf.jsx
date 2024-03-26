@@ -6,6 +6,14 @@ import { DataStore } from 'aws-amplify';
 import { StockControl } from '../models';
 import { set } from 'lodash';
 
+//  only allow access if running in electron
+ if (window && window.process && window.process.type) {
+   ipcRenderer = window.require('electron').ipcRenderer;
+ }
+
+
+
+
 function App() {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
