@@ -61,30 +61,10 @@ export default function Example() {
     fetchSessions();
   }, []);
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      const messages = await DataStore.query(Messages);
-      const filter = messages.filter(message => message.FoodReady === true && message.delivered === false);
-      if (filter.length > 0) {
-        setMessage(filter[0].content);
-        setShowMessage(true);
-        // Hide message after 2 minutes
-        setTimeout(() => setShowMessage(false), 120000);
-      }
-    };
-
-    fetchMessages();
-  }, []);
+ 
 
   return (
     <>
-      {showMessage ? (
-        <div className="flex flex-col items-center justify-center h-screen text-white mt-10 ml-10 animate-pulse font-bold text-3xl border-4 border-orange-500 rounded-lg bg-center bg-no-repeat bg-cover" style={{ backgroundImage: 'url("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcms0ZjljOWFxcHR5YmhzMW5qYjdnMnllanp3aWp4dmQyenNrOXVyeCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oKHW5ygEPHUNrb1SM/giphy.gif")' }}>
-          <BellIcon className="h-24 w-24 border-4 border-orange-500 rounded-full p-2 component-title" aria-hidden="true" />
-          {message}
-        </div>
-      ) : (
-        <>
           <div className="fixed top-0 left-0 w-full h-10 flex items-center px-4 bg-white">
             <div className="text-orange-500 font-bold text-xl mr-auto">
               {format(new Date(), "HH:mm")}
@@ -118,8 +98,9 @@ export default function Example() {
               </div>
             </div>
           </div>
-        </>
-      )}
-    </>
+          </>
   );
 }
+
+
+

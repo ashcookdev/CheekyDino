@@ -1,5 +1,5 @@
 module.exports = {
-    OPENAI_API_KEY: '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',
+    OPENAI_API_KEY: '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',
   };
 
 // Path: frontend/src/staffpages/stockpdf.jsx

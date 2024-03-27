@@ -20,6 +20,7 @@ function OccupiedTables() {
   const [moveTable, setMoveTable] = useState([]);
   const [moveState, setMoveState] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [till, setTill] = useState(false);
 
 
   
@@ -39,6 +40,8 @@ function OccupiedTables() {
     ipcRenderer = window.require('electron').ipcRenderer;
   }
   
+
+
 
   const navigate = useNavigate();
 
@@ -75,6 +78,10 @@ function OccupiedTables() {
   }, []);
 
 
+  if (till === true) {
+    navigate('/till');
+    
+  }
 
 
 
@@ -398,6 +405,14 @@ console.log(tableInfo.id)
     >
       Move Table
     </button>
+    <button
+      type="button"
+      onClick={() => setTill(true)}
+      className="inline-flex items-center gap-x-2 rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+    >
+      Create Order
+    </button>
+
 
 
    

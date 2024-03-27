@@ -7,10 +7,6 @@ import { StockControl } from '../models';
 import { set } from 'lodash';
 
 //  only allow access if running in electron
- if (window && window.process && window.process.type) {
-   ipcRenderer = window.require('electron').ipcRenderer;
- }
-
 
 
 
