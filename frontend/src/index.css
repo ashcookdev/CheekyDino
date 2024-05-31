@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .blurry-bg {
+    @apply bg-transparent backdrop-blur-md opacity-80;
+  }
+}

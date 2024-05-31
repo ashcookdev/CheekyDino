@@ -1,0 +1,17 @@
+{
+  "providers": [
+    "awscloudformation"
+  ],
+  "projectName": "CheekyTemp",
+  "version": "3.1",
+  "frontend": "javascript",
+  "javascript": {
+    "framework": "react",
+    "config": {
+      "SourceDir": "src",
+      "DistributionDir": "build",
+      "BuildCommand": "run build-react",
+      "StartCommand": "run start-react"
+    }
+  }
+}

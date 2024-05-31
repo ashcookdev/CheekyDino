@@ -1,0 +1,33 @@
+@media screen and (max-width: 600px) {
+    thead {
+        display: none !important;
+    }
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      display: block;
+    }
+  
+    tbody tr {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  
+    td {
+      display: flex;
+      flex-basis: 100%;
+      align-items: center;
+    }
+  
+    td:before {
+      content: attr(data-label);
+      flex-basis: 40%;
+      text-align: right;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+  }
+  

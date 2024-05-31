@@ -1,0 +1,9 @@
+@keyframes moveUp {
+    0% { transform: translateY(100%); }
+    100% { transform: translateY(-100%); }
+  }
+  
+  .animate-moveUp {
+    animation: moveUp 60s linear infinite;
+  }
+  

@@ -1,0 +1,145 @@
+{
+  "name": "versasoft-cheekydino",
+  "version": "1.1.1",
+  "description": "POS System for Cheeky Dino",
+  "author": "Ash Cook <ashcookdev@gmail.com>",
+  "homepage": "./",
+  "private": false,
+  "main": "public/electron.js",
+  "dependencies": {
+    "@aws-amplify/datastore": "^4.7.6",
+    "@aws-amplify/ui-react": "^4.6.2",
+    "@aws-sdk/client-cognito-identity-provider": "^3.370.0",
+    "@aws-sdk/config-resolver": "^3.374.0",
+    "@aws-sdk/fetch-http-handler": "^3.374.0",
+    "@aws-sdk/invalid-dependency": "^3.374.0",
+    "@aws-sdk/middleware-content-length": "^3.374.0",
+    "@aws-sdk/middleware-retry": "^3.374.0",
+    "@aws-sdk/middleware-serde": "^3.374.0",
+    "@aws-sdk/util-hex-encoding": "^3.374.0",
+    "@emailjs/browser": "^3.11.0",
+    "@fontsource/inter": "^4.5.15",
+    "@headlessui/react": "^1.7.14",
+    "@heroicons/react": "^2.0.17",
+    "@react-three/drei": "^9.80.1",
+    "@react-three/fiber": "^8.13.6",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/forms": "^0.5.3",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "aws-amplify": "^5.2.5",
+    "axios": "^1.5.1",
+    "body-parser": "^1.20.2",
+    "chart.js": "^4.3.0",
+    "child_process": "^1.0.2",
+    "cors": "^2.8.5",
+    "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0",
+    "dotenv": "^16.4.5",
+    "electron-is-dev": "^2.0.0",
+    "electron-router-dom": "^1.0.5",
+    "electron-updater": "^6.1.4",
+    "emailjs-com": "^3.2.0",
+    "escpos": "^3.0.0-alpha.6",
+    "escpos-network": "^3.0.0-alpha.5",
+    "escpos-usb-usb": "^3.0.2",
+    "ewelink-api": "^3.1.1",
+    "express": "^4.18.2",
+    "framer-motion": "^10.16.2",
+    "fuzzyset": "^1.0.7",
+    "history": "^5.3.0",
+    "howler": "^2.2.4",
+    "jspdf": "^2.5.1",
+    "lodash": "^4.17.21",
+    "nodemailer": "^6.9.7",
+    "openai": "^4.28.0",
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^2.6.347",
+    "qrcode": "^1.5.3",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-countdown": "^2.3.5",
+    "react-csv": "^2.2.2",
+    "react-datepicker": "^4.25.0",
+    "react-dom": "^18.2.0",
+    "react-edit-text": "^5.1.1",
+    "react-qr-code": "^2.0.11",
+    "react-qr-scanner": "^1.0.0-alpha.11",
+    "react-router-dom": "^6.10.0",
+    "react-scripts": "5.0.1",
+    "react-to-print": "^2.14.13",
+    "recharts": "^2.7.2",
+    "simple-peer": "^9.11.1",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
+    "sound-play": "^1.1.0",
+    "tailwindcss": "^3.3.2",
+    "tts-react": "^3.0.1",
+    "usb": "^2.11.0",
+    "uuid": "^9.0.0",
+    "web-vitals": "^2.1.4",
+    "websocket": "^1.0.34",
+    "ws": "^8.14.2"
+  },
+  "scripts": {
+    "start-react": "react-scripts start",
+    "start-electron": "electron .",
+    "build": "react-scripts build",
+    "build-react": "react-scripts build",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "concurrently": "^7.0.0",
+    "cross-env": "^7.0.3",
+    "electron": "^27.0.4",
+    "electron-builder": "^24.9.1",
+    "wait-on": "^6.0.0"
+  },
+  "build": {
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "dist/**/*",
+      "package.json",
+      "public/**/*",
+      "src/**/*",
+      "../amplify/**/*"
+    ],
+    "appId": "com.versasoft.cheekydino",
+    "productName": "Versasoft",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "./public/ver.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "directories": {
+      "buildResources": "assets"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "ashcookdev",
+        "repo": "CheekyDino"
+      }
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

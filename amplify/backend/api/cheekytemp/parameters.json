@@ -1,0 +1,12 @@
+{
+  "AppSyncApiName": "cheekytemp",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authcheekytemp3ae1a485",
+      "Outputs.UserPoolId"
+    ]
+  },
+  "AuthModeLastUpdated": "2024-05-30T12:36:20.735Z"
+}

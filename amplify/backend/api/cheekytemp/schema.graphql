@@ -1,0 +1,395 @@
+type CustomerEnquiries @model @auth(rules: [{allow: private}, {allow: owner}]) {
+  id: ID!
+  To: String
+  Content: String
+  Replied: Boolean
+  From: String
+  Marketing: Boolean
+  ToMarketing: [String]
+}
+
+type Admin @model @auth(rules: [{allow: private}, {allow: owner}, {allow: public, operations: [read]}]) {
+  id: ID!
+  Monday: AWSJSON
+  Tuesday: AWSJSON
+  Wednesday: AWSJSON
+  Thursday: AWSJSON
+  Friday: AWSJSON
+  Saturday: AWSJSON
+  Sunday: AWSJSON
+  TableData: AWSJSON
+  SessionPriceList: AWSJSON
+  AdultPrice: String
+  CalculationCode: AWSJSON
+  PartyPriceList: AWSJSON
+  UpdateURL: String
+  ClosedDates: [AWSDate]
+  PartyTimeslots: AWSJSON
+  DefaultSlots: AWSJSON
+}
+
+type JobApplication @model @auth(rules: [{allow: public, operations: [create, read, update]}, {allow: owner}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}]) {
+  id: ID!
+  Name: String
+  CoverLetter: String
+  Role: String
+  Town: String
+  DOB: String
+  Email: String
+  Telephone: String
+  PreviousExprience: String
+  CV: String
+  Age: String
+  Interviewed: Boolean
+  InterviewNotes: String
+  Offered: Boolean
+  InterviewTime: String
+  InterviewDate: String
+  InterviewSet: Boolean
+  NotInterested: Boolean
+}
+
+type BeautyInPlay @model @auth(rules: [{allow: private}, {allow: owner}]) {
+  id: ID!
+  AppointmentTime: AWSTime
+  AppointmentDate: AWSDate
+  Treatment: String
+  Total: String
+}
+
+type HomeCookedCollection @model @auth(rules: [{allow: public}, {allow: owner}]) {
+  id: ID!
+  CreatedTime: AWSTime
+  CreatedDate: AWSDate
+  Total: Float
+  DrinkItems: [String]
+  HotItems: [String]
+  CollectionTime: AWSTime
+  Completed: Boolean
+  Delieved: Boolean
+  Name: String
+  Notes: String
+  Kitchen: Boolean
+  KitchenMenuId: [String]
+  Email: String
+  Telephone: String
+  Prepaid: Boolean
+  PaymentAuth: String
+}
+
+type Events @model @auth(rules: [{allow: public}, {allow: owner}]) {
+  id: ID!
+  Name: String
+  Description: String
+  Food: Boolean
+  StartTime: String
+  Date: AWSDate
+  Tables: Int
+  KidsPrice: Float
+  Image: String
+  AdultMenu: AWSJSON
+  KidsMenu: AWSJSON
+  CustomeEvents: [CustomerEvent] @manyToMany(relationName: "EventsCustomerEvent")
+  EndTime: String
+  AdultPrice: String
+  Price2: Float
+  Price3: Float
+  TicketsSold: Int
+  CalibrateStock: Boolean
+  Total: Float
+  PaymentAuth: String
+}
+
+type CustomerEvent @model @auth(rules: [{allow: public}, {allow: owner}]) {
+  id: ID!
+  EventName: String
+  EventDate: String
+  EventTime: String
+  CustomerName: String
+  Children: String
+  Adults: String
+  Table: String
+  FoodOptions: AWSJSON
+  Total: Float
+  Email: String
+  Telephone: String
+  FoodOption: Boolean
+  eventss: [Events] @manyToMany(relationName: "EventsCustomerEvent")
+}
+
+type Gates @model @auth(rules: [{allow: private}, {allow: owner}, {allow: groups, groups: ["Staff"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Cafe"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Kitchen"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartyHosts"], operations: [read, create, update, delete]}]) {
+  id: ID!
+  content: Int
+}
+
+type StockControl @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  Name: String
+  Weight: Int
+  Quantity: Int
+  Price: Float
+  PreVAT: Float
+  Supplier: String
+  VAT: Float
+  CurrentStockLevel: Int
+  kitchenmenus: [KitchenMenu] @manyToMany(relationName: "KitchenMenuStockControl")
+  Cases: Int
+  ProductId: String
+  NewPrice: Float
+  NewVAT: Float
+  UsedBy: String
+  MatchCode: String
+}
+
+type ClockIns @model @auth(rules: [{allow: private}, {allow: owner}]) {
+  id: ID!
+  ClockIn: AWSTime
+  ClockOut: AWSTime
+  Sick: Boolean
+  Holiday: String
+  StaffId: String
+  TimeEntryId: String
+  Date: AWSDate
+  ClockedIn: Boolean
+  ClockedOut: Boolean
+  StaffName: String
+  StaffRole: String
+  Break: Boolean
+  BreakStart: AWSTime
+  BreakEnd: AWSTime
+  HoursWorked: Float
+  HourlyRate: Float
+  TotalPay: Float
+}
+
+type Teddys @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  Name: String
+  ImgSrc: String
+}
+
+type Holiday @model @auth(rules: [{allow: private}, {allow: owner}]) {
+  id: ID!
+  Name: String
+  StartDate: String
+  Description: String
+  EndDate: String
+  Approved: Boolean
+}
+
+type HomePage @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  TopSectionTitle: String
+  TopSectionPic: String
+  TopSectionWriting: String
+  EventTitle: String
+  EventPic: String
+  EventWriting: String
+  EventTwoTitle: String
+  EventTwoPic: String
+  EventTwoWriting: String
+  EventThreeTitle: String
+  EventThreePic: String
+  EventThreeWriting: String
+  EventOneButton: Boolean
+  EventTwoButton: Boolean
+  EventThreeButton: Boolean
+}
+
+type CustomerScreen @model @auth(rules: [{allow: private}, {allow: owner}]) {
+  id: ID!
+  Message: String
+  Show: Boolean
+  Number: Int
+}
+
+type KitchenMenu @model @auth(rules: [{allow: public, operations: [read]}, {allow: owner}, {allow: private}]) {
+  id: ID!
+  Name: String
+  Price: Float
+  Description: String
+  Notes: String
+  Kitchen: Boolean
+  imageSrc: String
+  Prep: AWSTime
+  Ingredients: AWSJSON
+  Snooze: Boolean
+  Extras: AWSJSON
+  Category: String
+  ProfitMargin: Float
+  PriceNoVAT: Float
+  InStock: Boolean
+  StockLevel: Int
+  StockControls: [StockControl] @manyToMany(relationName: "KitchenMenuStockControl")
+  CafeOrders: [CafeOrder] @manyToMany(relationName: "KitchenMenuCafeOrder")
+}
+
+type TimeEntry @model @auth(rules: [{allow: private}, {allow: owner}]) {
+  id: ID!
+  Staff: [Staff] @manyToMany(relationName: "TimeEntryStaff")
+  StaffID: String
+  Hours: Float
+  Dates: [AWSDate]
+  ShiftStart: [String]
+  ShiftFinish: [String]
+  Month: String
+  StaffName: String
+  Holiday: [AWSDate]
+}
+
+type Staff @model @auth(rules: [{allow: private}, {allow: owner}]) {
+  id: ID!
+  Name: String
+  Email: String
+  TimeEntries: String
+  timeentriess: [TimeEntry] @manyToMany(relationName: "TimeEntryStaff")
+  Role: String
+  HourlyRate: Float
+  StartDate: AWSDate
+  Current: Boolean
+  Telephone: String
+  ContractType: String
+  EndDate: AWSDate
+  Age: String
+  DOB: String
+  InterviewNotes: String
+  Medical: String
+  ApplicationID: String
+}
+
+type Sessions @model @auth(rules: [{allow: private}, {allow: owner}, {allow: public, operations: [read]}]) {
+  id: ID!
+  Name: String
+  Email: String
+  TimeslotFrom: AWSTime
+  TimeslotTo: AWSTime
+  TimeLeft: AWSTime
+  TimeArrived: AWSTime
+  Date: AWSDate
+  Table: Int
+  Orders: Int
+  Prepaid: Boolean
+  TotalSpent: Float
+  Adults: Int
+  Children: Int
+  Arrived: Boolean
+  LeftCenter: Boolean
+  ExtraTables: Int
+  Telephone: String
+  CafeOrders: [CafeOrder] @hasMany(indexName: "bySessions", fields: ["id"])
+  orderid: [String]
+  Staff: String
+  CustomerbookingID: String
+  Event: Boolean
+  EventID: String
+  EventName: String
+  PaymentAuth: String
+  PaymentMethod: String
+  EntranceFee: Float
+  CleanTable: Boolean
+  ChildData: AWSJSON
+  TableCleaned: Boolean
+  AcceptedTerms: Boolean
+  EmailSubscription: Boolean
+  CarReg: String
+}
+
+type CafeOrder @model @auth(rules: [{allow: private}, {allow: owner}, {allow: groups, groups: ["Kitchen"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Cafe"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Staff"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartyHosts"], operations: [read, create, update, delete]}, {allow: public}]) {
+  id: ID!
+  CreatedTime: AWSTime
+  CreatedDate: AWSDate
+  Total: Float
+  DrinkItems: [String]
+  HotItems: [String]
+  Table: Int
+  Completed: Boolean
+  Delieved: Boolean
+  sessionsID: ID! @index(name: "bySessions")
+  Sessionid: String
+  TimeDelivered: AWSTime
+  Notes: String
+  Kitchen: Boolean
+  HotOrderPrep: String
+  TotalNoVAT: Float
+  KitchenMenuId: [String]
+  ChefName: String
+  StaffOrderName: String
+  kitchenmenus: [KitchenMenu] @manyToMany(relationName: "KitchenMenuCafeOrder")
+  SessionEmail: String
+  EventID: String
+  Event: Boolean
+  PaymentAuth: String
+  Tab: Boolean
+  Paid: Boolean
+  PaymentMethod: String
+}
+
+type Messages @model @auth(rules: [{allow: private}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: groups, groups: ["PartHosts"], operations: [read, create]}, {allow: groups, groups: ["Staff"], operations: [read, create]}, {allow: groups, groups: ["TeamLeader"], operations: [read, create]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: owner, operations: [create, read]}]) {
+  id: ID!
+  content: String
+  createdAt: AWSTime
+  email: String
+  group: [String]
+  orderID: String
+  sessionID: String
+  partyID: String
+  delivered: Boolean
+  FoodReady: Boolean
+  FoodDelivered: Boolean
+}
+
+type PartyAdultFood @model @auth(rules: [{allow: public}, {allow: owner}, {allow: private}]) {
+  id: ID!
+  Name: String
+}
+
+type PartyGuests @model @auth(rules: [{allow: owner}, {allow: groups, groups: ["PartHosts"], operations: [read, update]}, {allow: groups, groups: ["Staff"], operations: [create, read]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: groups, groups: ["TeamLeader"], operations: [read, update]}, {allow: private}]) {
+  id: ID!
+  ChildName: String
+  FoodOption: String!
+  Allergies: String
+  ContactInfoEmail: String
+  partybookingID: ID! @index(name: "byPartyBooking")
+  ArrivalTime: AWSTime
+  SweetConeColour: String
+  TeddyTasticBear: String
+  Completed: Boolean
+  Arrived: Boolean
+  ImgSrc: String
+}
+
+type PartyBooking @model @auth(rules: [{allow: owner}, {allow: groups, groups: ["PartHosts"], operations: [read, update, create]}, {allow: groups, groups: ["TeamLeader"], operations: [create, read, update]}, {allow: groups, groups: ["SuperUser"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Staff"], operations: [create, read, update]}, {allow: groups, groups: ["Developer"], operations: [read, create, update, delete]}, {allow: groups, groups: ["Admin"], operations: [read, create, update, delete]}, {allow: public, operations: [read]}]) {
+  id: ID!
+  PartyType: String!
+  ChildName: String!
+  ChildAge: Int!
+  PartyDate: AWSDate!
+  PartyTime: AWSTime!
+  NoOfChildren: Int!
+  ThirdPartyContactedDate: Boolean
+  FoodOptionSelected: String
+  Total: Float!
+  PartyGuests: [PartyGuests] @hasMany(indexName: "byPartyBooking", fields: ["id"])
+  SweetConesSelected: Boolean
+  CharacterSelected: String
+  BearVoiceRecorders: Boolean
+  PartyFoodPrepared: AWSTime
+  PartyHostAssigned: String
+  PartyChildMumArrived: AWSTime
+  PartyFoodTimeDue: AWSTime
+  PartyFinish: AWSTime
+  partybookingID: String
+  PartyFoodComplete: Boolean
+  LeftBranch: Boolean
+  CurrentGuests: Int
+  LeftBranchTime: AWSTime
+  Table: Int
+  PartyFoodDelivered: Boolean
+  AmountPaid: String
+  PartyAdultFoodChoices: [String]
+  Email: String
+  Telephone: String
+  CalibrateStock: Boolean
+  Payments: [String]
+  Utd: Boolean
+} 

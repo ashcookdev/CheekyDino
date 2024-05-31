@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Screen Component</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Additional styles can be added here */
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div id="app" class="fixed inset-0 flex items-center justify-center">
+        <!-- Content will be dynamically rendered here -->
+    </div>
+
+    <script>
+        // Define your WebSocket connection
+        const socket = new WebSocket('ws://localhost:5253');
+
+        // Function to handle WebSocket messages
+        socket.addEventListener('message', (event) => {
+            const message = JSON.parse(event.data);
+            handleMessage(message);
+        });
+
+        // Function to handle received messages
+        const handleMessage = (message) => {
+            switch (message.type) {
+                case 'show-form':
+                    renderForm();
+                    break;
+                case 'show-data':
+                    renderData(message.data);
+                    break;
+                case 'new-customer':
+                    renderDefault();
+                    break;
+                default:
+                    console.error('Unknown message type:', message.type);
+            }
+        };
+
+        // Function to dynamically render the form
+        const renderForm = () => {
+            document.getElementById('app').innerHTML = `
+                <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <form class="space-y-4 bg-white bg-opacity-50 p-4 rounded-lg">
+                        <input class="border p-4 text-xl rounded-full component-title" type="text" placeholder="Name" onchange="sendMessage('name', this.value)" />
+                        <input class="border p-4 text-xl rounded-full component-title" type="email" placeholder="Email" required onchange="sendMessage('email', this.value)" />
+                        <input class="border p-4 text-xl rounded-full component-title" type="tel" placeholder="Telephone" onchange="sendMessage('telephone', this.value)" />
+                        <input class="border p-4 text-xl rounded-full component-title" type="text" placeholder="Car Reg" onchange="sendMessage('carReg', this.value)" />
+                    </form>
+                </div>
+            `;
+        };
+
+        // Function to dynamically render the data
+        const renderData = (data) => {
+            document.getElementById('app').innerHTML = `
+                <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div class="bg-black p-4 rounded-lg border-4 border-gray-200 bg-opacity-50 w-full h-full overflow-auto text-center text-white">
+                        <h1 class="text-4xl font-bold mb-4 component-title">Your Booking</h1>
+                        <p class="text-2xl mb-2 component-title"><strong>Name:</strong> ${data.name}</p>
+                        <p class="text-2xl mb-2 component-title"><strong>Email:</strong> ${data.email}</p>
+                        <p class="text-2xl mb-2 component-title"><strong>Telephone:</strong> ${data.telephone}</p>
+                        <p class="text-2xl mb-2 component-title"><strong>Car Reg:</strong> ${data.carReg}</p>
+                        <!-- Additional data fields can be added here -->
+                    </div>
+                </div>
+            `;
+        };
+
+        // Function to render default content
+        const renderDefault = () => {
+            document.getElementById('app').innerHTML = `
+                <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <button id="closeButton" class="absolute top-4 right-4 bg-red-500 text-white p-4 text-xl rounded-full" onclick="navigateTo('/dashboard')">Close</button>
+                    <img src="dino-logo.png" alt="Dinosaur" class="max-w-full max-h-full" />
+                </div>
+            `;
+        };
+
+        // Function to send message via WebSocket
+        const sendMessage = (field, value) => {
+            const message = {
+                type: 'input',
+                field: field,
+                value: value
+            };
+            socket.send(JSON.stringify(message));
+        };
+
+        // Function to navigate
+        const navigateTo = (route) => {
+            // Your navigation logic here
+        };
+
+        // Initial rendering
+        renderDefault();
+    </script>
+</body>
+</html>

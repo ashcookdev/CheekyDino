@@ -1,0 +1,20 @@
+{
+  "main": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cheekytemp-main-6ab97-authRole",
+      "UnauthRoleArn": "arn:aws:iam::388127569725:role/amplify-cheekytemp-main-6ab97-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::388127569725:role/amplify-cheekytemp-main-6ab97-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-cheekytemp-main-6ab97-deployment",
+      "UnauthRoleName": "amplify-cheekytemp-main-6ab97-unauthRole",
+      "StackName": "amplify-cheekytemp-main-6ab97",
+      "StackId": "arn:aws:cloudformation:eu-west-2:388127569725:stack/amplify-cheekytemp-main-6ab97/56093870-1e70-11ef-876a-0ae9449618bb",
+      "AmplifyAppId": "db30h2rcugri3"
+    },
+    "categories": {
+      "auth": {
+        "cheekytemp3ae1a485": {}
+      }
+    }
+  }
+}

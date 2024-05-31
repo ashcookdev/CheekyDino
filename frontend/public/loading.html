@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: radial-gradient(rgb(255, 255, 255), rgb(147, 197, 253), rgb(232, 121, 249));
+            font-family: Arial, sans-serif;
+        }
+
+        .loader {
+            position: relative;
+            border: 16px solid #f3f3f3; /* Change the color here to white */
+            border-top: 16px solid #4d00e6; /* Change the color here */
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        .loader .inner {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            bottom: 16px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .loader img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px; /* Adjust the size here */
+            height: 50px; /* Adjust the size here */
+            background: transparent;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader">
+        <div class="inner"></div> <!-- Add this div inside the loader div -->
+        <img src="/versa.gif" alt="Loading..."> <!-- Place the img inside the loader div -->
+    </div>
+</body>
+</html>
